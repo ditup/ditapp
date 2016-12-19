@@ -1,14 +1,10 @@
-import { DitappNgPage } from './app.po';
+import { browser, element, by } from 'protractor';
 
-describe('ditapp-ng App', function() {
-  let page: DitappNgPage;
+describe('DitUp App', function() {
 
-  beforeEach(() => {
-    page = new DitappNgPage();
-  });
-
-  it('should display message saying app works', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+  it('should show main page for visitors', () => {
+    browser.get('/');
+    let mainTitle = element(by.css('#content h1')).getText();
+    expect(mainTitle).toEqual('ditup.org');
   });
 });

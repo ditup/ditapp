@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700');
+@import url('https://fonts.googleapis.com/css?family=Josefin+Slab:400,700');
+
+$main-font: 'Libre Baskerville', serif;
+$font-2: 'Josefin Slab', serif;
+$bg-color: white;
+$dark-color: #011149;
+$light-color: #0194fe;
+$bg-darker-color: #ebf6ff;
+
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+a, a:visited {
+  color: $light-color;
+  border: 2px solid $dark-color;
+}
+
+a:hover {
+  color: $bg-color;
+  background-color: $dark-color;
+}
+
+.colored {
+  color: $light-color;
+}
+
+.button {
+  font-family: $font-2;
+  font-size: 25px;
+  text-decoration: none;
+  padding: 7px 10px;
+  margin: 5px;
+  transition: all 200ms ease;
+}
+
+#about {
+  color: $dark-color;
+  background-color: $bg-darker-color;
+  font-family: $main-font;
+  padding:60px;
+
+  h1 {
+    font-family: $font-2;
+    font-size: 50px;
+    font-weight: bold;
+  }
+}
+
+.page {
+  min-height:100%;
+  width:100%;
+}
+
+#content {
+  z-index:10;
+  background-color: $bg-color;
+  color: $dark-color;
+  padding-top: 50px;
+  font-family: $main-font !important;
+  text-align: center;
+  font-size: 20px;
+}
+
+.page-url {
+  font-family: $font-2;
+  font-weight: bold;
+  font-size: 70px;
+  margin-top:30px;
+}
+.app-summary {
+  font-family: $main-font;
+  font-style: italic;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.introduction {
+  font-family: $main-font;
+  font-size: 30px;
+}
