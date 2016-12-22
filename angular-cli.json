@@ -1,6 +1,6 @@
 {
   "project": {
-    "version": "1.0.0-beta.22-1",
+    "version": "1.0.0-beta.24",
     "name": "ditapp-ng"
   },
   "apps": [
@@ -18,7 +18,9 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css"
+        "reset.scss",
+        "styles.scss",
+        "forms.scss"
       ],
       "scripts": [
       ],
