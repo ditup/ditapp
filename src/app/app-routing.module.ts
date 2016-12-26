@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SignupComponent } from './signup/signup.component';
 import { MainComponent } from './main/main.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { FofComponent } from './fof/fof.component';
 
 const routes: Routes = [
@@ -13,6 +14,14 @@ const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent
+  },
+  {
+    path: 'user/:username/verify-email',
+    component: VerifyEmailComponent
+  },
+  {
+    path: 'user/:username/verify-email/:code',
+    component: VerifyEmailComponent
   },
   {
     path: '**',

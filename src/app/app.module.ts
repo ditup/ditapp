@@ -8,13 +8,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { SignupComponent } from './signup/signup.component';
 import { MainComponent } from './main/main.component';
 import { FofComponent } from './fof/fof.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignupComponent,
     MainComponent,
-    FofComponent
+    FofComponent,
+    VerifyEmailComponent
   ],
   imports: [
     BrowserModule,

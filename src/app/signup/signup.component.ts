@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { CustomValidators } from 'ng2-validation';
 
 import { NewUser } from '../new-user';
 import { uniqueUsernameValidator } from '../shared/unique-username.directive';
+import { ModelService } from '../model.service';
 
 @Component({
   selector: 'app-signup',
@@ -14,7 +16,7 @@ import { uniqueUsernameValidator } from '../shared/unique-username.directive';
 export class SignupComponent implements OnInit {
 
   // inject modules, services
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private model: ModelService) { }
 
   // the data model
   user = new NewUser('', '', '');
@@ -91,11 +93,16 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  onSubmit(): void {
     // this is just testing. TODO remove
     console.log('submitted!!!');
     console.log(this.signupForm.value);
     this.user = this.signupForm.value;
+
+    this.model.createUser(this.user)
+    .then(() => {
+      this.router.navigate(['/user', this.user.username, 'verify-email']);
+    });
     // on submit, we want to send http request POST /users to the server
     // on success (201 response) we want to redirect to a page which is awaiting the email verification code
   }
