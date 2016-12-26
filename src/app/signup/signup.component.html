@@ -1,6 +1,42 @@
 <nav>
   <a routerLink="/">Home</a>
 </nav>
-<div>
-  <input>
+<div class="container">
+  <h1>Signup Form</h1>
+  <form (ngSubmit)="onSubmit()" [formGroup]="signupForm">
+    <div class="form-group"
+      [ngClass]="bootstrapClass.username">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" id="username"
+      formControlName="username" required>
+
+      <div *ngIf="formErrors.username" class="alert alert-danger">
+        {{formErrors.username}}
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="bootstrapClass.email">
+      <label for="email">Email</label>
+      <input type="text" class="form-control" id="email"
+      formControlName="email" required>
+
+      <div *ngIf="formErrors.email" class="alert alert-danger">
+        {{formErrors.email}}
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="bootstrapClass.password">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password"
+      formControlName="password" required>
+
+      <div *ngIf="formErrors.password" class="alert alert-danger">
+        {{formErrors.password}}
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default"
+      [disabled]="!signupForm.valid">Submit</button>
+  </form>
+
 </div>

@@ -18,9 +18,7 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "reset.scss",
-        "styles.scss",
-        "forms.scss"
+        "styles.scss"
       ],
       "scripts": [
       ],
@@ -31,10 +29,8 @@
       }
     }
   ],
-  "addons": [
-  ],
-  "packages": [
-  ],
+  "addons": [],
+  "packages": [],
   "e2e": {
     "protractor": {
       "config": "./protractor.conf.js"
