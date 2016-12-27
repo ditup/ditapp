@@ -5,7 +5,7 @@ export function uniqueUsernameValidator(control: AbstractControl): Promise<{[key
   return new Promise(resolve => {
     setTimeout(() => {
       resolve(null);
-    }, 1000)
+    }, 1000);
   });
 }
 
