@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable } from "rxjs/Rx";
 
 import { CustomValidators } from 'ng2-validation';
 
 import { NewUser } from '../new-user';
-import { uniqueUsernameValidator } from '../shared/unique-username.directive';
+// import { UniqueUsernameValidator } from '../shared/unique-username.directive';
 import { ModelService } from '../model.service';
 
 @Component({
@@ -62,6 +63,27 @@ export class SignupComponent implements OnInit {
     this.buildForm();
   }
 
+  uniqueUsernameValidator(control: AbstractControl): Observable<{[key: string]: any}> {
+    console.log('inside validate **********', this);
+    return this.validateUniqueUsernameObservable(control.value).first();
+  }
+
+  validateUniqueUsernameObservable(username: string) {
+
+    return new Observable(observer => {
+
+      this.model.isUsernameAvailable(username).then((isUnique) => {
+        console.log('validate');
+        if (isUnique === true) {
+          observer.next(null);
+        }
+        else {
+          observer.next({ uniqueUsername: true });
+        }
+      });
+    });
+  }
+
   buildForm(): void {
     this.signupForm = this.formBuilder.group({
       username: [this.user.username, [
@@ -70,7 +92,7 @@ export class SignupComponent implements OnInit {
         Validators.maxLength(32),
         Validators.pattern(/^[a-z0-9]+([_\-\.][a-z0-9]+)*$/)
       ], [
-        uniqueUsernameValidator
+        this.uniqueUsernameValidator.bind(this)
       ]],
       email: [this.user.email, [
         Validators.required,
@@ -95,6 +117,7 @@ export class SignupComponent implements OnInit {
   }
 
   onStatusChanged(data?: any) {
+    // change the styling of input fields based on their validity
     let bootstrapClass = this.bootstrapClass;
     for (const field in bootstrapClass) {
       if (bootstrapClass.hasOwnProperty(field)) {
@@ -108,34 +131,45 @@ export class SignupComponent implements OnInit {
                                 : '';
       }
     }
+
+    // whenever status changes, we want to generate errors
+    // (this is to make async validator errors visible)
+    this.generateErrors();
   }
 
   onValueChanged(data?: any) {
+    // whenever we edit any values, we want to generate errors
+    this.generateErrors();
+  }
+
+  private generateErrors(): void {
     if (!this.signupForm) { return; }
-    const form = this.signupForm;
-
     for (const field in this.formErrors) {
-      if (this.formErrors.hasOwnProperty(field)) {
-        this.formErrors[field] = '';
-        const control = form.get(field);
+      if (this.formErrors.hasOwnProperty(field)) { // required check to make for .. in work properly
+        // get a control object for the field
+        const control = this.signupForm.get(field);
 
-        if (control && control.dirty && !control.valid) {
+        // we'll collect error messages to this variable
+        let errorMessages = [];
+
+        if (control && control.dirty && !control.valid) { // when control is invalid and dirty
+          // get the array of all validation messages belonging to the field
           const messages = this.validationMessages[field];
-          console.log(control.errors);
+
+          // filter the validation messages for which validation didn't pass
           for (const key in control.errors) {
             if (control.errors.hasOwnProperty(key)) {
-              this.formErrors[field] += messages[key] + ' ';
+              errorMessages.push(messages[key]);
             }
           }
         }
+        // for every field, generate string from array of error messages
+        this.formErrors[field] = errorMessages.join(' ');
       }
     }
   }
 
   onSubmit(): void {
-    // this is just testing. TODO remove
-    console.log('submitted!!!');
-    console.log(this.signupForm.value);
     this.user = this.signupForm.value;
 
     this.model.createUser(this.user)

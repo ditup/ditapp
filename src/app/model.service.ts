@@ -14,8 +14,12 @@ export class ModelService {
 
   }
 
-  isUsernameAvailable(username: string): boolean {
-    return username === 'user1' ? false : true;
+  isUsernameAvailable(username: string): Promise<boolean> {
+    return new Promise(resolve => {
+      setTimeout(function () {
+        resolve(username === 'user1' ? false : true);
+      }, 1000);
+    });
   }
 
 }
