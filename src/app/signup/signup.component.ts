@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from "rxjs/Rx";
+import { Observable, Subject } from "rxjs";
+
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 import { CustomValidators } from 'ng2-validation';
 
@@ -63,26 +66,39 @@ export class SignupComponent implements OnInit {
     this.buildForm();
   }
 
-  uniqueUsernameValidator(control: AbstractControl): Observable<{[key: string]: any}> {
-    console.log('inside validate **********', this);
-    return this.validateUniqueUsernameObservable(control.value).first();
-  }
 
-  validateUniqueUsernameObservable(username: string) {
+  /**
+   * @TODO very imperfect validator
+   * the goal is to have a standard async validator, which has some debounce time
+   * (not firing http request all the time)
+   * it didn't like to work so far
+   * ideally this should be moved to another file
+   *
+   */
+  private uniqueUsernameTimeout;
 
-    return new Observable(observer => {
-
-      this.model.isUsernameAvailable(username).then((isUnique) => {
-        console.log('validate');
-        if (isUnique === true) {
-          observer.next(null);
-        }
-        else {
-          observer.next({ uniqueUsername: true });
-        }
-      });
+  uniqueUsernameValidator(control: AbstractControl): Promise<{[key: string]: any}> {
+    clearTimeout(this.uniqueUsernameTimeout);
+    return new Promise((resolve, reject) => {
+      this.uniqueUsernameTimeout = setTimeout(() => {
+        this.validateUniqueUsernameObservable(control.value).subscribe(resp => resolve(resp));
+      }, 300);
     });
   }
+
+  private validateUniqueUsernameObservable(username: string) {
+
+    if(this.signupForm.get('username').invalid) return new Observable(observer => observer.next(this.signupForm.get('username').errors));
+    return this.model.isUsernameAvailable(username).map((isUnique) => {
+      if (isUnique === true) {
+        return null;
+      }
+      else {
+        return { uniqueUsername: true };
+      }
+    });
+  }
+  // the end of uniqueUsernameValidator
 
   buildForm(): void {
     this.signupForm = this.formBuilder.group({
