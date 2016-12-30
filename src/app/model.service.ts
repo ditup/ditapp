@@ -12,9 +12,9 @@ import { NewUser } from './new-user';
 @Injectable()
 export class ModelService {
 
-  constructor(private http: Http) { }
-
   private baseUrl = 'http://localhost:3000';
+
+  constructor(private http: Http) { }
 
   createUser(newUser: NewUser): Promise<void> {
     console.log('creating new user!', newUser);
@@ -52,11 +52,11 @@ export class ModelService {
     return this.http
       .get(`${this.baseUrl}/users/${username}`, { headers })
       .map((resp: Response) => {
-        if (resp.status === 200) return false;
+        if (resp.status === 200) { return false; }
       })
       .catch((err, observable): Observable<boolean> => {
-        if (err.status === 404) return new Observable(observer => observer.next(true));
-      })
+        if (err.status === 404) { return new Observable(observer => observer.next(true)); }
+      });
   }
 
 }

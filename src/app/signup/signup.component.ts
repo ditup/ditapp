@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject } from 'rxjs';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -18,6 +18,9 @@ import { ModelService } from '../model.service';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
+
+  // variable used for async username validator (to make debounce)
+  private uniqueUsernameTimeout;
 
   // the data model
   user = new NewUser('', '', '');
@@ -66,7 +69,6 @@ export class SignupComponent implements OnInit {
     this.buildForm();
   }
 
-
   /**
    * @TODO very imperfect validator
    * the goal is to have a standard async validator, which has some debounce time
@@ -75,8 +77,6 @@ export class SignupComponent implements OnInit {
    * ideally this should be moved to another file
    *
    */
-  private uniqueUsernameTimeout;
-
   uniqueUsernameValidator(control: AbstractControl): Promise<{[key: string]: any}> {
     clearTimeout(this.uniqueUsernameTimeout);
     return new Promise((resolve, reject) => {
@@ -88,12 +88,13 @@ export class SignupComponent implements OnInit {
 
   private validateUniqueUsernameObservable(username: string) {
 
-    if(this.signupForm.get('username').invalid) return new Observable(observer => observer.next(this.signupForm.get('username').errors));
+    if (this.signupForm.get('username').invalid) {
+      return new Observable(observer => observer.next(this.signupForm.get('username').errors));
+    }
     return this.model.isUsernameAvailable(username).map((isUnique) => {
       if (isUnique === true) {
         return null;
-      }
-      else {
+      } else {
         return { uniqueUsername: true };
       }
     });
