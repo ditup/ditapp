@@ -2,16 +2,53 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import { SignupComponent } from './signup.component';
+import { ModelService } from '../model.service';
+
+import { NewUser } from '../new-user';
+
+class RouterStub {
+  navigate(url: Array) { return url.join('/'); }
+}
+
+class FakeModelService implements ModelService {
+  lastPromise: Promise<any>;
+
+  createUser(newUser: NewUser): Promise<void> {
+    return this.lastPromise = Promise.resolve();
+  }
+
+  isUsernameAvailable(username: string): Observable<boolean> {
+    return new Observable(observer => {
+      if (username === 'existent-user') {
+        observer.next(false);
+      } else {
+        observer.next(true);
+      }
+    });
+  }
+}
+
 
 fdescribe('SignupComponent', () => {
+
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SignupComponent ]
+      declarations: [ SignupComponent ],
+      imports: [
+        ReactiveFormsModule,
+      ],
+      providers: [
+        { provide: Router, useClass: RouterStub },
+        { provide: ModelService, useClass: FakeModelService }
+      ]
     })
     .compileComponents();
   }));
