@@ -3,17 +3,25 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { VerifyEmailComponent } from './verify-email.component';
+import { ActivatedRouteStub } from '../../testing/router-stubs';
+
+let activatedRoute: ActivatedRouteStub;
 
 describe('VerifyEmailComponent', () => {
   let component: VerifyEmailComponent;
   let fixture: ComponentFixture<VerifyEmailComponent>;
 
   beforeEach(async(() => {
+    activatedRoute = new ActivatedRouteStub();
     TestBed.configureTestingModule({
       declarations: [ VerifyEmailComponent ],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute }
+      ]
     })
     .compileComponents();
   }));
@@ -21,6 +29,7 @@ describe('VerifyEmailComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VerifyEmailComponent);
     component = fixture.componentInstance;
+    activatedRoute.testParams = { username: 'test-user' };
     fixture.detectChanges();
   });
 
