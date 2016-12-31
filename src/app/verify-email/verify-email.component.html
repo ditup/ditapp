@@ -1,3 +1,11 @@
-<p>
-  verify-email works!
-</p>
+<div class="container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmailForm">
+    <div class="form-group" [ngClass]="bootstrapCodeClass">
+      <label for="code">Verification Code</label>
+      <input type="text" class="form-control" id="code"
+      formControlName="code" required>
+    </div>
+    <button type="submit" class="btn btn-default"
+      [disabled]="!verifyEmailForm.valid">Verify Email</button>
+  </form>
+</div>

@@ -5,7 +5,7 @@ import { DebugElement } from '@angular/core';
 
 import { MainComponent } from './main.component';
 
-describe('MainComponent', () => {
+xdescribe('MainComponent', () => {
   let component: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
 

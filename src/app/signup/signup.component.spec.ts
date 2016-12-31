@@ -34,7 +34,7 @@ class FakeModelService implements ModelService {
 }
 
 
-fdescribe('SignupComponent', () => {
+describe('SignupComponent', () => {
 
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
