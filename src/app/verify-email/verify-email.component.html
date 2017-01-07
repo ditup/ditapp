@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="!verificationSuccess" class="container">
   <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmailForm">
     <div class="form-group" [ngClass]="bootstrapCodeClass">
       <label for="code">Verification Code</label>
@@ -8,4 +8,17 @@
     <button type="submit" class="btn btn-default"
       [disabled]="!verifyEmailForm.valid">Verify Email</button>
   </form>
+</div>
+<div *ngIf="verificationSuccess">
+  <div>
+    Your email was successfully verified. What now?
+  </div>
+  <nav>
+    <ul>
+      <li><a routerLink="/explore">Explore</a></li>
+      <li><a routerLink="/user/username">Edit My Profile</a></li>
+      <li><a routerLink="/">Go Home</a></li>
+      <li><a href="https://example.com">Leave</a></li>
+    </ul>
+  </nav>
 </div>

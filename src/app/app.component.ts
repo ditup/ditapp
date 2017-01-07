@@ -9,4 +9,5 @@ import { ModelService } from './model.service';
   providers: [ModelService]
 })
 export class AppComponent {
+  options = {};
 }

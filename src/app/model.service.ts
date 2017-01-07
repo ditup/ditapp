@@ -59,4 +59,27 @@ export class ModelService {
       });
   }
 
+  verifyEmail(username: string, code: string): Promise<string> {
+    const requestBody = {
+      data: {
+        type: 'users',
+        id: username,
+        attributes: {
+          username: username,
+          code: code
+        }
+      }
+    };
+
+    const headers = new Headers({ 'Content-Type': 'application/vnd.api+json' });
+
+    return this.http
+      .get(`${this.baseUrl}/users/${username}/account/email/verify/${code}`, { headers })
+      .toPromise()
+      .then((response) => {
+        console.log('responded!', response);
+        return 'some-email';
+      });
+  }
+
 }

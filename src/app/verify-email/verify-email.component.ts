@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Params }   from '@angular/router';
 
+import { NotificationsService, SimpleNotificationsComponent } from 'angular2-notifications';
+
+import { ModelService } from '../model.service';
+
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',
@@ -14,16 +18,18 @@ export class VerifyEmailComponent implements OnInit {
   bootstrapCodeClass: string;
   username: string;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute) { }
+  // this is used to launch the after-success part of the page and hide the form
+  verificationSuccess: boolean;
+
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private notifications: NotificationsService, private model: ModelService) { }
 
   ngOnInit(): void {
+    this.verificationSuccess = false;
     // fetch the username (and code if provided in url)
     this.route.params
       .subscribe((params: Params) => {
-        console.log(params, '####');
         this.username = params['username'];
 
-        console.log(this.username);
         // set code if provided in url
         this.code = params['code'] || this.code;
       });
@@ -61,6 +67,24 @@ export class VerifyEmailComponent implements OnInit {
 
   onSubmit(): void {
     this.code = this.verifyEmailForm.get('code').value;
+    var notification = this.notifications.info('verifying email', `submitted ${this.username} ${this.code}`);
+    console.log(notification, '>>>>>>>>')
     console.log('submitted!', this.username, this.code);
+    this.model.verifyEmail(this.username, this.code)
+      .then((email) => {
+        console.log(email);
+        // empty the code
+        this.code = '';
+        // show success notification
+        this.notifications.remove(notification.id);
+        this.notifications.success('email verified', email);
+        // show the after-success part of the page
+        this.verificationSuccess = true;
+      })
+      .catch((err) => {
+        console.log(err);
+        this.notifications.remove(notification.id);
+        this.notifications.error('not verified', err, { position: ['top', 'left'] });
+      });
   }
 }
