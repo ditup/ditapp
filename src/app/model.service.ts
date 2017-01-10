@@ -82,4 +82,23 @@ export class ModelService {
       });
   }
 
+
+  basicAuth({ username, password }: { username: string, password: string }): Promise<any> {
+    // generate an Authorization header
+    const authHeader = 'Basic ' + new Buffer(`${username}:${password}`).toString('base64');
+
+    const headers = new Headers({
+      'Content-Type': 'application/vnd.api+json',
+      'Authorization': authHeader
+    });
+
+    return this.http
+      .get(`${this.baseUrl}/auth/basic`, { headers })
+      .toPromise()
+      .then((response: Response) => {
+        console.log('responded!', response);
+        return response.json().data.attributes;
+      });
+  }
+
 }

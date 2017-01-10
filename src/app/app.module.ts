@@ -11,6 +11,7 @@ import { SignupComponent } from './signup/signup.component';
 import { MainComponent } from './main/main.component';
 import { FofComponent } from './fof/fof.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { LoginBasicComponent } from './login-basic/login-basic.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
     SignupComponent,
     MainComponent,
     FofComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    LoginBasicComponent
   ],
   imports: [
     BrowserModule,

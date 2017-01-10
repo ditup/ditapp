@@ -21,7 +21,10 @@ export class VerifyEmailComponent implements OnInit {
   // this is used to launch the after-success part of the page and hide the form
   verificationSuccess: boolean;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private notifications: NotificationsService, private model: ModelService) { }
+  constructor(private formBuilder: FormBuilder,
+              private route: ActivatedRoute,
+              private notifications: NotificationsService,
+              private model: ModelService) { }
 
   ngOnInit(): void {
     this.verificationSuccess = false;
@@ -67,8 +70,7 @@ export class VerifyEmailComponent implements OnInit {
 
   onSubmit(): void {
     this.code = this.verifyEmailForm.get('code').value;
-    var notification = this.notifications.info('verifying email', `submitted ${this.username} ${this.code}`);
-    console.log(notification, '>>>>>>>>')
+    const notification = this.notifications.info('verifying email', `submitted ${this.username} ${this.code}`);
     console.log('submitted!', this.username, this.code);
     this.model.verifyEmail(this.username, this.code)
       .then((email) => {
