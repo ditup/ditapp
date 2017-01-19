@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -11,13 +11,14 @@ import { CustomValidators } from 'ng2-validation';
 import { NewUser } from '../new-user';
 // import { UniqueUsernameValidator } from '../shared/unique-username.directive';
 import { ModelService } from '../model.service';
+import { HeaderControlService } from '../header-control.service';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
 
   // variable used for async username validator (to make debounce)
   private uniqueUsernameTimeout;
@@ -62,11 +63,22 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
 
   // inject modules, services
-  constructor(private router: Router, private formBuilder: FormBuilder, private model: ModelService) { }
+  constructor(private router: Router,
+              private formBuilder: FormBuilder,
+              private model: ModelService,
+              private headerControl: HeaderControlService) { }
 
   // this will execute when the page is loaded
   ngOnInit(): void {
+    // don't display the page header
+    this.headerControl.display(false);
+    // prepare the reactive form
     this.buildForm();
+  }
+
+  ngOnDestroy(): void {
+    // display the page header again when leaving
+    this.headerControl.display(true);
   }
 
   /**

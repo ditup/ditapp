@@ -9,6 +9,7 @@ import { NotificationsService } from 'angular2-notifications';
 
 import { VerifyEmailComponent } from './verify-email.component';
 import { ModelService } from '../model.service';
+import { HeaderControlService } from '../header-control.service';
 import { ActivatedRouteStub } from '../../testing/router-stubs';
 
 let activatedRoute: ActivatedRouteStub;
@@ -35,6 +36,13 @@ class FakeModelService {
   }
 }
 
+class FakeHeaderControlService implements HeaderControlService {
+  displayChanged$;
+
+  display(value: boolean) {}
+
+}
+
 describe('VerifyEmailComponent', () => {
   let component: VerifyEmailComponent;
   let fixture: ComponentFixture<VerifyEmailComponent>;
@@ -47,6 +55,7 @@ describe('VerifyEmailComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: NotificationsService, useClass: NotificationsServiceStub },
+        { provide: HeaderControlService, useClass: FakeHeaderControlService },
         { provide: ModelService, useClass: FakeModelService }
       ]
     })

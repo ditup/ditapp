@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 
 import { SignupComponent } from './signup.component';
 import { ModelService } from '../model.service';
+import { HeaderControlService } from '../header-control.service';
 
 import { NewUser } from '../new-user';
 
@@ -33,6 +34,13 @@ class FakeModelService implements ModelService {
   }
 }
 
+class FakeHeaderControlService implements HeaderControlService {
+  displayChanged$;
+
+  display(value: boolean) {}
+
+}
+
 
 describe('SignupComponent', () => {
 
@@ -48,6 +56,7 @@ describe('SignupComponent', () => {
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: ModelService, useClass: FakeModelService }
+        { provide: HeaderControlService, useClass: FakeHeaderControlService }
       ]
     })
     .compileComponents();

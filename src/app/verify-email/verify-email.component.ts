@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Params }   from '@angular/router';
 
 import { NotificationsService, SimpleNotificationsComponent } from 'angular2-notifications';
 
 import { ModelService } from '../model.service';
+import { HeaderControlService } from '../header-control.service';
 
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',
   styleUrls: ['./verify-email.component.scss']
 })
-export class VerifyEmailComponent implements OnInit {
+export class VerifyEmailComponent implements OnInit, OnDestroy {
 
   verifyEmailForm: FormGroup;
   code: string;
@@ -24,9 +25,13 @@ export class VerifyEmailComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private notifications: NotificationsService,
-              private model: ModelService) { }
+              private model: ModelService,
+              private headerControl: HeaderControlService) { }
 
   ngOnInit(): void {
+    // hide the header
+    this.headerControl.display(false);
+
     this.verificationSuccess = false;
     // fetch the username (and code if provided in url)
     this.route.params
@@ -44,6 +49,11 @@ export class VerifyEmailComponent implements OnInit {
     if (this.code) {
       this.onSubmit();
     }
+  }
+
+  ngOnDestroy(): void {
+    // show the header
+    this.headerControl.display(true);
   }
 
   private buildForm() {
