@@ -9,6 +9,13 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { FofComponent } from './fof/fof.component';
 
+// importing guards and their dependencies
+import { AuthGuard } from './auth-guard.service';
+import { AuthMeGuard } from './auth-me-guard.service';
+import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { AuthService } from './auth.service';
+import { BasicAuthService } from './basic-auth.service';
+
 const routes: Routes = [
   {
     path: '',
@@ -24,11 +31,14 @@ const routes: Routes = [
   },
   {
     path: 'user/:username',
-    component: UserComponent
+    component: UserComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'user/:username/edit',
-    component: UserEditComponent
+    component: UserEditComponent,
+    canActivate: [AuthGuard, AuthMeGuard],
+    canDeactivate: [CanDeactivateGuard]
   },
   {
     path: 'user/:username/verify-email',
@@ -46,6 +56,13 @@ const routes: Routes = [
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  exports: [ RouterModule ],
+  providers: [
+    AuthGuard,
+    AuthMeGuard,
+    CanDeactivateGuard,
+    AuthService,
+    BasicAuthService
+  ]
 })
 export class AppRoutingModule { }
