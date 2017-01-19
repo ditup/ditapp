@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     // initialize the authentication values
+    this.logged = this.auth.logged;
     this.loggedUnverified = this.auth.loggedUnverified;
     this.username = this.auth.username;
   }
