@@ -21,9 +21,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // if logged, what is her username?
   public username: string;
 
-  // expose the logout function
-  public logout = this.auth.logout;
-
   // subscriptions to observables. To be able to unsubscribe OnDestroy.
   private subscription: Subscription;
   private authSubscription: Subscription;
@@ -46,9 +43,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
+  // expose the logout function
+  public logout() {
+    this.auth.logout();
+  };
+
+
   ngOnInit() {
+
     // initialize the authentication values
-    this.logged = this.auth.logged;
     this.loggedUnverified = this.auth.loggedUnverified;
     this.username = this.auth.username;
   }
