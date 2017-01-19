@@ -1,0 +1,18 @@
+<header *ngIf="display" class="app-header">
+  <nav class="main-navigation">
+    <ul class="people-menu header-menu">
+      <li *ngIf="logged||loggedUnverified" class="header-avatar">
+        <span>{{username}}</span>
+        <ul class="header-submenu">
+          <li><a *ngIf="logged" routerLink="/user/{{username}}">Profile</a></li>
+          <li><a *ngIf="logged" routerLink="/user/{{username}}/edit">Edit Profile</a></li>
+          <li><a *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a></li>
+          <li><a routerLink="/user/{{username}}/settings">Settings</a></li>
+          <li><a routerLink="/" (click)="logout()">Logout</a></li>
+        </ul>
+      </li>
+      <li><a *ngIf="!(logged||loggedUnverified)" routerLink="/login">Login</a></li><!--
+   --><li><a *ngIf="!(logged||loggedUnverified)" routerLink="/signup">Signup</a></li>
+    </ul>
+  </nav>
+</header>

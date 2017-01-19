@@ -1,0 +1,22 @@
+@function char-from-code($iso-char) {
+  @return unquote('\"\\#{$iso-char}\"');
+}
+
+@mixin fa-icon ($code){
+  content: char-from-code($code);
+  font-family:FontAwesome;
+  line-height:0;
+}
+
+@mixin fa-icon-before ($code) {
+  &:before{
+    @include fa-icon($code);
+  }
+  &:not(:empty):before {
+    //@extend .no-class-like-this;
+    padding-right:0.1em;
+  }
+}
+
+//.no-class-like-this {
+//}

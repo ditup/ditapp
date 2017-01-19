@@ -12,7 +12,7 @@ import { MainComponent } from './main/main.component';
 import { FofComponent } from './fof/fof.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { LoginBasicComponent } from './login-basic/login-basic.component';
-
+import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
 
 @NgModule({
@@ -23,6 +23,7 @@ import { UserComponent } from './user/user.component';
     FofComponent,
     VerifyEmailComponent,
     LoginBasicComponent,
+    HeaderComponent,
     UserComponent
   ],
   imports: [
