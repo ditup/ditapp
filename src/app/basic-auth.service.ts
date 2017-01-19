@@ -35,4 +35,11 @@ export class BasicAuthService {
   get email(): string|undefined {
     return localStorage.getItem('email');
   }
+
+  get credentials(): { username: string, password: string } {
+    return {
+      username: localStorage.getItem('username'),
+      password: localStorage.getItem('password')
+    };
+  }
 }

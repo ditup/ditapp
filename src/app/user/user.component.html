@@ -1,0 +1,21 @@
+<div *ngIf="exists !== false && exists !== true">
+  loading ...
+</div>
+<div *ngIf="exists === false">
+  user doesn't exist
+</div>
+<div *ngIf="exists === true">
+  <img style="width:200px;height:200px;" src="" alt="Profile Picture of {{username}}"/>
+  <span>{{user.gender}}</span>
+  <span>{{user.age}}</span>
+  <span>{{user.location}}</span>
+  <span style="font-weight:bold;">{{user.givenName}} {{user.familyName}}</span>
+  <span>@{{username}}</span>
+  <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
+  <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
+
+  <ul id="user-profile-tag-list"><!--
+    --><span *ngIf="tags===undefined">Loading tags ...</span><!--
+    --><li *ngFor="let tag of tags">{{tag.name}}</li><!--
+  --></ul>
+</div>

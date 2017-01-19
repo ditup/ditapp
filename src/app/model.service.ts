@@ -6,15 +6,23 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+import * as _ from 'lodash';
 
 import { NewUser } from './new-user';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class ModelService {
 
   private baseUrl = 'http://localhost:3000';
 
-  constructor(private http: Http) { }
+  private generateAuthHeader = this.generateBasicAuthHeader;
+
+  private contentTypeHeader = {
+    'Content-Type': 'application/vnd.api+json',
+  };
+
+  constructor(private http: Http, private auth: AuthService) { }
 
   createUser(newUser: NewUser): Promise<void> {
     console.log('creating new user!', newUser);
@@ -82,15 +90,26 @@ export class ModelService {
       });
   }
 
+  private get authHeader() {
+    return this.generateAuthHeader();
+  }
+
+  private generateBasicAuthHeader() {
+    const credentials = this.auth.credentials;
+    return this.createBasicAuthHeader(credentials);
+  }
+
+  private createBasicAuthHeader({ username, password }: { username: string, password: string }): { Authorization: string } {
+    return {
+      Authorization: 'Basic ' + new Buffer(`${username}:${password}`).toString('base64')
+    };
+  }
 
   basicAuth({ username, password }: { username: string, password: string }): Promise<any> {
     // generate an Authorization header
-    const authHeader = 'Basic ' + new Buffer(`${username}:${password}`).toString('base64');
+    const authHeader = this.createBasicAuthHeader({ username, password });
 
-    const headers = new Headers({
-      'Content-Type': 'application/vnd.api+json',
-      'Authorization': authHeader
-    });
+    const headers = new Headers(_.assign({}, authHeader, this.contentTypeHeader));
 
     return this.http
       .get(`${this.baseUrl}/auth/basic`, { headers })
@@ -98,6 +117,50 @@ export class ModelService {
       .then((response: Response) => {
         console.log('responded!', response);
         return response.json().data.attributes;
+      });
+  }
+
+  readUser(username: string): Promise<any> { // @TODO better return type
+    console.log('reading user', username);
+
+    const headers = new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+
+    return this.http
+      .get(`${this.baseUrl}/users/${username}`, { headers })
+      .toPromise()
+      .then((response: Response) => {
+        return response.json().data.attributes;
+      });
+  }
+
+  updateUser(username: string, profile: { givenName?: string, familyName?: string, description?: string}): Promise<any> {
+    console.log('updating the user!', username, profile);
+    const requestBody = {
+      data: {
+        type: 'users',
+        id: username,
+        attributes: profile
+      }
+    };
+
+    const headers = new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+
+    return this.http
+      .patch(`${this.baseUrl}/users/${username}`, JSON.stringify(requestBody), { headers })
+      .toPromise()
+      .then((response: Response) => {
+        return response.json().data.attributes;
+      });
+  }
+
+  readUserTags(username: string): Promise<any> {
+    const headers = new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+
+    return this.http
+      .get(`${this.baseUrl}/users/${username}/tags`, { headers })
+      .toPromise()
+      .then((response: Response) => {
+        return response.json().data;
       });
   }
 

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SignupComponent } from './signup/signup.component';
 import { LoginBasicComponent } from './login-basic/login-basic.component';
 import { MainComponent } from './main/main.component';
+import { UserComponent } from './user/user.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { FofComponent } from './fof/fof.component';
 
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginBasicComponent
+  },
+  {
+    path: 'user/:username',
+    component: UserComponent
   },
   {
     path: 'user/:username/verify-email',

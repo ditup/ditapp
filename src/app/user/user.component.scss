@@ -1,0 +1,5 @@
+#user-profile-tag-list {
+  &:empty::after {
+    content: "no tags found";
+  }
+}
