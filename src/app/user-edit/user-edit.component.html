@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>Edit Profile</h1>
+  <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
+    <fieldset [disabled]="isFormDisabled">
+      <div class="form-group"
+        [ngClass]="bootstrapClass.givenName">
+        <label for="given-name">Given Name</label>
+        <input type="text" class="form-control" id="given-name"
+        formControlName="givenName" required>
+
+        <div *ngIf="formErrors.givenName" class="alert alert-danger">
+          {{formErrors.givenName}}
+        </div>
+      </div>
+
+      <div class="form-group"
+        [ngClass]="bootstrapClass.familyName">
+        <label for="family-name">Family Name</label>
+        <input type="text" class="form-control" id="family-name"
+        formControlName="familyName" required>
+
+        <div *ngIf="formErrors.familyName" class="alert alert-danger">
+          {{formErrors.familyName}}
+        </div>
+      </div>
+
+      <div class="form-group"
+        [ngClass]="bootstrapClass.description">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description"
+          formControlName="description" required></textarea>
+
+        <div *ngIf="formErrors.description" class="alert alert-danger">
+          {{formErrors.description}}
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-default"
+        [disabled]="!profileForm.valid">Submit</button>
+
+    </fieldset>
+  </form>
+</div>

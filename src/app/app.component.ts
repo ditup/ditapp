@@ -4,6 +4,7 @@ import { ModelService } from './model.service';
 import { BasicAuthService } from './basic-auth.service';
 import { AuthService } from './auth.service';
 import { HeaderControlService } from './header-control.service';
+import { DialogService } from './dialog.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ import { HeaderControlService } from './header-control.service';
     ModelService,
     BasicAuthService,
     AuthService,
-    HeaderControlService
+    HeaderControlService,
+    DialogService
   ]
 })
 export class AppComponent {
