@@ -13,7 +13,13 @@ module.exports = function (config) {
       require('karma-spec-reporter')
     ],
     files: [
-      { pattern: './src/test.ts', watched: false }
+      { pattern: './src/test.ts', watched: false },
+      // don't watch the Vim junk files
+      { pattern: '**/*.swp', watched: false }
+    ],
+    exclude: [
+      // exclude the Vim junk files
+      '**/*.swp'
     ],
     preprocessors: {
       './src/test.ts': ['angular-cli']
