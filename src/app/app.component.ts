@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { Router, PRIMARY_OUTLET } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
+
+import * as _ from 'lodash';
 
 import { ModelService } from './model.service';
 import { BasicAuthService } from './basic-auth.service';
@@ -18,6 +24,30 @@ import { DialogService } from './dialog.service';
     DialogService
   ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
+
+  // options of notifications @TODO this should be improved, not defined here
   options = {};
+
+  private subscription: Subscription;
+
+  constructor(private router: Router, private title: Title) {
+
+    // changing of page title
+    this.subscription = router.events.subscribe(event => {
+      console.log('changing title', event.url);
+      let url = event.url;
+      let tree = router.parseUrl(url);
+      let urlSegments: any[] = _.get(tree, `root.children[${PRIMARY_OUTLET}].segments`, []);
+      console.log(urlSegments);
+      let text = (_.map(urlSegments, element => element.path).join(' · ') || 'welcome') + ' - ditup';
+      this.title.setTitle(text);
+    });
+  }
+
+  ngOnInit() {}
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }
