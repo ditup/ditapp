@@ -11,6 +11,8 @@ import * as _ from 'lodash';
 import { NewUser } from './new-user';
 import { AuthService } from './auth.service';
 
+declare const Buffer; // fixing a weird error (not declared Buffer)
+
 @Injectable()
 export class ModelService {
 

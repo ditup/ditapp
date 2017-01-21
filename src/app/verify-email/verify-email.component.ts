@@ -18,6 +18,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   code: string;
   bootstrapCodeClass: string;
   username: string;
+  submitting: boolean = false;
 
   // this is used to launch the after-success part of the page and hide the form
   verificationSuccess: boolean;
@@ -79,6 +80,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
+    this.submitting = true;
     this.code = this.verifyEmailForm.get('code').value;
     const notification = this.notifications.info('verifying email', `submitted ${this.username} ${this.code}`);
     console.log('submitted!', this.username, this.code);
@@ -92,11 +94,13 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         this.notifications.success('email verified', email);
         // show the after-success part of the page
         this.verificationSuccess = true;
+        this.submitting = false;
       })
       .catch((err) => {
         console.log(err);
         this.notifications.remove(notification.id);
         this.notifications.error('not verified', err, { position: ['top', 'left'] });
+        this.submitting = false;
       });
   }
 }
