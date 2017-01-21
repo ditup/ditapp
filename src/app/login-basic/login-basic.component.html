@@ -4,19 +4,21 @@
 <div class="container">
   <h1>Login Form</h1>
   <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" class="form-control" id="username"
-      formControlName="username" required>
+    <div>
+      <md-input-container>
+        <input md-input type="text" placeholder="Username"
+          formControlName="username" required>
+      </md-input-container>
     </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" class="form-control" id="password"
-      formControlName="password" required>
+    <div>
+      <md-input-container>
+        <input md-input type="text" placeholder="Password"
+          formControlName="password" required>
+      </md-input-container>
     </div>
 
-    <button type="submit" class="btn btn-default"
+    <button md-raised-button type="submit"
       [disabled]="!loginForm.valid">Log In</button>
   </form>
 

@@ -1,43 +1,88 @@
 <div class="container">
-  <h1>Edit Profile</h1>
-  <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
-    <fieldset [disabled]="isFormDisabled">
-      <div class="form-group"
-        [ngClass]="bootstrapClass.givenName">
-        <label for="given-name">Given Name</label>
-        <input type="text" class="form-control" id="given-name"
-        formControlName="givenName" required>
+  <h1>Edit Profile of {{username}}</h1>
+  <md-tab-group>
+    <md-tab label="Info">
+      <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
+        <fieldset [disabled]="isFormDisabled">
+          <!--div class="form-group"
+            [ngClass]="bootstrapClass.givenName">
+            <label for="given-name">Given Name</label>
+            <input type="text" class="form-control" id="given-name"
+            formControlName="givenName" required>
 
-        <div *ngIf="formErrors.givenName" class="alert alert-danger">
-          {{formErrors.givenName}}
-        </div>
+            <div *ngIf="formErrors.givenName" class="alert alert-danger">
+              {{formErrors.givenName}}
+            </div>
+            </div-->
+
+          <div>
+            <md-input-container>
+              <input md-input type="text" placeholder="Given Name"
+              formControlName="givenName">
+            </md-input-container>
+
+            <div *ngIf="formErrors.givenName" class="alert alert-danger">
+              {{formErrors.givenName}}
+            </div>
+          </div>
+
+          <div>
+            <md-input-container>
+              <input md-input type="text" placeholder="Family Name"
+              formControlName="familyName">
+            </md-input-container>
+
+            <div *ngIf="formErrors.familyName" class="alert alert-danger">
+              {{formErrors.familyName}}
+            </div>
+          </div>
+
+          <div>
+            <md-input-container>
+              <textarea md-input placeholder="Description"
+                formControlName="description"></textarea>
+            </md-input-container>
+
+            <div *ngIf="formErrors.description" class="alert alert-danger">
+              {{formErrors.description}}
+            </div>
+          </div>
+
+          <button md-raised-button type="submit"
+            [disabled]="!profileForm.valid">Submit</button>
+
+          <!--div class="form-group"
+            [ngClass]="bootstrapClass.familyName">
+            <label for="family-name">Family Name</label>
+            <input type="text" class="form-control" id="family-name"
+            formControlName="familyName" required>
+
+            <div *ngIf="formErrors.familyName" class="alert alert-danger">
+              {{formErrors.familyName}}
+            </div>
+          </div>
+
+          <div class="form-group"
+            [ngClass]="bootstrapClass.description">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description"
+              formControlName="description" required></textarea>
+
+            <div *ngIf="formErrors.description" class="alert alert-danger">
+              {{formErrors.description}}
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-default"
+            [disabled]="!profileForm.valid">Submit</button-->
+
+        </fieldset>
+      </form>
+    </md-tab>
+    <md-tab label="Tags">
+      <div>
+        Tags of user {{username}}
       </div>
-
-      <div class="form-group"
-        [ngClass]="bootstrapClass.familyName">
-        <label for="family-name">Family Name</label>
-        <input type="text" class="form-control" id="family-name"
-        formControlName="familyName" required>
-
-        <div *ngIf="formErrors.familyName" class="alert alert-danger">
-          {{formErrors.familyName}}
-        </div>
-      </div>
-
-      <div class="form-group"
-        [ngClass]="bootstrapClass.description">
-        <label for="description">Description</label>
-        <textarea class="form-control" id="description"
-          formControlName="description" required></textarea>
-
-        <div *ngIf="formErrors.description" class="alert alert-danger">
-          {{formErrors.description}}
-        </div>
-      </div>
-
-      <button type="submit" class="btn btn-default"
-        [disabled]="!profileForm.valid">Submit</button>
-
-    </fieldset>
-  </form>
+    </md-tab>
+  </md-tab-group>
 </div>

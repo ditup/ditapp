@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('reset.scss');
-@import url('forms.scss');
+// @import url('reset.scss');
+// @import url('forms.scss');
+@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
 
 html, body {
   height:100%;
