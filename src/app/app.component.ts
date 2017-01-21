@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, PRIMARY_OUTLET } from '@angular/router';
+import { Router, NavigationEnd, PRIMARY_OUTLET } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -30,6 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
   options = {};
 
   private subscription: Subscription;
+  private scrollUpSubscription: Subscription;
 
   constructor(private router: Router, private title: Title) {
 
@@ -45,9 +46,20 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+    // scrolling on top of the page on every route change
+    this.scrollUpSubscription = this.router.events.subscribe(evt => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0);
+    });
+
+  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.scrollUpSubscription.unsubscribe();
   }
 }
