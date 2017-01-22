@@ -1,12 +1,25 @@
 <md-toolbar *ngIf="display" class="app-header">
   <nav class="main-navigation">
     <a md-button routerLink="/">DitUp</a>
-    <button md-button [mdMenuTriggerFor]="userMenu" *ngIf="logged||loggedUnverified">{{username}}</button>
+
+    <button md-button [mdMenuTriggerFor]="newMenu"
+      *ngIf="logged">+</button>
+
+    <md-menu #newMenu="mdMenu">
+      <a md-menu-item *ngIf="logged" routerLink="/tags/new">Tag</a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/challenges/new">Challenge</a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/ideas/new">Idea</a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/projects/new">Project</a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/discussions/new">Discussion</a>
+    </md-menu>
+
+    <button md-button [mdMenuTriggerFor]="userMenu"
+      *ngIf="logged||loggedUnverified">{{username}}</button>
     <md-menu #userMenu="mdMenu">
       <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
       <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}/edit">Edit Profile</a>
       <a md-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
-      <a md-menu-item routerLink="/user/{{username}}/settings">Settings</a>
+      <a md-menu-item disabled routerLink="/user/{{username}}/settings">Settings</a>
       <a md-menu-item routerLink="/" (click)="logout()">Logout</a>
     </md-menu>
     <a md-button *ngIf="!(logged||loggedUnverified)" routerLink="/login">Login</a>

@@ -4,6 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { SignupComponent } from './signup/signup.component';
 import { LoginBasicComponent } from './login-basic/login-basic.component';
 import { MainComponent } from './main/main.component';
+
+import { TagsNewComponent } from './tags-new/tags-new.component';
+import { TagComponent } from './tag/tag.component';
+import { TagEditComponent } from './tag-edit/tag-edit.component';
+
 import { UserComponent } from './user/user.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
@@ -47,6 +52,20 @@ const routes: Routes = [
   {
     path: 'user/:username/verify-email/:code',
     component: VerifyEmailComponent
+  },
+  {
+    path: 'tags/new',
+    component: TagsNewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'tag/:tagname',
+    component: TagComponent
+  },
+  {
+    path: 'tag/:tagname/edit',
+    component: TagEditComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

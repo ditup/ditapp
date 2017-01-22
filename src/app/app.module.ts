@@ -18,6 +18,9 @@ import { LoginBasicComponent } from './login-basic/login-basic.component';
 import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { TagsNewComponent } from './tags-new/tags-new.component';
+import { TagComponent } from './tag/tag.component';
+import { TagEditComponent } from './tag-edit/tag-edit.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,10 @@ import { UserEditComponent } from './user-edit/user-edit.component';
     LoginBasicComponent,
     HeaderComponent,
     UserComponent,
-    UserEditComponent
+    UserEditComponent,
+    TagsNewComponent,
+    TagComponent,
+    TagEditComponent
   ],
   imports: [
     BrowserModule,

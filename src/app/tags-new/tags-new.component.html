@@ -1,0 +1,32 @@
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="newTagForm">
+    <fieldset [disabled]="isFormDisabled">
+
+      <div>
+        <md-input-container>
+          <input md-input type="text" placeholder="Tagname"
+          formControlName="tagname" required>
+        </md-input-container>
+
+        <div *ngIf="formErrors.tagname" class="alert alert-danger">
+          {{formErrors.tagname}}
+        </div>
+      </div>
+
+      <div>
+        <md-input-container>
+          <textarea md-input placeholder="Description"
+            formControlName="description"></textarea>
+        </md-input-container>
+
+        <div *ngIf="formErrors.description" class="alert alert-danger">
+          {{formErrors.description}}
+        </div>
+      </div>
+
+      <button md-raised-button type="submit"
+        [disabled]="!newTagForm.valid">Submit</button>
+
+    </fieldset>
+  </form>
+</div>

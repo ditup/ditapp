@@ -49,6 +49,10 @@ export class ModelService {
       });
   }
 
+  private get loggedHeaders() {
+    return new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+  }
+
   /**
    * @TODO this function is hugely imperfect. we don't know how to work with Observables catch etc
    *
@@ -166,4 +170,51 @@ export class ModelService {
       });
   }
 
+  createTag({ tagname, description }: { tagname: string, description: string }): Promise<void> {
+
+    console.log('creating new tag!', tagname, description);
+
+    const requestBody = {
+      data: {
+        type: 'tags',
+        attributes: {
+          tagname,
+          description
+        }
+      }
+    };
+
+    const headers = this.loggedHeaders;
+
+    return this.http
+      .post(`${this.baseUrl}/tags`, JSON.stringify(requestBody), { headers })
+      .toPromise()
+      .then((response) => {
+        console.log('responded!', response);
+      });
+  }
+
+  /**
+   * @TODO this function is hugely imperfect. we don't know how to work with Observables catch etc
+   *
+   *
+   */
+  isTagnameAvailable(tagname: string): Observable<boolean> {
+    console.log('searching for availability of', tagname);
+
+    const headers = this.loggedHeaders;
+
+    return this.http
+      .head(`${this.baseUrl}/tags/${tagname}`, { headers })
+      .map((resp: Response) => {
+        if (resp.status === 200) { return false; }
+      })
+      .catch((err, observable): Observable<boolean> => {
+        if (err.status === 404) {
+          return new Observable(observer => observer.next(true));
+        }
+
+        throw err;
+      });
+  }
 }
