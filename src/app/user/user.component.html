@@ -14,8 +14,9 @@
   <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
   <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
 
-  <ul id="user-profile-tag-list"><!--
-    --><span *ngIf="tags===undefined">Loading tags ...</span><!--
-    --><li *ngFor="let tag of tags">{{tag.name}}</li><!--
-  --></ul>
+
+  <md-chip-list id="user-profile-tag-list">
+    <span *ngIf="tags===undefined">Loading tags ...</span>
+    <md-chip *ngFor="let tag of tags">{{tag.tagname}}</md-chip>
+  </md-chip-list>
 </div>

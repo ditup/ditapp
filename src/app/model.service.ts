@@ -166,7 +166,10 @@ export class ModelService {
       .get(`${this.baseUrl}/users/${username}/tags`, { headers })
       .toPromise()
       .then((response: Response) => {
-        return response.json().data;
+        const data: any[] = response.json().data;
+        const simplified = _.map(data, (tag: { attributes: any }) => tag.attributes);
+
+        return simplified;
       });
   }
 
@@ -217,4 +220,57 @@ export class ModelService {
         throw err;
       });
   }
+
+  addTagToUser({ username, tagname, relevance, story }:
+               { username: string, tagname: string, relevance?: number, story?: string }): Promise<any> {
+
+    // defaults
+
+    relevance = relevance || 3;
+    story = story || '';
+
+    console.log('adding tag', tagname, 'to user', username);
+
+    const headers = this.loggedHeaders;
+
+    const requestBody = {
+      data: {
+        type: 'user-tags',
+        id: `${username}--${tagname}`,
+        attributes: {
+          username,
+          tagname,
+          relevance,
+          story
+        }
+      }
+    };
+
+    return this.http
+      .post(`${this.baseUrl}/users/${username}/tags`, JSON.stringify(requestBody), { headers })
+      .toPromise()
+      .then((response) => {
+        console.log('responded!', response);
+        return response;
+      });
+
+  }
+
+  readTagsLike(value: string): Promise<any[]> {
+
+    console.log('searching tags like', value);
+
+    const headers = this.loggedHeaders;
+
+    return this.http
+      .get(`${this.baseUrl}/tags?like=${encodeURIComponent(value)}`, { headers })
+      .toPromise()
+      .then((response) => {
+        console.log('responded!', response);
+        return response;
+      });
+
+
+  }
+
 }

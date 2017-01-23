@@ -21,6 +21,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { TagsNewComponent } from './tags-new/tags-new.component';
 import { TagComponent } from './tag/tag.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
+import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { TagEditComponent } from './tag-edit/tag-edit.component';
     UserEditComponent,
     TagsNewComponent,
     TagComponent,
-    TagEditComponent
+    TagEditComponent,
+    UserEditTagsComponent
   ],
   imports: [
     BrowserModule,

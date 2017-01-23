@@ -1,0 +1,10 @@
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="addTagForm">
+    <md-input-container>
+      <input md-input type="text" placeholder="Add Tag"
+        formControlName="tagname">
+    </md-input-container>
+    <button md-raised-button type="submit"
+      [disabled]="!addTagForm.valid">+</button>
+  </form>
+</div>
