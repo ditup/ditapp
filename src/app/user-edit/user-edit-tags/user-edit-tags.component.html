@@ -7,4 +7,9 @@
     <button md-raised-button type="submit"
       [disabled]="!addTagForm.valid">+</button>
   </form>
+
+  <md-chip-list>
+    <span *ngIf="tags===undefined">Loading tags ...</span>
+    <md-chip *ngFor="let tag of tags">{{tag.tagname}}</md-chip>
+  </md-chip-list>
 </div>

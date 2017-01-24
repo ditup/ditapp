@@ -249,9 +249,9 @@ export class ModelService {
     return this.http
       .post(`${this.baseUrl}/users/${username}/tags`, JSON.stringify(requestBody), { headers })
       .toPromise()
-      .then((response) => {
+      .then((response: Response) => {
         console.log('responded!', response);
-        return response;
+        return response.json().data.attributes;
       });
 
   }
