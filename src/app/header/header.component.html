@@ -3,14 +3,31 @@
     <a md-button routerLink="/">DitUp</a>
 
     <button md-button [mdMenuTriggerFor]="newMenu"
-      *ngIf="logged">+</button>
+      *ngIf="logged">
+      <md-icon alt="create">add</md-icon>
+    </button>
 
     <md-menu #newMenu="mdMenu">
-      <a md-menu-item *ngIf="logged" routerLink="/tags/new">Tag</a>
-      <a md-menu-item *ngIf="logged" disabled routerLink="/challenges/new">Challenge</a>
-      <a md-menu-item *ngIf="logged" disabled routerLink="/ideas/new">Idea</a>
-      <a md-menu-item *ngIf="logged" disabled routerLink="/projects/new">Project</a>
-      <a md-menu-item *ngIf="logged" disabled routerLink="/discussions/new">Discussion</a>
+      <a md-menu-item *ngIf="logged" routerLink="/tags/new">
+        <md-icon alt="tag">label</md-icon>
+        Tag
+      </a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/challenges/new">
+        <md-icon alt="challenge">extension</md-icon>
+        Challenge
+      </a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/ideas/new">
+        <md-icon alt="idea">lightbulb_outline</md-icon>
+        Idea
+      </a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/projects/new">
+        <md-icon alt="project">build</md-icon>
+        Project
+      </a>
+      <a md-menu-item *ngIf="logged" disabled routerLink="/discussions/new">
+        <md-icon alt="discussion">forum</md-icon>
+        Discussion
+      </a>
     </md-menu>
 
     <button md-button [mdMenuTriggerFor]="userMenu"

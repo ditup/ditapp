@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { MdSnackBar } from '@angular/material';
+import { TagsNewComponent } from '../../tags-new/tags-new.component';
+
+import { MdSnackBar, MdDialog } from '@angular/material';
 
 import * as _ from 'lodash';
 
@@ -22,7 +24,8 @@ export class UserEditTagsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private model: ModelService,
-              private snackBar: MdSnackBar) { }
+              private snackBar: MdSnackBar,
+              private dialog: MdDialog) { }
 
   ngOnInit() {
     this.buildForm();
@@ -65,7 +68,8 @@ export class UserEditTagsComponent implements OnInit {
 
         switch (e.status){
           case 404:
-            this.snackBar.open('TODO: open a dialog for creating a new tag', 'OK');
+            // this.snackBar.open('TODO: open a dialog for creating a new tag', 'OK');
+            this.dialog.open(TagsNewComponent);
             break;
           case 409:
             this.snackBar.open(`The tag ${tagname} was already added to you`, 'OK');
