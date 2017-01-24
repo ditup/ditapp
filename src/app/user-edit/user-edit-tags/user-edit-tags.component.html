@@ -10,6 +10,9 @@
 
   <md-chip-list>
     <span *ngIf="tags===undefined">Loading tags ...</span>
-    <md-chip *ngFor="let tag of tags">{{tag.tagname}}</md-chip>
+    <md-chip *ngFor="let tag of tags">
+      {{tag.tagname}}
+      <button md-icon-button (click)="removeTag(tag.tagname)"><md-icon alt="remove">highlight_off</md-icon></button>
+    </md-chip>
   </md-chip-list>
 </div>

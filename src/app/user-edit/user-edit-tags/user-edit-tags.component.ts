@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { MdSnackBar } from '@angular/material';
 
+import * as _ from 'lodash';
+
 import { ModelService } from '../../model.service';
 
 @Component({
@@ -71,6 +73,21 @@ export class UserEditTagsComponent implements OnInit {
           default:
             this.snackBar.open(`An Unexpected Error. ${resp.toString()}`, 'OK');
         }
+      });
+  }
+
+  removeTag(tagname: string) {
+
+    // @TODO make the state of adding and removing a tag visible
+    // i.e. change color of the tag which is removed
+    // add the tag immediately with different color. when saved, make the color normal
+    console.log('removing tag', tagname);
+    const username = this.username;
+
+    this.model.removeUserTag(username, tagname)
+      .then(() => {
+        console.log('tag successfully removed');
+        _.pullAllBy(this.tags, [{ tagname }], 'tagname');
       });
   }
 

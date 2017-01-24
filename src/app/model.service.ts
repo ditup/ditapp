@@ -273,4 +273,20 @@ export class ModelService {
 
   }
 
+  removeUserTag(username: string, tagname: string): Promise<any> {
+
+    console.log('removing tag', tagname, 'from user', username);
+
+    const headers = this.loggedHeaders;
+
+    return this.http
+      .delete(`${this.baseUrl}/users/${username}/tags/${tagname}`, { headers })
+      .toPromise()
+      .then((response: Response) => {
+        console.log('responded!', response);
+        return response;
+      });
+
+  }
+
 }
