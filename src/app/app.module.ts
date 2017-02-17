@@ -22,6 +22,7 @@ import { TagsNewComponent } from './tags-new/tags-new.component';
 import { TagComponent } from './tag/tag.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags.component';
+import { TagsNewFormComponent } from './shared/tags-new-form/tags-new-form.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags
     TagsNewComponent,
     TagComponent,
     TagEditComponent,
-    UserEditTagsComponent
+    UserEditTagsComponent,
+    TagsNewFormComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +50,7 @@ import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags
     SimpleNotificationsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [TagsNewFormComponent]
 })
 export class AppModule { }

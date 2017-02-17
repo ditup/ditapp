@@ -32,36 +32,40 @@ export class AppComponent implements OnInit, OnDestroy {
   options = {};
 
   private subscription: Subscription;
-  private scrollUpSubscription: Subscription;
 
   constructor(private router: Router, private title: Title) {
 
-    // changing of page title
-    this.subscription = router.events.subscribe(event => {
-      console.log('changing title', event.url);
-      let url = event.url;
-      let tree = router.parseUrl(url);
-      let urlSegments: any[] = _.get(tree, `root.children[${PRIMARY_OUTLET}].segments`, []);
-      console.log(urlSegments);
-      let text = (_.map(urlSegments, element => element.path).join(' · ') || 'welcome') + ' - ditup';
-      this.title.setTitle(text);
-    });
-  }
-
-  ngOnInit() {
-
-    // scrolling on top of the page on every route change
-    this.scrollUpSubscription = this.router.events.subscribe(evt => {
+    // subscribing to router events
+    // 1. set page title
+    // 2. scroll on top of a page
+    this.subscription = router.events.subscribe(evt => {
       if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+
+      // change page title
+      console.log('changing title', evt.url);
+      const url = evt.url;
+      const tree = router.parseUrl(url);
+      const urlSegments: any[] = _.get(tree, `root.children[${PRIMARY_OUTLET}].segments`, []);
+      console.log(urlSegments);
+      const text = (_.map(urlSegments, element => element.path).join(' · ') || 'welcome') + ' - ditup';
+      this.title.setTitle(text);
+
+      // scroll to a top of the page on a new page
+      //
+      // when there is a navigation inside page (i.e. #about), don't scroll
+      if (tree.fragment !== null) {
+        this.router.navigate( urlSegments, {fragment: tree.fragment});
         return;
       }
       window.scrollTo(0, 0);
     });
-
   }
+
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.scrollUpSubscription.unsubscribe();
   }
 }

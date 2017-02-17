@@ -6,16 +6,16 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
     <div>
       <md-input-container>
-        <input md-input type="text" placeholder="Username"
+        <input mdInput type="text" placeholder="Username"
           formControlName="username" required>
       </md-input-container>
     </div>
 
     <div>
       <md-input-container>
-        <input md-input type="text" placeholder="Password"
+        <input mdInput type="password" placeholder="Password"
           formControlName="password" required>
-      </md-input-container>
+        </md-input-container>
     </div>
 
     <button md-raised-button type="submit"
