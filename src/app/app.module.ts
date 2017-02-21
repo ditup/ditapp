@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
+import { DndModule } from 'ng2-dnd';
 
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
@@ -47,7 +48,8 @@ import { TagsNewFormComponent } from './shared/tags-new-form/tags-new-form.compo
     HttpModule,
     MaterialModule.forRoot(), // angular material material.angular.io
     AppRoutingModule,
-    SimpleNotificationsModule
+    SimpleNotificationsModule,
+    DndModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],

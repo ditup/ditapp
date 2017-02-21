@@ -256,21 +256,36 @@ export class ModelService {
 
   }
 
-  readTagsLike(value: string): Promise<any[]> {
+  readTagsLike(value: string): Observable<any[]> {
 
     console.log('searching tags like', value);
 
     const headers = this.loggedHeaders;
 
     return this.http
-      .get(`${this.baseUrl}/tags?like=${encodeURIComponent(value)}`, { headers })
+      .get(`${this.baseUrl}/tags?filter${encodeURIComponent('[tagname][like]')}=${encodeURIComponent(value)}`, { headers })
+      .map(response => _.map(response.json().data, d => d.attributes));
+  }
+
+  updateUserTag(username: string, tagname: string, data: { story?: string, relevance?: number}): Promise<any> {
+    console.log('updating user-tag', username, tagname);
+    const requestBody = {
+      data: {
+        type: 'users',
+        id: `${username}--${tagname}`,
+        attributes: data
+      }
+    };
+
+    const headers = this.loggedHeaders;
+
+    return this.http
+      .patch(`${this.baseUrl}/users/${username}/tags/${tagname}`, JSON.stringify(requestBody), { headers })
       .toPromise()
-      .then((response) => {
-        console.log('responded!', response);
-        return response;
+      .then((response: Response) => {
+        const data = response.json().data;
+
       });
-
-
   }
 
   removeUserTag(username: string, tagname: string): Promise<any> {
