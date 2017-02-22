@@ -136,5 +136,3 @@ export class TagsNewFormComponent implements OnInit {
       });
   }
 }
-
-

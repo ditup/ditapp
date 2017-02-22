@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 
 import { TagsNewFormComponent } from '../../shared/tags-new-form/tags-new-form.component';
+import { TagStoryFormComponent } from './tag-story-form/tag-story-form.component';
 
 import { ModelService } from '../../model.service';
 
@@ -36,6 +37,8 @@ export class UserEditTagsComponent implements OnInit {
   public suggestedTags: Observable<Tag[]>;
 
   public dialogRef: MdDialogRef<TagsNewFormComponent>;
+
+  public tagStoryDialogRef: MdDialogRef<TagStoryFormComponent>;
 
   addTagForm: FormGroup;
 
@@ -115,6 +118,39 @@ export class UserEditTagsComponent implements OnInit {
       });
   }
 
+  // this function opens a dialog to update user-tag story
+  openTagStoryDialog(tag: UserTag) {
+    // open the dialog
+    this.tagStoryDialogRef = this.dialog.open(TagStoryFormComponent);
+    const dialogRef = this.tagStoryDialogRef;
+
+    // a function to call when the dialog form is submitted
+    dialogRef.componentInstance.processForm = this.updateTagStory.bind(this);
+
+    // initialize the dialog with the provided tag
+    dialogRef.componentInstance.init(tag);
+  }
+
+  // provided the data we update the current user's tag story in database
+  // at the end we close the dialog.
+  updateTagStory({ tagname, story }: { tagname: string, story: string }): Promise<void> {
+    // update user-tag in database (send XHR to REST API)
+    return this.model.updateUserTag(this.username, tagname, { story })
+      .then(() => {
+        // we succeeded.
+
+        // update the story in the tag object of this component
+        // find the tag by tagname and update its story
+        const tag = _.find(_.concat.apply(this, this.tagLists), (tag) => {
+          return tag.tagname === tagname;
+        });
+        tag.story = story;
+
+        // close the dialog
+        this.tagStoryDialogRef.close();
+      });
+  }
+
   addTagFromAutosuggestion(tagname) {
     this.addTag(this.username, tagname);
   }
@@ -168,6 +204,9 @@ export class UserEditTagsComponent implements OnInit {
     this.model.updateUserTag(username, tagname, { relevance: to })
       .then(() => {
         console.log(`moved tag ${tagname} from relevance ${from} to ${to}`);
+
+        // change the relevance of the tag object
+        tag.relevance = to;
         // remove the tag from the old relevance
         _.pull(this.tagLists[from], tag);
       })

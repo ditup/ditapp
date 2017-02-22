@@ -1,4 +1,5 @@
 <div>
+  <!-- a form for adding a tag -->
   <form (ngSubmit)="onSubmit()" [formGroup]="addTagForm">
     <md-input-container>
       <input mdInput type="text" placeholder="Add Tag"
@@ -6,6 +7,7 @@
         formControlName="tagname">
     </md-input-container>
 
+    <!-- autocomplete of tags -->
     <md-autocomplete #auto="mdAutocomplete">
       <md-option *ngFor="let tag of suggestedTags | async" [value]="tag.tagname"
         (click)="addTagFromAutosuggestion(tag.tagname)">
@@ -20,9 +22,13 @@
 
   <div>
     <span *ngIf="tags===undefined">Loading tags ...</span>
+
+    <!-- a container for newly added tags -->
+    <!-- it is possible to drag them and drop to the relevance containers -->
     <div style="min-height:30px;background-color:#9fa;border:4px solid #7c9">
       <md-chip-list>
         <md-chip *ngFor="let tag of tagLists[0]"
+          (click)="openTagStoryDialog(tag)"
           dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, data: tag }">
           {{tag.tagname}}
           <button md-icon-button (click)="removeTag(tag.tagname)">
@@ -32,11 +38,14 @@
       </md-chip-list>
     </div>
 
+    <!-- containers for tags by different relevance (1-5) -->
+    <!-- it is possible to drag and drop tags to change their relevance -->
     <div *ngFor="let relevance of [5,4,3,2,1]"
       style="min-height:30px;background-color:#9af;border:4px solid #79c"
       dnd-droppable (onDropSuccess)="dropTagToRelevance($event, relevance)">
       <md-chip-list>
         <md-chip *ngFor="let tag of tagLists[relevance]"
+          (click)="openTagStoryDialog(tag)"
           dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, data: tag }">
           {{tag.tagname}}
           <button md-icon-button (click)="removeTag(tag.tagname)">
