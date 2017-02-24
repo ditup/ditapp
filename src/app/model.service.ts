@@ -167,6 +167,7 @@ export class ModelService {
       .toPromise()
       .then((response: Response) => {
         const data: any[] = response.json().data;
+        console.log(data, '###########################');
         const simplified = _.map(data, (tag: { attributes: any }) => tag.attributes);
 
         return simplified;

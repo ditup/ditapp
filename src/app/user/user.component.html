@@ -17,6 +17,10 @@
 
   <md-chip-list id="user-profile-tag-list">
     <span *ngIf="tags===undefined">Loading tags ...</span>
-    <md-chip *ngFor="let tag of tags" class="relevance-{{tag.relevance}}">{{tag.tagname}}</md-chip>
+    <md-chip *ngFor="let tag of tags" class="relevance-{{tag.relevance}}"
+      mdTooltip="{{tag.story || 'no story yet'}}"
+      (click)="openTagDetail(tag)">
+      {{tag.tagname}}
+    </md-chip>
   </md-chip-list>
 </div>

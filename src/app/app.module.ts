@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { DndModule } from 'ng2-dnd';
+import { MarkdownModule } from 'angular2-markdown';
 
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
@@ -25,6 +26,7 @@ import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags.component';
 import { TagsNewFormComponent } from './shared/tags-new-form/tags-new-form.component';
 import { TagStoryFormComponent } from './user-edit/user-edit-tags/tag-story-form/tag-story-form.component';
+import { UserTagDetailComponent } from './user/user-tag-detail/user-tag-detail.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { TagStoryFormComponent } from './user-edit/user-edit-tags/tag-story-form
     TagEditComponent,
     UserEditTagsComponent,
     TagsNewFormComponent,
-    TagStoryFormComponent
+    TagStoryFormComponent,
+    UserTagDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -51,13 +54,15 @@ import { TagStoryFormComponent } from './user-edit/user-edit-tags/tag-story-form
     MaterialModule.forRoot(), // angular material material.angular.io
     AppRoutingModule,
     SimpleNotificationsModule,
-    DndModule.forRoot()
+    DndModule.forRoot(), // drag and drop: ng2-dnd
+    MarkdownModule
   ],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
     TagsNewFormComponent,
-    TagStoryFormComponent
+    TagStoryFormComponent,
+    UserTagDetailComponent
   ]
 })
 export class AppModule { }

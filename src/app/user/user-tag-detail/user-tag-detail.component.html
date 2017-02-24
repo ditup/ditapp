@@ -1,0 +1,17 @@
+<md-card>
+  <md-card-title>
+    {{tag.tagname}}
+  </md-card-title>
+  <md-card-content Markdown>
+    {{tag.story || '_no user story yet_'}}
+  </md-card-content>
+  <hr>
+  <md-card-content Markdown>
+    {{tag.description || '_no description yet_'}}
+  </md-card-content>
+  <md-card-actions>
+    <button md-raised-button (click)="close()">Close</button>
+    <a md-raised-button routerLink="/tag/{{tag.tagname}}"
+      (click)="close()">Visit Tag Page</a>
+  </md-card-actions>
+</md-card>

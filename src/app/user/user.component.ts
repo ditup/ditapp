@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params }   from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
+import { MdDialog } from '@angular/material';
 
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
+
+import { UserTagDetailComponent } from './user-tag-detail/user-tag-detail.component';
 
 @Component({
   selector: 'app-user',
@@ -19,7 +22,8 @@ export class UserComponent implements OnInit {
 
   constructor(private model: ModelService,
               private route: ActivatedRoute,
-              private auth: AuthService
+              private auth: AuthService,
+              private dialog: MdDialog
              ) { }
 
   ngOnInit() {
@@ -46,6 +50,17 @@ export class UserComponent implements OnInit {
           this.tags = tags;
         });
       });
+  }
+
+  public openTagDetail(tag) {
+    console.log(tag);
+    const dialogRef = this.dialog.open(UserTagDetailComponent);
+
+    // provide the closing function
+    dialogRef.componentInstance.ref = dialogRef;
+
+    // initialize the tag
+    dialogRef.componentInstance.tag = tag;
   }
 
 }
