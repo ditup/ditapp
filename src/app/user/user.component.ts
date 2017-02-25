@@ -32,23 +32,22 @@ export class UserComponent implements OnInit {
       .subscribe((params: Params) => {
         const username = params['username'];
         this.model.readUser(username)
-        .then((user) => {
-          console.log(user, 'reached ngOnInit');
-          this.exists = true;
-          this.username = user.username;
-          this.user = user;
-          this.isMe = (this.username === this.auth.username) ? true : false;
-        })
-        .catch((err) => {
-          this.exists = false;
-          console.log(err);
-        });
+          .then((user) => {
+            this.exists = true;
+            this.username = user.username;
+            this.user = user;
+            this.isMe = (this.username === this.auth.username) ? true : false;
+          })
+          .catch((err) => {
+            this.exists = false;
+            console.log(err);
+          });
 
         this.model.readUserTags(username)
-        .then(tags => {
-          console.log('we brought tags to profile', tags);
-          this.tags = tags;
-        });
+          .then(tags => {
+            console.log('we brought tags to profile', tags);
+            this.tags = tags;
+          });
       });
   }
 

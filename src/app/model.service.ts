@@ -159,18 +159,51 @@ export class ModelService {
       });
   }
 
+  /**
+   * Get user-tags of a given user from API
+   * @param {string} username: what user's tags we search
+   * @returns {Promise<UserTag>} array of formatted userTags
+   */
   readUserTags(username: string): Promise<any> {
     const headers = new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
 
+    // send a request to the REST API
     return this.http
       .get(`${this.baseUrl}/users/${username}/tags`, { headers })
       .toPromise()
       .then((response: Response) => {
-        const data: any[] = response.json().data;
-        console.log(data, '###########################');
-        const simplified = _.map(data, (tag: { attributes: any }) => tag.attributes);
+        // response should contain an array of user-tags (data) and also an array
+        // of related tags (included)
+        const { data, included }: { data: any[], included: any[] } = response.json();
 
-        return simplified;
+        // we map user-tags to a simpler structure
+        /* TODO improve?
+         *  {
+         *    tagname,
+         *    story,
+         *    tag: { // the included tag
+         *      tagname,
+         *      description
+         *    }
+         *  }
+         */
+        const deserialized = _.map(data, (tag: { attributes: any, relationships: any }) => {
+          const tagDeserialized = tag.attributes;
+
+          // find the tag in included array
+          const tagname = tag.relationships.tag.data.id; // get tagname
+          // search the tagname in included[]
+          const includedTag = _.find(included, (element) => {
+            return element.type === 'tags' && element.id === tagname;
+          });
+
+          tagDeserialized.tag = includedTag.attributes;
+
+          return tagDeserialized;
+
+        });
+
+        return deserialized;
       });
   }
 
