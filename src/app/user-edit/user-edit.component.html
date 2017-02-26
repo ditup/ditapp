@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Edit Profile of {{username}}</h1>
+  <h1>Edit Profile of <a routerLink="/user/{{username}}">{{username}}</a></h1>
   <md-tab-group>
     <md-tab label="Info">
       <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
