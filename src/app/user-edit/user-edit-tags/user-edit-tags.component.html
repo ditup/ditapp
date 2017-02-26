@@ -28,6 +28,7 @@
     <div style="min-height:30px;background-color:#9fa;border:4px solid #7c9">
       <md-chip-list>
         <md-chip *ngFor="let tag of tagLists[0]"
+          [disabled]="tag.disabled"
           (click)="openTagStoryDialog(tag)"
           dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, data: tag }">
           {{tag.tagname}}
@@ -45,6 +46,7 @@
       dnd-droppable (onDropSuccess)="dropTagToRelevance($event, relevance)">
       <md-chip-list>
         <md-chip *ngFor="let tag of tagLists[relevance]"
+          [disabled]="tag.disabled"
           (click)="openTagStoryDialog(tag)"
           dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, data: tag }">
           {{tag.tagname}}

@@ -200,6 +200,8 @@ export class UserEditTagsComponent implements OnInit {
 
     // add the tag to the new relevance
     this.tagLists[to].push(tag);
+    // disable the tag while moving
+    tag.disabled = true;
 
     this.model.updateUserTag(username, tagname, { relevance: to })
       .then(() => {
@@ -217,6 +219,10 @@ export class UserEditTagsComponent implements OnInit {
 
         // snackbar info
         this.snackBar.open(`changing relevance of ${tagname} failed`);
+      })
+      .then(() => {
+        // enable the tag again
+        delete tag.disabled;
       });
   }
 
