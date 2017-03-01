@@ -5,7 +5,7 @@
   user doesn't exist
 </div>
 <div *ngIf="exists === true">
-  <img style="width:200px;height:200px;" src="" alt="Profile Picture of {{username}}"/>
+  <img style="width:200px;height:200px;" src="data:image/{{avatar.format}};base64,{{avatar.base64}}" alt="Profile Picture of {{username}}"/>
   <span>{{user.gender}}</span>
   <span>{{user.age}}</span>
   <span>{{user.location}}</span>

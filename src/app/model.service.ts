@@ -338,4 +338,17 @@ export class ModelService {
 
   }
 
+  readAvatar(username: string): Promise<any> {
+    const headers = this.loggedHeaders;
+
+    return this.http
+      .get(`${this.baseUrl}/users/${username}/avatar`, { headers })
+      .toPromise()
+      .then((response: Response) => {
+        const data = response.json().data;
+        return data.attributes;
+      });
+
+  }
+
 }

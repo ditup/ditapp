@@ -18,7 +18,9 @@ export class UserComponent implements OnInit {
   public user: any;
   public exists: boolean;
   public isMe: boolean;
-  public tags: [any];
+  public tags: any[];
+  public avatar = { base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII=', format: 'png' };
+
 
   constructor(private model: ModelService,
               private route: ActivatedRoute,
@@ -47,6 +49,12 @@ export class UserComponent implements OnInit {
           .then(tags => {
             console.log('we brought tags to profile', tags);
             this.tags = tags;
+          });
+
+        this.model.readAvatar(username)
+          .then(data => {
+            console.log(data);
+            this.avatar = data;
           });
       });
   }
