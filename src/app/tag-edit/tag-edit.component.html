@@ -1,3 +1,30 @@
-<p>
-  tag-edit works!
-</p>
+<div *ngIf="tagExists === false">
+  Tag doesn't exist.
+  <!-- TODO offer create to users who have rights (i.e. logged in) -->
+</div>
+
+<div *ngIf="tagLoading === true">
+  <md-spinner></md-spinner>
+</div>
+
+<div *ngIf="tagExists === true">
+  <h1>Edit Tag <a routerLink="/tag/{{tag.tagname}}">{{tag.tagname}}</a></h1>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="tagForm">
+    <fieldset [disabled]="isFormDisabled">
+
+      <div>
+        <md-input-container
+          [dividerColor]="formErrors.description ? 'warn' : ''"
+          [hintLabel]="formErrors.description || null">
+          <textarea mdInput placeholder="Description"
+            formControlName="description"></textarea>
+        </md-input-container>
+      </div>
+
+      <button md-raised-button type="submit"
+        [disabled]="!tagForm.valid">Submit</button>
+
+    </fieldset>
+  </form>
+</div>

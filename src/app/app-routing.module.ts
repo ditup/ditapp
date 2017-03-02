@@ -65,7 +65,8 @@ const routes: Routes = [
   {
     path: 'tag/:tagname/edit',
     component: TagEditComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard]
   },
   {
     path: '**',

@@ -9,6 +9,7 @@ import 'rxjs/add/operator/catch';
 import * as _ from 'lodash';
 
 import { NewUser } from './new-user';
+import { Tag } from './shared/tag';
 import { AuthService } from './auth.service';
 
 declare const Buffer; // fixing a weird error (not declared Buffer)
@@ -73,7 +74,8 @@ export class ModelService {
       });
   }
 
-  verifyEmail(username: string, code: string): Promise<string> {
+  async verifyEmail(username: string, code: string): Promise<string> {
+
     const requestBody = {
       data: {
         type: 'users',
@@ -87,13 +89,14 @@ export class ModelService {
 
     const headers = new Headers({ 'Content-Type': 'application/vnd.api+json' });
 
-    return this.http
+    const response = await this.http
       .get(`${this.baseUrl}/users/${username}/account/email/verify/${code}`, { headers })
-      .toPromise()
-      .then((response) => {
-        console.log('responded!', response);
-        return 'some-email';
-      });
+      .toPromise();
+
+    console.log('responded!', response);
+
+    // TODO send the real email
+    return 'some-email';
   }
 
   private get authHeader() {
@@ -298,7 +301,7 @@ export class ModelService {
 
     return this.http
       .get(`${this.baseUrl}/tags?filter${encodeURIComponent('[tagname][like]')}=${encodeURIComponent(value)}`, { headers })
-      .map(response => _.map(response.json().data, d => d.attributes));
+      .map(response => _.map(response.json().data, (d: any) => d.attributes));
   }
 
   updateUserTag(username: string, tagname: string, data: { story?: string, relevance?: number}): Promise<any> {
@@ -348,7 +351,38 @@ export class ModelService {
         const data = response.json().data;
         return data.attributes;
       });
+  }
+
+  readTag(tagname: string): Promise<Tag> {
+    const headers = this.loggedHeaders;
+
+    return this.http
+      .get(`${this.baseUrl}/tags/${tagname}`, { headers })
+      .toPromise()
+      .then((response: Response) => {
+        const data = response.json().data;
+        return data.attributes;
+      });
 
   }
 
+  updateTag(tagname: string, { description }: { description: string }) {
+    const headers = this.loggedHeaders;
+
+    const requestBody = {
+      data: {
+        type: 'tags',
+        id: tagname,
+        attributes: { tagname, description }
+      }
+    };
+
+    return this.http
+      .patch(`${this.baseUrl}/tags/${tagname}`, requestBody, { headers })
+      .toPromise()
+      .then((response: Response) => {
+        const data = response.json().data;
+        return data.attributes;
+      });
+  }
 }
