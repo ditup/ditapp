@@ -363,7 +363,30 @@ export class ModelService {
         const data = response.json().data;
         return data.attributes;
       });
+  }
 
+  async tagExists(tagname: string): Promise<boolean> {
+    const headers = this.loggedHeaders;
+
+    try {
+      const { status } = await this.http
+        .head(`${this.baseUrl}/tags/${tagname}`, { headers })
+        .toPromise();
+
+      if (status === 200)
+        return true;
+
+      throw new Error(`Unexpected success status ${status}`);
+
+    } catch (e) {
+      const { status } = e;
+
+      if (status === 404) {
+        return false;
+      }
+
+      throw e;
+    }
   }
 
   updateTag(tagname: string, { description }: { description: string }) {

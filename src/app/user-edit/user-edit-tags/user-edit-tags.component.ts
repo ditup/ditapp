@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 
@@ -33,27 +32,20 @@ export class UserEditTagsComponent implements OnInit {
 
   public tags: UserTag[];
 
-  // a list of tags for autosuggest
-  public suggestedTags: Observable<Tag[]>;
-
   public dialogRef: MdDialogRef<TagsNewFormComponent>;
 
   public tagStoryDialogRef: MdDialogRef<TagStoryFormComponent>;
-
-  addTagForm: FormGroup;
 
   // lists of tags, by relevance
   // 1-5 tags by relevance
   // 0 newly added tags (default relevance = 3)
   tagLists: any[][] = [[],[],[],[],[],[]];
 
-  constructor(private formBuilder: FormBuilder,
-              private model: ModelService,
+  constructor(private model: ModelService,
               private snackBar: MdSnackBar,
               private dialog: MdDialog) { }
 
   ngOnInit() {
-    this.buildForm();
     this.model.readUserTags(this.username)
       .then(tags => {
         this.tags = tags;
@@ -61,59 +53,6 @@ export class UserEditTagsComponent implements OnInit {
         // sort tags into their tagList by relevance
         for(let tag of tags) {
           this.tagLists[tag.relevance].push(tag);
-        }
-      });
-
-    this.addTagForm.controls['tagname'].valueChanges
-      .debounceTime(400)
-      .startWith(null)
-      .subscribe(val => {
-        this.suggestedTags = this.model.readTagsLike(val);
-      });
-  }
-
-  private buildForm(): void {
-    this.addTagForm = this.formBuilder.group({
-      tagname: ['', [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(64),
-        Validators.pattern(/^[a-z0-9]+(\-[a-z0-9]+)*$/)
-      ]]
-    });
-  }
-
-  // adding a new tag
-  onSubmit() {
-    console.log('adding tag:', this.addTagForm.value);
-
-    const tagname = this.addTagForm.value.tagname;
-
-    this.addTagOfferNew(tagname);
-  }
-
-  // add existent tag
-  // open dialog to create non-existent tag
-  addTagOfferNew(tagname) {
-    const username = this.username;
-
-    this.addTag(username, tagname)
-      .catch(e => {
-        console.log(e.json());
-
-        const resp = e.json();
-
-        this.addTagForm.reset();
-
-        switch (e.status){
-          case 404:
-            this.openDialog(tagname);
-            break;
-          case 409:
-            this.snackBar.open(`The tag ${tagname} was already added to you`, 'OK');
-            break;
-          default:
-            this.snackBar.open(`An Unexpected Error. ${resp.toString()}`, 'OK');
         }
       });
   }
@@ -151,23 +90,33 @@ export class UserEditTagsComponent implements OnInit {
       });
   }
 
-  addTagFromAutosuggestion(tagname) {
-    this.addTag(this.username, tagname);
-  }
+  public async addTag(tagname: string): Promise<void> {
+    const username: string = this.username;
+    try {
+      console.log('adding tag to', username, tagname);
+      const newTag = await this.model.addTagToUser({ username, tagname, relevance: 3, story: ''});
 
-  // used in autocomplete
-  getTagname(tag: { tagname: string }): string {
-    return tag.tagname;
-  }
+      // add to the tag lists
+      this.tagLists[0].push(newTag);
 
-  addTag(username: string, tagname: string): Promise<void> {
-    return this.model.addTagToUser({ username, tagname, relevance: 3, story: ''})
-      .then(newTag => {
-        // add to the tag lists
-        this.tagLists[0].push(newTag);
+    } catch (e) {
 
-        this.addTagForm.reset();
-      });
+      console.log(e.json());
+
+      const resp = e.json();
+
+      switch (e.status) {
+        case 404:
+          this.snackBar.open(`The tag ${tagname} doesn't exist`, 'OK');
+          break;
+        case 409:
+          this.snackBar.open(`The tag ${tagname} was already added to you`, 'OK');
+          break;
+        default:
+          this.snackBar.open(`An Unexpected Error. ${resp.toString()}`, 'OK');
+      }
+
+    }
   }
 
   removeTag(tagname: string) {
@@ -233,7 +182,6 @@ export class UserEditTagsComponent implements OnInit {
     dialogRef.componentInstance.onSubmit = this.createAddTag.bind(this);
     dialogRef.componentInstance.isTagnameDisabled = true;
     dialogRef.componentInstance.init({ tagname, description: '' });
-
   }
 
   createAddTag({ tagname, description }: { tagname: string, description: string }): Promise<void> {
@@ -242,11 +190,19 @@ export class UserEditTagsComponent implements OnInit {
     return this.model.createTag({ tagname, description })
       .then(() => {
         console.log('submitting the tag to the user');
-        return this.addTag(this.username, tagname);
+        return this.addTag(tagname);
       })
       .then(() => {
         this.dialogRef.close();
       });
+  }
+
+  get autocompleteAction() {
+    return this.addTag.bind(this);
+  }
+
+  get autocompleteAction404() {
+    return this.openDialog.bind(this);
   }
 
 }

@@ -1,0 +1,18 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="tagForm">
+  <md-input-container>
+    <input mdInput type="text" [placeholder]="placeholder"
+      [mdAutocomplete]="auto"
+      formControlName="tagname">
+  </md-input-container>
+
+  <!-- autocomplete of tags -->
+  <md-autocomplete #auto="mdAutocomplete">
+    <md-option *ngFor="let tag of suggestedTags | async" [value]="tag.tagname"
+      (click)="submitFromAutosuggestion(tag.tagname)">
+      {{ tag.tagname }}
+    </md-option>
+  </md-autocomplete>
+
+  <button md-raised-button type="submit"
+    [disabled]="!tagForm.valid">+</button>
+</form>

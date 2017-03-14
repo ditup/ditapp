@@ -27,6 +27,8 @@ import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags
 import { TagsNewFormComponent } from './shared/tags-new-form/tags-new-form.component';
 import { TagStoryFormComponent } from './user-edit/user-edit-tags/tag-story-form/tag-story-form.component';
 import { UserTagDetailComponent } from './user/user-tag-detail/user-tag-detail.component';
+import { PeopleComponent } from './people/people.component';
+import { TagAutocompleteComponent } from './shared/tag-autocomplete/tag-autocomplete.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { UserTagDetailComponent } from './user/user-tag-detail/user-tag-detail.c
     UserEditTagsComponent,
     TagsNewFormComponent,
     TagStoryFormComponent,
-    UserTagDetailComponent
+    UserTagDetailComponent,
+    PeopleComponent,
+    TagAutocompleteComponent
   ],
   imports: [
     BrowserModule,
