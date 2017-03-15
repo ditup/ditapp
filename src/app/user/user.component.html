@@ -14,15 +14,14 @@
   <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
   <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
 
+  <md-progress-spinner
+    mode="indefinite"
+    *ngIf="tags===undefined"></md-progress-spinner>
+  <app-user-tag-list
+    [userTags]="userTags"
+    [user]="user">
+  </app-user-tag-list>
 
-  <md-chip-list id="user-profile-tag-list">
-    <span *ngIf="tags===undefined">Loading tags ...</span>
-    <md-chip *ngFor="let tag of tags" class="relevance-{{tag.relevance}}"
-      mdTooltip="{{tag.story || 'no story yet'}}"
-      (click)="openTagDetail(tag)">
-      {{tag.tagname}}
-    </md-chip>
-  </md-chip-list>
   <div Markdown>
     {{user.description}}
   </div>

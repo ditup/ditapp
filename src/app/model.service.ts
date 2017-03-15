@@ -9,7 +9,7 @@ import 'rxjs/add/operator/catch';
 import * as _ from 'lodash';
 
 import { NewUser } from './new-user';
-import { Tag } from './shared/tag';
+import { Tag, User, UserTag } from './shared/types';
 import { AuthService } from './auth.service';
 
 declare const Buffer; // fixing a weird error (not declared Buffer)
@@ -407,5 +407,47 @@ export class ModelService {
         const data = response.json().data;
         return data.attributes;
       });
+  }
+
+  public async findUsersByTags(tagnames: string[]) {
+    const headers = this.loggedHeaders;
+
+    const tagnamesJoined: string = tagnames.join(',');
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/users?filter${encodeURIComponent('[tag]')}=${encodeURIComponent(tagnamesJoined)}`, { headers })
+      .toPromise();
+
+    const responseJson = response.json();
+    const data = responseJson.data;
+    const included = responseJson.included;
+
+    const users: User[] = _.map(data, (userData: any) => {
+
+      const user = userData.attributes as User;
+      user.userTags = [];
+
+      _.each(userData.relationships.tags.data, (userTagRel: any) => {
+        const userTagData = _.find(included, (userTag: any) => {
+          return userTag.type === 'user-tags' && userTag.id === userTagRel.id;
+        });
+
+        const userTag = userTagData.attributes as UserTag;
+
+        const tagData = _.find(included, (tag: any) => {
+          const tagRel = userTagData.relationships.tag.data;
+          return tag.type === 'tags' && tag.id === tagRel.id;
+        });
+
+        userTag.tag = tagData.attributes as Tag;
+
+        user.userTags.push(userTag);
+
+      });
+
+      return user;
+    });
+
+    return users;
   }
 }

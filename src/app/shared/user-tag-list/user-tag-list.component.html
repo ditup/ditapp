@@ -1,0 +1,8 @@
+<md-chip-list>
+  <md-chip *ngFor="let userTag of userTags"
+    class="relevance-{{userTag.relevance}}"
+    mdTooltip="{{userTag.story || 'no story yet'}}"
+    (click)="openTagDetail(userTag)">
+    {{userTag.tag.tagname}}
+  </md-chip>
+</md-chip-list>

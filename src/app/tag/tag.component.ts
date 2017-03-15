@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Tag } from '../shared/tag';
+import { Tag } from '../shared/types';
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
 

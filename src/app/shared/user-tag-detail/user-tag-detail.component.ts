@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
 import { MdDialogRef } from '@angular/material';
+
+import { UserTag } from '../types';
 
 @Component({
   selector: 'app-user-tag-detail',
@@ -9,7 +10,7 @@ import { MdDialogRef } from '@angular/material';
 })
 export class UserTagDetailComponent implements OnInit {
 
-  public tag: any;
+  public userTag: UserTag;
 
   public ref: MdDialogRef<UserTagDetailComponent>;
 

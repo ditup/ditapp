@@ -4,8 +4,9 @@ import { MdDialog } from '@angular/material';
 
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
+import { UserTag } from '../shared/types';
 
-import { UserTagDetailComponent } from './user-tag-detail/user-tag-detail.component';
+import { UserTagDetailComponent } from '../shared/user-tag-detail/user-tag-detail.component';
 
 @Component({
   selector: 'app-user',
@@ -18,7 +19,7 @@ export class UserComponent implements OnInit {
   public user: any;
   public exists: boolean;
   public isMe: boolean;
-  public tags: any[];
+  public userTags: UserTag[];
   public avatar = { base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII=', format: 'png' };
 
 
@@ -46,9 +47,8 @@ export class UserComponent implements OnInit {
           });
 
         this.model.readUserTags(username)
-          .then(tags => {
-            console.log('we brought tags to profile', tags);
-            this.tags = tags;
+          .then((userTags: UserTag[]) => {
+            this.userTags = userTags;
           });
 
         this.model.readAvatar(username)
@@ -59,15 +59,14 @@ export class UserComponent implements OnInit {
       });
   }
 
-  public openTagDetail(tag) {
-    console.log(tag);
+  public openTagDetail(userTag: UserTag) {
     const dialogRef = this.dialog.open(UserTagDetailComponent);
 
     // provide the closing function
     dialogRef.componentInstance.ref = dialogRef;
 
     // initialize the tag
-    dialogRef.componentInstance.tag = tag;
+    dialogRef.componentInstance.userTag = userTag;
   }
 
 }

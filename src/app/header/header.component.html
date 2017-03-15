@@ -30,6 +30,37 @@
       </a>
     </md-menu>
 
+    <button md-button [mdMenuTriggerFor]="exploreMenu">
+      <md-icon alt="explore">search</md-icon>
+    </button>
+
+    <md-menu #exploreMenu="mdMenu">
+      <a md-menu-item *ngIf="logged" routerLink="/people">
+        <md-icon alt="people">person</md-icon>
+        People
+      </a>
+      <a md-menu-item routerLink="/tags">
+        <md-icon alt="tag">label</md-icon>
+        Tags
+      </a>
+      <a md-menu-item disabled routerLink="/challenges">
+        <md-icon alt="challenge">extension</md-icon>
+        Challenges
+      </a>
+      <a md-menu-item disabled routerLink="/ideas">
+        <md-icon alt="idea">lightbulb_outline</md-icon>
+        Ideas
+      </a>
+      <a md-menu-item disabled routerLink="/projects">
+        <md-icon alt="project">build</md-icon>
+        Projects
+      </a>
+      <a md-menu-item disabled routerLink="/discussions">
+        <md-icon alt="discussion">forum</md-icon>
+        Discussions
+      </a>
+    </md-menu>
+
     <button md-button [mdMenuTriggerFor]="userMenu"
       *ngIf="logged||loggedUnverified">{{username}}</button>
     <md-menu #userMenu="mdMenu">

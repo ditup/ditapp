@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 
 import { ModelService } from '../model.service';
 import { DialogService } from '../dialog.service';
-import { Tag } from '../shared/tag';
+import { Tag } from '../shared/types';
 
 @Component({
   selector: 'app-tag-edit',

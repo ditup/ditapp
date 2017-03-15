@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
 
-import { Tag } from '../tag';
+import { Tag } from '../types';
 import { ModelService } from '../../model.service';
 
 @Component({
