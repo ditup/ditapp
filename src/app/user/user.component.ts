@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   public exists: boolean;
   public isMe: boolean;
   public userTags: UserTag[];
-  public avatar = { base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2BgYAAAAAQAAVzN/2kAAAAASUVORK5CYII=', format: 'png' };
+  public avatar: { base64: string, format: string };
 
 
   constructor(private model: ModelService,
@@ -32,30 +32,38 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     // fetch the username from url params
     this.route.params
-      .subscribe((params: Params) => {
+      .subscribe(async (params: Params) => {
         const username = params['username'];
-        this.model.readUser(username)
-          .then((user) => {
-            this.exists = true;
-            this.username = user.username;
-            this.user = user;
-            this.isMe = (this.username === this.auth.username) ? true : false;
-          })
-          .catch((err) => {
-            this.exists = false;
-            console.log(err);
-          });
 
-        this.model.readUserTags(username)
-          .then((userTags: UserTag[]) => {
-            this.userTags = userTags;
-          });
+        try {
+          // read user from database
+          const user = await this.model.readUser(username);
 
-        this.model.readAvatar(username)
-          .then(data => {
-            console.log(data);
-            this.avatar = data;
-          });
+          // assign variables
+          this.exists = true;
+          this.username = user.username;
+          this.user = user;
+          this.isMe = (this.username === this.auth.username) ? true : false;
+
+          // get avatar and assign it to this.avatar
+          const avatarPromise = this.model.readAvatar(username)
+            .then(data => {
+              this.avatar = data;
+            });
+
+          // get user-tags and assign them to this.userTags;
+          const userTagsPromise = this.model.readUserTags(username)
+            .then((userTags: UserTag[]) => {
+              this.userTags = userTags;
+            });
+
+          await Promise.all([userTagsPromise, avatarPromise]);
+
+        } catch (err) {
+          this.exists = false;
+          console.log(err);
+        }
+
       });
   }
 

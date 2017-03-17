@@ -366,6 +366,18 @@ export class ModelService {
   }
 
   async tagExists(tagname: string): Promise<boolean> {
+    const isValid: boolean = (function (tagname: string): boolean {
+      const isSizeValid = tagname.length >= 1 && tagname.length <= 64;
+      const isNameValid = /^[a-z0-9]+(\-[a-z0-9]+)*$/.test(tagname);
+
+      return isSizeValid && isNameValid;
+
+    }(tagname));
+
+    if (!isValid) {
+      return false;
+    }
+
     const headers = this.loggedHeaders;
 
     try {

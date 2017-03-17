@@ -5,7 +5,14 @@
   user doesn't exist
 </div>
 <div *ngIf="exists === true">
-  <img style="width:200px;height:200px;" src="data:image/{{avatar.format}};base64,{{avatar.base64}}" alt="Profile Picture of {{username}}"/>
+  <div *ngIf="!avatar"
+    class="avatar">
+    <md-spinner></md-spinner>
+  </div>
+  <img *ngIf="avatar"
+    class="avatar"
+    src="data:image/{{avatar.format}};base64,{{avatar.base64}}"
+    alt="Profile Picture of {{username}}"/>
   <span>{{user.gender}}</span>
   <span>{{user.age}}</span>
   <span>{{user.location}}</span>
@@ -14,9 +21,10 @@
   <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
   <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
 
-  <md-progress-spinner
-    mode="indefinite"
-    *ngIf="tags===undefined"></md-progress-spinner>
+  <div *ngIf="userTags===undefined">
+    <md-spinner></md-spinner>
+  </div>
+
   <app-user-tag-list
     [userTags]="userTags"
     [user]="user">
