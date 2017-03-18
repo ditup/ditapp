@@ -462,4 +462,44 @@ export class ModelService {
 
     return users;
   }
+
+  public async findUsersByMyTags() {
+    const headers = this.loggedHeaders;
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/users?filter${encodeURIComponent('[byMyTags]')}=true`, { headers })
+      .toPromise();
+
+    const responseJson = response.json();
+    const data = responseJson.data;
+    const included = responseJson.included;
+
+    const users: User[] = _.map(data, (userData: any) => {
+
+      const user = userData.attributes as User;
+      user.userTags = [];
+
+      _.each(userData.relationships.tags.data, (userTagRel: any) => {
+        const userTagData = _.find(included, (userTag: any) => {
+          return userTag.type === 'user-tags' && userTag.id === userTagRel.id;
+        });
+
+        const userTag = userTagData.attributes as UserTag;
+
+        const tagData = _.find(included, (tag: any) => {
+          const tagRel = userTagData.relationships.tag.data;
+          return tag.type === 'tags' && tag.id === tagRel.id;
+        });
+
+        userTag.tag = tagData.attributes as Tag;
+
+        user.userTags.push(userTag);
+
+      });
+
+      return user;
+    });
+
+    return users;
+  }
 }

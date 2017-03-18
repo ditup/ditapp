@@ -31,6 +31,9 @@ import { PeopleComponent } from './people/people.component';
 import { TagAutocompleteComponent } from './shared/tag-autocomplete/tag-autocomplete.component';
 import { UserSmallComponent } from './shared/user-small/user-small.component';
 import { UserTagListComponent } from './shared/user-tag-list/user-tag-list.component';
+import { WithMyTagsComponent } from './people/with-my-tags/with-my-tags.component';
+import { WithTagsComponent } from './people/with-tags/with-tags.component';
+import { SelectFromMyTagsComponent } from './shared/select-from-my-tags/select-from-my-tags.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,10 @@ import { UserTagListComponent } from './shared/user-tag-list/user-tag-list.compo
     PeopleComponent,
     TagAutocompleteComponent,
     UserSmallComponent,
-    UserTagListComponent
+    UserTagListComponent,
+    WithMyTagsComponent,
+    WithTagsComponent,
+    SelectFromMyTagsComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +76,8 @@ import { UserTagListComponent } from './shared/user-tag-list/user-tag-list.compo
   entryComponents: [
     TagsNewFormComponent,
     TagStoryFormComponent,
-    UserTagDetailComponent
+    UserTagDetailComponent,
+    SelectFromMyTagsComponent
   ]
 })
 export class AppModule { }

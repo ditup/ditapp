@@ -1,0 +1,31 @@
+<app-tag-autocomplete
+  placeholder="Search People By Tags"
+  [action]="tagAutocompleteAction"
+  [action404]="tagAutocompleteAction404"></app-tag-autocomplete>
+<button md-raised-button
+  (click)="openMyTagsDialog()">Choose from My Tags</button>
+<button md-raised-button
+  (click)="clearTags()">Clear</button>
+
+<md-chip-list>
+  <md-chip *ngFor="let tag of tagList.tags">
+    {{tag.tagname}}
+    <button md-icon-button (click)="removeTagFromList(tag.tagname)">
+      <md-icon alt="remove">close</md-icon>
+    </button>
+  </md-chip>
+</md-chip-list>
+
+<div *ngIf="loadingUsers">
+  <md-progress-bar mode="indeterminate"></md-progress-bar>
+</div>
+
+<md-list>
+  <md-list-item *ngFor="let user of userList.users">
+    <app-user-small [user]="user"></app-user-small>
+    <app-user-tag-list
+      [user]="user"
+      [userTags]="user.userTags"></app-user-tag-list>
+  </md-list-item>
+</md-list>
+

@@ -33,26 +33,28 @@ export class TagList {
     return _.map(this.tags, tag => tag.tagname);
   }
 
-  public add(tagname: string): boolean {
+  public add(tagname: string) {
     // is the tag already added to the list?
     const tagIndex: number = _.findIndex(this.tags, (tag) => {
       return tag.tagname === tagname;
     });
+
     const isAdded: boolean = (tagIndex === -1) ? false : true;
 
-    if (isAdded) return true;
-
+    if (isAdded) throw new Error(`The tag ${tagname} is already in the list.`);
 
     // add tag to the list
     const tag = new Tag(tagname);
     this.tags.push(tag);
 
-    return false;
   }
 
-  public remove(tagname: string): boolean {
+  public get isEmpty(): boolean {
+    return this.tags.length === 0;
+  }
+
+  public remove(tagname: string) {
     _.pullAllBy(this.tags, [{ tagname }], 'tagname');
-    return true;
   }
 }
 

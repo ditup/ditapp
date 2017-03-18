@@ -1,12 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 import * as _ from 'lodash';
 
-import { TagList, UserList, Tag } from '../shared/types';
 import { ModelService } from '../model.service';
+import { MdSnackBar } from '@angular/material';
 
+import { Tag } from '../shared/types';
+/*
+
+
+import { TagList, UserList, UserTag, Tag } from '../shared/types';
+*/
 @Component({
   selector: 'app-people',
   templateUrl: './people.component.html',
@@ -14,135 +20,138 @@ import { ModelService } from '../model.service';
 })
 export class PeopleComponent implements OnInit {
 
-  // TODO make tagList observable
-  public tagList = new TagList();
-  public userList = new UserList([]);
+  public selectedTab = 0;
 
-  private queryDelimiter = '|';
+  private querySeparator = '--';
 
-  // showing a progress bar when users loading is in progress
-  public loadingUsers: boolean = false;
+  private queryTags: Tag[];
 
-  constructor(private snackBar: MdSnackBar,
-              private model: ModelService,
+  constructor(private model: ModelService,
+              private route: ActivatedRoute,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private snackBar: MdSnackBar) {}
 
-  private parseTagnames(tagnamesString: string): string[] {
-    return (tagnamesString) ? tagnamesString.split(this.queryDelimiter) : [];
+  private parseTagnames(tagnamesString: string): Tag[] {
+    if (!_.isString(tagnamesString)) return undefined;
+
+    const tagnames: string[] = (tagnamesString) ? tagnamesString.split(this.querySeparator) : [];
+    return _.map(tagnames, tagname => new Tag(tagname));
   }
 
-  private async navigateToTags(tagnames: string[], replaceUrl?: boolean){
-    replaceUrl = replaceUrl || false;
-    let navigationExtras: any = (tagnames.length > 0)
-      ? { queryParams: { tags: tagnames.join(this.queryDelimiter) } }
-      : {};
+  private async tagsExist(tags: Tag[]) {
+    // find out
+    const existPromises = _.map(tags, tag => this.model.tagExists(tag.tagname));
+    // execute in parallel
+    const exist = await Promise.all(existPromises);
 
-    navigationExtras.relativeTo = this.route;
-    navigationExtras.replaceUrl = replaceUrl;
+    // separate existent and nonexistent tags
+    const existentTags: Tag[] = [];
+    const nonexistentTags: Tag[] = [];
 
-    console.log('Navigating.', navigationExtras);
-    console.log(await this.router.navigate([], navigationExtras));
-    console.log('after navigation');
+    _.each(exist, (exists: boolean, i) => {
+      if (exists) {
+        existentTags.push(tags[i]);
+      } else {
+        nonexistentTags.push(tags[i]);
+      }
+    });
+
+    return [existentTags, nonexistentTags];
+
   }
 
   async ngOnInit() {
 
-    console.log('initializing!', '*****************************');
+    // get the urlParams
+    const tagString: string = this.route.snapshot.queryParams['tags'];
 
-    // See whether all the tagnames provided in url exist.
-    // 1. get the parametes from query
-    const tagnames: string[] = this.parseTagnames(this.route.snapshot.queryParams['tags']);
-    // 2. find out which of the tagnames exist
-    const existPromises = _.map(tagnames, tagname => this.model.tagExists(tagname));
-    const exist = await Promise.all(existPromises);
+    // if params.tags exists
+    const tags: Tag[] = this.parseTagnames(tagString);
 
-    // 3. separate existent and nonexistent tags
-    const existentTagnames: string[] = [];
-    const nonexistentTagnames: string[] = [];
+    if (_.isArray(tags)) {
 
-    _.each(exist, (exists: boolean, i) => {
-      if (exists) {
-        existentTagnames.push(tagnames[i]);
-      } else {
-        nonexistentTagnames.push(tagnames[i]);
+      // move to the other tab
+      this.changeTab(true);
+
+      // check which tagnames exist
+      const [existentTags, nonexistentTags]: Tag[][] = await this.tagsExist(tags);
+
+      // update the tags
+      this.queryTags = existentTags;
+
+      // complain about unexistent tagnames
+      if (nonexistentTags.length > 0) {
+        // complain
+        const [s, es] = (nonexistentTags.length > 1) ? ['s', ''] : ['', 'es'];
+
+        const nonexistent: string = _.map(nonexistentTags, tag => tag.tagname).join(', ');
+        this.snackBar.open(`The tag${s} ${nonexistent} do${es}n't exist`, 'OK');
+
+        // update url with existent tagnames
+        await this.changeUrl(true, existentTags, true);
       }
-    });
-
-    // 4. if some tags don't exist, remove them from query url and complain
-    if (nonexistentTagnames.length > 0) {
-      // change query parameters
-      await this.navigateToTags(existentTagnames, true);
-
-      // complain
-      const s = (nonexistentTagnames.length > 1) ? 's' : '';
-      const es = (nonexistentTagnames.length > 1) ? '' : 'es';
-      const nonexistent: string = nonexistentTagnames.join(', ');
-      this.snackBar.open(`The tag${s} ${nonexistent} do${es}n't exist`, 'OK');
     }
-    // 5. finished
 
+    console.log('establishing params observer');
     // Observe query params and their changing
     this.route.queryParams.map(params => {
+      console.log('observed url change', params);
 
       // 1. get the tagnames from query
-      const tagnamesString = params['tags'];
+      const tagnameString = params['tags'];
 
-      return this.parseTagnames(tagnamesString);
-    }).subscribe(async (tagnames: string[]) => {
+      return this.parseTagnames(tagnameString);
+
+    }).subscribe(async (tags: Tag[]) => {
+
+      if (tags === undefined) {
+        this.changeTab(false);
+        return;
+      }
+
+      this.changeTab(true);
 
       // 2. are the tags different from the current tag list?
-      const difference: string[] = _.xor(this.tagList.tagnames, tagnames);
+      const difference: Tag[] = _.xor(this.queryTags, tags);
       const isQueryDifferent: boolean = difference.length > 0;
 
       // 3. update the tag list and find users
       if (isQueryDifferent) {
-        this.tagList.tags = _.map(tagnames, (tagname: string) => new Tag(tagname));
-        await this.findUsersByTagList();
+        this.queryTags = tags;
       }
 
     });
+
+    console.log('finished oninit');
+
   }
 
-  private async addTagToList(tagname: string) {
+  public async selectedTabChanged(tabno: number) {
+    const withTags = (tabno === 1) ? true : false;
+    await this.changeUrl(withTags, this.queryTags);
+  }
 
-    const isAdded = this.tagList.add(tagname);
+  public get changeQuery() {
+    return this.changeUrl.bind(this, true);
+  }
 
-    if (isAdded) {
-      this.snackBar.open(`tag ${tagname} is already in the list`, 'OK');
-      return;
+  private async changeUrl(withTags: boolean, tags?: Tag[], replaceUrl?: boolean) {
+    tags = tags || [];
+    const navigationExtras: NavigationExtras = {
+      relativeTo: this.route,
+      replaceUrl
+    };
+
+    if (withTags) {
+      const tagString = _.map(tags, tag => tag.tagname).join(this.querySeparator);
+      navigationExtras.queryParams = { tags: tagString };
     }
 
-    await this.findUsersByTagList();
+    await this.router.navigate([], navigationExtras);
   }
 
-  public async removeTagFromList(tagname: string) {
-    this.tagList.remove(tagname);
-    await this.findUsersByTagList();
-  }
-
-  private async findUsersByTagList() {
-    this.loadingUsers = true;
-
-    await this.navigateToTags(this.tagList.tagnames);
-
-    console.log('searching for users with tags', this.tagList.tags);
-    const users = await this.model.findUsersByTags(this.tagList.tagnames);
-
-    this.userList = new UserList(users);
-    this.loadingUsers = false;
-  }
-
-  private async complainNonexistentTag (tagname: string) {
-    this.snackBar.open(`tag ${tagname} doesn't exist`, 'OK');
-  }
-
-  get tagAutocompleteAction() {
-    return this.addTagToList.bind(this);
-  }
-
-  get tagAutocompleteAction404() {
-    return this.complainNonexistentTag.bind(this);
+  private changeTab(withTags: boolean) {
+    this.selectedTab = (withTags) ? 1 : 0;
   }
 
 }
