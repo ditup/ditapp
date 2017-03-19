@@ -1,3 +1,12 @@
-<p>
-  select-from-my-tags works!
-</p>
+<div *ngIf="loading"><md-spinner></md-spinner></div>
+
+<div *ngIf="!loading">
+  <md-chip-list [selectable]="false">
+    <md-chip *ngFor="let myTag of myTags"
+      [color]="(myTag.selected) ? 'primary' : ''"
+      [selected]="!myTag.originalSelection"
+      (click)="toggleSelection(myTag)">{{myTag.tag.tagname}}</md-chip>
+  </md-chip-list>
+  <button md-raised-button (click)="close(selectedTags)">OK</button>
+  <button md-raised-button (click)="close([])">Cancel</button>
+</div>

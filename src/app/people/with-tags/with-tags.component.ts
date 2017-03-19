@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 
 import { TagList, UserList, UserTag, Tag } from '../../shared/types';
 import { ModelService } from '../../model.service';
+import { AuthService } from '../../auth.service';
 
 import { SelectFromMyTagsComponent } from '../../shared/select-from-my-tags/select-from-my-tags.component';
 
@@ -31,6 +32,7 @@ export class WithTagsComponent implements OnInit, OnChanges {
   public loadingUsers: boolean = false;
 
   constructor(private snackBar: MdSnackBar,
+              private auth: AuthService,
               private model: ModelService,
               private dialog: MdDialog) { }
 
@@ -113,6 +115,8 @@ export class WithTagsComponent implements OnInit, OnChanges {
 
   private async addTagsToList(tagnames: string[]) {
 
+    if (tagnames.length === 0) return;
+
     const alreadyAdded: string[] = [];
     // add tags to list
     _.each(tagnames, (tagname: string) => {
@@ -123,7 +127,9 @@ export class WithTagsComponent implements OnInit, OnChanges {
       }
     });
 
-    this.snackBar.open('Some tags were already added. Not to happen.', 'OK');
+    if (alreadyAdded.length > 0) {
+      this.snackBar.open('Some tags were already added. Not to happen.', 'OK');
+    }
 
     // send info to Output
     this.onChangedTags.emit(this.tagList.tags);
@@ -131,8 +137,25 @@ export class WithTagsComponent implements OnInit, OnChanges {
     await this.updateUserList();
   }
 
-  public openMyTagsDialog() {
-    this.dialog.open(SelectFromMyTagsComponent);
+  public async openMyTagsDialog() {
+    this.myTagsDialog = this.dialog.open(SelectFromMyTagsComponent);
+
+    const dialog = this.myTagsDialog.componentInstance;
+
+    dialog.loading = true;
+
+    const myTags = await this.model.readUserTags(this.auth.username);
+
+    dialog.originalSelection = this.tagList.tags;
+    dialog.userTags = myTags;
+    dialog.generateMyTags.call(dialog);
+    dialog.loading = false;
+    dialog.close = this.closeDialog.bind(this);
+  }
+
+  public async closeDialog(selectedTags) {
+    this.myTagsDialog.close();
+    await this.addTagsToList(_.map(selectedTags, (tag: Tag) => tag.tagname));
   }
 
 }
