@@ -20,11 +20,8 @@ import { LoginBasicComponent } from './login-basic/login-basic.component';
 import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
-import { TagsNewComponent } from './tags-new/tags-new.component';
 import { TagComponent } from './tag/tag.component';
-import { TagEditComponent } from './tag-edit/tag-edit.component';
 import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags.component';
-import { TagsNewFormComponent } from './shared/tags-new-form/tags-new-form.component';
 import { TagStoryFormComponent } from './user-edit/user-edit-tags/tag-story-form/tag-story-form.component';
 import { UserTagDetailComponent } from './shared/user-tag-detail/user-tag-detail.component';
 import { PeopleComponent } from './people/people.component';
@@ -50,11 +47,8 @@ import { NotLoggedComponent } from './main/not-logged/not-logged.component';
     HeaderComponent,
     UserComponent,
     UserEditComponent,
-    TagsNewComponent,
     TagComponent,
-    TagEditComponent,
     UserEditTagsComponent,
-    TagsNewFormComponent,
     TagStoryFormComponent,
     UserTagDetailComponent,
     PeopleComponent,
@@ -82,7 +76,6 @@ import { NotLoggedComponent } from './main/not-logged/not-logged.component';
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
-    TagsNewFormComponent,
     TagStoryFormComponent,
     UserTagDetailComponent,
     SelectFromMyTagsComponent

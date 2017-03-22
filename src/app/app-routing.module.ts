@@ -5,9 +5,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginBasicComponent } from './login-basic/login-basic.component';
 import { MainComponent } from './main/main.component';
 
-import { TagsNewComponent } from './tags-new/tags-new.component';
 import { TagComponent } from './tag/tag.component';
-import { TagEditComponent } from './tag-edit/tag-edit.component';
 
 import { UserComponent } from './user/user.component';
 import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
@@ -56,19 +54,8 @@ const routes: Routes = [
     component: VerifyEmailComponent
   },
   {
-    path: 'tags/new',
-    component: TagsNewComponent,
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'tag/:tagname',
     component: TagComponent
-  },
-  {
-    path: 'tag/:tagname/edit',
-    component: TagEditComponent,
-    canActivate: [AuthGuard],
-    canDeactivate: [CanDeactivateGuard]
   },
   {
     path: 'people',

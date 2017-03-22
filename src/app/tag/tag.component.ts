@@ -3,7 +3,6 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { Tag } from '../shared/types';
 import { ModelService } from '../model.service';
-import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-tag',
@@ -12,13 +11,12 @@ import { AuthService } from '../auth.service';
 })
 export class TagComponent implements OnInit {
 
-  public tag: Tag = { tagname: '', description: '' };
+  public tag: Tag = { tagname: '' };
   public tagLoading: boolean;
   public tagExists: boolean;
 
   constructor(private model: ModelService,
-              private route: ActivatedRoute,
-              private auth: AuthService) { }
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -45,9 +43,4 @@ export class TagComponent implements OnInit {
       }
     });
   }
-
-  public get canEditTag(): boolean {
-    // TODO make it more protected
-    return this.auth.logged;
-  };
 }

@@ -185,8 +185,7 @@ export class ModelService {
          *    tagname,
          *    story,
          *    tag: { // the included tag
-         *      tagname,
-         *      description
+         *      tagname
          *    }
          *  }
          */
@@ -210,28 +209,24 @@ export class ModelService {
       });
   }
 
-  createTag({ tagname, description }: { tagname: string, description: string }): Promise<void> {
-
-    console.log('creating new tag!', tagname, description);
+  async createTag({ tagname }: Tag): Promise<void> {
 
     const requestBody = {
       data: {
         type: 'tags',
         attributes: {
-          tagname,
-          description
+          tagname
         }
       }
     };
 
     const headers = this.loggedHeaders;
 
-    return this.http
+    const response: Response = await this.http
       .post(`${this.baseUrl}/tags`, JSON.stringify(requestBody), { headers })
-      .toPromise()
-      .then((response) => {
-        console.log('responded!', response);
-      });
+      .toPromise();
+
+    console.log('responded!', response.json());
   }
 
   /**
@@ -399,26 +394,6 @@ export class ModelService {
 
       throw e;
     }
-  }
-
-  updateTag(tagname: string, { description }: { description: string }) {
-    const headers = this.loggedHeaders;
-
-    const requestBody = {
-      data: {
-        type: 'tags',
-        id: tagname,
-        attributes: { tagname, description }
-      }
-    };
-
-    return this.http
-      .patch(`${this.baseUrl}/tags/${tagname}`, requestBody, { headers })
-      .toPromise()
-      .then((response: Response) => {
-        const data = response.json().data;
-        return data.attributes;
-      });
   }
 
   public async findUsersByTags(tagnames: string[]) {

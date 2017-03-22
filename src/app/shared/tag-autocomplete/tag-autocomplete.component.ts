@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
@@ -13,11 +13,18 @@ import { ModelService } from '../../model.service';
 })
 export class TagAutocompleteComponent implements OnInit {
 
+  // the placeholder for tag search input field
   @Input()
   public placeholder: string = 'placeholder';
 
   public tagForm: FormGroup;
   public suggestedTags: Observable<Tag[]>;
+
+  @Output()
+  public action: EventEmitter<Tag> = new EventEmitter();
+
+  @Output()
+  public action404: EventEmitter<Tag> = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder,
               private model: ModelService) { }
@@ -53,24 +60,18 @@ export class TagAutocompleteComponent implements OnInit {
     const exists = await this.model.tagExists(tagname);
 
     if (exists) {
-      await this.action(tagname);
+      this.action.emit({ tagname });
     } else {
-      await this.action404(tagname);
+      this.action404.emit({ tagname });
     }
 
     this.tagForm.reset();
   }
 
-  public async submitFromAutosuggestion(tagname: string): Promise<void> {
-    await this.action(tagname);
-
+  public submitFromAutosuggestion(tagname: string) {
+    this.action.emit({ tagname });
     this.tagForm.reset();
   }
 
-  @Input()
-  public async action(tagname: string): Promise<void> {}
-
-  @Input()
-  public async action404(tagname: string): Promise<void> {}
 
 }

@@ -1,8 +1,8 @@
 <div>
   <!-- a form for adding a tag -->
   <app-tag-autocomplete
-    [action]="autocompleteAction"
-    [action404]="autocompleteAction404"
+    (action)="addTag($event)"
+    (action404)="createAddTag($event)"
     placeholder="Add Tag"></app-tag-autocomplete>
 
   <div>

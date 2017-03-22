@@ -1,7 +1,7 @@
 <app-tag-autocomplete
   placeholder="Search People By Tags"
-  [action]="tagAutocompleteAction"
-  [action404]="tagAutocompleteAction404"></app-tag-autocomplete>
+  (action)="addTagToList($event)"
+  (action404)="complainNonexistentTag($event)"></app-tag-autocomplete>
 <button md-raised-button
   (click)="openMyTagsDialog()">Choose from My Tags</button>
 <button md-raised-button

@@ -5,10 +5,6 @@
   <md-card-content Markdown>
     {{userTag.story || '_no user story yet_'}}
   </md-card-content>
-  <hr>
-  <md-card-content Markdown>
-    {{userTag.tag.description || '_no description yet_'}}
-  </md-card-content>
   <md-card-actions>
     <button md-raised-button (click)="close()">Close</button>
     <a md-raised-button routerLink="/tag/{{userTag.tag.tagname}}"

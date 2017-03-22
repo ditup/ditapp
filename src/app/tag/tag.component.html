@@ -9,14 +9,8 @@
 <md-card *ngIf="tagExists === true">
   <md-card-title><md-icon alt="tag">label</md-icon> {{tag.tagname}}</md-card-title>
 
-  <a *ngIf="canEditTag" md-raised-button routerLink="/tag/{{tag.tagname}}/edit">edit</a><!-- TODO better position? -->
   <md-card-content>
     <md-tab-group>
-
-      <md-tab label="Info">
-        <md-card-subtitle>Description</md-card-subtitle>
-        {{tag.description || 'no description yet'}}
-      </md-tab>
 
       <md-tab label="Related Tags">
         TODO

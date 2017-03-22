@@ -36,7 +36,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // subscribe to observing the login values
     this.authSubscription = this.auth.loggedStatusChanged$.subscribe(
       ({logged, username, loggedUnverified }: {logged: boolean, username: string, loggedUnverified: boolean }) => {
-      console.log('auth subscribed!', username, logged, loggedUnverified);
       this.logged = logged;
       this.username = username;
       this.loggedUnverified = loggedUnverified;

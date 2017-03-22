@@ -8,10 +8,6 @@
     </button>
 
     <md-menu #newMenu="mdMenu">
-      <a md-menu-item *ngIf="logged" routerLink="/tags/new">
-        <md-icon alt="tag">label</md-icon>
-        Tag
-      </a>
       <a md-menu-item *ngIf="logged" disabled routerLink="/challenges/new">
         <md-icon alt="challenge">extension</md-icon>
         Challenge

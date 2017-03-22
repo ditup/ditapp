@@ -58,7 +58,7 @@ export class WithTagsComponent implements OnInit, OnChanges {
     //
   }
 
-  private async addTagToList(tagname: string) {
+  public async addTagToList({ tagname }: Tag) {
     try {
       // add to list
       this.tagList.add(tagname);
@@ -93,17 +93,10 @@ export class WithTagsComponent implements OnInit, OnChanges {
     }
   }
 
-  private async complainNonexistentTag (tagname: string) {
+  public complainNonexistentTag ({ tagname }: Tag) {
     this.snackBar.open(`tag ${tagname} doesn't exist`, 'OK');
   }
 
-  get tagAutocompleteAction() {
-    return this.addTagToList.bind(this);
-  }
-
-  get tagAutocompleteAction404() {
-    return this.complainNonexistentTag.bind(this);
-  }
 
   public async clearTags() {
     this.tagList.tags = [];

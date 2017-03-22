@@ -11,8 +11,7 @@ export class User {
 
 export class Tag {
   constructor(public tagname: string,
-              public description?: string,
-              public created?: Date|number) {
+              public created?: number) {
 
     // TODO fix the creator
 

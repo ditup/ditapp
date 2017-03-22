@@ -6,20 +6,11 @@ import { Observable } from 'rxjs/Observable';
 
 import * as _ from 'lodash';
 
-import { TagsNewFormComponent } from '../../shared/tags-new-form/tags-new-form.component';
 import { TagStoryFormComponent } from './tag-story-form/tag-story-form.component';
 
 import { ModelService } from '../../model.service';
 
-class Tag {
-  constructor(public tagname: string, public description: string) {}
-}
-
-class UserTag {
-  constructor(public tagname: string,
-              public story: string,
-              public relevance: number) {}
-}
+import { Tag, UserTag } from '../../shared/types';
 
 @Component({
   selector: 'app-user-edit-tags',
@@ -31,8 +22,6 @@ export class UserEditTagsComponent implements OnInit {
   @Input() username: string;
 
   public tags: UserTag[];
-
-  public dialogRef: MdDialogRef<TagsNewFormComponent>;
 
   public tagStoryDialogRef: MdDialogRef<TagStoryFormComponent>;
 
@@ -90,7 +79,7 @@ export class UserEditTagsComponent implements OnInit {
       });
   }
 
-  public async addTag(tagname: string): Promise<void> {
+  public async addTag({ tagname }: Tag): Promise<void> {
     const username: string = this.username;
     try {
       console.log('adding tag to', username, tagname);
@@ -175,34 +164,12 @@ export class UserEditTagsComponent implements OnInit {
       });
   }
 
-  openDialog(tagname: string) {
-    this.dialogRef = this.dialog.open(TagsNewFormComponent);
-    const dialogRef = this.dialogRef;
-    dialogRef.componentInstance.tagname = tagname;
-    dialogRef.componentInstance.onSubmit = this.createAddTag.bind(this);
-    dialogRef.componentInstance.isTagnameDisabled = true;
-    dialogRef.componentInstance.init({ tagname, description: '' });
-  }
+  async createAddTag({ tagname }: Tag): Promise<void> {
 
-  createAddTag({ tagname, description }: { tagname: string, description: string }): Promise<void> {
+    await this.model.createTag({ tagname });
 
-    console.log('creating tag in model', tagname, description);
-    return this.model.createTag({ tagname, description })
-      .then(() => {
-        console.log('submitting the tag to the user');
-        return this.addTag(tagname);
-      })
-      .then(() => {
-        this.dialogRef.close();
-      });
-  }
-
-  get autocompleteAction() {
-    return this.addTag.bind(this);
-  }
-
-  get autocompleteAction404() {
-    return this.openDialog.bind(this);
+    console.log('submitting the tag to the user');
+    await this.addTag({ tagname });
   }
 
 }
