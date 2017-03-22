@@ -36,6 +36,8 @@ import { WithTagsComponent } from './people/with-tags/with-tags.component';
 import { SelectFromMyTagsComponent } from './shared/select-from-my-tags/select-from-my-tags.component';
 import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
 import { MessageFormComponent } from './messages-with-user/message-form/message-form.component';
+import { LoggedComponent } from './main/logged/logged.component';
+import { NotLoggedComponent } from './main/not-logged/not-logged.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { MessageFormComponent } from './messages-with-user/message-form/message-
     WithTagsComponent,
     SelectFromMyTagsComponent,
     MessagesWithUserComponent,
-    MessageFormComponent
+    MessageFormComponent,
+    LoggedComponent,
+    NotLoggedComponent
   ],
   imports: [
     BrowserModule,

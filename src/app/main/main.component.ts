@@ -1,22 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { HeaderControlService } from '../header-control.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit {
 
-  constructor(private headerControl: HeaderControlService) { }
+  constructor(public auth: AuthService) { }
 
   ngOnInit() {
-    this.headerControl.display(false);
-  }
-
-  ngOnDestroy() {
-    this.headerControl.display(true);
   }
 
 }
