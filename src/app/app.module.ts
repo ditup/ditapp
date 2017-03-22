@@ -34,6 +34,8 @@ import { UserTagListComponent } from './shared/user-tag-list/user-tag-list.compo
 import { WithMyTagsComponent } from './people/with-my-tags/with-my-tags.component';
 import { WithTagsComponent } from './people/with-tags/with-tags.component';
 import { SelectFromMyTagsComponent } from './shared/select-from-my-tags/select-from-my-tags.component';
+import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
+import { MessageFormComponent } from './messages-with-user/message-form/message-form.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { SelectFromMyTagsComponent } from './shared/select-from-my-tags/select-f
     UserTagListComponent,
     WithMyTagsComponent,
     WithTagsComponent,
-    SelectFromMyTagsComponent
+    SelectFromMyTagsComponent,
+    MessagesWithUserComponent,
+    MessageFormComponent
   ],
   imports: [
     BrowserModule,

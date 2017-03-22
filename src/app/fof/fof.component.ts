@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-fof',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fof.component.scss']
 })
 export class FofComponent implements OnInit {
+
+  @Input()
+  public message: string = 'not found';
 
   constructor() { }
 

@@ -9,7 +9,7 @@ import 'rxjs/add/operator/catch';
 import * as _ from 'lodash';
 
 import { NewUser } from './new-user';
-import { Tag, User, UserTag } from './shared/types';
+import { Tag, User, UserTag, Message } from './shared/types';
 import { AuthService } from './auth.service';
 
 declare const Buffer; // fixing a weird error (not declared Buffer)
@@ -501,5 +501,70 @@ export class ModelService {
     });
 
     return users;
+  }
+
+  public async readMessagesWith(username: string): Promise<Message[]> {
+    const headers = this.loggedHeaders;
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/messages?filter${encodeURIComponent('[with]')}=${username}`, { headers })
+      .toPromise();
+
+    const { data, included } = response.json();
+
+    const messages: Message[] = _.map(data, (msgData: any) => {
+      return this.deserializeMessage(msgData, included);
+    });
+
+    return messages;
+  }
+
+  public async sendMessage(to: string, { body }: { body: string }): Promise<any> {
+
+    const headers = this.loggedHeaders;
+
+    const requestBody = {
+      data: {
+        type: 'messages',
+        attributes: {
+          body
+        },
+        relationships: {
+          to: { data: { type: 'users', id: to } }
+        }
+      }
+    };
+
+    const response: Response = await this.http
+      .post(`${this.baseUrl}/messages`, JSON.stringify(requestBody), { headers })
+      .toPromise();
+
+      console.log('responded!', response.json().data);
+
+      const { data, included } = response.json();
+
+      return this.deserializeMessage(data, included);
+  }
+
+  private deserializeMessage(msgData: any, included: any): Message {
+    const message = msgData.attributes as Message;
+
+    message.id = msgData.id;
+
+    const fromUsername: string = msgData.relationships.from.data.id;
+    const toUsername: string = msgData.relationships.to.data.id;
+
+    const fromData = _.find(included, (user: any) => {
+      return user.type === 'users' && user.id === fromUsername;
+    });
+
+    const toData = _.find(included, (user: any) => {
+      return user.type === 'users' && user.id === toUsername;
+    });
+
+    message.from = fromData.attributes as User;
+    message.to = toData.attributes as User;
+
+    return message;
   }
 }

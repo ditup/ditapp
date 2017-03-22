@@ -10,6 +10,7 @@ import { TagComponent } from './tag/tag.component';
 import { TagEditComponent } from './tag-edit/tag-edit.component';
 
 import { UserComponent } from './user/user.component';
+import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
 import { PeopleComponent } from './people/people.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
@@ -72,6 +73,11 @@ const routes: Routes = [
   {
     path: 'people',
     component: PeopleComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'messages/:username',
+    component: MessagesWithUserComponent,
     canActivate: [AuthGuard]
   },
   {

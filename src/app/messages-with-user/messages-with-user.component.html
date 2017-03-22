@@ -1,0 +1,18 @@
+<div *ngIf="loading">
+  <md-spinner></md-spinner>
+</div>
+
+<div *ngIf="otherUserExists === true">
+  <md-list>
+    <md-list-item *ngFor="let msg of inverseMessages">
+      {{msg.from.username}} ({{msg.created | date:"hh:mm:ss"}}):
+      {{msg.body}}
+    </md-list-item>
+  </md-list>
+  <app-message-form [receiver]="otherUser" (onMessageSent)="onNewMessage($event)">
+  </app-message-form>
+</div>
+
+<div *ngIf="otherUserExists === false">
+  <app-fof message="user {{otherUser.username}} doesn't exist"></app-fof>
+</div>

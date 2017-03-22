@@ -1,0 +1,20 @@
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="messageForm">
+    <fieldset [disabled]="isFormDisabled">
+
+      <div>
+        <md-input-container
+          [dividerColor]="formErrors.body ? 'warn' : ''"
+          [hintLabel]="formErrors.body || null">
+          <textarea mdInput placeholder="Message"
+            formControlName="body"></textarea>
+        </md-input-container>
+      </div>
+
+      <button md-raised-button type="submit"
+        [disabled]="!messageForm.valid">Send</button>
+      <span *ngIf="sending"><md-spinner></md-spinner></span>
+
+    </fieldset>
+  </form>
+</div>

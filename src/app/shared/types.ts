@@ -61,3 +61,11 @@ export class TagList {
 export class UserList {
   constructor(public users: User[]) {}
 }
+
+export class Message {
+  constructor(public from: User,
+              public to: User,
+              public id: string,
+              public body: string,
+              public created: number) {}
+}
