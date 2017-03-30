@@ -57,6 +57,12 @@
       </a>
     </md-menu>
 
+    <a md-button
+      routerLink="/map"
+      *ngIf="logged">
+      <md-icon alt="map">place</md-icon>
+    </a>
+
     <button md-button [mdMenuTriggerFor]="userMenu"
       *ngIf="logged||loggedUnverified">{{username}}</button>
     <md-menu #userMenu="mdMenu">

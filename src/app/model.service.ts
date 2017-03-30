@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
+import { LatLng } from 'leaflet';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -478,6 +479,23 @@ export class ModelService {
     return users;
   }
 
+  public async findUsersWithinRectangle(sw: LatLng, ne: LatLng): Promise<User[]> {
+    const headers = this.loggedHeaders;
+
+    console.log(sw, ne);
+
+    const locationString = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/users?filter${encodeURIComponent('[location]')}=${locationString}`, { headers })
+      .toPromise();
+
+    const responseJson = response.json();
+    const data = responseJson.data;
+
+    return _.map(data, (user: any) => this.deserializeUser(user));
+  }
+
   public async readMessagesWith(username: string): Promise<Message[]> {
     const headers = this.loggedHeaders;
 
@@ -541,5 +559,11 @@ export class ModelService {
     message.to = toData.attributes as User;
 
     return message;
+  }
+
+  private deserializeUser(userData: any, included?: any): User {
+    const user = userData.attributes as User;
+
+    return user;
   }
 }

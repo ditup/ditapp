@@ -35,6 +35,7 @@ import { MessagesWithUserComponent } from './messages-with-user/messages-with-us
 import { MessageFormComponent } from './messages-with-user/message-form/message-form.component';
 import { LoggedComponent } from './main/logged/logged.component';
 import { NotLoggedComponent } from './main/not-logged/not-logged.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { NotLoggedComponent } from './main/not-logged/not-logged.component';
     MessagesWithUserComponent,
     MessageFormComponent,
     LoggedComponent,
-    NotLoggedComponent
+    NotLoggedComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
