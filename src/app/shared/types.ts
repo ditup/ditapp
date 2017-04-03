@@ -6,6 +6,7 @@ export class User {
               public familyName?: string,
               public description?: string,
               public location?: [number, number],
+              public preciseLocation?: [number, number],
               public userTags?: UserTag[]) {
   }
 }

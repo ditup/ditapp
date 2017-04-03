@@ -130,37 +130,39 @@ export class ModelService {
       });
   }
 
-  readUser(username: string): Promise<any> { // @TODO better return type
-    console.log('reading user', username);
+  async readUser(username: string): Promise<User> { // @TODO better return type
 
-    const headers = new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+    const response = await this.http
+      .get(`${this.baseUrl}/users/${username}`, { headers: this.loggedHeaders })
+      .toPromise();
 
-    return this.http
-      .get(`${this.baseUrl}/users/${username}`, { headers })
-      .toPromise()
-      .then((response: Response) => {
-        return response.json().data.attributes;
-      });
+    return this.deserializeUser(response.json().data);
   }
 
-  updateUser(username: string, profile: { givenName?: string, familyName?: string, description?: string}): Promise<any> {
-    console.log('updating the user!', username, profile);
+  /**
+   * @param {string} username
+   * @param {Object} fields
+   * @param {string} [fields.givenName]
+   * @param {string} [fields.familyName]
+   * @param {string} [fields.description]
+   * @param {[number, number]} [fields.location]
+   * @returns {Promise<User>}
+   */
+  async updateUser(username: string, fields: { givenName?: string, familyName?: string, description?: string, location?: [number, number] }): Promise<User> {
+    console.log('updating the user!', username, fields);
     const requestBody = {
       data: {
         type: 'users',
         id: username,
-        attributes: profile
+        attributes: fields
       }
     };
 
-    const headers = new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+    const response: Response = await this.http
+      .patch(`${this.baseUrl}/users/${username}`, JSON.stringify(requestBody), { headers: this.loggedHeaders })
+      .toPromise();
 
-    return this.http
-      .patch(`${this.baseUrl}/users/${username}`, JSON.stringify(requestBody), { headers })
-      .toPromise()
-      .then((response: Response) => {
-        return response.json().data.attributes;
-      });
+    return this.deserializeUser(response.json().data);
   }
 
   /**

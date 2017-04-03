@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 
 import { ModelService } from '../model.service';
 import { DialogService } from '../dialog.service';
+import { User } from '../shared/types';
 
 @Component({
   selector: 'app-user-edit',
@@ -20,64 +21,40 @@ export class UserEditComponent implements OnInit {
 
   username: string;
 
-  profileFields = ['givenName', 'familyName', 'description'];
-
-  profile = {
-    givenName: '',
-    familyName: '',
-    description: ''
-  };
+  public user = new User('');
 
   formErrors = {};
   validationMessages = {};
-
-  bootstrapClass = {
-    givenName: '',
-    familyName: '',
-    description: ''
-  };
+  private profileFields = ['givenName', 'familyName', 'description'];
 
   constructor(private formBuilder: FormBuilder,
               private model: ModelService,
               private route: ActivatedRoute,
               private dialog: DialogService) { }
 
-  ngOnInit(): Promise<void> {
+  async ngOnInit(): Promise<void> {
     this.username = this.route.snapshot.params['username'];
-
     this.buildForm();
-
-    return this.model.readUser(this.username).then(user => {
-      console.log('received user to edit', user);
-      _.assign(this.profile, _.pick(user, this.profileFields));
-
-      this.profileForm.setValue(_.pick(this.profile, this.profileFields));
-
-      this.isFormDisabled = false;
-
-    });
-
+    this.user = await this.model.readUser(this.username) as User;
+    this.profileForm.setValue(_.pick(this.user, this.profileFields));
+    console.log('*****');
+    this.isFormDisabled = false;
   }
 
   private buildForm(): void {
-    this.profileForm = this.formBuilder.group({
-      givenName: [this.profile.givenName],
-      familyName: [this.profile.familyName],
-      description: [this.profile.description]
-    });
+    console.log(this.user);
+    this.profileForm = this.formBuilder.group(_.pick(this.user, this.profileFields));
   }
 
   onSubmit() {
     // disable the form until the submitting is finished
     this.isFormDisabled = true;
 
-    // _.assign(this.profile, this.profileForm.value);
-
     this.model.updateUser(this.username, this.profileForm.value).then(updated => {
       console.log(updated);
       // update the form with the current values
-      _.assign(this.profile, _.pick(updated, this.profileFields));
-      this.profileForm.setValue(this.profile);
+      this.user = updated as User;
+      this.profileForm.setValue(_.pick(this.user, this.profileFields));
       // enable the form again
       this.isFormDisabled = false;
     });
@@ -88,7 +65,7 @@ export class UserEditComponent implements OnInit {
     // Allow synchronous navigation (`true`) if no changes
 
 
-    let isUnchanged = _.isEqual(this.profile, this.profileForm.value);
+    let isUnchanged = _.isEqual(this.user, this.profileForm.value);
 
     if (isUnchanged) {
       return true;

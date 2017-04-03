@@ -1,0 +1,20 @@
+.edit-location-container {
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
+.edit-location-map, .edit-location-overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.edit-location-overlay {
+  background-image: url(/static/img/user-icon.svg);
+  pointer-events: none;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  z-index: 1000;
+}

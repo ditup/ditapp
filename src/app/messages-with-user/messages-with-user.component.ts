@@ -33,7 +33,7 @@ export class MessagesWithUserComponent implements OnInit {
         this.otherUserExists = undefined;
         this.loading = true;
         const otherUser: string = params['username'];
-        this.otherUser = { username: otherUser };
+        this.otherUser = { username: otherUser } as User;
         this.messages = await this.model.readMessagesWith(otherUser);
 
         console.log(this.messages);
