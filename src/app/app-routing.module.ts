@@ -13,6 +13,7 @@ import { PeopleComponent } from './people/people.component';
 import { MapComponent } from './map/map.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { MessagesComponent } from './messages/messages.component';
 import { FofComponent } from './fof/fof.component';
 
 // importing guards and their dependencies
@@ -61,6 +62,11 @@ const routes: Routes = [
   {
     path: 'people',
     component: PeopleComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'messages',
+    component: MessagesComponent,
     canActivate: [AuthGuard]
   },
   {

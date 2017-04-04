@@ -1,0 +1,18 @@
+<h1>My Conversations</h1>
+
+<div *ngIf="loading">
+  <md-spinner></md-spinner>
+</div>
+
+<div *ngIf="!loading">
+  <md-list>
+    <md-list-item *ngFor="let msg of messages">
+      <div style="border:1px solid black">
+        {{msg.with(me).username}}
+        ({{msg.created | date:"hh:mm:ss"}}):
+        <a routerLink="/messages/{{msg.with(me).username}}">{{msg.body}}</a>
+        <md-icon *ngIf="msg.from.username === me.username">reply</md-icon>
+      </div>
+    </md-list-item>
+  </md-list>
+</div>

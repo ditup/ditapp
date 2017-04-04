@@ -37,6 +37,7 @@ import { LoggedComponent } from './main/logged/logged.component';
 import { NotLoggedComponent } from './main/not-logged/not-logged.component';
 import { MapComponent } from './map/map.component';
 import { UserEditLocationComponent } from './user-edit/user-edit-location/user-edit-location.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { UserEditLocationComponent } from './user-edit/user-edit-location/user-e
     LoggedComponent,
     NotLoggedComponent,
     MapComponent,
-    UserEditLocationComponent
+    UserEditLocationComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

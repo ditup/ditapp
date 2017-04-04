@@ -514,6 +514,22 @@ export class ModelService {
     return messages;
   }
 
+  public async readThreads(): Promise<Message[]> {
+    const headers = this.loggedHeaders;
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/messages?filter${encodeURIComponent('[threads]')}`, { headers })
+      .toPromise();
+
+    const { data, included } = response.json();
+
+    const messages: Message[] = _.map(data, (msgData: any) => {
+      return this.deserializeMessage(msgData, included);
+    });
+
+    return messages;
+  }
+
   public async sendMessage(to: string, { body }: { body: string }): Promise<any> {
 
     const headers = this.loggedHeaders;
@@ -542,9 +558,6 @@ export class ModelService {
   }
 
   private deserializeMessage(msgData: any, included: any): Message {
-    const message = msgData.attributes as Message;
-
-    message.id = msgData.id;
 
     const fromUsername: string = msgData.relationships.from.data.id;
     const toUsername: string = msgData.relationships.to.data.id;
@@ -557,10 +570,14 @@ export class ModelService {
       return user.type === 'users' && user.id === toUsername;
     });
 
-    message.from = fromData.attributes as User;
-    message.to = toData.attributes as User;
+    const from = this.deserializeUser(fromData);
+    const to = this.deserializeUser(toData);
+    const id = msgData.id;
+    const body = msgData.attributes.body;
+    const created = msgData.attributes.created;
 
-    return message;
+    return new Message({ from, to, id, body, created });
+
   }
 
   private deserializeUser(userData: any, included?: any): User {

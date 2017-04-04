@@ -63,6 +63,12 @@
       <md-icon alt="map">place</md-icon>
     </a>
 
+    <a md-button
+      routerLink="/messages"
+      *ngIf="logged">
+      <md-icon alt="messages">mail_outline</md-icon>
+    </a>
+
     <button md-button [mdMenuTriggerFor]="userMenu"
       *ngIf="logged||loggedUnverified">{{username}}</button>
     <md-menu #userMenu="mdMenu">

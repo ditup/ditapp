@@ -64,9 +64,22 @@ export class UserList {
 }
 
 export class Message {
-  constructor(public from: User,
-              public to: User,
-              public id: string,
-              public body: string,
-              public created: number) {}
+  public from: User;
+  public to: User;
+  public id: string;
+  public body: string;
+  public created: number;
+
+  constructor({ from, to, id, body, created }) {
+    this.from = from;
+    this.to = to;
+    this.id = id;
+    this.body = body;
+    this.created = created;
+  }
+
+  // who is not me?
+  public with(me: User): User {
+    return (me.username === this.from.username) ? this.to : this.from;
+  }
 }
