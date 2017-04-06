@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DndModule } from 'ng2-dnd';
 import { MarkdownModule } from 'angular2-markdown';
 
@@ -71,6 +72,7 @@ import { MessagesComponent } from './messages/messages.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpModule,
     MaterialModule.forRoot(), // angular material material.angular.io
