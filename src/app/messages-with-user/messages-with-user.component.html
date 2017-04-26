@@ -5,8 +5,15 @@
 <div *ngIf="otherUserExists === true">
   <md-list>
     <md-list-item *ngFor="let msg of inverseMessages">
-      {{msg.from.username}} ({{msg.created | date:"hh:mm:ss"}}):
-      {{msg.body}}
+      <div [ngClass]="[
+          'message',
+          (msg.to.username === otherUser.username)
+            ? 'sent'
+            : (!msg.read) ? 'unread' : 'read'
+        ]">
+        {{msg.from.username}} ({{msg.created | date:"hh:mm:ss"}}):
+        {{msg.body}}
+      </div>
     </md-list-item>
   </md-list>
   <app-message-form [receiver]="otherUser" (onMessageSent)="onNewMessage($event)">

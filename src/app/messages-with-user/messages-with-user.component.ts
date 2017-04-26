@@ -40,6 +40,22 @@ export class MessagesWithUserComponent implements OnInit {
 
         this.loading = false;
         this.otherUserExists = true;
+
+        // now mark the messages as read if applicable
+        if (this.messages.length > 0) {
+          // find the last message i received
+          const lastUnreadMsg = _.find(this.messages, (msg: Message) => {
+            return msg.from.username === this.otherUser.username && !msg.read;
+          });
+
+          if (lastUnreadMsg) {
+            console.log('updating last message', lastUnreadMsg);
+            const updated = await this.model.updateMessageToRead(lastUnreadMsg);
+
+            console.log('messages updated!', updated);
+          }
+        }
+
       } catch (e) {
         this.loading = false;
 

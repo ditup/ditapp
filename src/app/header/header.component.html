@@ -67,6 +67,7 @@
       routerLink="/messages"
       *ngIf="logged">
       <md-icon alt="messages">mail_outline</md-icon>
+      <span *ngIf="messageCount && messageCount > 0">({{messageCount}})</span>
     </a>
 
     <button md-button [mdMenuTriggerFor]="userMenu"

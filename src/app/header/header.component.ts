@@ -1,9 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription }   from 'rxjs/Subscription';
+import { Observable }   from 'rxjs/Observable';
+// import 'rxjs/add/operator/timer';
+import 'rxjs/add/operator/map';
 
 import { HeaderControlService } from '../header-control.service';
 import { AuthService } from '../auth.service';
+import { ModelService } from '../model.service';
 
 @Component({
   selector: 'app-header',
@@ -20,13 +24,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public loggedUnverified: boolean;
   // if logged, what is her username?
   public username: string;
+  // how many unread messages do we have?
+  public messageCount: number;
 
   // subscriptions to observables. To be able to unsubscribe OnDestroy.
   private subscription: Subscription;
   private authSubscription: Subscription;
 
   constructor(private headerControl: HeaderControlService,
-              private auth: AuthService) {
+              private auth: AuthService,
+              private model: ModelService) {
 
     // subscribe to observing whether to display the header or not
     this.subscription = this.headerControl.displayChanged$.subscribe(display => {
@@ -54,6 +61,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.logged = this.auth.logged;
     this.loggedUnverified = this.auth.loggedUnverified;
     this.username = this.auth.username;
+
+    // load unread message count and update regularly
+    Observable.timer(0, 60000)
+      .subscribe(async () => {
+        if (this.logged) {
+          this.messageCount = await this.model.countUnreadMessages().toPromise();
+        }
+      });
   }
 
   ngOnDestroy() {

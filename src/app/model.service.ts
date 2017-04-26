@@ -18,7 +18,7 @@ declare const Buffer; // fixing a weird error (not declared Buffer)
 @Injectable()
 export class ModelService {
 
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'https://dev.ditup.org/api';
 
   private generateAuthHeader = this.generateBasicAuthHeader;
 
@@ -550,11 +550,40 @@ export class ModelService {
       .post(`${this.baseUrl}/messages`, JSON.stringify(requestBody), { headers })
       .toPromise();
 
-      console.log('responded!', response.json().data);
-
       const { data, included } = response.json();
 
       return this.deserializeMessage(data, included);
+  }
+
+  public async updateMessageToRead(message: Message) {
+    const requestBody = {
+      data: {
+        type: 'messages',
+        id: message.id,
+        attributes: {
+          read: true
+        }
+      }
+    };
+
+    const response: Response = await this.http
+      .patch(`${this.baseUrl}/messages/${message.id}`, JSON.stringify(requestBody), { headers: this.loggedHeaders })
+      .toPromise();
+
+      const { data } = response.json();
+
+      return data;
+  }
+
+  public countUnreadMessages(): Observable<number> {
+    console.log('counting unread messages');
+    return this.http
+      .get(`${this.baseUrl}/messages?filter${encodeURIComponent('[count]')}`, { headers: this.loggedHeaders })
+      .map((resp: Response) => {
+        console.log(resp.json(), resp.json().meta);
+        return resp.json().meta.unread;
+      });
+
   }
 
   private deserializeMessage(msgData: any, included: any): Message {
@@ -575,8 +604,9 @@ export class ModelService {
     const id = msgData.id;
     const body = msgData.attributes.body;
     const created = msgData.attributes.created;
+    const read = msgData.attributes.read;
 
-    return new Message({ from, to, id, body, created });
+    return new Message({ from, to, id, body, created, read });
 
   }
 

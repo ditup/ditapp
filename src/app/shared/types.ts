@@ -69,13 +69,17 @@ export class Message {
   public id: string;
   public body: string;
   public created: number;
+  public read?: Boolean;
 
-  constructor({ from, to, id, body, created }) {
+  constructor({ from, to, id, body, created, read }: { from: User, to: User, id: string, body: string, created: number, read?: Boolean }) {
     this.from = from;
     this.to = to;
     this.id = id;
     this.body = body;
     this.created = created;
+    if (read) {
+      this.read = read;
+    }
   }
 
   // who is not me?
