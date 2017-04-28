@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 
+import { Subscription } from 'rxjs/Subscription';
+
 import * as _ from 'lodash';
 import { Map, LatLng, TileLayer, Circle, Marker } from 'leaflet';
 import * as L from 'leaflet';
@@ -26,6 +28,7 @@ export class MapComponent implements OnInit {
   private userIcon = L.icon({
     iconUrl: '/static/img/user-icon.svg'
   });
+  private subscription: Subscription;
 
   public loadingUsers: boolean = false;
 
@@ -46,49 +49,55 @@ export class MapComponent implements OnInit {
       attributionControl: false
     });
 
-    await this.findAndUpdateUsers();
+    this.findAndUpdateUsers();
 
     this.map.on('moveend', async (evt) => {
-      console.log('moving map', evt);
-      await this.findAndUpdateUsers();
+      this.findAndUpdateUsers();
     });
   }
 
-  private async findAndUpdateUsers() {
+  private findAndUpdateUsers() {
     this.setLoadingUsers(true);
     const rawBounds = this.map.getBounds();
 
     const sw = rawBounds.getSouthWest();
     const ne = rawBounds.getNorthEast();
 
-    const users = await this.model.findUsersWithinRectangle(sw, ne);
-
-    // remove the previous markers
-    if (this.markers as Boolean) {
-      this.map.removeLayer(this.markers);
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
 
-    // add the new markers
-    this.markers = L['markerClusterGroup']({
-      maxClusterRadius: 40
-    });
+    this.subscription = this.model.findUsersWithinRectangle(sw, ne)
+      .subscribe((users: User[]) => {
+        // remove the previous markers
+        if (this.markers as Boolean) {
+          this.map.removeLayer(this.markers);
+        }
 
-    _.each(users, (user) => {
-      const marker = new Marker(new LatLng(user.location[0], user.location[1]), {
-        title: user.username,
-        icon: this.userIcon
+        // add the new markers
+        this.markers = L['markerClusterGroup']({
+          maxClusterRadius: 40
+        });
+
+        _.each(users, (user) => {
+          const marker = new Marker(new LatLng(user.location[0], user.location[1]), {
+            title: user.username,
+            icon: this.userIcon
+          });
+
+          marker.on('click', () => {
+            console.log('clicked', user.username);
+          });
+
+          this.markers.addLayer(marker);
+        });
+
+        this.map.addLayer(this.markers);
+
+        this.setLoadingUsers(false);
+        this.subscription.unsubscribe();
       });
-
-      marker.on('click', () => {
-        console.log('clicked', user.username);
-      });
-
-      this.markers.addLayer(marker);
-    });
-
-    this.map.addLayer(this.markers);
-
-    this.setLoadingUsers(false);
+    return this.subscription;
   }
 
   private setLoadingUsers(loading: boolean) {

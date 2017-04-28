@@ -481,21 +481,21 @@ export class ModelService {
     return users;
   }
 
-  public async findUsersWithinRectangle(sw: LatLng, ne: LatLng): Promise<User[]> {
+  public findUsersWithinRectangle(sw: LatLng, ne: LatLng): Observable<User[]> {
     const headers = this.loggedHeaders;
 
     console.log(sw, ne);
 
     const locationString = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
 
-    const response: Response = await this.http
+    return this.http
       .get(`${this.baseUrl}/users?filter${encodeURIComponent('[location]')}=${locationString}`, { headers })
-      .toPromise();
+      .map((response: Response) => {
+        const responseJson = response.json();
+        const data = responseJson.data;
 
-    const responseJson = response.json();
-    const data = responseJson.data;
-
-    return _.map(data, (user: any) => this.deserializeUser(user));
+        return _.map(data, (user: any) => this.deserializeUser(user));
+      });
   }
 
   public async readMessagesWith(username: string): Promise<Message[]> {

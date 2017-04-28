@@ -35,6 +35,7 @@ export class UserEditLocationComponent implements OnInit, OnChanges {
       this.map = L.map(this.locationContainer.nativeElement, {
         center: L.latLng.apply(null, this.user.preciseLocation || [0, 0]),
         zoom: 6,
+        scrollWheelZoom: 'center', // zoom to the center point
         layers: [
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
