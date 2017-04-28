@@ -12,7 +12,7 @@ import { ResizeEvent } from 'leaflet';
   templateUrl: './user-edit-location.component.html',
   styleUrls: ['./user-edit-location.component.scss']
 })
-export class UserEditLocationComponent implements OnInit {
+export class UserEditLocationComponent implements OnInit, OnChanges {
 
   @ViewChild('locationContainer')
   locationContainer: ElementRef;
@@ -33,10 +33,10 @@ export class UserEditLocationComponent implements OnInit {
     // when user changes
     if (changes['user'] && this.user.username) {
       this.map = L.map(this.locationContainer.nativeElement, {
-        center: L.latLng.apply(null, this.user.preciseLocation),
+        center: L.latLng.apply(null, this.user.preciseLocation || [0, 0]),
         zoom: 6,
         layers: [
-          L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
             attribution: 'Open Street Map',
             noWrap: true

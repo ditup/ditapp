@@ -38,7 +38,7 @@ export class MapComponent implements OnInit {
       center: new LatLng(50, 0),
       zoom: 6,
       layers: [
-        new TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        new TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
           attribution: 'Open Street Map'
         })
