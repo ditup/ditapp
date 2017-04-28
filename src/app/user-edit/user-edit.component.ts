@@ -17,7 +17,7 @@ export class UserEditComponent implements OnInit {
 
   profileForm: FormGroup;
 
-  isFormDisabled: boolean = true;
+  public isFormDisabled: boolean = true;
 
   username: string;
 
@@ -37,27 +37,27 @@ export class UserEditComponent implements OnInit {
     this.buildForm();
     this.user = await this.model.readUser(this.username) as User;
     this.profileForm.setValue(_.pick(this.user, this.profileFields));
-    console.log('*****');
+
     this.isFormDisabled = false;
   }
 
   private buildForm(): void {
-    console.log(this.user);
     this.profileForm = this.formBuilder.group(_.pick(this.user, this.profileFields));
   }
 
-  onSubmit() {
+  async onSubmit() {
     // disable the form until the submitting is finished
     this.isFormDisabled = true;
 
-    this.model.updateUser(this.username, this.profileForm.value).then(updated => {
-      console.log(updated);
-      // update the form with the current values
-      this.user = updated as User;
-      this.profileForm.setValue(_.pick(this.user, this.profileFields));
-      // enable the form again
-      this.isFormDisabled = false;
-    });
+    const updated = await this.model.updateUser(this.username, this.profileForm.value) as User;
+
+    // update the user with the new values
+    this.profileFields.forEach((field) => { this.user[field] = updated[field]; });
+
+    // update the form with the current values
+    await this.profileForm.setValue(_.pick(this.user, this.profileFields));
+    // enable the form again
+    this.isFormDisabled = false;
   }
 
   @HostListener('window:beforeunload')

@@ -611,7 +611,8 @@ export class ModelService {
   }
 
   private deserializeUser(userData: any, included?: any): User {
-    const user = userData.attributes as User;
+
+    const user = new User(userData.id, userData.attributes.givenName, userData.attributes.familyName, userData.attributes.description, userData.attributes.location, userData.attributes.preciseLocation);
 
     return user;
   }
