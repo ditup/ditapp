@@ -39,6 +39,8 @@ import { NotLoggedComponent } from './main/not-logged/not-logged.component';
 import { MapComponent } from './map/map.component';
 import { UserEditLocationComponent } from './user-edit/user-edit-location/user-edit-location.component';
 import { MessagesComponent } from './messages/messages.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ResetPasswordUpdateComponent } from './reset-password-update/reset-password-update.component';
 
 @NgModule({
   declarations: [
@@ -68,14 +70,16 @@ import { MessagesComponent } from './messages/messages.component';
     NotLoggedComponent,
     MapComponent,
     UserEditLocationComponent,
-    MessagesComponent
+    MessagesComponent,
+    ResetPasswordComponent,
+    ResetPasswordUpdateComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpModule,
-    MaterialModule.forRoot(), // angular material material.angular.io
+    MaterialModule, // angular material material.angular.io
     AppRoutingModule,
     SimpleNotificationsModule,
     DndModule.forRoot(), // drag and drop: ng2-dnd

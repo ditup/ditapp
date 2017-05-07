@@ -14,6 +14,8 @@ import { MapComponent } from './map/map.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { MessagesComponent } from './messages/messages.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ResetPasswordUpdateComponent } from './reset-password-update/reset-password-update.component';
 import { FofComponent } from './fof/fof.component';
 
 // importing guards and their dependencies
@@ -78,6 +80,14 @@ const routes: Routes = [
     path: 'map',
     component: MapComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent
+  },
+  {
+    path: 'reset-password/:username/:code',
+    component: ResetPasswordUpdateComponent
   },
   {
     path: '**',

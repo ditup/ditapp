@@ -586,6 +586,40 @@ export class ModelService {
 
   }
 
+  public async requestResetPassword(usernameOrEmail: string): Promise<void> {
+    const requestBody = {
+      data: {
+        type: 'users',
+        id: usernameOrEmail
+      }
+    };
+
+    await this.http
+      .patch(`${this.baseUrl}/account?reset-password`, JSON.stringify(requestBody), { headers: new Headers(this.contentTypeHeader) }).toPromise();
+
+    return;
+
+  }
+
+  public async resetPassword(username: string, password: string, code: string): Promise<void> {
+    const requestBody = {
+      data: {
+        type: 'users',
+        id: username,
+        attributes: {
+          password,
+          code
+        }
+      }
+    };
+
+    await this.http
+      .patch(`${this.baseUrl}/account`, JSON.stringify(requestBody), { headers: new Headers(this.contentTypeHeader) }).toPromise();
+
+    return;
+
+  }
+
   private deserializeMessage(msgData: any, included: any): Message {
 
     const fromUsername: string = msgData.relationships.from.data.id;
