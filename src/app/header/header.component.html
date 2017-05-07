@@ -76,7 +76,7 @@
       <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
       <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}/edit">Edit Profile</a>
       <a md-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
-      <a md-menu-item disabled routerLink="/user/{{username}}/settings">Settings</a>
+      <a md-menu-item routerLink="/account">Account</a>
       <a md-menu-item routerLink="/" (click)="logout()">Logout</a>
     </md-menu>
     <a md-button *ngIf="!(logged||loggedUnverified)" routerLink="/login">Login</a>

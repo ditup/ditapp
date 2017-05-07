@@ -16,6 +16,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ResetPasswordUpdateComponent } from './reset-password-update/reset-password-update.component';
+import { AccountComponent } from './account/account.component';
 import { FofComponent } from './fof/fof.component';
 
 // importing guards and their dependencies
@@ -88,6 +89,11 @@ const routes: Routes = [
   {
     path: 'reset-password/:username/:code',
     component: ResetPasswordUpdateComponent
+  },
+  {
+    path: 'account',
+    component: AccountComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

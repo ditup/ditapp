@@ -617,7 +617,42 @@ export class ModelService {
       .patch(`${this.baseUrl}/account`, JSON.stringify(requestBody), { headers: new Headers(this.contentTypeHeader) }).toPromise();
 
     return;
+  }
 
+  public async changePassword(username: string, oldPassword: string, newPassword: string): Promise<void> {
+    const requestBody = {
+      data: {
+        type: 'users',
+        id: username,
+        attributes: {
+          oldPassword,
+          password: newPassword
+        }
+      }
+    };
+
+    await this.http
+      .patch(`${this.baseUrl}/users/${username}/account`, JSON.stringify(requestBody), { headers: this.loggedHeaders }).toPromise();
+
+    return;
+  }
+
+  public async changeEmail(username: string, email: string, password: string): Promise<void> {
+    const requestBody = {
+      data: {
+        type: 'users',
+        id: username,
+        attributes: {
+          email,
+          password
+        }
+      }
+    };
+
+    await this.http
+      .patch(`${this.baseUrl}/account`, JSON.stringify(requestBody), { headers: this.loggedHeaders }).toPromise();
+
+    return;
   }
 
   private deserializeMessage(msgData: any, included: any): Message {

@@ -41,6 +41,8 @@ import { UserEditLocationComponent } from './user-edit/user-edit-location/user-e
 import { MessagesComponent } from './messages/messages.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ResetPasswordUpdateComponent } from './reset-password-update/reset-password-update.component';
+import { AccountComponent } from './account/account.component';
+import { ChangeEmailComponent } from './account/change-email/change-email.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,9 @@ import { ResetPasswordUpdateComponent } from './reset-password-update/reset-pass
     UserEditLocationComponent,
     MessagesComponent,
     ResetPasswordComponent,
-    ResetPasswordUpdateComponent
+    ResetPasswordUpdateComponent,
+    AccountComponent,
+    ChangeEmailComponent
   ],
   imports: [
     BrowserModule,
