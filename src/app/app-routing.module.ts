@@ -22,10 +22,7 @@ import { ProfileComponent } from './user/profile/profile.component';
 import { FofComponent } from './fof/fof.component';
 
 // contacts
-import { ContactRequestSendComponent } from './contact/contact-request-send/contact-request-send.component';
-import { ContactRequestUpdateComponent } from './contact/contact-request-update/contact-request-update.component';
-import { ContactRequestProcessComponent } from './contact/contact-request-process/contact-request-process.component';
-import { ContactUpdateComponent } from './contact/contact-update/contact-update.component';
+import { ManageContactComponent } from './contact/manage-contact/manage-contact.component';
 
 // importing guards and their dependencies
 import { AuthGuard } from './auth-guard.service';
@@ -51,30 +48,8 @@ const routes: Routes = [
     component: LoginBasicComponent
   },
   {
-    path: 'contact-add/:username',
-    component: ContactRequestSendComponent,
-    canActivate: [AuthGuard]
-    // TODO add a resolver to find out whether the contact exists
-  },
-  {
-    path: 'contact-request-respond/:username',
-    component: ContactRequestProcessComponent,
-    canActivate: [AuthGuard],
-    resolve: {
-      contact: ContactResolver
-    }
-  },
-  {
-    path: 'contact-request-update/:username',
-    component: ContactRequestUpdateComponent,
-    canActivate: [AuthGuard],
-    resolve: {
-      contact: ContactResolver
-    }
-  },
-  {
-    path: 'contact-update/:username',
-    component: ContactUpdateComponent,
+    path: 'contact-with/:username',
+    component: ManageContactComponent,
     canActivate: [AuthGuard],
     resolve: {
       contact: ContactResolver

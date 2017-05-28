@@ -1,0 +1,17 @@
+<app-fof *ngIf="isSelf===true">
+</app-fof>
+
+<div *ngIf="isSelf!==true">
+  <!-- nonexistent -->
+  <app-contact-request-send *ngIf="contactStatus === 'nonexistent'">
+  </app-contact-request-send>
+  <!-- confirmed -->
+  <app-contact-update *ngIf="contactStatus === 'confirmed'">
+  </app-contact-update>
+  <!-- unconfirmed, sent -->
+  <app-contact-request-update *ngIf="contactStatus === 'sent'">
+  </app-contact-request-update>
+  <!-- unconfirmed, received -->
+  <app-contact-request-process *ngIf="contactStatus === 'received'">
+  </app-contact-request-process>
+</div>

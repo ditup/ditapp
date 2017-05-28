@@ -52,6 +52,7 @@ import { ContactUpdateComponent } from './contact/contact-update/contact-update.
 import { ContactOverviewComponent } from './contact/contact-overview/contact-overview.component';
 import { ContactFormComponent } from './contact/contact-form/contact-form.component';
 import { ContactDeleteButtonComponent } from './contact/contact-delete-button/contact-delete-button.component';
+import { ManageContactComponent } from './contact/manage-contact/manage-contact.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { ContactDeleteButtonComponent } from './contact/contact-delete-button/co
     ContactUpdateComponent,
     ContactOverviewComponent,
     ContactFormComponent,
-    ContactDeleteButtonComponent
+    ContactDeleteButtonComponent,
+    ManageContactComponent
   ],
   imports: [
     BrowserModule,

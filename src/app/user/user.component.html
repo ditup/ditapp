@@ -12,27 +12,24 @@
 <span>@{{username}}</span>
 <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
 <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
+
+
+<!-- contact link  -->
 <span *ngIf="isMe === false">
-<!--  -->
-<span *ngIf="contactExists === null">Fetching contact info...</span>
-<!-- not me, not exist -->
-<a routerLink="/contact-add/{{username}}"
-  *ngIf="contactExists === false">Send a contact request</a>
-<!-- not me, exist, confirmed -->
-<a routerLink="/contact-update/{{username}}"
-  *ngIf="contactExists === true && contactFromMe.isConfirmed === true">
-  Update contact
-</a>
-<!-- not me, exist, unconfirmed, from me -->
-<a routerLink="/contact-request-update/{{username}}"
-  *ngIf="contactExists === true && contactFromMe.isConfirmed === false && contactFromMe.trust">
-  Update contact request
-</a>
-<!-- not me, exist, unconfirmed, to me -->
-<a routerLink="/contact-request-respond/{{username}}"
-  *ngIf="contactExists === true && contactFromMe.isConfirmed === false && !contactFromMe.trust">
-  Accept or Decline contact request
-</a>
+
+  <!-- loading -->
+  <span *ngIf="contactStatus === null">Fetching contact info...</span>
+
+  <a *ngIf="contactStatus !== null" routerLink="/contact-with/{{username}}">
+    <!-- nonexistent -->
+    <span *ngIf="contactStatus === 'nonexistent'">Send a contact request</span>
+    <!-- confirmed -->
+    <span *ngIf="contactStatus === 'confirmed'">Update contact</span>
+    <!-- unconfirmed, sent -->
+    <span *ngIf="contactStatus === 'sent'">Update contact request</span>
+    <!-- unconfirmed, received -->
+    <span *ngIf="contactStatus === 'received'">Accept or Decline contact request</span>
+  </a>
 </span>
 
 <nav md-tab-nav-bar>

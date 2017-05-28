@@ -14,6 +14,11 @@ export class ContactResolver implements Resolve<{ fromMe: Contact, toMe: Contact
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<{ fromMe: Contact, toMe: Contact }> {
     let username = route.params['username'];
     let me = this.auth.username;
+
+    if (username === me) {
+      throw new Error('self contact');
+    }
+
     try {
       const fromMe = await this.model.readContact(me, username);
       const toMe = await this.model.readContact(username, me);

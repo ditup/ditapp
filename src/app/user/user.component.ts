@@ -18,7 +18,8 @@ export class UserComponent implements OnInit {
   public avatar: { base64: string, format: string };
   public contactFromMe?: Contact;
   public contactToMe?: Contact;
-  public contactExists?: boolean;
+
+  public contactStatus: string; // 'confirmed', 'sent', 'received', 'nonexistent'
 
 
 
@@ -38,9 +39,17 @@ export class UserComponent implements OnInit {
           try {
             this.contactToMe = await this.model.readContact(this.username, this.auth.username);
             this.contactFromMe = await this.model.readContact(this.auth.username, this.username);
-            this.contactExists = true;
+
+            const { isConfirmed, to: me, creator } = this.contactToMe;
+
+            this.contactStatus = (isConfirmed)
+              ? 'confirmed'
+              : (me.username === creator.username)
+              ? 'sent'
+              : 'received';
+
           } catch (e) {
-            this.contactExists = false;
+            this.contactStatus = 'nonexistent';
           }
         }
 
