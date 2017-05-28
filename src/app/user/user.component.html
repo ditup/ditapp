@@ -1,36 +1,54 @@
-<div *ngIf="exists !== false && exists !== true">
-  loading ...
+<div *ngIf="!avatar"
+  class="avatar">
+  <md-spinner></md-spinner>
 </div>
-<div *ngIf="exists === false">
-  user doesn't exist
-</div>
-<div *ngIf="exists === true">
-  <div *ngIf="!avatar"
-    class="avatar">
-    <md-spinner></md-spinner>
-  </div>
-  <img *ngIf="avatar"
-    class="avatar"
-    src="data:image/{{avatar.format}};base64,{{avatar.base64}}"
-    alt="Profile Picture of {{username}}"/>
-  <span>{{user.gender}}</span>
-  <span>{{user.age}}</span>
-  <span>{{user.location}}</span>
-  <span style="font-weight:bold;">{{user.givenName}} {{user.familyName}}</span>
-  <span>@{{username}}</span>
-  <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
-  <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
+<img *ngIf="avatar"
+  class="avatar"
+  src="data:image/{{avatar.format}};base64,{{avatar.base64}}"
+  alt="Profile Picture of {{username}}"/>
+<span>{{user.gender}}</span>
+<span>{{user.age}}</span>
+<span style="font-weight:bold;">{{user.givenName}} {{user.familyName}}</span>
+<span>@{{username}}</span>
+<a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
+<a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
+<span *ngIf="isMe === false">
+<!--  -->
+<span *ngIf="contactExists === null">Fetching contact info...</span>
+<!-- not me, not exist -->
+<a routerLink="/contact-add/{{username}}"
+  *ngIf="contactExists === false">Send a contact request</a>
+<!-- not me, exist, confirmed -->
+<a routerLink="/contact-update/{{username}}"
+  *ngIf="contactExists === true && contactFromMe.isConfirmed === true">
+  Update contact
+</a>
+<!-- not me, exist, unconfirmed, from me -->
+<a routerLink="/contact-request-update/{{username}}"
+  *ngIf="contactExists === true && contactFromMe.isConfirmed === false && contactFromMe.trust">
+  Update contact request
+</a>
+<!-- not me, exist, unconfirmed, to me -->
+<a routerLink="/contact-request-respond/{{username}}"
+  *ngIf="contactExists === true && contactFromMe.isConfirmed === false && !contactFromMe.trust">
+  Accept or Decline contact request
+</a>
+</span>
 
-  <div *ngIf="userTags===undefined">
-    <md-spinner></md-spinner>
-  </div>
+<nav md-tab-nav-bar>
+  <a md-tab-link
+    routerLink="/user/{{username}}"
+    routerLinkActive #profileLink="routerLinkActive"
+    [active]="profileLink.isActive">
+    Profile
+  </a>
 
-  <app-user-tag-list
-    [userTags]="userTags"
-    [user]="user">
-  </app-user-tag-list>
+  <a md-tab-link
+    routerLink="/user/{{username}}/contacts"
+    routerLinkActive #contactsLink="routerLinkActive"
+    [active]="contactsLink.isActive">
+    Contacts
+  </a>
+</nav>
 
-  <div Markdown>
-    {{user.description}}
-  </div>
-</div>
+<router-outlet></router-outlet>

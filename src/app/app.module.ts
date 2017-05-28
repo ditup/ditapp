@@ -43,6 +43,15 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { ResetPasswordUpdateComponent } from './reset-password-update/reset-password-update.component';
 import { AccountComponent } from './account/account.component';
 import { ChangeEmailComponent } from './account/change-email/change-email.component';
+import { ContactsComponent } from './user/contacts/contacts.component';
+import { ProfileComponent } from './user/profile/profile.component';
+import { ContactRequestSendComponent } from './contact/contact-request-send/contact-request-send.component';
+import { ContactRequestUpdateComponent } from './contact/contact-request-update/contact-request-update.component';
+import { ContactRequestProcessComponent } from './contact/contact-request-process/contact-request-process.component';
+import { ContactUpdateComponent } from './contact/contact-update/contact-update.component';
+import { ContactOverviewComponent } from './contact/contact-overview/contact-overview.component';
+import { ContactFormComponent } from './contact/contact-form/contact-form.component';
+import { ContactDeleteButtonComponent } from './contact/contact-delete-button/contact-delete-button.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +85,16 @@ import { ChangeEmailComponent } from './account/change-email/change-email.compon
     ResetPasswordComponent,
     ResetPasswordUpdateComponent,
     AccountComponent,
-    ChangeEmailComponent
+    ChangeEmailComponent,
+    ContactsComponent,
+    ProfileComponent,
+    ContactRequestSendComponent,
+    ContactRequestUpdateComponent,
+    ContactRequestProcessComponent,
+    ContactUpdateComponent,
+    ContactOverviewComponent,
+    ContactFormComponent,
+    ContactDeleteButtonComponent
   ],
   imports: [
     BrowserModule,

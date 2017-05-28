@@ -10,7 +10,7 @@ import 'rxjs/add/operator/catch';
 import * as _ from 'lodash';
 
 import { NewUser } from './new-user';
-import { Tag, User, UserTag, Message } from './shared/types';
+import { Tag, User, UserTag, Message, Contact } from './shared/types';
 import { AuthService } from './auth.service';
 
 declare const Buffer; // fixing a weird error (not declared Buffer)
@@ -655,6 +655,77 @@ export class ModelService {
     return;
   }
 
+  public async sendContactRequestTo(username: string, { message, trust, reference }: { message: string, trust: number, reference: string }): Promise<void> {
+
+    const requestBody = {
+      data: {
+        type: 'contacts',
+        attributes: {
+          message,
+          trust,
+          reference
+        },
+        relationships: {
+          to: { data: { type: 'users', id: username }}
+        }
+      }
+    };
+
+    await this.http
+      .post(`${this.baseUrl}/contacts`, JSON.stringify(requestBody), { headers: this.loggedHeaders }).toPromise();
+    return;
+  }
+
+  public async updateContactWith(username: string, attributes: { trust?: number, reference?: string, isConfirmed?: boolean, message?: string }): Promise<void> {
+    const me = this.auth.username;
+    const other = username;
+
+    const requestBody = {
+      data: {
+        type: 'contacts',
+        id: `${me}--${other}`,
+        attributes
+      }
+    };
+
+    await this.http
+      .patch(`${this.baseUrl}/contacts/${me}/${other}`, JSON.stringify(requestBody), { headers: this.loggedHeaders }).toPromise();
+    return;
+  }
+
+  public async deleteContactWith(username: string): Promise<void> {
+    const me = this.auth.username;
+    const other = username;
+
+    await this.http
+      .delete(`${this.baseUrl}/contacts/${me}/${other}`, { headers: this.loggedHeaders }).toPromise();
+    return;
+  }
+
+  public confirmContactRequestFrom(username: string, { trust, reference }: { trust: number, reference: string }): Promise<void> {
+    const attributes = { isConfirmed: true, trust, reference };
+    return this.updateContactWith(username, attributes);
+  }
+
+  public async readContactsTo(username: string): Promise<Contact[]> {
+    const response = await this.http
+      .get(`${this.baseUrl}/contacts?filter[to]=${username}`, { headers: this.loggedHeaders }).toPromise();
+
+    const { data, included } = response.json();
+
+    return _.map(data, (raw: any) => this.deserializeContact(raw, included));
+  }
+
+  public async readContact(from: string, to: string): Promise<Contact> {
+
+    const response = await this.http
+      .get(`${this.baseUrl}/contacts/${from}/${to}`, { headers: this.loggedHeaders }).toPromise();
+
+    const { data, included } = response.json();
+
+    return this.deserializeContact(data, included);
+  }
+
   private deserializeMessage(msgData: any, included: any): Message {
 
     const fromUsername: string = msgData.relationships.from.data.id;
@@ -676,7 +747,32 @@ export class ModelService {
     const read = msgData.attributes.read;
 
     return new Message({ from, to, id, body, created, read });
+  }
 
+  private deserializeContact(data: any, included: any): Contact {
+    const fromUsername: string = data.relationships.from.data.id;
+    const toUsername: string = data.relationships.to.data.id;
+    const creatorUsername: string = data.relationships.creator.data.id;
+
+    const fromData = _.find(included, (user: any) => {
+      return user.type === 'users' && user.id === fromUsername;
+    });
+
+    const toData = _.find(included, (user: any) => {
+      return user.type === 'users' && user.id === toUsername;
+    });
+
+    const creatorData = _.find(included, (user: any) => {
+      return user.type === 'users' && user.id === creatorUsername;
+    });
+
+    const from = this.deserializeUser(fromData);
+    const to = this.deserializeUser(toData);
+    const creator = this.deserializeUser(creatorData);
+
+    const { isConfirmed, confirmed, created, trust, reference, message } = data.attributes;
+
+    return new Contact({ from, to, isConfirmed, confirmed, created, trust, reference, message, creator });
   }
 
   private deserializeUser(userData: any, included?: any): User {

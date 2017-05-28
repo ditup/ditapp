@@ -20,6 +20,37 @@ export class Tag {
   }
 }
 
+export class Contact {
+  public from: User;
+  public to: User;
+  public isConfirmed: boolean;
+  public created: number;
+  public confirmed?: number;
+  public trust: number;
+  public reference: string;
+  public message?: string;
+  public creator?: User;
+  constructor({ from, to, creator, isConfirmed, created, confirmed, trust, reference, message }: { from: User, to: User, creator?: User, isConfirmed: boolean, created: number, confirmed?: number, trust?: number, reference?: string, message?: string }) {
+    this.from = from;
+    this.to = to;
+    this.isConfirmed = isConfirmed;
+    this.created = created;
+    if (confirmed) {
+      this.confirmed = confirmed;
+    }
+    if (trust && _.isString(reference)) {
+      this.trust = trust;
+      this.reference = reference;
+    }
+    if (_.isString(message)) {
+      this.message = message;
+    }
+    if (creator) {
+      this.creator = creator;
+    }
+  }
+}
+
 export class UserTag {
   constructor(public user: User,
               public tag: Tag,

@@ -1,0 +1,11 @@
+<h1>Confirm contact request</h1>
+
+<div>
+  or
+  <app-contact-delete-button [with]="from">delete it</app-contact-delete-button>
+</div>
+
+<app-contact-overview [from]="from" [to]="to"></app-contact-overview>
+<h2>{{from.username}} wrote to you</h2>
+{{message}}
+<app-contact-form [onSubmit]="confirmContact" [fields]="['trust', 'reference']"></app-contact-form>

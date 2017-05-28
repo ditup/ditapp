@@ -1,0 +1,13 @@
+<ul>
+  <li *ngFor="let contact of contacts">
+    <a routerLink="/user/{{contact.from.username}}">{{contact.from.username}}</a>
+    <span *ngIf="!contact.isConfirmed">
+      (pending)
+      <a *ngIf="contact.creator.username === myUsername"
+        routerLink="/contact-request-update/{{contact.from.username}}">Update Contact Request</a>
+      <a *ngIf="contact.creator.username !== myUsername"
+        routerLink="/contact-request-respond/{{contact.from.username}}">Confirm/Delete Contact Request</a>
+      {{contact.creator.username}} {{myUsername}}
+    </span>
+  </li>
+</ul>

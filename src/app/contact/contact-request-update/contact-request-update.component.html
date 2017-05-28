@@ -1,0 +1,11 @@
+<h1>Update contact request</h1>
+
+<div>
+  or
+  <app-contact-delete-button [with]="to">delete it</app-contact-delete-button>
+</div>
+
+<app-contact-overview [from]="from" [to]="to"></app-contact-overview>
+<app-contact-form
+  [onSubmit]="updateContactRequest"
+  [data]="initialFormData"></app-contact-form>

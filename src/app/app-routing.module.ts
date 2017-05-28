@@ -17,14 +17,25 @@ import { MessagesComponent } from './messages/messages.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ResetPasswordUpdateComponent } from './reset-password-update/reset-password-update.component';
 import { AccountComponent } from './account/account.component';
+import { ContactsComponent } from './user/contacts/contacts.component';
+import { ProfileComponent } from './user/profile/profile.component';
 import { FofComponent } from './fof/fof.component';
+
+// contacts
+import { ContactRequestSendComponent } from './contact/contact-request-send/contact-request-send.component';
+import { ContactRequestUpdateComponent } from './contact/contact-request-update/contact-request-update.component';
+import { ContactRequestProcessComponent } from './contact/contact-request-process/contact-request-process.component';
+import { ContactUpdateComponent } from './contact/contact-update/contact-update.component';
 
 // importing guards and their dependencies
 import { AuthGuard } from './auth-guard.service';
 import { AuthMeGuard } from './auth-me-guard.service';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { UserResolver } from './user/user-resolver.service';
+import { ContactResolver } from './contact/contact-resolver.service';
 import { AuthService } from './auth.service';
 import { BasicAuthService } from './basic-auth.service';
+import { ModelService } from './model.service';
 
 const routes: Routes = [
   {
@@ -40,9 +51,52 @@ const routes: Routes = [
     component: LoginBasicComponent
   },
   {
+    path: 'contact-add/:username',
+    component: ContactRequestSendComponent,
+    canActivate: [AuthGuard]
+    // TODO add a resolver to find out whether the contact exists
+  },
+  {
+    path: 'contact-request-respond/:username',
+    component: ContactRequestProcessComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      contact: ContactResolver
+    }
+  },
+  {
+    path: 'contact-request-update/:username',
+    component: ContactRequestUpdateComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      contact: ContactResolver
+    }
+  },
+  {
+    path: 'contact-update/:username',
+    component: ContactUpdateComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      contact: ContactResolver
+    }
+  },
+  {
     path: 'user/:username',
     component: UserComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {
+      user: UserResolver
+    },
+    children: [
+      {
+        path: '',
+        component: ProfileComponent
+      },
+      {
+        path: 'contacts',
+        component: ContactsComponent
+      }
+    ]
   },
   {
     path: 'user/:username/edit',
@@ -108,8 +162,11 @@ const routes: Routes = [
     AuthGuard,
     AuthMeGuard,
     CanDeactivateGuard,
+    UserResolver,
+    ContactResolver,
     AuthService,
-    BasicAuthService
+    BasicAuthService,
+    ModelService
   ]
 })
 export class AppRoutingModule { }

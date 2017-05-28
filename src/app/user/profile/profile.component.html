@@ -1,0 +1,13 @@
+<div *ngIf="userTags===undefined">
+  <md-spinner></md-spinner>
+</div>
+
+<app-user-tag-list
+  [userTags]="userTags"
+  [user]="user">
+</app-user-tag-list>
+
+<div Markdown>
+  {{user.description}}
+</div>
+<span>Location: {{user.location}}</span>
