@@ -1,0 +1,31 @@
+@import '../shared/styles/fonts';
+@import '../shared/styles/colors';
+
+.signup-form-container {
+  width: 300px;
+  margin: 0 auto;
+  display: block;
+
+  h1 {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+form {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+md-input-container {
+  width: 100%;
+}
+
+.login-link {
+  text-align: center;
+}
+
+.home-mushroom-link {
+  margin-top: 50px;
+  text-align: center;
+}

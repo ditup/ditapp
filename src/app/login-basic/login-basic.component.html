@@ -1,27 +1,27 @@
-<nav>
-  <a routerLink="/">Home</a>
+<nav class="home-mushroom-link">
+  <a routerLink="/"><img src="/static/img/fungi/helvella_n.png" alt="Helvella mushroom by Carl Linnae"></a>
 </nav>
-<div class="container">
-  <h1>Login Form</h1>
-  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
-    <div>
-      <md-input-container>
-        <input mdInput type="text" placeholder="Username"
-          formControlName="username" required>
-      </md-input-container>
-    </div>
 
-    <div>
-      <md-input-container>
-        <input mdInput type="password" placeholder="Password"
-          formControlName="password" required>
-        </md-input-container>
-    </div>
+<section class="login-form-container">
+
+  <h1>Log in</h1>
+  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="login-form">
+    <md-input-container>
+      <input mdInput type="text" placeholder="Username"
+        formControlName="username" required>
+    </md-input-container>
+
+    <md-input-container>
+      <input mdInput type="password" placeholder="Password"
+        formControlName="password" required>
+      </md-input-container>
 
     <button md-raised-button type="submit"
-      [disabled]="!loginForm.valid">Log In</button>
+      [disabled]="!loginForm.valid">Log in</button>
   </form>
 
-  <a routerLink="/reset-password">forgot password?</a>
+  <nav class="reset-password-link">
+    <a routerLink="/reset-password">forgot password?</a>
+  </nav>
 
-</div>
+</section>

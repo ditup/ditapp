@@ -1,37 +1,38 @@
-<div *ngIf="!verificationSuccess" class="container">
-  <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmailForm">
+<!-- hide the home mushroom link when code is provided and submitting is in process -->
+<nav class="home-mushroom-link" *ngIf="!(isCodeProvided && !verificationSuccess)">
+  <a routerLink="/"><img src="/static/img/fungi/helvella_n.png" alt="Helvella mushroom by Carl Linnae"></a>
+</nav>
 
-    <!-- TODO style validation pending/errors -->
-    <div>
+<section *ngIf="!verificationSuccess && !isCodeProvided" class="verification-container">
+  <h1>Verify your email</h1>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmailForm">
+    <fieldset [disabled]="isFormDisabled">
+
       <md-input-container>
         <input mdInput type="text" placeholder="Verification Code"
           formControlName="code" required>
       </md-input-container>
-    </div>
 
-    <!--div class="form-group" [ngClass]="bootstrapCodeClass">
-      <label for="code">Verification Code</label>
-      <input type="text" class="form-control" id="code"
-      formControlName="code" required>
-    </div-->
-    <button md-raised-button type="submit" class="btn btn-default"
-      [disabled]="!verifyEmailForm.valid || submitting">Verify Email</button>
-    <md-progress-spinner mode="indeterminate" *ngIf="submitting"></md-progress-spinner>
+      <button md-raised-button type="submit" class="btn btn-default"
+        [disabled]="!verifyEmailForm.valid">Verify Email</button>
+      <md-spinner *ngIf="isSubmitting"></md-spinner>
+    </fieldset>
   </form>
-</div>
+</section>
 
+<section *ngIf="!verificationSuccess && isCodeProvided" class="verification-container">
+  <h1>Verifying email</h1>
+  <md-spinner></md-spinner>
+</section>
 
+<section *ngIf="verificationSuccess" class="verification-container">
+  <h1>What now?</h1>
 
-<div *ngIf="verificationSuccess">
-  <div>
-    Your email was successfully verified. What now?
-  </div>
   <nav>
     <ul>
       <li><a routerLink="/explore">Explore</a></li>
       <li><a routerLink="/user/username/edit">Edit My Profile</a></li>
-      <li><a routerLink="/">Go Home</a></li>
-      <li><a href="https://example.com">Leave</a></li>
     </ul>
   </nav>
-</div>
+</section>

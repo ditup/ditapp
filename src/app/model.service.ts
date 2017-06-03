@@ -9,7 +9,6 @@ import 'rxjs/add/operator/catch';
 
 import * as _ from 'lodash';
 
-import { NewUser } from './new-user';
 import { Tag, User, UserTag, Message, Contact } from './shared/types';
 import { AuthService } from './auth.service';
 
@@ -28,15 +27,14 @@ export class ModelService {
 
   constructor(private http: Http, private auth: AuthService) { }
 
-  createUser(newUser: NewUser): Promise<void> {
-    console.log('creating new user!', newUser);
+  createUser({ username, email, password }: User): Promise<void> {
     const requestBody = {
       data: {
         type: 'users',
         attributes: {
-          username: newUser.username,
-          email: newUser.email,
-          password: newUser.password
+          username,
+          email,
+          password
         }
       }
     };

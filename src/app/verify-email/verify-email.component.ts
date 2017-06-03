@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Params }   from '@angular/router';
+import { Router, ActivatedRoute, Params }   from '@angular/router';
 
 import { NotificationsService, SimpleNotificationsComponent } from 'angular2-notifications';
+import { has } from 'lodash';
 
 import { ModelService } from '../model.service';
 import { HeaderControlService } from '../header-control.service';
@@ -14,41 +15,49 @@ import { HeaderControlService } from '../header-control.service';
 })
 export class VerifyEmailComponent implements OnInit, OnDestroy {
 
-  verifyEmailForm: FormGroup;
-  code: string;
-  bootstrapCodeClass: string;
-  username: string;
-  submitting: boolean = false;
+  public verifyEmailForm: FormGroup;
+  private code: string;
+  private username: string;
+  public isSubmitting: boolean;
+  public isCodeProvided: boolean;
 
   // this is used to launch the after-success part of the page and hide the form
-  verificationSuccess: boolean;
+  public verificationSuccess: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
+              private router: Router,
               private notifications: NotificationsService,
               private model: ModelService,
               private headerControl: HeaderControlService) { }
 
-  ngOnInit(): void {
+  public get isFormDisabled(): boolean {
+    return this.isSubmitting;
+  }
+
+  async ngOnInit(): Promise<void> {
     // hide the header
     this.headerControl.display(false);
 
-    this.verificationSuccess = false;
+    const params = this.route.snapshot.params;
+
     // fetch the username (and code if provided in url)
-    this.route.params
-      .subscribe((params: Params) => {
-        this.username = params['username'];
+    this.username = params['username'];
 
-        // set code if provided in url
-        this.code = params['code'] || this.code;
-      });
+    this.isCodeProvided = has(params, 'code');
 
-    // initialize the form
-    this.buildForm();
 
-    // submit the form immediately if the code was provided in url (probably clicked email link)
-    if (this.code) {
-      this.onSubmit();
+    // when :code in /user/:username/verify-email/:code is provided
+    if (this.isCodeProvided) {
+      this.code = params['code'];
+      try {
+        await this.verifyEmail();
+      } catch (e) {
+        // go to the email verification form without code
+        await this.router.navigate(['user', this.username, 'verify-email']);
+      }
+    } else {
+      this.buildForm();
     }
   }
 
@@ -59,48 +68,37 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
 
   private buildForm() {
     this.verifyEmailForm = this.formBuilder.group({
-      code: [this.code, [
+      code: ['', [
         Validators.required
       ]]
     });
-
-    this.verifyEmailForm.valueChanges.subscribe(data => this.onValueChanged(data));
   };
 
-  private onValueChanged(data?: any) {
-    // change the styling of input fields based on their validity
-    let state = this.verifyEmailForm.get('code');
-    this.bootstrapCodeClass = (state.valid)
-                              ? 'has-success'
-                              : (state.pending)
-                              ? 'has-warning'
-                              : (state.invalid)
-                              ? 'has-error'
-                              : '';
+  async onSubmit(): Promise<void> {
+    this.isSubmitting = true;
+
+    try {
+      await this.verifyEmail();
+    } catch (e) {
+    } finally {
+      this.verifyEmailForm.reset();
+      this.isSubmitting = false;
+    }
   }
 
-  onSubmit(): void {
-    this.submitting = true;
-    this.code = this.verifyEmailForm.get('code').value;
-    const notification = this.notifications.info('verifying email', `submitted ${this.username} ${this.code}`);
-    console.log('submitted!', this.username, this.code);
-    this.model.verifyEmail(this.username, this.code)
-      .then((email) => {
-        console.log(email);
-        // empty the code
-        this.code = '';
-        // show success notification
-        this.notifications.remove(notification.id);
-        this.notifications.success('email verified', email);
-        // show the after-success part of the page
-        this.verificationSuccess = true;
-        this.submitting = false;
-      })
-      .catch((err) => {
-        console.log(err);
-        this.notifications.remove(notification.id);
-        this.notifications.error('not verified', err, { position: ['top', 'left'] });
-        this.submitting = false;
-      });
+  async verifyEmail(): Promise<void> {
+
+    this.code = (this.isCodeProvided) ? this.code : this.verifyEmailForm.get('code').value;
+
+    try {
+      const email = await this.model.verifyEmail(this.username, this.code);
+      // TODO notify success
+      // show success notification
+      // show the after-success part of the page
+      this.verificationSuccess = true;
+    } catch (e) {
+      // TODO notify error
+      throw e;
+    }
   }
 }

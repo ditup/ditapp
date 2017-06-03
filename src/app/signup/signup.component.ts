@@ -8,10 +8,11 @@ import 'rxjs/add/operator/distinctUntilChanged';
 
 import { CustomValidators } from 'ng2-validation';
 
-import { NewUser } from '../new-user';
 // import { UniqueUsernameValidator } from '../shared/unique-username.directive';
 import { ModelService } from '../model.service';
 import { HeaderControlService } from '../header-control.service';
+
+import { User } from '../shared/types';
 
 @Component({
   selector: 'app-signup',
@@ -23,18 +24,17 @@ export class SignupComponent implements OnInit, OnDestroy {
   // variable used for async username validator (to make debounce)
   private uniqueUsernameTimeout;
 
-  // the data model
-  user = new NewUser('', '', '');
+  public isFormDisabled: boolean;
 
-  formErrors = {
-    username: '',
-    email: '',
-    password: ''
+  public formErrors = {
+    username: [],
+    email: [],
+    password: []
   };
 
-  validationMessages = {
+  private validationMessages = {
     username: {
-      required: '',
+      required: 'Required.',
       minlength: 'Username must be at least 2 characters long.',
       maxlength: 'Username cannot be more than 32 characters long.',
       pattern: 'Username must consist of a-z0-9 optionally separated by .,-,_',
@@ -42,25 +42,19 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     },
     email: {
-      required: '',
+      required: 'Required.',
       email: 'You need to provide a valid email.',
       maxlength: 'Do you really have so long email address?'
     },
     password: {
-      required: '',
+      required: 'Required.',
       minlength: 'Password must be at least 8 characters long',
       maxlength: 'That\'s too long.'
     }
   };
 
-  bootstrapClass = {
-    username: '',
-    email: '',
-    password: ''
-  };
-
   // the form object
-  signupForm: FormGroup;
+  public signupForm: FormGroup;
 
   // inject modules, services
   constructor(private router: Router,
@@ -115,7 +109,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   buildForm(): void {
     this.signupForm = this.formBuilder.group({
-      username: [this.user.username, [
+      username: ['', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(32),
@@ -123,12 +117,12 @@ export class SignupComponent implements OnInit, OnDestroy {
       ], [
         this.uniqueUsernameValidator.bind(this)
       ]],
-      email: [this.user.email, [
+      email: ['', [
         Validators.required,
         Validators.maxLength(2048),
         CustomValidators.email,
       ]],
-      password: [this.user.password, [
+      password: ['', [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(1024)
@@ -146,21 +140,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   onStatusChanged(data?: any) {
-    // change the styling of input fields based on their validity
-    let bootstrapClass = this.bootstrapClass;
-    for (const field in bootstrapClass) {
-      if (bootstrapClass.hasOwnProperty(field)) {
-        let state = this.signupForm.get(field);
-        bootstrapClass[field] = (state.valid)
-                                ? 'has-success'
-                                : (state.pending)
-                                ? 'has-warning'
-                                : (state.invalid)
-                                ? 'has-error'
-                                : '';
-      }
-    }
-
     // whenever status changes, we want to generate errors
     // (this is to make async validator errors visible)
     this.generateErrors();
@@ -193,19 +172,31 @@ export class SignupComponent implements OnInit, OnDestroy {
           }
         }
         // for every field, generate string from array of error messages
-        this.formErrors[field] = errorMessages.join(' ');
+        this.formErrors[field] = errorMessages;
       }
     }
   }
 
-  onSubmit(): void {
-    this.user = this.signupForm.value;
+  async onSubmit() {
 
-    this.model.createUser(this.user)
-    .then(() => {
-      this.router.navigate(['/user', this.user.username, 'verify-email']);
-    });
     // on submit, we want to send http request POST /users to the server
     // on success (201 response) we want to redirect to a page which is awaiting the email verification code
+    const user = this.signupForm.value as User;
+
+    this.isFormDisabled = true;
+
+    try {
+      // create the user
+      await this.model.createUser(user);
+
+      // redirect to email verification form
+      await this.router.navigate(['/user', user.username, 'verify-email']);
+    } catch (e) {
+      // TODO notify about the error
+      console.log('error', e);
+    } finally {
+      this.isFormDisabled = false;
+    }
+
   }
 }

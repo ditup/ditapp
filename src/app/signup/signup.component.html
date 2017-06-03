@@ -1,75 +1,39 @@
-<nav>
-  <a routerLink="/">Home</a>
+<nav class="home-mushroom-link">
+  <a routerLink="/"><img src="/static/img/fungi/helvella_n.png" alt="Helvella mushroom by Carl Linnae"></a>
 </nav>
-<div class="container">
-  <h1>Signup Form</h1>
-  <form (ngSubmit)="onSubmit()" [formGroup]="signupForm">
 
+<section class="signup-form-container">
 
-    <div>
+  <h1>Sign up</h1>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="signupForm" class="signup-form">
+    <fieldset [disabled]="isFormDisabled">
       <md-input-container>
         <input mdInput type="text" placeholder="Username"
-          formControlName="username" required>
+        formControlName="username" required>
+        <md-error *ngFor="let error of formErrors.username">{{error}}</md-error>
       </md-input-container>
 
-      <div *ngIf="formErrors.username" class="alert alert-danger">
-        {{formErrors.username}}
-      </div>
-    </div>
-
-    <div>
       <md-input-container>
-        <input mdInput type="text" placeholder="Email"
+        <input mdInput type="email" placeholder="Email"
           formControlName="email" required>
+        <md-error *ngFor="let error of formErrors.email">{{error}}</md-error>
       </md-input-container>
 
-      <div *ngIf="formErrors.email" class="alert alert-danger">
-        {{formErrors.email}}
-      </div>
-    </div>
-
-    <div>
       <md-input-container>
         <input mdInput type="password" placeholder="Password"
           formControlName="password" required>
+        <md-error *ngFor="let error of formErrors.password">{{error}}</md-error>
       </md-input-container>
 
-      <div *ngIf="formErrors.password" class="alert alert-danger">
-        {{formErrors.password}}
-      </div>
-    </div>
 
-
-    <!--div class="form-group"
-      [ngClass]="bootstrapClass.username">
-      <label for="username">Username</label>
-      <input type="text" class="form-control" id="username"
-      formControlName="username" required>
-
-    </div>
-
-    <div class="form-group" [ngClass]="bootstrapClass.email">
-      <label for="email">Email</label>
-      <input type="text" class="form-control" id="email"
-      formControlName="email" required>
-
-      <div *ngIf="formErrors.email" class="alert alert-danger">
-        {{formErrors.email}}
-      </div>
-    </div>
-
-    <div class="form-group" [ngClass]="bootstrapClass.password">
-      <label for="password">Password</label>
-      <input type="password" class="form-control" id="password"
-      formControlName="password" required>
-
-      <div *ngIf="formErrors.password" class="alert alert-danger">
-        {{formErrors.password}}
-      </div>
-    </div-->
-
-    <button md-raised-button type="submit" class="btn btn-default"
-      [disabled]="!signupForm.valid">Submit</button>
+      <button md-raised-button type="submit" class="btn btn-default"
+        [disabled]="!signupForm.valid">Sign Up</button>
+    </fieldset>
   </form>
 
-</div>
+  <nav class="login-link">
+    <a routerLink="/login">Already have an account? Log in.</a>
+  </nav>
+
+</section>
