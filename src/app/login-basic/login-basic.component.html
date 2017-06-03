@@ -6,18 +6,20 @@
 
   <h1>Log in</h1>
   <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="login-form">
-    <md-input-container>
-      <input mdInput type="text" placeholder="Username"
-        formControlName="username" required>
-    </md-input-container>
-
-    <md-input-container>
-      <input mdInput type="password" placeholder="Password"
-        formControlName="password" required>
+    <fieldset [disabled]="isFormDisabled">
+      <md-input-container>
+        <input mdInput type="text" placeholder="Username"
+          formControlName="username" required>
       </md-input-container>
 
-    <button md-raised-button type="submit"
-      [disabled]="!loginForm.valid">Log in</button>
+      <md-input-container>
+        <input mdInput type="password" placeholder="Password"
+          formControlName="password" required>
+        </md-input-container>
+
+      <button md-raised-button type="submit"
+        [disabled]="!loginForm.valid">Log in</button>
+    </fieldset>
   </form>
 
   <nav class="reset-password-link">

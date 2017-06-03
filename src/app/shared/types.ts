@@ -1,15 +1,28 @@
 import * as _ from 'lodash';
 
 export class User {
-  constructor(public username: string,
-              public givenName?: string,
-              public familyName?: string,
-              public description?: string,
-              public email?: string,
-              public password?: string,
-              public location?: [number, number],
-              public preciseLocation?: [number, number],
-              public userTags?: UserTag[]) {
+
+  public username: string;
+  public givenName?: string;
+  public familyName?: string;
+  public description?: string;
+  public location?: [number, number];
+  public preciseLocation?: [number, number];
+  public userTags?: UserTag[];
+  public email?: string;
+  public password?: string;
+
+  constructor({ username, givenName, familyName, description, location, preciseLocation, email, password }: {
+    username: string,
+    givenName?: string,
+    familyName?: string,
+    description?: string,
+    location?: [number, number],
+    preciseLocation?: [number, number],
+    email?: string,
+    password?: string
+  }) {
+    _.assign(this, { username, givenName, familyName, description, location, preciseLocation, email, password });
   }
 }
 

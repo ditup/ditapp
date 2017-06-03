@@ -20,7 +20,7 @@ export class MessagesComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
 
-    this.me = new User(this.auth.username);
+    this.me = new User({ username: this.auth.username });
     this.messages = await this.model.readThreads();
 
     this.loading = false;

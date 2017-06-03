@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Edit Profile of <a routerLink="/user/{{username}}">{{username}}</a></h1>
+  <h1>Edit Profile of <a routerLink="/user/{{user.username}}">{{user.username}}</a></h1>
   <md-tab-group>
     <md-tab label="Info">
       <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
@@ -45,7 +45,7 @@
       </form>
     </md-tab>
     <md-tab label="Tags">
-      <app-user-edit-tags [username]="username"></app-user-edit-tags>
+      <app-user-edit-tags [username]="user.username"></app-user-edit-tags>
     </md-tab>
     <md-tab label="Location">
       <app-user-edit-location [user]="user"></app-user-edit-location>

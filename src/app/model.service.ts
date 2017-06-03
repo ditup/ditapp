@@ -113,19 +113,17 @@ export class ModelService {
     };
   }
 
-  basicAuth({ username, password }: { username: string, password: string }): Promise<any> {
+  async basicAuth({ username, password }: User): Promise<User> {
     // generate an Authorization header
     const authHeader = this.createBasicAuthHeader({ username, password });
 
     const headers = new Headers(_.assign({}, authHeader, this.contentTypeHeader));
 
-    return this.http
+    const response = await this.http
       .get(`${this.baseUrl}/auth/basic`, { headers })
-      .toPromise()
-      .then((response: Response) => {
-        console.log('responded!', response);
-        return response.json().data.attributes;
-      });
+      .toPromise();
+
+    return this.deserializeUser(response.json().data);
   }
 
   async readUser(username: string): Promise<User> { // @TODO better return type
@@ -774,8 +772,9 @@ export class ModelService {
   }
 
   private deserializeUser(userData: any, included?: any): User {
+    const rawUser = _.extend({ username: userData.id }, _.pick(userData.attributes, ['givenName', 'familyName', 'description', 'location', 'preciseLocation', 'email']));
 
-    const user = new User(userData.id, userData.attributes.givenName, userData.attributes.familyName, userData.attributes.description, userData.attributes.location, userData.attributes.preciseLocation);
+    const user = new User(rawUser);
 
     return user;
   }

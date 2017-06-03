@@ -77,7 +77,10 @@ const routes: Routes = [
     path: 'user/:username/edit',
     component: UserEditComponent,
     canActivate: [AuthGuard, AuthMeGuard],
-    canDeactivate: [CanDeactivateGuard]
+    canDeactivate: [CanDeactivateGuard],
+    resolve: {
+      user: UserResolver
+    }
   },
   {
     path: 'user/:username/verify-email',

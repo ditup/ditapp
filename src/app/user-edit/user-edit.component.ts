@@ -15,13 +15,11 @@ import { User } from '../shared/types';
 })
 export class UserEditComponent implements OnInit {
 
-  profileForm: FormGroup;
+  public profileForm: FormGroup;
 
-  public isFormDisabled: boolean = true;
+  public isFormDisabled: boolean;
 
-  username: string;
-
-  public user = new User('');
+  public user: User;
 
   formErrors = {};
   validationMessages = {};
@@ -33,12 +31,11 @@ export class UserEditComponent implements OnInit {
               private dialog: DialogService) { }
 
   async ngOnInit(): Promise<void> {
-    this.username = this.route.snapshot.params['username'];
-    this.buildForm();
-    this.user = await this.model.readUser(this.username) as User;
-    this.profileForm.setValue(_.pick(this.user, this.profileFields));
-
-    this.isFormDisabled = false;
+    this.route.data
+      .subscribe(({ user }: { user: User }) => {
+        this.user = user;
+        this.buildForm();
+      });
   }
 
   private buildForm(): void {
@@ -49,7 +46,7 @@ export class UserEditComponent implements OnInit {
     // disable the form until the submitting is finished
     this.isFormDisabled = true;
 
-    const updated = await this.model.updateUser(this.username, this.profileForm.value) as User;
+    const updated = await this.model.updateUser(this.user.username, this.profileForm.value) as User;
 
     // update the user with the new values
     this.profileFields.forEach((field) => { this.user[field] = updated[field]; });
@@ -65,7 +62,7 @@ export class UserEditComponent implements OnInit {
     // Allow synchronous navigation (`true`) if no changes
 
 
-    let isUnchanged = _.isEqual(this.user, this.profileForm.value);
+    let isUnchanged = _.isEqual(_.pick(this.user, this.profileFields), this.profileForm.value);
 
     if (isUnchanged) {
       return true;

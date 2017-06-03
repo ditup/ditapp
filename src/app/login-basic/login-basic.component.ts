@@ -7,11 +7,7 @@ import { NotificationsService, SimpleNotificationsComponent } from 'angular2-not
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
-
-// an object with the authorization data
-class Credentials {
-  constructor(public username: string, public password: string) {}
-}
+import { User } from '../shared/types';
 
 @Component({
   selector: 'app-login-basic',
@@ -21,9 +17,9 @@ class Credentials {
 export class LoginBasicComponent implements OnInit, OnDestroy {
 
   // the form object
-  loginForm: FormGroup;
+  public loginForm: FormGroup;
 
-  credentials = new Credentials('', '');
+  private isFormDisabled: boolean;
 
   // inject modules, services
   constructor(private formBuilder: FormBuilder,
@@ -49,24 +45,27 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
 
   buildForm(): void {
     this.loginForm = this.formBuilder.group({
-      username: [this.credentials.username, [
+      username: ['', [
         Validators.required
       ]],
-      password: [this.credentials.password, [
+      password: ['', [
         Validators.required
       ]]
     });
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
+    this.isFormDisabled = true;
     this.auth.logout();
-    this.credentials = this.loginForm.value;
+    const credentials = this.loginForm.value as User;
     let pendingNote = this.notifications.info('authenticating', 'authentication in process');
 
-    this.model.basicAuth(this.credentials)
-    .then((user: any) => {
+    try {
+      const user = await this.model.basicAuth(credentials);
 
-      user.password = this.credentials.password;
+      user.password = credentials.password;
+
+      console.log(user);
 
       // log in the auth service
       this.auth.login({ method: 'basic', credentials: user});
@@ -74,33 +73,30 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
       console.log('authenticated');
       this.notifications.remove(pendingNote.id);
       this.notifications.success('authentication successful', 'user was successfully authenticated');
-      this.clearFields();
+      const redirectUrl = this.route.snapshot.queryParams['redirect'] || `/user/${this.auth.username}`;
+
+      await this.router.navigate([redirectUrl]);
+      this.loginForm.reset();
 
       console.log('logged in as', this.auth.username, this.auth.email);
       console.log('logged', this.auth.logged, 'unverified', this.auth.loggedUnverified);
 
       // redirect to the url provided in ?redirect=url or to default redirect
 
-      const redirectUrl = this.route.snapshot.queryParams['redirect'] || `/user/${this.auth.username}`;
 
-      console.log(redirectUrl);
-
-      this.router.navigate([redirectUrl]);
-
-    })
-    .catch((err) => {
+    } catch (err) {
       this.notifications.remove(pendingNote.id);
       this.notifications.error('authentication not successful', 'username or password don\'t match');
-      console.log(err);
-      this.loginForm.patchValue({ password: '' });
+      this.loginForm.reset({
+        username: credentials.username,
+        password: ''
+      });
 
-      console.log('logged', this.auth.logged, 'unverified', this.auth.loggedUnverified);
-    });
+    } finally {
+      this.isFormDisabled = false;
+    }
+
     // on submit, we want to send http request POST /users to the server
     // on success (201 response) we want to redirect to a page which is awaiting the email verification code
-  }
-
-  clearFields() {
-    this.loginForm.setValue({ username: '', password: '' });
   }
 }
