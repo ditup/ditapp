@@ -54,6 +54,7 @@ import { ContactFormComponent } from './contact/contact-form/contact-form.compon
 import { ContactDeleteButtonComponent } from './contact/contact-delete-button/contact-delete-button.component';
 import { ManageContactComponent } from './contact/manage-contact/manage-contact.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { AvatarComponent } from './shared/avatar/avatar.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
     ContactFormComponent,
     ContactDeleteButtonComponent,
     ManageContactComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    AvatarComponent
   ],
   imports: [
     BrowserModule,

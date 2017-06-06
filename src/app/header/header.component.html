@@ -1,6 +1,6 @@
 <md-toolbar *ngIf="display" class="app-header">
   <nav class="main-navigation">
-    <a md-button routerLink="/">DitUp</a>
+    <a md-button routerLink="/"><img class="ditup-logo" src="/static/img/logo-white.png" alt="logo of ditup"></a>
 
     <button md-button [mdMenuTriggerFor]="newMenu"
       *ngIf="logged">
@@ -62,7 +62,11 @@
       *ngIf="logged">
       <md-icon alt="map">place</md-icon>
     </a>
+  </nav>
 
+  <span class="fill-remaining-space"></span>
+
+  <nav class="user-navigation">
     <a md-button
       routerLink="/messages"
       *ngIf="logged">
@@ -71,7 +75,11 @@
     </a>
 
     <button md-button [mdMenuTriggerFor]="userMenu"
-      *ngIf="logged||loggedUnverified">{{username}}</button>
+      *ngIf="logged||loggedUnverified">
+      <app-avatar [username]="username" class="user-avatar"></app-avatar>
+      {{username}}
+    </button>
+
     <md-menu #userMenu="mdMenu">
       <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
       <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}/edit">Edit Profile</a>
@@ -81,18 +89,5 @@
     </md-menu>
     <a md-button *ngIf="!(logged||loggedUnverified)" routerLink="/login">Login</a>
     <a md-button *ngIf="!(logged||loggedUnverified)" routerLink="/signup">Signup</a>
-    <!--ul class="people-menu header-menu">
-      <li *ngIf="logged||loggedUnverified" class="header-avatar">
-        <ul class="header-submenu">
-          <li><a *ngIf="logged" routerLink="/user/{{username}}">Profile</a></li>
-          <li><a *ngIf="logged" routerLink="/user/{{username}}/edit">Edit Profile</a></li>
-          <li><a *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a></li>
-          <li><a routerLink="/user/{{username}}/settings">Settings</a></li>
-          <li><a routerLink="/" (click)="logout()">Logout</a></li>
-        </ul>
-      </li>
-      <li><a *ngIf="!(logged||loggedUnverified)" routerLink="/login">Login</a></li>
-      <li><a *ngIf="!(logged||loggedUnverified)" routerLink="/signup">Signup</a></li>
-    </ul-->
   </nav>
 </md-toolbar>
