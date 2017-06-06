@@ -1,13 +1,6 @@
-<ul>
-  <li *ngFor="let contact of contacts">
-    <a routerLink="/user/{{contact.from.username}}">{{contact.from.username}}</a>
-    {{contact.trust}}
-    <span *ngIf="!contact.isConfirmed">
-      (pending)
-      <a routerLink="/contact-with/{{contact.from.username}}">
-        <span *ngIf="contact.creator.username === myUsername">Update Contact Request</span>
-        <span *ngIf="contact.creator.username !== myUsername">Confirm/Delete Contact Request</span>
-      </a>
-    </span>
+<ul class="user-contact-list">
+  <li class="user-contact" *ngFor="let contact of contacts">
+    <app-user-contact [contact]="contact" [me]="auth.user"></app-user-contact>
+
   </li>
 </ul>

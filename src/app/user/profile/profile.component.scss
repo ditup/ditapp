@@ -1,0 +1,23 @@
+.user-location {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  display: inline-block;
+}
+
+.user-description {
+  display: inline-block;
+  flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+}
+
+.user-loc-desc-wrapper {
+  display: flex;
+  display: -webkit-flex;
+  vertical-align: top;
+}
+
+app-user-tag-list {
+  margin-bottom: 1em;
+  display: block;
+}

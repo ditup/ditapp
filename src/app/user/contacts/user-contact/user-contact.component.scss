@@ -1,0 +1,44 @@
+$contact-width: 150px;
+$avatar-size: 120px;
+$trust-diameter: 1em;
+
+$trust-color-1: green;
+$trust-color-2: yellow;
+
+.user-contact-wrapper {
+  width: $contact-width;
+  border: 1px solid gray;
+}
+
+.user-contact-avatar {
+  position: relative;
+  width: $avatar-size;
+  height: $avatar-size;
+  display: block;
+  margin: ($contact-width - $avatar-size)/2 auto;
+}
+
+.contact-username-trust {
+  text-align: center;
+  display: block;
+}
+
+.contact-trust-1 {
+  color: $trust-color-2;
+}
+
+.contact-trust-2 {
+  color: mix($trust-color-1, $trust-color-2, 33%);
+}
+
+.contact-trust-4 {
+  color: mix($trust-color-1, $trust-color-2, 67%);
+}
+
+.contact-trust-8 {
+  color: $trust-color-1;
+}
+
+.contact-username {
+  color: gray;
+}

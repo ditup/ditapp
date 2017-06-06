@@ -1,51 +1,62 @@
-<div *ngIf="!avatar"
-  class="avatar">
-  <md-spinner></md-spinner>
-</div>
-<img *ngIf="avatar"
-  class="avatar"
-  src="data:image/{{avatar.format}};base64,{{avatar.base64}}"
-  alt="Profile Picture of {{username}}">
-<span>{{user.gender}}</span>
-<span>{{user.age}}</span>
-<span style="font-weight:bold;">{{user.givenName}} {{user.familyName}}</span>
-<span>@{{username}}</span>
-<a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
-<a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
+<section class="user-profile">
+
+  <section class="user-info">
+    <app-avatar [username]="username" class="user-avatar"></app-avatar>
+    <span>{{user.gender}}</span>
+    <span>{{user.age}}</span>
+  </section>
+
+  <section class="user-detail">
+    <header class="user-detail-header">
+      <span class="user-detail-name">{{user.givenName}} {{user.familyName}}</span>
+      <span class="user-detail-username">{{username}}</span>
+
+      <span class="fill-remaining-space"></span>
+
+      <nav class="user-links-container">
+        <!-- edit profile -->
+        <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
+        <!-- messages -->
+        <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
 
 
-<!-- contact link  -->
-<span *ngIf="isMe === false">
+        <!-- contact link  -->
+        <span *ngIf="isMe === false">
 
-  <!-- loading -->
-  <span *ngIf="contactStatus === null">Fetching contact info...</span>
+          <!-- loading -->
+          <span *ngIf="contactStatus === null">Fetching contact info...</span>
 
-  <a *ngIf="contactStatus !== null" routerLink="/contact-with/{{username}}">
-    <!-- nonexistent -->
-    <span *ngIf="contactStatus === 'nonexistent'">Send a contact request</span>
-    <!-- confirmed -->
-    <span *ngIf="contactStatus === 'confirmed'">Update contact</span>
-    <!-- unconfirmed, sent -->
-    <span *ngIf="contactStatus === 'sent'">Update contact request</span>
-    <!-- unconfirmed, received -->
-    <span *ngIf="contactStatus === 'received'">Accept or Decline contact request</span>
-  </a>
-</span>
+          <a *ngIf="contactStatus !== null" routerLink="/contact-with/{{username}}">
+            <!-- nonexistent -->
+            <span *ngIf="contactStatus === 'nonexistent'">Send a contact request</span>
+            <!-- confirmed -->
+            <span *ngIf="contactStatus === 'confirmed'">Update contact</span>
+            <!-- unconfirmed, sent -->
+            <span *ngIf="contactStatus === 'sent'">Update contact request</span>
+            <!-- unconfirmed, received -->
+            <span *ngIf="contactStatus === 'received'">Accept or Decline contact request</span>
+          </a>
+        </span>
+      </nav>
+    </header>
 
-<nav md-tab-nav-bar>
-  <a md-tab-link
-    routerLink="/user/{{username}}"
-    routerLinkActive #profileLink="routerLinkActive"
-    [active]="profileLink.isActive">
-    Profile
-  </a>
+    <nav md-tab-nav-bar class="user-pages-navigation">
+      <a md-tab-link
+        routerLink="/user/{{username}}"
+        routerLinkActive #profileLink="routerLinkActive"
+        [active]="profileLink.isActive">
+        Profile
+      </a>
 
-  <a md-tab-link
-    routerLink="/user/{{username}}/contacts"
-    routerLinkActive #contactsLink="routerLinkActive"
-    [active]="contactsLink.isActive">
-    Contacts
-  </a>
-</nav>
+      <a md-tab-link
+        routerLink="/user/{{username}}/contacts"
+        routerLinkActive #contactsLink="routerLinkActive"
+        [active]="contactsLink.isActive">
+        Contacts
+      </a>
+    </nav>
 
-<router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+
+  </section>
+</section>

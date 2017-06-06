@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
 
 import { BasicAuthService } from './basic-auth.service';
+import { User } from './shared/types';
 
 @Injectable()
 export class AuthService {
@@ -45,6 +46,11 @@ export class AuthService {
 
   get loggedUnverified(): boolean {
     return this.basicAuth.loggedUnverified;
+  }
+
+  get user(): User {
+    const { username } = this.basicAuth;
+    return new User({ username });
   }
 
   get username(): string {

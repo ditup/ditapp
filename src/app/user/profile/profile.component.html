@@ -7,7 +7,10 @@
   [user]="user">
 </app-user-tag-list>
 
-<div Markdown>
-  {{user.description}}
-</div>
-<span>Location: {{user.location}}</span>
+<section class="user-loc-desc-wrapper">
+  <section class="user-description" Markdown>
+    {{user.description}}
+  </section>
+
+  <app-location class="user-location" *ngIf="user.location" [location]="user.location"></app-location>
+</section>
