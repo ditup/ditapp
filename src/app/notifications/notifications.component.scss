@@ -1,0 +1,23 @@
+.notification {
+  padding: 0.9em;
+  color: white;
+}
+
+.notification-error {
+  background-color: red;
+}
+
+.notification-info {
+  background-color: green;
+}
+
+.notifications-container {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
+.notifications-container.notifications-placeholder {
+  position: relative;
+  visibility: hidden;
+}

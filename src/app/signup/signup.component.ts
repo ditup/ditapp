@@ -10,6 +10,7 @@ import { CustomValidators } from 'ng2-validation';
 
 // import { UniqueUsernameValidator } from '../shared/unique-username.directive';
 import { ModelService } from '../model.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { HeaderControlService } from '../header-control.service';
 
 import { User } from '../shared/types';
@@ -60,6 +61,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private model: ModelService,
+              private notifications: NotificationsService,
               private headerControl: HeaderControlService) { }
 
   // this will execute when the page is loaded
@@ -192,8 +194,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       // redirect to email verification form
       await this.router.navigate(['/user', user.username, 'verify-email']);
     } catch (e) {
-      // TODO notify about the error
-      console.log('error', e);
+      this.notifications.error(e.message);
     } finally {
       this.isFormDisabled = false;
     }

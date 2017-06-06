@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import * as _ from 'lodash';
 
-import { NotificationsService } from 'angular2-notifications'
+import { NotificationsService } from './notifications/notifications.service';
 import { ModelService } from './model.service';
 import { BasicAuthService } from './basic-auth.service';
 import { AuthService } from './auth.service';
@@ -27,9 +27,6 @@ import { DialogService } from './dialog.service';
   ]
 })
 export class AppComponent implements OnInit, OnDestroy {
-
-  // options of notifications @TODO this should be improved, not defined here
-  options = {};
 
   private subscription: Subscription;
 

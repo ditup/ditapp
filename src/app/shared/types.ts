@@ -133,3 +133,7 @@ export class Message {
     return (me.username === this.from.username) ? this.to : this.from;
   }
 }
+
+export class Notification {
+  constructor (public msg: string, public type?: string, public id?: string|number, public ttl?: number) {}
+}

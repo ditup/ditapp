@@ -2,10 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { NotificationsService, SimpleNotificationsComponent } from 'angular2-notifications';
-
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { HeaderControlService } from '../header-control.service';
 import { User } from '../shared/types';
 
@@ -58,35 +57,30 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
     this.isFormDisabled = true;
     this.auth.logout();
     const credentials = this.loginForm.value as User;
-    let pendingNote = this.notifications.info('authenticating', 'authentication in process');
 
     try {
       const user = await this.model.basicAuth(credentials);
 
       user.password = credentials.password;
 
-      console.log(user);
-
       // log in the auth service
       this.auth.login({ method: 'basic', credentials: user});
 
       console.log('authenticated');
-      this.notifications.remove(pendingNote.id);
-      this.notifications.success('authentication successful', 'user was successfully authenticated');
+
+      this.notifications.clear();
+      this.notifications.info('you were authenticated', { ttl: 5000 });
+
+      // redirect to the url provided in ?redirect=url or to default redirect
       const redirectUrl = this.route.snapshot.queryParams['redirect'] || `/user/${this.auth.username}`;
 
       await this.router.navigate([redirectUrl]);
       this.loginForm.reset();
 
-      console.log('logged in as', this.auth.username, this.auth.email);
-      console.log('logged', this.auth.logged, 'unverified', this.auth.loggedUnverified);
-
-      // redirect to the url provided in ?redirect=url or to default redirect
-
-
     } catch (err) {
-      this.notifications.remove(pendingNote.id);
-      this.notifications.error('authentication not successful', 'username or password don\'t match');
+      this.notifications.clear();
+      this.notifications.error('username or password don\'t match');
+
       this.loginForm.reset({
         username: credentials.username,
         password: ''
