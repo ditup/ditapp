@@ -15,7 +15,7 @@ export class ContactsComponent implements OnInit {
 
   public user: User;
   public isMe: boolean;
-  public contacts: Contact[];
+  public contacts: Contact[] = [];
 
   constructor(private auth: AuthService,
               private route: ActivatedRoute,
@@ -35,5 +35,18 @@ export class ContactsComponent implements OnInit {
 
   public get myUsername() {
     return this.auth.username;
+  }
+
+  public get confirmedContacts() {
+    return this.contacts
+      .filter((contact: Contact) => contact.isConfirmed)
+      .sort((a, b) => (a.trust < b.trust)
+        ? 1
+        : (a.trust === b.trust) ? 0
+        : -1);
+  }
+
+  public get unconfirmedContacts() {
+    return this.contacts.filter((contact: Contact) => !contact.isConfirmed);
   }
 }

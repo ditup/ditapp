@@ -1,4 +1,56 @@
-md-chip[disabled=true] {
-  color:gray;
-  background-color:#eee;
+@import '../../shared/styles/colors';
+
+$tag-remove-size: 2em;
+
+md-chip {
+  cursor: grab;
+  vertical-align: middle;
+
+  &[disabled=true] {
+    color: gray;
+    background-color: #eee;
+  }
+
+  button {
+    width: $tag-remove-size;
+    height: $tag-remove-size;
+    border-radius: $tag-remove-size/2;
+
+    padding: 0;
+    vertical-align: middle;
+    text-align: center;
+
+    cursor: pointer;
+  }
+}
+
+.tag-relevance-container {
+  &:not(.tag-relevance-container-initial) {
+    min-height: 3em;
+  }
+  padding: 0.5em;
+}
+
+.tag-relevance-container-initial {
+  // background-color: mix($accent, white, 60%);
+}
+
+.tag-relevance-container-5 {
+  background-color: $darker;
+}
+
+.tag-relevance-container-4 {
+  background-color: mix($darker, white, 80%);
+}
+
+.tag-relevance-container-3 {
+  background-color: mix($darker, white, 60%);
+}
+
+.tag-relevance-container-2 {
+  background-color: mix($darker, white, 40%);
+}
+
+.tag-relevance-container-1 {
+  background-color: mix($darker, white, 20%);
 }

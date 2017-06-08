@@ -11,7 +11,13 @@ import { UserComponent } from './user/user.component';
 import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
 import { PeopleComponent } from './people/people.component';
 import { MapComponent } from './map/map.component';
+
+// user edit
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { UserEditProfileComponent } from './user-edit/user-edit-profile/user-edit-profile.component';
+import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags.component';
+import { UserEditLocationComponent } from './user-edit/user-edit-location/user-edit-location.component';
+
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -80,7 +86,21 @@ const routes: Routes = [
     canDeactivate: [CanDeactivateGuard],
     resolve: {
       user: UserResolver
-    }
+    },
+    children: [
+      {
+        path: '',
+        component: UserEditProfileComponent
+      },
+      {
+        path: 'tags',
+        component: UserEditTagsComponent
+      },
+      {
+        path: 'location',
+        component: UserEditLocationComponent
+      }
+    ]
   },
   {
     path: 'user/:username/verify-email',

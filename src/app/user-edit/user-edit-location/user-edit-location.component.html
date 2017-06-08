@@ -1,7 +1,2 @@
-<button md-raised-button
-  [disabled]="isButtonDisabled"
-  (click)="updateLocation()">Update My Location</button>
-<div class="edit-location-container">
-  <div #locationContainer class="edit-location-map"></div>
-  <div class="edit-location-overlay"></div>
-</div>
+<app-select-location [location]="user.preciseLocation" [onSubmit]="updateLocation">
+</app-select-location>

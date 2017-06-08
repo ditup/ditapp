@@ -57,6 +57,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { AvatarComponent } from './shared/avatar/avatar.component';
 import { LocationComponent } from './shared/location/location.component';
 import { UserContactComponent } from './user/contacts/user-contact/user-contact.component';
+import { UserEditProfileComponent } from './user-edit/user-edit-profile/user-edit-profile.component';
+import { SelectLocationComponent } from './shared/select-location/select-location.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +106,9 @@ import { UserContactComponent } from './user/contacts/user-contact/user-contact.
     NotificationsComponent,
     AvatarComponent,
     LocationComponent,
-    UserContactComponent
+    UserContactComponent,
+    UserEditProfileComponent,
+    SelectLocationComponent
   ],
   imports: [
     BrowserModule,

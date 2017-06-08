@@ -1,30 +1,38 @@
 .user-profile {
-  display: flex;
-  display: -webkit-flex
-}
-.user-info {
-  width: 200px;
-}
-.user-detail {
-  -webkit-flex: 1;
-  flex: 1;
 }
 
-.user-avatar {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  margin: 1em auto;
+/* the top of the page (avatar, name & username, links) */
+.user-info {
+  display: flex;
+  display: -webkit-flex;
+}
+
+.user-detail {
   display: block;
 }
 
-.user-detail {
-  margin: 1em;
+.user-avatar {
+  display: inline-block;
 }
 
-.user-detail-header {
-  display: flex;
-  display: -webkit-flex;
+.user-names-container {
+  display: inline-block;
+
+  .user-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    display: block;
+  }
+
+  .user-username {
+    font-size: 1.2em;
+    color: gray;
+    display: block;
+  }
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
 }
 
 .user-links-container {
@@ -36,21 +44,13 @@
   }
 }
 
-.fill-remaining-space {
-  flex: 1 1 auto;
+.user-avatar {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 1em 1em 0;
 }
 
 .user-pages-navigation {
   margin-bottom: 1em;
-}
-
-.user-detail-name {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-right: 1em;
-}
-
-.user-detail-username {
-  font-size: 1.5em;
-  color: gray;
 }

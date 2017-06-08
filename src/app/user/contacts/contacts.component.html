@@ -1,6 +1,13 @@
-<ul class="user-contact-list">
-  <li class="user-contact" *ngFor="let contact of contacts">
+<ul class="user-contact-list user-contact-unconfirmed-list">
+  <li class="user-contact user-contact-unconfirmed" *ngFor="let contact of unconfirmedContacts">
     <app-user-contact [contact]="contact" [me]="auth.user"></app-user-contact>
+
+  </li>
+</ul>
+
+<ul class="user-contact-list">
+  <li class="user-contact" *ngFor="let contact of confirmedContacts">
+    <app-user-contact *ngIf="contact.isConfirmed" [contact]="contact" [me]="auth.user"></app-user-contact>
 
   </li>
 </ul>

@@ -1,54 +1,31 @@
 <div class="container">
-  <h1>Edit Profile of <a routerLink="/user/{{user.username}}">{{user.username}}</a></h1>
-  <md-tab-group>
-    <md-tab label="Info">
-      <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
-        <fieldset [disabled]="isFormDisabled">
 
-          <div>
-            <md-input-container>
-              <input mdInput type="text" placeholder="Given Name"
-              formControlName="givenName">
-            </md-input-container>
+  <h1>
+    Edit Profile of <a routerLink="/user/{{user.username}}">{{user.username}}</a>
+  </h1>
 
-            <div *ngIf="formErrors.givenName" class="alert alert-danger">
-              {{formErrors.givenName}}
-            </div>
-          </div>
+  <nav md-tab-nav-bar>
+    <a md-tab-link
+      routerLink="/user/{{user.username}}/edit"
+      routerLinkActive #profileLink="routerLinkActive"
+      [active]="profileLink.isActive">
+      Info
+    </a>
 
-          <div>
-            <md-input-container>
-              <input mdInput type="text" placeholder="Family Name"
-              formControlName="familyName">
-            </md-input-container>
+    <a md-tab-link
+      routerLink="/user/{{user.username}}/edit/tags"
+      routerLinkActive #profileLink="routerLinkActive"
+      [active]="profileLink.isActive">
+      Tags
+    </a>
 
-            <div *ngIf="formErrors.familyName" class="alert alert-danger">
-              {{formErrors.familyName}}
-            </div>
-          </div>
+    <a md-tab-link
+      routerLink="/user/{{user.username}}/edit/location"
+      routerLinkActive #profileLink="routerLinkActive"
+      [active]="profileLink.isActive">
+      Location
+    </a>
+  </nav>
 
-          <div>
-            <md-input-container>
-              <textarea mdInput placeholder="Description"
-                formControlName="description"></textarea>
-            </md-input-container>
-
-            <div *ngIf="formErrors.description" class="alert alert-danger">
-              {{formErrors.description}}
-            </div>
-          </div>
-
-          <button md-raised-button type="submit"
-            [disabled]="!profileForm.valid">Submit</button>
-
-        </fieldset>
-      </form>
-    </md-tab>
-    <md-tab label="Tags">
-      <app-user-edit-tags [username]="user.username"></app-user-edit-tags>
-    </md-tab>
-    <md-tab label="Location">
-      <app-user-edit-location [user]="user"></app-user-edit-location>
-    </md-tab>
-  </md-tab-group>
+  <router-outlet></router-outlet>
 </div>
