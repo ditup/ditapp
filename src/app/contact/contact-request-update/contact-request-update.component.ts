@@ -15,7 +15,7 @@ export class FormData {
 @Component({
   selector: 'app-contact-request-update',
   templateUrl: './contact-request-update.component.html',
-  styleUrls: ['./contact-request-update.component.scss']
+  styleUrls: ['./contact-request-update.component.scss', '../contact-style.scss']
 })
 export class ContactRequestUpdateComponent implements OnInit {
 

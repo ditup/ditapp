@@ -7,7 +7,7 @@ import { Contact, User } from '../../shared/types';
 @Component({
   selector: 'app-contact-request-process',
   templateUrl: './contact-request-process.component.html',
-  styleUrls: ['./contact-request-process.component.scss']
+  styleUrls: ['./contact-request-process.component.scss', '../contact-style.scss']
 })
 export class ContactRequestProcessComponent implements OnInit {
 

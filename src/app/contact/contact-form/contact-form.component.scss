@@ -1,0 +1,28 @@
+form {
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+
+  button {
+    display: block;
+    margin: 0 auto;
+  }
+
+  textarea {
+    min-height: 6em;
+  }
+}
+
+.form-field {
+  width: 100%;
+  display: block;
+}
+
+.trust-field {
+  h2 {
+    color: gray;
+  }
+  md-radio-button {
+    display: block;
+  }
+}

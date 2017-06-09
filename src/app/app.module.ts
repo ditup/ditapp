@@ -59,6 +59,7 @@ import { LocationComponent } from './shared/location/location.component';
 import { UserContactComponent } from './user/contacts/user-contact/user-contact.component';
 import { UserEditProfileComponent } from './user-edit/user-edit-profile/user-edit-profile.component';
 import { SelectLocationComponent } from './shared/select-location/select-location.component';
+import { UserCardComponent } from './shared/user-card/user-card.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +109,8 @@ import { SelectLocationComponent } from './shared/select-location/select-locatio
     LocationComponent,
     UserContactComponent,
     UserEditProfileComponent,
-    SelectLocationComponent
+    SelectLocationComponent,
+    UserCardComponent
   ],
   imports: [
     BrowserModule,

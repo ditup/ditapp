@@ -1,17 +1,13 @@
 <form (ngSubmit)="onSubmitWrapper()" [formGroup]="contactForm">
   <fieldset [disabled]="isFormDisabled">
 
-    <div *ngIf="fields.indexOf('message') > -1">
-      <md-input-container
-        [dividerColor]="formErrors.message ? 'warn' : ''"
-        [hintLabel]="formErrors.message || null">
-        <textarea mdInput placeholder="Message"
-          formControlName="message"></textarea>
-      </md-input-container>
-    </div>
+    <md-input-container class="form-field message-field" *ngIf="fields.indexOf('message') > -1">
+      <textarea mdInput placeholder="Message"
+        formControlName="message"></textarea>
+    </md-input-container>
 
-    <div *ngIf="fields.indexOf('trust') > -1">
-      <h2>trust</h2>
+    <div class="form-field trust-field" *ngIf="fields.indexOf('trust') > -1">
+      <h2>Trust</h2>
       <md-radio-group formControlName="trust">
         <md-radio-button *ngFor="let tl of trustLevels" [value]="tl.value">
           {{tl.label}}
@@ -19,14 +15,10 @@
       </md-radio-group>
     </div>
 
-    <div *ngIf="fields.indexOf('reference') > -1">
-      <md-input-container
-        [dividerColor]="formErrors.reference? 'warn' : ''"
-        [hintLabel]="formErrors.reference || null">
-        <textarea mdInput placeholder="Reference"
-          formControlName="reference"></textarea>
-      </md-input-container>
-    </div>
+    <md-input-container class="form-field reference-field" *ngIf="fields.indexOf('reference') > -1">
+      <textarea mdInput placeholder="Reference"
+        formControlName="reference"></textarea>
+    </md-input-container>
 
     <button md-raised-button type="submit"
       [disabled]="!contactForm.valid">Submit</button>

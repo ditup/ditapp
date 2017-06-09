@@ -1,0 +1,29 @@
+@import '../styles/colors';
+
+$card-width: 150px;
+$border-width: 5px;
+
+.user-card {
+  width: $card-width;
+  border: $border-width solid $darker;
+  display: block;
+  padding: 1em;
+}
+
+.user-card-avatar {
+  margin: 0 auto;
+}
+
+.user-card-name {
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: center;
+  display: block;
+}
+
+.user-card-username {
+  color: gray;
+  font-size: 1em;
+  text-align: center;
+  display: block;
+}

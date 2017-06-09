@@ -10,7 +10,7 @@ import { User } from '../../shared/types';
 @Component({
   selector: 'app-contact-request-send',
   templateUrl: './contact-request-send.component.html',
-  styleUrls: ['./contact-request-send.component.scss']
+  styleUrls: ['./contact-request-send.component.scss', '../contact-style.scss']
 })
 export class ContactRequestSendComponent implements OnInit {
 

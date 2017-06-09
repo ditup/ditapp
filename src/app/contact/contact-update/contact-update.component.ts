@@ -13,7 +13,7 @@ class FormData {
 @Component({
   selector: 'app-contact-update',
   templateUrl: './contact-update.component.html',
-  styleUrls: ['./contact-update.component.scss']
+  styleUrls: ['./contact-update.component.scss', '../contact-style.scss']
 })
 export class ContactUpdateComponent implements OnInit {
 
