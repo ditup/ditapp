@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ActivatedRoute } from '@angular/router';
+
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
 import { Message, User } from '../shared/types';
@@ -13,17 +15,16 @@ export class MessagesComponent implements OnInit {
 
   public messages: Message[];
   public me: User;
-  public loading: boolean;
 
-  constructor(private model: ModelService, private auth: AuthService) { }
+  constructor(private auth: AuthService, private route: ActivatedRoute) { }
 
-  async ngOnInit() {
-    this.loading = true;
-
+  ngOnInit() {
     this.me = new User({ username: this.auth.username });
-    this.messages = await this.model.readThreads();
 
-    this.loading = false;
+    this.route.data
+      .subscribe(({ threads }: { threads: Message[] }) => {
+        this.messages = threads;
+      });
   }
 
 }

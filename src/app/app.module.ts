@@ -61,6 +61,8 @@ import { UserEditProfileComponent } from './user-edit/user-edit-profile/user-edi
 import { SelectLocationComponent } from './shared/select-location/select-location.component';
 import { UserCardComponent } from './shared/user-card/user-card.component';
 
+import { MomentModule } from 'angular2-moment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -121,7 +123,8 @@ import { UserCardComponent } from './shared/user-card/user-card.component';
     AppRoutingModule,
     SimpleNotificationsModule,
     DndModule.forRoot(), // drag and drop: ng2-dnd
-    MarkdownModule
+    MarkdownModule,
+    MomentModule
   ],
   providers: [],
   bootstrap: [AppComponent],

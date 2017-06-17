@@ -6,7 +6,7 @@ import { ModelService } from '../model.service';
 
 import { Message, User } from '../shared/types';
 
-import * as _ from 'lodash';
+import { find, reverse } from 'lodash';
 
 @Component({
   selector: 'app-messages-with-user',
@@ -22,49 +22,40 @@ export class MessagesWithUserComponent implements OnInit {
   public otherUser: User;
 
   constructor(private route: ActivatedRoute,
+              private auth: AuthService,
               private model: ModelService) { }
 
   ngOnInit() {
     // observe the username parameter
-    this.route.params.subscribe(async (params: Params) => {
+    this.route.data.subscribe(async ({ messages }: { messages: Message[] }) => {
+      this.messages = messages;
 
-      try {
-        // load the tag from database
-        this.otherUserExists = undefined;
-        this.loading = true;
-        const otherUser: string = params['username'];
-        this.otherUser = { username: otherUser } as User;
-        this.messages = await this.model.readMessagesWith(otherUser);
+      console.log(this.messages, this.inverseMessages);
 
-        console.log(this.messages);
+      this.otherUserExists = true;
 
-        this.loading = false;
-        this.otherUserExists = true;
+      if (this.messages.length > 0) {
+        this.otherUser = this.messages[0].with({ username: this.auth.username } as User);
+      } else {
+        this.otherUser = { username: this.route.snapshot['username'] } as User;
+      }
 
-        // now mark the messages as read if applicable
-        if (this.messages.length > 0) {
-          // find the last message i received
-          const lastUnreadMsg = _.find(this.messages, (msg: Message) => {
-            return msg.from.username === this.otherUser.username && !msg.read;
-          });
+      // now mark the messages as read if applicable
+      if (this.messages.length > 0) {
+        // find the last message i received
+        const lastUnreadMsg = find(this.messages, (msg: Message) => {
+          return msg.from.username === this.otherUser.username && !msg.read;
+        });
 
-          if (lastUnreadMsg) {
-            console.log('updating last message', lastUnreadMsg);
-            const updated = await this.model.updateMessageToRead(lastUnreadMsg);
-
-            console.log('messages updated!', updated);
-          }
+        if (lastUnreadMsg) {
+          const updated = await this.model.updateMessageToRead(lastUnreadMsg);
         }
-
-      } catch (e) {
-        this.loading = false;
-
-        console.log(e);
-        if (e.status === 404) {
-          this.otherUserExists = false;
-        } else {
-          throw e;
-        }
+      }
+    }, (e) => {
+      if (e.status === 404) {
+        this.otherUserExists = false;
+      } else {
+        throw e;
       }
     });
   }
@@ -75,7 +66,7 @@ export class MessagesWithUserComponent implements OnInit {
   }
 
   public get inverseMessages() {
-    return _.reverse(this.messages);
+    return reverse(this.messages);
   }
 
 }

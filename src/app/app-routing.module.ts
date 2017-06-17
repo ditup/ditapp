@@ -34,8 +34,14 @@ import { ManageContactComponent } from './contact/manage-contact/manage-contact.
 import { AuthGuard } from './auth-guard.service';
 import { AuthMeGuard } from './auth-me-guard.service';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
+
+// resolvers
 import { UserResolver } from './user/user-resolver.service';
 import { ContactResolver } from './contact/contact-resolver.service';
+import { ThreadsResolver } from './messages/threads-resolver.service';
+import { MessagesResolver } from './messages-with-user/messages-resolver.service';
+
+// services
 import { AuthService } from './auth.service';
 import { BasicAuthService } from './basic-auth.service';
 import { ModelService } from './model.service';
@@ -122,12 +128,19 @@ const routes: Routes = [
   {
     path: 'messages',
     component: MessagesComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {
+      threads: ThreadsResolver
+    },
   },
   {
     path: 'messages/:username',
     component: MessagesWithUserComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {
+      messages: MessagesResolver
+    },
+
   },
   {
     path: 'map',
@@ -162,6 +175,8 @@ const routes: Routes = [
     CanDeactivateGuard,
     UserResolver,
     ContactResolver,
+    ThreadsResolver,
+    MessagesResolver,
     AuthService,
     BasicAuthService,
     ModelService

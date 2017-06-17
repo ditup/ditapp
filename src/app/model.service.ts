@@ -267,12 +267,17 @@ export class ModelService {
     const requestBody = {
       data: {
         type: 'user-tags',
-        id: `${username}--${tagname}`,
         attributes: {
-          username,
-          tagname,
           relevance,
           story
+        },
+        relationships: {
+          tag: {
+            data: {
+              type: 'tags',
+              id: tagname
+            }
+          }
         }
       }
     };

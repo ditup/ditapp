@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // subscriptions to observables. To be able to unsubscribe OnDestroy.
   private subscription: Subscription;
   private authSubscription: Subscription;
+  private messageTimerSubscription: Subscription;
 
   constructor(private headerControl: HeaderControlService,
               private auth: AuthService,
@@ -38,6 +39,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // subscribe to observing whether to display the header or not
     this.subscription = this.headerControl.displayChanged$.subscribe(display => {
       this.display = display;
+
+      this.subscribeToMessageCount();
     });
 
     // subscribe to observing the login values
@@ -46,6 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.logged = logged;
       this.username = username;
       this.loggedUnverified = loggedUnverified;
+      this.subscribeToMessageCount();
     });
   }
 
@@ -53,6 +57,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public logout() {
     this.auth.logout();
   };
+
+  /*
+   * we want to refresh the timer when we
+   * - log in
+   * - display the header
+   */
+
+  private modelCountSubscription: Subscription;
+
+  private subscribeToMessageCount() {
+    if (this.messageTimerSubscription) {
+      this.messageTimerSubscription.unsubscribe();
+    }
+
+    if (this.display && this.logged) {
+      this.messageTimerSubscription = Observable.timer(0,30000)
+        .subscribe(async () => {
+
+          if (this.modelCountSubscription) {
+            this.modelCountSubscription.unsubscribe();
+          }
+
+          this.modelCountSubscription = this.model.countUnreadMessages().subscribe((count: number) => {
+            this.messageCount = count;
+            this.modelCountSubscription.unsubscribe();
+          });
+        });
+    }
+  }
 
 
   ngOnInit() {
@@ -62,19 +95,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.loggedUnverified = this.auth.loggedUnverified;
     this.username = this.auth.username;
 
-    // load unread message count and update regularly
-    Observable.timer(0, 60000)
-      .subscribe(async () => {
-        if (this.logged) {
-          this.messageCount = await this.model.countUnreadMessages().toPromise();
-        }
-      });
+    this.subscribeToMessageCount();
   }
 
   ngOnDestroy() {
     // avoid memory leaks by unsubscribing from observables
     this.subscription.unsubscribe();
     this.authSubscription.unsubscribe();
+    if (this.messageTimerSubscription) {
+      this.messageTimerSubscription.unsubscribe();
+    }
+    if (this.modelCountSubscription) {
+      this.modelCountSubscription.unsubscribe();
+    }
   }
 
 }

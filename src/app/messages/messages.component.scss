@@ -1,5 +1,77 @@
+@import '../shared/styles/colors';
+
+$inside: 40px;
+$border: 1px;
+$padding: 5px;
+
+ul {
+  border-top: 2px solid $darker;
+}
+
 .thread {
+  display: flex;
+  display: -webkit-flex;
+  position: relative;
+  height: $inside + 2 * $padding + $border;
+
+  border-bottom: $border solid $accent;
+
   &.unread {
     font-weight: bold;
   }
+
+  &>div {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: $inside + 2 * $padding;
+  }
+}
+
+a {
+  display: block;
+  height: $inside + 2 * $padding;
+
+  &:hover {
+    background-color: mix($accent, white, 20%);
+  }
+}
+
+.thread-with-user {
+  app-avatar {
+    display: inline-block;
+    vertical-align: middle;
+    width: $inside;
+    height: $inside;
+    position: relative;
+  }
+
+  width: 128px;
+  flex: none;
+  -webkit-flex: none;
+}
+
+.thread-user-name {
+  vertical-align: middle;
+  padding: 0 $padding;
+}
+
+.thread-message {
+  flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+
+  overflow: hidden;
+  padding: 0 $padding;
+
+  a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.thread-message-from {
+}
+
+.thread-message-created {
+  white-space: nowrap;
 }

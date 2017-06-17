@@ -1,22 +1,21 @@
 <h1>My Conversations</h1>
 
-<div *ngIf="loading">
-  <md-spinner></md-spinner>
-</div>
-
-<div *ngIf="!loading">
-  <md-list>
-    <md-list-item *ngFor="let msg of messages">
-      <div style="border:1px solid black"
-        [ngClass]="[
-          (msg.read === true || msg.from.username === me.username) ? 'read' : 'unread',
-          'thread'
-        ]">
-        {{msg.with(me).username}}
-        ({{msg.created | date:"hh:mm:ss"}}):
-        <a routerLink="/messages/{{msg.with(me).username}}">{{msg.body}}</a>
-        <md-icon *ngIf="msg.from.username === me.username">reply</md-icon>
-      </div>
-    </md-list-item>
-  </md-list>
-</div>
+<ul>
+  <li *ngFor="let msg of messages" class="thread"
+    [ngClass]="(msg.read === true || msg.from.username === me.username) ? 'read' : 'unread'">
+    <div class="thread-with-user">
+      <a routerLink="/user/{{msg.with(me).username}}">
+        <app-avatar [username]="msg.with(me).username"></app-avatar><span class="thread-user-name">{{msg.with(me).username}}</span>
+      </a>
+    </div>
+    <div class="thread-message">
+      <a routerLink="/messages/{{msg.with(me).username}}">{{msg.body}}</a>
+    </div>
+    <div class="thread-message-from">
+      <md-icon *ngIf="msg.from.username === me.username">reply</md-icon>
+    </div>
+    <div class="thread-message-created">
+      {{msg.created | amTimeAgo}}
+    </div>
+  </li>
+</ul>
