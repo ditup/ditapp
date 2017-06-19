@@ -27,18 +27,12 @@ export class MessagesWithUserComponent implements OnInit {
 
   ngOnInit() {
     // observe the username parameter
-    this.route.data.subscribe(async ({ messages }: { messages: Message[] }) => {
-      this.messages = messages;
-
-      console.log(this.messages, this.inverseMessages);
+    this.route.data.subscribe(async ({ messages, otherUser }: { messages: Message[], otherUser: User }) => {
+      this.messages = messages.reverse();
 
       this.otherUserExists = true;
 
-      if (this.messages.length > 0) {
-        this.otherUser = this.messages[0].with({ username: this.auth.username } as User);
-      } else {
-        this.otherUser = { username: this.route.snapshot['username'] } as User;
-      }
+      this.otherUser = otherUser;
 
       // now mark the messages as read if applicable
       if (this.messages.length > 0) {
@@ -62,11 +56,7 @@ export class MessagesWithUserComponent implements OnInit {
 
   public onNewMessage(message: Message) {
     console.log('new message sent', message);
-    this.messages.unshift(message);
-  }
-
-  public get inverseMessages() {
-    return reverse(this.messages);
+    this.messages.push(message);
   }
 
 }

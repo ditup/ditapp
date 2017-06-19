@@ -1,6 +1,6 @@
 <div *ngIf="otherUserExists === true">
   <md-list>
-    <md-list-item *ngFor="let msg of inverseMessages">
+    <md-list-item *ngFor="let msg of messages">
       <div class="message"
         [ngClass]="(msg.to.username === otherUser.username)
           ? 'sent'

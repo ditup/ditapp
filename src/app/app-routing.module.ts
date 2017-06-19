@@ -138,7 +138,8 @@ const routes: Routes = [
     component: MessagesWithUserComponent,
     canActivate: [AuthGuard],
     resolve: {
-      messages: MessagesResolver
+      messages: MessagesResolver,
+      otherUser: UserResolver
     },
 
   },
