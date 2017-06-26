@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { MessagesResolverService } from './messages-resolver.service';
+import { MessagesResolver } from './messages-resolver.service';
 
-describe('MessagesResolverService', () => {
+describe('MessagesResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MessagesResolverService]
+      providers: [MessagesResolver]
     });
   });
 
-  it('should ...', inject([MessagesResolverService], (service: MessagesResolverService) => {
+  it('should ...', inject([MessagesResolver], (service: MessagesResolver) => {
     expect(service).toBeTruthy();
   }));
 });

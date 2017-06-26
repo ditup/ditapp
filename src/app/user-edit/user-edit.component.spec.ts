@@ -11,13 +11,14 @@ import { DialogService } from '../dialog.service';
 
 import { ActivatedRoute } from '@angular/router';
 import { ActivatedRouteStub } from '../../testing/router-stubs';
+import { User } from '../shared/types';
 
 let activatedRoute: ActivatedRouteStub;
 
-class FakeModelService implements ModelService {
+class FakeModelService {
   lastPromise: Promise<any>;
 
-  createUser(newUser: NewUser): Promise<void> {
+  createUser(newUser: User): Promise<void> {
     return this.lastPromise = Promise.resolve();
   }
 
@@ -32,7 +33,7 @@ class FakeModelService implements ModelService {
 
   updateUser(username: string, profile: any): Promise<any> {
     return this.lastPromise = Promise.resolve({
-      username: username
+      username: username,
       givenName: '',
       familyName: '',
       description: ''
@@ -52,7 +53,7 @@ describe('UserEditComponent', () => {
       declarations: [ UserEditComponent ],
       imports: [ReactiveFormsModule],
       providers: [
-        { provide: ModelService, useClass: FakeModelService }
+        { provide: ModelService, useClass: FakeModelService },
         { provide: ActivatedRoute, useValue: activatedRoute },
         DialogService
       ]

@@ -36,7 +36,7 @@ class FakeModelService {
   }
 }
 
-class FakeHeaderControlService implements HeaderControlService {
+class FakeHeaderControlService {
   displayChanged$;
 
   display(value: boolean) {}

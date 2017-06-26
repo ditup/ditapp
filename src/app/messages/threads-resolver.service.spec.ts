@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ThreadsResolverService } from './threads-resolver.service';
+import { ThreadsResolver } from './threads-resolver.service';
 
-describe('ThreadsResolverService', () => {
+describe('ThreadsResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ThreadsResolverService]
+      providers: [ThreadsResolver]
     });
   });
 
-  it('should ...', inject([ThreadsResolverService], (service: ThreadsResolverService) => {
+  it('should ...', inject([ThreadsResolver], (service: ThreadsResolver) => {
     expect(service).toBeTruthy();
   }));
 });

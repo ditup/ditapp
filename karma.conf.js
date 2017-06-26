@@ -4,13 +4,13 @@
 module.exports = function (config) {
   let configuration = {
     basePath: '',
-    frameworks: ['jasmine', 'angular-cli'],
+    frameworks: ['jasmine', '@angular/cli'],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
-      require('angular-cli/plugins/karma'),
-      require('karma-spec-reporter')
+      require('@angular/cli/plugins/karma'),
     ],
     files: [
       { pattern: './src/test.ts', watched: false },
@@ -21,12 +21,6 @@ module.exports = function (config) {
       // exclude the Vim junk files
       '**/*.swp'
     ],
-    preprocessors: {
-      './src/test.ts': ['angular-cli']
-    },
-    mime: {
-      'text/x-typescript': ['ts','tsx']
-    },
     customLaunchers: {
       // chrome setup for travis CI using chromium
       Chrome_travis_ci: {
@@ -39,15 +33,9 @@ module.exports = function (config) {
       fixWebpackSourcePaths: true
     },
     angularCli: {
-      config: './.angular-cli.json',
       environment: 'dev'
     },
-    /*
-    reporters: config.angularCli && config.angularCli.codeCoverage
-              ? ['progress', 'karma-coverage-istanbul-reporter']
-              : ['progress'],
-    */
-    reporters: ['spec'],
+    reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

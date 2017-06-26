@@ -10,16 +10,16 @@ import { SignupComponent } from './signup.component';
 import { ModelService } from '../model.service';
 import { HeaderControlService } from '../header-control.service';
 
-import { NewUser } from '../new-user';
+import { User } from '../shared/types';
 
 class RouterStub {
-  navigate(url: Array) { return url.join('/'); }
+  navigate(url: any[]) { return url.join('/'); }
 }
 
-class FakeModelService implements ModelService {
+class FakeModelService {
   lastPromise: Promise<any>;
 
-  createUser(newUser: NewUser): Promise<void> {
+  createUser(newUser: User): Promise<void> {
     return this.lastPromise = Promise.resolve();
   }
 
@@ -34,7 +34,7 @@ class FakeModelService implements ModelService {
   }
 }
 
-class FakeHeaderControlService implements HeaderControlService {
+class FakeHeaderControlService {
   displayChanged$;
 
   display(value: boolean) {}
@@ -55,7 +55,7 @@ describe('SignupComponent', () => {
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
-        { provide: ModelService, useClass: FakeModelService }
+        { provide: ModelService, useClass: FakeModelService },
         { provide: HeaderControlService, useClass: FakeHeaderControlService }
       ]
     })

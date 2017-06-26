@@ -16,7 +16,7 @@ import { BasicAuthService } from '../basic-auth.service';
 
 let activatedRoute: ActivatedRouteStub;
 
-class FakeModelService implements ModelService {
+class FakeModelService {
   lastPromise: Promise<any>;
 
   readUser(username: string): Promise<any> {

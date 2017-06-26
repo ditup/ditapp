@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { UserResolverService } from './user-resolver.service';
+import { UserResolver } from './user-resolver.service';
 
-describe('UserResolverService', () => {
+describe('UserResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UserResolverService]
+      providers: [UserResolver]
     });
   });
 
-  it('should ...', inject([UserResolverService], (service: UserResolverService) => {
+  it('should ...', inject([UserResolver], (service: UserResolver) => {
     expect(service).toBeTruthy();
   }));
 });

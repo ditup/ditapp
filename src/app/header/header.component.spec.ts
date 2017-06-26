@@ -12,11 +12,10 @@ import { HeaderControlService } from '../header-control.service';
 import { AuthService } from '../auth.service';
 import { BasicAuthService } from '../basic-auth.service';
 
-class FakeHeaderControlService implements HeaderControlService {
+class FakeHeaderControlService {
   displayChanged$: Observable<boolean> = new Observable(observer => observer.next(false));
 
   display(value: boolean) {}
-
 }
 
 describe('HeaderComponent', () => {

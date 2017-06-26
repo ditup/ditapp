@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ContactResolverService } from './contact-resolver.service';
+import { ContactResolver } from './contact-resolver.service';
 
-describe('ContactResolverService', () => {
+describe('ContactResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ContactResolverService]
+      providers: [ContactResolver]
     });
   });
 
-  it('should ...', inject([ContactResolverService], (service: ContactResolverService) => {
+  it('should ...', inject([ContactResolver], (service: ContactResolver) => {
     expect(service).toBeTruthy();
   }));
 });

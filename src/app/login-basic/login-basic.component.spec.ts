@@ -24,12 +24,16 @@ class FakeModelService {
   }
 }
 
-class FakeHeaderControlService implements HeaderControlService {
-  display(value: boolean) {}
+class FakeHeaderControlService {
+  display(value: boolean) {
+
+  }
+
+  private displayHeaderSource;
 }
 
 class RouterStub {
-  navigate(url: Array) { return url.join('/'); }
+  navigate(url: any) { return url.join('/'); }
 }
 
 class NotificationsServiceStub {
@@ -60,8 +64,8 @@ describe('LoginBasicComponent', () => {
         { provide: Router, useClass: RouterStub },
         { provide: ModelService, useClass: FakeModelService },
         { provide: NotificationsService, useClass: NotificationsServiceStub },
-        { provide: ActivatedRoute, useValue: activatedRoute }
-        { provide: HeaderControlService, useClass: FakeHeaderControlService }
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: HeaderControlService, useClass: FakeHeaderControlService },
         BasicAuthService,
         AuthService
       ]

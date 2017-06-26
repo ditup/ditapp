@@ -70,7 +70,7 @@ export class MapComponent implements OnInit {
     this.subscription = this.model.findUsersWithinRectangle(sw, ne)
       .subscribe((users: User[]) => {
         // remove the previous markers
-        if (this.markers as Boolean) {
+        if (this.markers) {
           this.map.removeLayer(this.markers);
         }
 
