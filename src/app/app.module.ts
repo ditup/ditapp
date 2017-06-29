@@ -6,6 +6,7 @@ import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DndModule } from 'ng2-dnd';
 import { MarkdownModule } from 'angular2-markdown';
+import { MomentModule } from 'angular2-moment';
 
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
@@ -60,8 +61,6 @@ import { UserContactComponent } from './user/contacts/user-contact/user-contact.
 import { UserEditProfileComponent } from './user-edit/user-edit-profile/user-edit-profile.component';
 import { SelectLocationComponent } from './shared/select-location/select-location.component';
 import { UserCardComponent } from './shared/user-card/user-card.component';
-
-import { MomentModule } from 'angular2-moment';
 
 @NgModule({
   declarations: [

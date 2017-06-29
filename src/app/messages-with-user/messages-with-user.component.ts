@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { AuthService } from '../auth.service';
 import { ModelService } from '../model.service';
 
 import { Message, User } from '../shared/types';
@@ -22,7 +21,6 @@ export class MessagesWithUserComponent implements OnInit {
   public otherUser: User;
 
   constructor(private route: ActivatedRoute,
-              private auth: AuthService,
               private model: ModelService) { }
 
   ngOnInit() {
