@@ -2,13 +2,20 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AvatarComponent } from './avatar.component';
 
+import { ModelService } from '../../model.service';
+
+class ModelStubService { }
+
 describe('AvatarComponent', () => {
   let component: AvatarComponent;
   let fixture: ComponentFixture<AvatarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AvatarComponent ]
+      declarations: [ AvatarComponent ],
+      providers: [
+        { provide: ModelService, useClass: ModelStubService }
+      ]
     })
     .compileComponents();
   }));

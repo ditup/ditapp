@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MaterialModule } from '@angular/material';
+
 import { UserTagListComponent } from './user-tag-list.component';
 
 describe('UserTagListComponent', () => {
@@ -8,7 +10,10 @@ describe('UserTagListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserTagListComponent ]
+      declarations: [ UserTagListComponent ],
+      imports: [
+        MaterialModule
+      ]
     })
     .compileComponents();
   }));
