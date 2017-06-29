@@ -37,6 +37,7 @@ import { CanDeactivateGuard } from './can-deactivate-guard.service';
 
 // resolvers
 import { UserResolver } from './user/user-resolver.service';
+import { TagResolver } from './tag/tag-resolver.service';
 import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
@@ -118,7 +119,10 @@ const routes: Routes = [
   },
   {
     path: 'tag/:tagname',
-    component: TagComponent
+    component: TagComponent,
+    resolve: {
+      tag: TagResolver
+    }
   },
   {
     path: 'people',
@@ -178,6 +182,7 @@ const routes: Routes = [
     ContactResolver,
     ThreadsResolver,
     MessagesResolver,
+    TagResolver,
     AuthService,
     BasicAuthService,
     ModelService

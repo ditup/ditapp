@@ -1,12 +1,6 @@
-<div *ngIf="tagExists === false">
-  Tag doesn't exist
-</div>
+<app-fof *ngIf="!tag" [message]="'tag not found'"></app-fof>
 
-<div *ngIf="tagLoading === true">
-  <md-spinner></md-spinner>
-</div>
-
-<md-card *ngIf="tagExists === true">
+<md-card *ngIf="tag">
   <md-card-title><md-icon alt="tag">label</md-icon> {{tag.tagname}}</md-card-title>
 
   <md-card-content>
