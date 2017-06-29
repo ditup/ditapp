@@ -1,14 +1,16 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { MaterialModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Observable } from 'rxjs/Observable';
 
 import { SignupComponent } from './signup.component';
 import { ModelService } from '../model.service';
 import { HeaderControlService } from '../header-control.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import { User } from '../shared/types';
 
@@ -41,7 +43,6 @@ class FakeHeaderControlService {
 
 }
 
-
 describe('SignupComponent', () => {
 
   let component: SignupComponent;
@@ -52,11 +53,14 @@ describe('SignupComponent', () => {
       declarations: [ SignupComponent ],
       imports: [
         ReactiveFormsModule,
+        MaterialModule,
+        BrowserAnimationsModule
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: ModelService, useClass: FakeModelService },
-        { provide: HeaderControlService, useClass: FakeHeaderControlService }
+        { provide: HeaderControlService, useClass: FakeHeaderControlService },
+        NotificationsService
       ]
     })
     .compileComponents();

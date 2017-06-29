@@ -14,6 +14,8 @@ module.exports = function (config) {
     ],
     files: [
       { pattern: './src/test.ts', watched: false },
+      // include angular material core theme
+      { pattern: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' },
       // don't watch the Vim junk files
       { pattern: '**/*.swp', watched: false }
     ],
