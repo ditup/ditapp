@@ -8,21 +8,24 @@
     <a md-tab-link
       routerLink="/user/{{user.username}}/edit"
       routerLinkActive #profileLink="routerLinkActive"
+      [routerLinkActiveOptions]="{exact: true}"
       [active]="profileLink.isActive">
       Info
     </a>
 
     <a md-tab-link
       routerLink="/user/{{user.username}}/edit/tags"
-      routerLinkActive #profileLink="routerLinkActive"
-      [active]="profileLink.isActive">
+      routerLinkActive #tagsLink="routerLinkActive"
+      [routerLinkActiveOptions]="{exact: true}"
+      [active]="tagsLink.isActive">
       Tags
     </a>
 
     <a md-tab-link
       routerLink="/user/{{user.username}}/edit/location"
-      routerLinkActive #profileLink="routerLinkActive"
-      [active]="profileLink.isActive">
+      routerLinkActive #locationLink="routerLinkActive"
+      [routerLinkActiveOptions]="{exact: true}"
+      [active]="locationLink.isActive">
       Location
     </a>
   </nav>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Directive } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, ElementRef, Directive, EventEmitter } from '@angular/core';
 
 import { ResizeEvent } from 'leaflet';
 
@@ -25,11 +25,8 @@ export class SelectLocationComponent implements OnInit {
   @Input()
   public location: [number, number];
 
-  @Input()
-  public onSubmit: (location: [number, number]) => Promise<void> = async function (location) {
-    console.log('location called', location);
-  }
-
+  @Output()
+  public onSubmit = new EventEmitter<[number, number]>();
   ngOnInit() {
     this.map = L.map(this.locationContainer.nativeElement, {
       center: L.latLng.apply(null, this.location || [0, 0]),
@@ -78,7 +75,7 @@ export class SelectLocationComponent implements OnInit {
     const { lat, lng } = this.map.getCenter();
     const location: [number, number] = [lat, lng];
 
-    await this.onSubmit(location);
+    await this.onSubmit.emit(location);
 
     this.isButtonDisabled = false;
   }

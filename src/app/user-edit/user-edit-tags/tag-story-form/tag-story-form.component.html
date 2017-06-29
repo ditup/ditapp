@@ -4,13 +4,13 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="updateTagStoryForm">
     <fieldset [disabled]="isFormDisabled">
       <div>
-        Edit story of <md-icon alt="tag">label</md-icon> {{tag.tagname}}
+        Edit story of <md-icon alt="tag">label</md-icon> {{userTag.tag.tagname}}
       </div>
 
       <div>
         <md-input-container>
-          <textarea mdInput placeholder="Why do you care about {{tag.tagname}}?"
-            formControlName="story">{{tag.story}}</textarea>
+          <textarea mdInput placeholder="Why do you care about {{userTag.tag.tagname}}?"
+            formControlName="story">{{userTag.story}}</textarea>
         </md-input-container>
 
         <div *ngIf="formErrors.story" class="alert alert-danger">

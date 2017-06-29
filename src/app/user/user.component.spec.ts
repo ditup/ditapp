@@ -2,19 +2,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
+import { Observable } from 'rxjs/Observable';
 
 import { UserComponent } from './user.component';
 
 import { ModelService } from '../model.service';
 
 import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteStub } from '../../testing/router-stubs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRouteStub, RouterStub } from '../../testing/router-stubs';
+import { AvatarStubComponent } from '../../testing/avatar-stub';
 
 import { AuthService } from '../auth.service';
 import { BasicAuthService } from '../basic-auth.service';
-
-let activatedRoute: ActivatedRouteStub;
 
 class FakeModelService {
   lastPromise: Promise<any>;
@@ -37,15 +39,19 @@ describe('UserComponent', () => {
   let component: UserComponent;
   let fixture: ComponentFixture<UserComponent>;
 
+  const activatedRouteStub = {
+    params: Observable.of({ username: 'test-user' }),
+    data: Observable.of({ user: { username: 'test-user' } })
+  }
+
   beforeEach(async(() => {
-    activatedRoute = new ActivatedRouteStub();
 
     TestBed.configureTestingModule({
-      declarations: [ UserComponent ],
-      imports: [RouterModule],
+      declarations: [UserComponent, AvatarStubComponent],
+      imports: [RouterTestingModule],
       providers: [
         { provide: ModelService, useClass: FakeModelService },
-        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: ActivatedRoute, useValue: activatedRouteStub },
         AuthService,
         BasicAuthService
       ]
@@ -56,7 +62,6 @@ describe('UserComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserComponent);
     component = fixture.componentInstance;
-    activatedRoute.testParams = { username: 'test-user' };
     fixture.detectChanges();
   });
 

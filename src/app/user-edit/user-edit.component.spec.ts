@@ -3,6 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '@angular/material';
+
+import { Observable } from 'rxjs/Observable';
 
 import { UserEditComponent } from './user-edit.component';
 
@@ -10,10 +13,12 @@ import { ModelService } from '../model.service';
 import { DialogService } from '../dialog.service';
 
 import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteStub } from '../../testing/router-stubs';
+import { RouterLinkStubDirective, RouterLinkActiveStubDirective, RouterOutletStubComponent } from '../../testing/router-stubs';
 import { User } from '../shared/types';
 
-let activatedRoute: ActivatedRouteStub;
+class ActivatedRouteStub {
+  data = Observable.of({ user: {} });
+}
 
 class FakeModelService {
   lastPromise: Promise<any>;
@@ -47,14 +52,17 @@ describe('UserEditComponent', () => {
   let fixture: ComponentFixture<UserEditComponent>;
 
   beforeEach(async(() => {
-    activatedRoute = new ActivatedRouteStub();
-
     TestBed.configureTestingModule({
-      declarations: [ UserEditComponent ],
-      imports: [ReactiveFormsModule],
+      declarations: [
+        UserEditComponent,
+        RouterLinkStubDirective,
+        RouterLinkActiveStubDirective,
+        RouterOutletStubComponent
+      ],
+      imports: [ReactiveFormsModule, MaterialModule],
       providers: [
         { provide: ModelService, useClass: FakeModelService },
-        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         DialogService
       ]
     })
@@ -64,7 +72,6 @@ describe('UserEditComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserEditComponent);
     component = fixture.componentInstance;
-    activatedRoute.testParams = { username: 'test-user' };
     fixture.detectChanges();
   });
 

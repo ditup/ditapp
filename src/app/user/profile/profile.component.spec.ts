@@ -1,6 +1,36 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+
+import { Component, Input } from '@angular/core';
+import { MaterialModule } from '@angular/material';
+import 'hammerjs';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
 import { ProfileComponent } from './profile.component';
+
+import { ModelService } from '../../model.service';
+import { AuthService } from '../../auth.service';
+
+/* stubs */
+class ModelStubService { }
+
+class ActivatedRouteStub {
+  data = Observable.of({ user: {} });
+}
+
+class AuthStubService { }
+
+@Component({ selector: 'app-user-tag-list', template: '' })
+class UserTagListStubComponent {
+  @Input() userTags;
+  @Input() user;
+}
+
+@Component({ selector: 'app-location', template: '' })
+class LocationStubComponent {
+  @Input() location;
+}
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -8,7 +38,13 @@ describe('ProfileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProfileComponent ]
+      declarations: [ProfileComponent, UserTagListStubComponent, LocationStubComponent],
+      imports: [MaterialModule],
+      providers: [
+        { provide: ModelService, useClass: ModelStubService },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: AuthService, useClass: AuthStubService }
+      ]
     })
     .compileComponents();
   }));

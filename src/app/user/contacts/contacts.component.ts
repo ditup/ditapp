@@ -23,9 +23,8 @@ export class ContactsComponent implements OnInit {
 
   ngOnInit() {
     this.route.parent.data
-      .subscribe(async (data: any) => {
-        console.log(this.route, data, this.auth);
-        this.user = data.user;
+      .subscribe(async ({ user }: { user: User }) => {
+        this.user = user;
         this.isMe = this.user.username === this.auth.username;
 
         // get contacts

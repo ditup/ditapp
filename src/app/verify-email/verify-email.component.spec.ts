@@ -3,14 +3,17 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { NotificationsService } from 'angular2-notifications';
 
 import { VerifyEmailComponent } from './verify-email.component';
 import { ModelService } from '../model.service';
 import { HeaderControlService } from '../header-control.service';
-import { ActivatedRouteStub } from '../../testing/router-stubs';
+import { ActivatedRouteStub, RouterStub } from '../../testing/router-stubs';
+
+import { MaterialModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 let activatedRoute: ActivatedRouteStub;
 
@@ -51,12 +54,13 @@ describe('VerifyEmailComponent', () => {
     activatedRoute = new ActivatedRouteStub();
     TestBed.configureTestingModule({
       declarations: [ VerifyEmailComponent ],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, MaterialModule, BrowserAnimationsModule],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: NotificationsService, useClass: NotificationsServiceStub },
         { provide: HeaderControlService, useClass: FakeHeaderControlService },
-        { provide: ModelService, useClass: FakeModelService }
+        { provide: ModelService, useClass: FakeModelService },
+        { provide: Router, useClass: RouterStub }
       ]
     })
     .compileComponents();
@@ -76,7 +80,7 @@ describe('VerifyEmailComponent', () => {
   it('should show a form to provide email verification code', () => {
     const formDebugElement = fixture.debugElement.query(By.css('form'));
     const form = formDebugElement.nativeElement;
-    const inputDebugElement = fixture.debugElement.query(By.css('input#code'));
+    const inputDebugElement = fixture.debugElement.query(By.css('input[formControlName=code]'));
     const input = inputDebugElement.nativeElement;
     expect(form).toBeTruthy();
     expect(input).toBeTruthy();

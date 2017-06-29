@@ -62,7 +62,7 @@ export class UserEditTagsComponent implements OnInit {
     dialogRef.componentInstance.processForm = this.updateTagStory.bind(this);
 
     // initialize the dialog with the provided tag
-    dialogRef.componentInstance.init(tag);
+    dialogRef.componentInstance.userTag = tag;
   }
 
   // provided the data we update the current user's tag story in database
