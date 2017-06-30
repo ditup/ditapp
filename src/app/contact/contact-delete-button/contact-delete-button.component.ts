@@ -12,8 +12,8 @@ import { ModelService } from '../../model.service';
 export class ContactDeleteButtonComponent implements OnInit {
 
   @Input('with') public otherUser: User;
-  @Input() public buttonLabel: string = 'delete';
-  public isActivated: boolean = false;
+  @Input() public buttonLabel = 'delete';
+  public isActivated = false;
 
   constructor(private model: ModelService,
               private router: Router) { }

@@ -12,7 +12,7 @@ export class UserSmallComponent implements OnInit {
 
   public avatar: { base64: string, format: string };
 
-  public avatarLoaded: boolean = false;
+  public avatarLoaded = false;
 
   @Input()
   public user: User;

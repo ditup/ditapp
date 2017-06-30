@@ -1,24 +1,21 @@
-import { Injectable, Directive, Input, Component } from '@angular/core';
+import { Injectable, Directive, Input, Component, Host, HostListener } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../app/shared/types';
 
-@Directive({
-  selector: '[routerLink]',
-  host: {
-    '(click)': 'onClick()'
-  }
-})
+// tslint:disable-next-line:directive-selector
+@Directive({ selector: '[routerLink]' })
 export class RouterLinkStubDirective {
-  @Input('routerLink') linkParams: any;
+  @Input() routerLink: any;
   navigatedTo: any = null;
 
-  onClick() {
-    this.navigatedTo = this.linkParams;
+  @HostListener('click') onClick() {
+    this.navigatedTo = this.routerLink;
   }
 }
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[routerLinkActive]',
   exportAs: 'routerLinkActive'
 })
@@ -27,6 +24,7 @@ export class RouterLinkActiveStubDirective {
   routerLinkActiveOptions;
 }
 
+// tslint:disable-next-line:component-selector
 @Component({ selector: 'router-outlet', template: '' })
 export class RouterOutletStubComponent { }
 

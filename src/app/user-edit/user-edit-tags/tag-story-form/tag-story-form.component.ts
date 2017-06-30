@@ -20,7 +20,7 @@ export class TagStoryFormComponent implements OnInit {
   public updateTagStoryForm: FormGroup;
 
   // disable the form when submitting the form or when data are invalid
-  public isFormDisabled: boolean = false;
+  public isFormDisabled = false;
 
   // TODO display validation errors
   public formErrors = {

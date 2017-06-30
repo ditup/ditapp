@@ -30,7 +30,7 @@ export class MapComponent implements OnInit {
   });
   private subscription: Subscription;
 
-  public loadingUsers: boolean = false;
+  public loadingUsers = false;
 
   constructor(private model: ModelService) {}
 
@@ -95,7 +95,9 @@ export class MapComponent implements OnInit {
         this.map.addLayer(this.markers);
 
         this.setLoadingUsers(false);
-        if (this.subscription) this.subscription.unsubscribe();
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+        }
       });
     return this.subscription;
   }

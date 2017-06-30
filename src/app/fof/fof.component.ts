@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FofComponent implements OnInit {
 
   @Input()
-  public message: string = 'not found';
+  public message = 'not found';
 
   constructor() { }
 

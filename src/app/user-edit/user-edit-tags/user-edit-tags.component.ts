@@ -29,7 +29,7 @@ export class UserEditTagsComponent implements OnInit {
   // lists of tags, by relevance
   // 1-5 tags by relevance
   // 0 newly added tags (default relevance = 3)
-  tagLists: UserTag[][] = [[],[],[],[],[],[]];
+  tagLists: UserTag[][] = [[], [], [], [], [], []];
 
   constructor(private model: ModelService,
               private snackBar: MdSnackBar,
@@ -45,7 +45,7 @@ export class UserEditTagsComponent implements OnInit {
       this.tags = tags;
 
       // sort tags into their tagList by relevance
-      for(let tag of tags) {
+      for (let tag of tags) {
         this.tagLists[tag.relevance].push(tag);
       }
 
@@ -135,7 +135,9 @@ export class UserEditTagsComponent implements OnInit {
     const { tagname } = tag;
 
     // check if the relevance is new
-    if (from === to) return;
+    if (from === to) {
+      return;
+    }
 
     // add the tag to the new relevance
     this.tagLists[to].push(tag);

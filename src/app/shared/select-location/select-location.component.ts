@@ -20,13 +20,14 @@ export class SelectLocationComponent implements OnInit {
 
   public isButtonDisabled = true;
 
-  constructor() { }
-
   @Input()
   public location: [number, number];
 
   @Output()
   public onSubmit = new EventEmitter<[number, number]>();
+
+  constructor() { }
+
   ngOnInit() {
     this.map = L.map(this.locationContainer.nativeElement, {
       center: L.latLng.apply(null, this.location || [0, 0]),

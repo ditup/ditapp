@@ -144,7 +144,9 @@ export class ModelService {
    * @param {[number, number]} [fields.location]
    * @returns {Promise<User>}
    */
-  async updateUser(username: string, fields: { givenName?: string, familyName?: string, description?: string, location?: [number, number] }): Promise<User> {
+  async updateUser(username: string, fields: {
+    givenName?: string, familyName?: string, description?: string, location?: [number, number]
+  }): Promise<User> {
     console.log('updating the user!', username, fields);
     const requestBody = {
       data: {
@@ -319,8 +321,7 @@ export class ModelService {
       .patch(`${this.baseUrl}/users/${username}/tags/${tagname}`, JSON.stringify(requestBody), { headers })
       .toPromise()
       .then((response: Response) => {
-        const data = response.json().data;
-
+        // const data = response.json().data;
       });
   }
 
@@ -384,8 +385,9 @@ export class ModelService {
         .head(`${this.baseUrl}/tags/${tagname}`, { headers })
         .toPromise();
 
-      if (status === 200)
+      if (status === 200) {
         return true;
+      }
 
       throw new Error(`Unexpected success status ${status}`);
 
@@ -596,7 +598,8 @@ export class ModelService {
     };
 
     await this.http
-      .patch(`${this.baseUrl}/account?reset-password`, JSON.stringify(requestBody), { headers: new Headers(this.contentTypeHeader) }).toPromise();
+      .patch(`${this.baseUrl}/account?reset-password`, JSON.stringify(requestBody), { headers: new Headers(this.contentTypeHeader) })
+      .toPromise();
 
     return;
 
@@ -656,7 +659,8 @@ export class ModelService {
     return;
   }
 
-  public async sendContactRequestTo(username: string, { message, trust, reference }: { message: string, trust: number, reference: string }): Promise<void> {
+  public async sendContactRequestTo(username: string,
+                                    { message, trust, reference }: { message: string, trust: number, reference: string }): Promise<void> {
 
     const requestBody = {
       data: {
@@ -677,7 +681,9 @@ export class ModelService {
     return;
   }
 
-  public async updateContactWith(username: string, attributes: { trust?: number, reference?: string, isConfirmed?: boolean, message?: string }): Promise<void> {
+  public async updateContactWith(username: string,
+                                 attributes: { trust?: number, reference?: string, isConfirmed?: boolean, message?: string }
+                                ): Promise<void> {
     const me = this.auth.username;
     const other = username;
 
@@ -777,7 +783,8 @@ export class ModelService {
   }
 
   private deserializeUser(userData: any, included?: any): User {
-    const rawUser = _.extend({ username: userData.id }, _.pick(userData.attributes, ['givenName', 'familyName', 'description', 'location', 'preciseLocation', 'email']));
+    const attrs = ['givenName', 'familyName', 'description', 'location', 'preciseLocation', 'email'];
+    const rawUser = _.extend({ username: userData.id }, _.pick(userData.attributes, attrs));
 
     const user = new User(rawUser);
 

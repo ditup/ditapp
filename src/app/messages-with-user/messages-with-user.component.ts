@@ -14,7 +14,7 @@ import { find, reverse } from 'lodash';
 })
 export class MessagesWithUserComponent implements OnInit {
 
-  public loading: boolean = false;
+  public loading = false;
   public messages: Message[];
   public otherUserExists: boolean;
 

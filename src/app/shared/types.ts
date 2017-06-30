@@ -45,7 +45,27 @@ export class Contact {
   public reference: string;
   public message?: string;
   public creator?: User;
-  constructor({ from, to, creator, isConfirmed, created, confirmed, trust, reference, message }: { from: User, to: User, creator?: User, isConfirmed: boolean, created: number, confirmed?: number, trust?: number, reference?: string, message?: string }) {
+  constructor({
+    from,
+    to,
+    creator,
+    isConfirmed,
+    created,
+    confirmed,
+    trust,
+    reference,
+    message
+  }: {
+    from: User,
+    to: User,
+    creator?: User,
+    isConfirmed: boolean,
+    created: number,
+    confirmed?: number,
+    trust?: number,
+    reference?: string,
+    message?: string
+  }) {
     this.from = from;
     this.to = to;
     this.isConfirmed = isConfirmed;
@@ -88,7 +108,9 @@ export class TagList {
 
     const isAdded: boolean = (tagIndex === -1) ? false : true;
 
-    if (isAdded) throw new Error(`The tag ${tagname} is already in the list.`);
+    if (isAdded) {
+      throw new Error(`The tag ${tagname} is already in the list.`);
+    }
 
     // add tag to the list
     const tag = new Tag(tagname);

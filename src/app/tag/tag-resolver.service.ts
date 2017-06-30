@@ -12,9 +12,10 @@ export class TagResolver implements Resolve<Tag> {
     const tagname = route.params['tagname'];
     try {
       return await this.model.readTag(tagname);
-    }
-    catch(e) {
-      if (e.status === 404) return null;
+    } catch (e) {
+      if (e.status === 404) {
+        return null;
+      }
       throw e;
     }
   }

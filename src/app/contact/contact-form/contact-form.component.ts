@@ -25,7 +25,7 @@ export class ContactFormComponent implements OnInit {
 
   public disabledFields: string[];
 
-  public isFormDisabled: boolean = true;
+  public isFormDisabled = true;
 
   public trustLevels = [
     {

@@ -32,7 +32,9 @@ export class PeopleComponent implements OnInit {
               private snackBar: MdSnackBar) {}
 
   private parseTagnames(tagnamesString: string): Tag[] {
-    if (!_.isString(tagnamesString)) return undefined;
+    if (!_.isString(tagnamesString)) {
+      return undefined;
+    }
 
     const tagnames: string[] = (tagnamesString) ? tagnamesString.split(this.querySeparator) : [];
     return _.map(tagnames, tagname => new Tag(tagname));

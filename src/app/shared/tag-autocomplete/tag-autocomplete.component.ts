@@ -15,7 +15,7 @@ export class TagAutocompleteComponent implements OnInit {
 
   // the placeholder for tag search input field
   @Input()
-  public placeholder: string = 'placeholder';
+  public placeholder = '';
 
   public tagForm: FormGroup;
   public suggestedTags: Observable<Tag[]>;

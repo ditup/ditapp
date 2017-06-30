@@ -27,6 +27,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // how many unread messages do we have?
   public messageCount: number;
 
+  private modelCountSubscription: Subscription;
+
   // subscriptions to observables. To be able to unsubscribe OnDestroy.
   private subscription: Subscription;
   private authSubscription: Subscription;
@@ -64,15 +66,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * - display the header
    */
 
-  private modelCountSubscription: Subscription;
-
   private subscribeToMessageCount() {
     if (this.messageTimerSubscription) {
       this.messageTimerSubscription.unsubscribe();
     }
 
     if (this.display && this.logged) {
-      this.messageTimerSubscription = Observable.timer(0,30000)
+      this.messageTimerSubscription = Observable.timer(0, 30000)
         .subscribe(async () => {
 
           if (this.modelCountSubscription) {

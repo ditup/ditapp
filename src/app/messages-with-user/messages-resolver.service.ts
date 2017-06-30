@@ -4,7 +4,7 @@ import { ModelService } from '../model.service';
 import { Message } from '../shared/types';
 
 @Injectable()
-export class MessagesResolver implements Resolve<Message[]>{
+export class MessagesResolver implements Resolve<Message[]> {
 
   constructor(private model: ModelService) {}
 
