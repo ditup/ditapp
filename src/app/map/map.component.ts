@@ -95,7 +95,7 @@ export class MapComponent implements OnInit {
         this.map.addLayer(this.markers);
 
         this.setLoadingUsers(false);
-        this.subscription.unsubscribe();
+        if (this.subscription) this.subscription.unsubscribe();
       });
     return this.subscription;
   }

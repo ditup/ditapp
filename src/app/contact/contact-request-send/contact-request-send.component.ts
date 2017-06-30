@@ -27,10 +27,8 @@ export class ContactRequestSendComponent implements OnInit {
     this.from = await this.model.readUser(this.auth.username);
   }
 
-  public get sendRequest() {
-    return async function ({ trust, reference, message }: any): Promise<void> {
-      await this.model.sendContactRequestTo(this.to.username, { trust, reference, message });
-      this.router.navigate([`/user/${this.to.username}`]);
-    }.bind(this);
+  async sendRequest({ trust, reference, message }: any): Promise<void> {
+    await this.model.sendContactRequestTo(this.to.username, { trust, reference, message });
+    this.router.navigate([`/user/${this.to.username}`]);
   }
 }

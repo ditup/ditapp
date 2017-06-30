@@ -19,7 +19,7 @@ export class ManageContactComponent implements OnInit {
 
   ngOnInit() {
     this.route.data
-      .subscribe((data: { contact: { toMe: Contact } } | null) => {
+      .subscribe((data: { contact: { toMe: Contact } } | { contact: null }) => {
 
         if (has(data, 'contact.toMe')) {
           const { isConfirmed, to: me, creator } = data.contact.toMe;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 
@@ -18,11 +18,7 @@ export class ContactFormComponent implements OnInit {
   };
 
 
-  @Input()
-  public onSubmit = async function (formData: { message?: string, trust?: number, reference?: string }): Promise<any> {
-    console.log(formData);
-    return;
-  };
+  @Output() onSubmit: EventEmitter<{ message?: string, trust?: number, reference?: string }>;
 
   @Input()
   public fields = ['message', 'trust', 'reference'];
@@ -76,7 +72,7 @@ export class ContactFormComponent implements OnInit {
     // disable the form until the submitting is finished
     this.isFormDisabled = true;
 
-    await this.onSubmit(this.contactForm.value);
+    this.onSubmit.emit(this.contactForm.value);
 
     this.isFormDisabled = false;
   }

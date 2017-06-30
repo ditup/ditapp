@@ -7,5 +7,5 @@
 
 <app-contact-overview [from]="from" [to]="to"></app-contact-overview>
 <app-contact-form
-  [onSubmit]="updateContactRequest"
+  (onSubmit)="updateContactRequest($event)"
   [data]="initialFormData"></app-contact-form>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
 import { Contact } from '../shared/types';
@@ -8,7 +8,6 @@ import { Contact } from '../shared/types';
 export class ContactResolver implements Resolve<{ fromMe: Contact, toMe: Contact }> {
 
   constructor(private model: ModelService,
-              private router: Router,
               private auth: AuthService) { }
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<{ fromMe: Contact, toMe: Contact }> {

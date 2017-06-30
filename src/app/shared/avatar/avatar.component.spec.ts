@@ -4,7 +4,9 @@ import { AvatarComponent } from './avatar.component';
 
 import { ModelService } from '../../model.service';
 
-class ModelStubService { }
+class ModelStubService {
+  readAvatar() {}
+}
 
 describe('AvatarComponent', () => {
   let component: AvatarComponent;

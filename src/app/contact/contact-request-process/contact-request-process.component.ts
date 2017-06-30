@@ -21,7 +21,7 @@ export class ContactRequestProcessComponent implements OnInit {
 
   ngOnInit() {
     this.route.data
-      .subscribe(async ({ contact: { fromMe, toMe } }: { contact: { fromMe: Contact, toMe: Contact } }) => {
+      .subscribe(async ({ contact: { toMe } }: { contact: { toMe: Contact } }) => {
         this.to = toMe.to;
         this.from = toMe.from;
 
@@ -29,11 +29,9 @@ export class ContactRequestProcessComponent implements OnInit {
       });
   }
 
-  public get confirmContact() {
-    return async function ({ trust, reference }: any): Promise<void> {
-      await this.model.confirmContactRequestFrom(this.from.username, { trust, reference });
-      this.router.navigate([`/user/${this.from.username}`]);
-    }.bind(this);
+  async confirmContact({ trust, reference }: any): Promise<void> {
+    await this.model.confirmContactRequestFrom(this.from.username, { trust, reference });
+    this.router.navigate([`/user/${this.from.username}`]);
   }
 
 }

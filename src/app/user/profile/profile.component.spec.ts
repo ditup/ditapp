@@ -13,7 +13,9 @@ import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
 
 /* stubs */
-class ModelStubService { }
+class ModelStubService {
+  readUserTags() {}
+}
 
 class ActivatedRouteStub {
   data = Observable.of({ user: {} });

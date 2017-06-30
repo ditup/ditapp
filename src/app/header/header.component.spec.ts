@@ -1,21 +1,29 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { RouterModule } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { MaterialModule } from '@angular/material';
+
+import { Observable } from 'rxjs/Observable';
 
 import { HeaderComponent } from './header.component';
 
 import { HeaderControlService } from '../header-control.service';
 import { AuthService } from '../auth.service';
-import { BasicAuthService } from '../basic-auth.service';
+import { ModelService } from '../model.service';
 
-class FakeHeaderControlService {
-  displayChanged$: Observable<boolean> = new Observable(observer => observer.next(false));
+import { RouterLinkStubDirective } from '../../testing/router-stubs';
 
-  display(value: boolean) {}
+class AuthStubService {
+  loggedStatusChanged$ = Observable.of({});
+}
+
+class ModelStubService {
+}
+
+@Component({ selector: 'app-avatar', template: '' })
+class AvatarStubComponent {
+  @Input() username;
 }
 
 describe('HeaderComponent', () => {
@@ -24,12 +32,18 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ],
-      imports: [RouterModule],
+      declarations: [
+        HeaderComponent,
+        AvatarStubComponent,
+        RouterLinkStubDirective
+      ],
+      imports: [
+        MaterialModule
+      ],
       providers: [
-        { provide: HeaderControlService, useClass: FakeHeaderControlService },
-        AuthService,
-        BasicAuthService
+        HeaderControlService,
+        { provide: AuthService, useClass: AuthStubService },
+        { provide: ModelService, useClass: ModelStubService }
       ]
     })
     .compileComponents();

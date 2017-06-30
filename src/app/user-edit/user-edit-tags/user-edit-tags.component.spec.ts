@@ -18,7 +18,11 @@ import { ModelService } from '../../model.service';
 class TagAutocompleteStubComponent {
 }
 
-class ModelStubService { }
+class ModelStubService {
+  async readUserTags() {
+    return [];
+  }
+}
 
 class ActivatedRouteStub {
   parent = {

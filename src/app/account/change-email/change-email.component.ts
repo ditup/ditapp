@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MdSnackBar } from '@angular/material';
 import * as _ from 'lodash';
 
@@ -22,8 +21,6 @@ export class ChangeEmailComponent implements OnInit {
 
   // inject modules, services
   constructor(private formBuilder: FormBuilder,
-              private router: Router,
-              private route: ActivatedRoute,
               private model: ModelService,
               private auth: AuthService,
               private snackBar: MdSnackBar) { }

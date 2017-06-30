@@ -11,7 +11,9 @@ import { ModelService } from '../../model.service';
 
 class AuthStubService { }
 
-class ModelStubService { }
+class ModelStubService {
+  readContactsTo() {}
+}
 
 class ActivatedRouteStub {
   parent = {

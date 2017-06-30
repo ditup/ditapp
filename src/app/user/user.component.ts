@@ -52,9 +52,6 @@ export class UserComponent implements OnInit {
             this.contactStatus = 'nonexistent';
           }
         }
-
-        // get avatar and assign it to this.avatar
-        this.avatar = await this.model.readAvatar(this.username);
       });
   }
 }

@@ -1,56 +1,31 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 
-import { NotificationsService } from 'angular2-notifications';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MaterialModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { NotificationsService } from '../notifications/notifications.service';
 
 import { LoginBasicComponent } from './login-basic.component';
 import { ModelService } from '../model.service';
-import { BasicAuthService } from '../basic-auth.service';
 import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
 
-import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteStub } from '../../testing/router-stubs';
+import { RouterStub } from '../../testing/router-stubs';
 
-let activatedRoute: ActivatedRouteStub;
-
-class FakeModelService {
-  basicAuth() {
-    return Promise.resolve();
-  }
+class ModelStubService {
+  async basicAuth() {}
 }
 
-class FakeHeaderControlService {
-  display(value: boolean) {
-
-  }
-
-  private displayHeaderSource;
+class ActivatedRouteStub {
+  snapshot = {
+    queryParams: {}
+  };
 }
 
-class RouterStub {
-  navigate(url: any) { return url.join('/'); }
-}
-
-class NotificationsServiceStub {
-  info() {
-    return { id: 'info' };
-  }
-
-  success() {
-    return { id: 'success' };
-  }
-
-  error() {
-    return { id: 'error' };
-  }
-
-  remove() {}
-}
+class AuthStubService {}
 
 describe('LoginBasicComponent', () => {
   let component: LoginBasicComponent;
@@ -59,15 +34,18 @@ describe('LoginBasicComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LoginBasicComponent],
-      imports: [ReactiveFormsModule],
+      imports: [
+        ReactiveFormsModule,
+        MaterialModule,
+        BrowserAnimationsModule
+      ],
       providers: [
         { provide: Router, useClass: RouterStub },
-        { provide: ModelService, useClass: FakeModelService },
-        { provide: NotificationsService, useClass: NotificationsServiceStub },
-        { provide: ActivatedRoute, useValue: activatedRoute },
-        { provide: HeaderControlService, useClass: FakeHeaderControlService },
-        BasicAuthService,
-        AuthService
+        { provide: ModelService, useClass: ModelStubService },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: AuthService, useClass: AuthStubService },
+        NotificationsService,
+        HeaderControlService,
       ]
     })
     .compileComponents();
