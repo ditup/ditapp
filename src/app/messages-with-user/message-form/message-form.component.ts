@@ -18,11 +18,11 @@ export class MessageFormComponent implements OnInit {
   @Input()
   receiver: User;
 
-  public sending: boolean = false;
+  public sending = false;
 
   public messageForm: FormGroup;
-  public isFormDisabled: boolean = false;
-  private message: { body: string } = { body: '' }
+  public isFormDisabled = false;
+  private message: { body: string } = { body: '' };
 
   private formErrors = {
     body: ''

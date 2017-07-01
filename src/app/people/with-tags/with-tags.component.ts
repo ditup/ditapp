@@ -29,7 +29,7 @@ export class WithTagsComponent implements OnInit, OnChanges {
   private myTagsDialog: MdDialogRef<SelectFromMyTagsComponent>;
 
   // showing a progress bar when users loading is in progress
-  public loadingUsers: boolean = false;
+  public loadingUsers = false;
 
   constructor(private snackBar: MdSnackBar,
               private auth: AuthService,
@@ -88,7 +88,7 @@ export class WithTagsComponent implements OnInit, OnChanges {
       // send info to Output
       this.onChangedTags.emit(this.tagList.tags);
       await this.updateUserList();
-    } catch(e) {
+    } catch (e) {
       this.snackBar.open(e.message, 'OK');
     }
   }
@@ -108,7 +108,9 @@ export class WithTagsComponent implements OnInit, OnChanges {
 
   private async addTagsToList(tagnames: string[]) {
 
-    if (tagnames.length === 0) return;
+    if (tagnames.length === 0) {
+      return;
+    }
 
     const alreadyAdded: string[] = [];
     // add tags to list

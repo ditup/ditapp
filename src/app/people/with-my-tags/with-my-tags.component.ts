@@ -18,7 +18,7 @@ export class WithMyTagsComponent implements OnInit {
   public userList = new UserList([]);
 
   // showing a progress bar when users loading is in progress
-  public loadingUsers: boolean = false;
+  public loadingUsers = false;
 
   constructor(private model: ModelService) { }
 

@@ -21,7 +21,7 @@ export class SelectFromMyTagsComponent implements OnInit {
   public originalSelection: Tag[] = [];
   public userTags: UserTag[] = [];
 
-  public loading: boolean = false;
+  public loading = false;
 
   public myTags: MyTag[];
 

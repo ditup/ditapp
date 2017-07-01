@@ -74,8 +74,8 @@ export class UserEditTagsComponent implements OnInit {
 
     // update the story in the tag object of this component
     // find the tag by tagname and update its story
-    const tag = _.find(_.concat.apply(this, this.tagLists), (tag: { tagname: string, story: string }) => {
-      return tag.tagname === tagname;
+    const tag = _.find(_.concat.apply(this, this.tagLists), (_tag: { tagname: string, story: string }) => {
+      return _tag.tagname === tagname;
     });
     tag.story = story;
 

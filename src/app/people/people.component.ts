@@ -104,9 +104,9 @@ export class PeopleComponent implements OnInit {
 
       return this.parseTagnames(tagnameString);
 
-    }).subscribe(async (tags: Tag[]) => {
+    }).subscribe(async (tgs: Tag[]) => {
 
-      if (tags === undefined) {
+      if (tgs === undefined) {
         this.changeTab(false);
         return;
       }
@@ -114,12 +114,12 @@ export class PeopleComponent implements OnInit {
       this.changeTab(true);
 
       // 2. are the tags different from the current tag list?
-      const difference: Tag[] = _.xor(this.queryTags, tags);
+      const difference: Tag[] = _.xor(this.queryTags, tgs);
       const isQueryDifferent: boolean = difference.length > 0;
 
       // 3. update the tag list and find users
       if (isQueryDifferent) {
-        this.queryTags = tags;
+        this.queryTags = tgs;
       }
 
     });

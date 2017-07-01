@@ -7,7 +7,7 @@ import { HeaderControlService } from '../../header-control.service';
   templateUrl: './not-logged.component.html',
   styleUrls: ['./not-logged.component.scss']
 })
-export class NotLoggedComponent implements OnInit {
+export class NotLoggedComponent implements OnInit, OnDestroy {
 
   constructor(private headerControl: HeaderControlService) { }
 

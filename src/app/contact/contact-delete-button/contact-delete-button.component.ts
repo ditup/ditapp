@@ -11,6 +11,7 @@ import { ModelService } from '../../model.service';
 })
 export class ContactDeleteButtonComponent implements OnInit {
 
+  // tslint:disable-next-line:no-input-rename
   @Input('with') public otherUser: User;
   @Input() public buttonLabel = 'delete';
   public isActivated = false;
