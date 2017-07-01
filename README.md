@@ -1,5 +1,7 @@
 # Ditapp - Angular 2 app for ditup
 
+[![Build Status](https://travis-ci.org/ditup/ditapp.svg?branch=master)](https://travis-ci.org/ditup/ditapp)
+
 Do It Together - start it UP
 
 [ditup.org](https://ditup.org)
