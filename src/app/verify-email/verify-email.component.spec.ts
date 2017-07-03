@@ -1,11 +1,10 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import { VerifyEmailComponent } from './verify-email.component';
 import { ModelService } from '../model.service';
@@ -17,32 +16,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 let activatedRoute: ActivatedRouteStub;
 
-class NotificationsServiceStub {
-  info() {
-    return { id: 'info' };
-  }
-
-  success() {
-    return { id: 'success' };
-  }
-
-  error() {
-    return { id: 'error' };
-  }
-
-  remove() {}
+class ModelStubService {
+  async verifyEmail() { }
 }
 
-class FakeModelService {
-  verifyEmail() {
-    return Promise.resolve();
-  }
-}
-
-class FakeHeaderControlService {
+class HeaderControlStubService {
   displayChanged$;
 
-  display(value: boolean) {}
+  display(value: boolean) {
+    value; // tslint:disable-line:no-unused-expression
+  }
 
 }
 
@@ -57,9 +40,9 @@ describe('VerifyEmailComponent', () => {
       imports: [ReactiveFormsModule, MaterialModule, BrowserAnimationsModule],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
-        { provide: NotificationsService, useClass: NotificationsServiceStub },
-        { provide: HeaderControlService, useClass: FakeHeaderControlService },
-        { provide: ModelService, useClass: FakeModelService },
+        NotificationsService,
+        { provide: HeaderControlService, useClass: HeaderControlStubService },
+        { provide: ModelService, useClass: ModelStubService },
         { provide: Router, useClass: RouterStub }
       ]
     })

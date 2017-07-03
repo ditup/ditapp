@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   CanActivate, Router,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  NavigationExtras
+  RouterStateSnapshot
 } from '@angular/router';
 
 import { AuthService } from './auth.service';
@@ -15,7 +14,9 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): boolean {
-    let url: string = state.url;
+    const url: string = state.url;
+    // satisfy compiler's no unused params
+    route; // tslint:disable-line:no-unused-expression
 
     return this.checkLogin(url);
   }

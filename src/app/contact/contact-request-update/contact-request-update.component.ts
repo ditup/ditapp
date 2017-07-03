@@ -23,6 +23,7 @@ export class ContactRequestUpdateComponent implements OnInit {
   public to: User;
   public contact: Contact;
   public initialFormData: FormData;
+  public saving = false;
 
   constructor(private route: ActivatedRoute,
               private model: ModelService,
@@ -39,8 +40,10 @@ export class ContactRequestUpdateComponent implements OnInit {
   }
 
   public async updateContactRequest({ message, trust, reference }: FormData): Promise<void> {
+    this.saving = true;
     await this.model.updateContactWith(this.to.username, { message, trust, reference });
     this.router.navigate([`/user/${this.to.username}`]);
+    this.saving = false;
   }
 
 

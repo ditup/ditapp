@@ -4,7 +4,7 @@ import { Input, Component } from '@angular/core';
 
 import { UserContactComponent } from './user-contact.component';
 
-import { User, Contact } from '../../../shared/types';
+import { Contact } from '../../../shared/types';
 import { RouterLinkStubDirective } from '../../../../testing/router-stubs';
 
 @Component({ selector: 'app-avatar', template: '' })

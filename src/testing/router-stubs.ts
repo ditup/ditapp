@@ -1,7 +1,5 @@
-import { Injectable, Directive, Input, Component, Host, HostListener } from '@angular/core';
+import { Injectable, Directive, Input, Component, HostListener } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { User } from '../app/shared/types';
 
 // tslint:disable-next-line:directive-selector
 @Directive({ selector: '[routerLink]' })
@@ -52,7 +50,7 @@ export class ActivatedRouteStub {
 @Injectable()
 export class RouterStub {
   public navigate(url: any[]) {
-
+    url; // tslint:disable-line:no-unused-expression
   }
 
 }

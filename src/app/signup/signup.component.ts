@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -87,7 +87,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    */
   uniqueUsernameValidator(control: AbstractControl): Promise<{[key: string]: any}> {
     clearTimeout(this.uniqueUsernameTimeout);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.uniqueUsernameTimeout = setTimeout(() => {
         this.validateUniqueUsernameObservable(control.value).subscribe(resp => resolve(resp));
       }, 300);
@@ -131,23 +131,23 @@ export class SignupComponent implements OnInit, OnDestroy {
       ]]
     });
 
-    this.signupForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.signupForm.valueChanges.subscribe(() => this.onValueChanged());
 
-    this.signupForm.statusChanges.subscribe(data => {
-      this.onStatusChanged(data);
+    this.signupForm.statusChanges.subscribe(() => {
+      this.onStatusChanged();
     });
 
     this.onValueChanged();
     this.onStatusChanged();
   }
 
-  onStatusChanged(data?: any) {
+  onStatusChanged() {
     // whenever status changes, we want to generate errors
     // (this is to make async validator errors visible)
     this.generateErrors();
   }
 
-  onValueChanged(data?: any) {
+  onValueChanged() {
     // whenever we edit any values, we want to generate errors
     this.generateErrors();
   }
@@ -160,7 +160,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         const control = this.signupForm.get(field);
 
         // we'll collect error messages to this variable
-        let errorMessages = [];
+        const errorMessages = [];
 
         if (control && control.dirty && !control.valid) { // when control is invalid and dirty
           // get the array of all validation messages belonging to the field

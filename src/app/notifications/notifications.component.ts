@@ -20,8 +20,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   // get only the existent notifications
   public get displayedNotifications() {
     // get only notifications which are not undefined,
-    // and assign id to each notification
-    return this.notifications.filter((note, index) => {
+    // and TODO assign id to each notification
+    return this.notifications.filter((note) => {
       const exists = Boolean(note);
       return exists;
     });

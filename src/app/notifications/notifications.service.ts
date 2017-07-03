@@ -56,12 +56,12 @@ export class NotificationsService {
   }
 
   public info(msg: string, options?: { ttl: number }) {
-    const { ttl } = options || { ttl: 0 };
+    const { ttl } = options || { ttl: 5000 };
     return this.add({ msg, type: 'info', ttl });
   }
 
   public error(msg: string, options?: { ttl: number }) {
-    const { ttl } = options || { ttl: 0 };
+    const { ttl } = options || { ttl: 5000 };
     return this.add({ msg, type: 'error', ttl });
   }
 

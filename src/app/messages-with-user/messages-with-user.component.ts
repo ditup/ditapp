@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { ModelService } from '../model.service';
 
 import { Message, User } from '../shared/types';
 
-import { find, reverse } from 'lodash';
+import { find } from 'lodash';
 
 @Component({
   selector: 'app-messages-with-user',
@@ -40,7 +40,7 @@ export class MessagesWithUserComponent implements OnInit {
         });
 
         if (lastUnreadMsg) {
-          const updated = await this.model.updateMessageToRead(lastUnreadMsg);
+          await this.model.updateMessageToRead(lastUnreadMsg);
         }
       }
     }, (e) => {

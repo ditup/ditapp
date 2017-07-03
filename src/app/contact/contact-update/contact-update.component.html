@@ -9,4 +9,5 @@
 <app-contact-form
   (onSubmit)="updateContact($event)"
   [fields]="formFields"
+  [isFormDisabled]="saving"
   [data]="initialFormData"></app-contact-form>

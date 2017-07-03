@@ -8,4 +8,6 @@
 <app-contact-overview [from]="from" [to]="to"></app-contact-overview>
 <h2>{{from.username}} wrote to you</h2>
 {{message}}
-<app-contact-form (onSubmit)="confirmContact($event)" [fields]="['trust', 'reference']"></app-contact-form>
+<app-contact-form (onSubmit)="confirmContact($event)"
+  [fields]="['trust', 'reference']"
+  [isFormDisabled]="saving"></app-contact-form>

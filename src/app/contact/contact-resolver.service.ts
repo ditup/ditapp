@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
 import { Contact } from '../shared/types';
@@ -10,9 +10,9 @@ export class ContactResolver implements Resolve<{ fromMe: Contact, toMe: Contact
   constructor(private model: ModelService,
               private auth: AuthService) { }
 
-  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<{ fromMe: Contact, toMe: Contact }> {
-    let username = route.params['username'];
-    let me = this.auth.username;
+  async resolve(route: ActivatedRouteSnapshot): Promise<{ fromMe: Contact, toMe: Contact }> {
+    const username = route.params['username'];
+    const me = this.auth.username;
 
     if (username === me) {
       throw new Error('self contact');

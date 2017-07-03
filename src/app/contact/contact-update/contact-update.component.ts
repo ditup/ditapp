@@ -22,6 +22,7 @@ export class ContactUpdateComponent implements OnInit {
   public message: string;
   public initialFormData: FormData;
   public formFields = ['trust', 'reference'];
+  public saving = false;
 
   constructor(private route: ActivatedRoute,
               private model: ModelService,
@@ -37,7 +38,9 @@ export class ContactUpdateComponent implements OnInit {
   }
 
   public async updateContact({ trust, reference }: FormData): Promise<void> {
+    this.saving = true;
     await this.model.updateContactWith(this.to.username, { trust, reference });
     this.router.navigate([`/user/${this.to.username}`]);
+    this.saving = false;
   }
 }

@@ -1,6 +1,4 @@
-import { Component, OnInit, Input, Output, ViewChild, ElementRef, Directive, EventEmitter } from '@angular/core';
-
-import { ResizeEvent } from 'leaflet';
+import { Component, OnInit, Input, Output, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 
 import { inRange } from 'lodash';
 

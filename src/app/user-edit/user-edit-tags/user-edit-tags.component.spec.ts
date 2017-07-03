@@ -1,11 +1,9 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 
 import { Component } from '@angular/core';
 
-import { MaterialModule, MdSnackBar, MdDialog } from '@angular/material';
-import { DebugElement } from '@angular/core';
+import { MaterialModule } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';

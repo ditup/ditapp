@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
-import { UserTag, User, Contact } from '../shared/types';
+import { User, Contact } from '../shared/types';
 
 @Component({
   selector: 'app-user',

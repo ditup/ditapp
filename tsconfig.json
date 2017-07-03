@@ -7,6 +7,8 @@
     "lib": ["es6", "dom"],
     "module": "es6",
     "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "target": "es5",

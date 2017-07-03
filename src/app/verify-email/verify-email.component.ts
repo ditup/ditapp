@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, Params }   from '@angular/router';
+import { Router, ActivatedRoute }   from '@angular/router';
 
-import { NotificationsService, SimpleNotificationsComponent } from 'angular2-notifications';
+import { NotificationsService } from '../notifications/notifications.service';
 import { has } from 'lodash';
 
 import { ModelService } from '../model.service';
@@ -92,12 +92,14 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
 
     try {
       const email = await this.model.verifyEmail(this.username, this.code);
-      // TODO notify success
+      // notify success
       // show success notification
+      this.notifications.info(`your email ${email} was successfully verified`);
       // show the after-success part of the page
       this.verificationSuccess = true;
     } catch (e) {
-      // TODO notify error
+      // TODO notify error in more detail
+      this.notifications.error('there was an error');
       throw e;
     }
   }

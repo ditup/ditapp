@@ -22,6 +22,7 @@ class FakeModelService {
   lastPromise: Promise<any>;
 
   createUser(newUser: User): Promise<void> {
+    newUser; // tslint:disable-line:no-unused-expression
     return this.lastPromise = Promise.resolve();
   }
 
@@ -34,13 +35,6 @@ class FakeModelService {
       }
     });
   }
-}
-
-class FakeHeaderControlService {
-  displayChanged$;
-
-  display(value: boolean) {}
-
 }
 
 describe('SignupComponent', () => {
@@ -59,7 +53,7 @@ describe('SignupComponent', () => {
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: ModelService, useClass: FakeModelService },
-        { provide: HeaderControlService, useClass: FakeHeaderControlService },
+        HeaderControlService,
         NotificationsService
       ]
     })

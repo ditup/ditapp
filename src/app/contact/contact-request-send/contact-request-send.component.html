@@ -2,4 +2,6 @@
 
 <app-contact-overview [from]="from" [to]="to"></app-contact-overview>
 
-<app-contact-form (onSubmit)="sendRequest($event)"></app-contact-form>
+<app-contact-form
+  (onSubmit)="sendRequest($event)"
+  [isFormDisabled]="saving"></app-contact-form>

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import * as _ from 'lodash';
-
-import { UserList, UserTag, Tag } from '../../shared/types';
+import { UserList } from '../../shared/types';
 import { ModelService } from '../../model.service';
 
 @Component({

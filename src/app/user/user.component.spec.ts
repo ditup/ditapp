@@ -1,8 +1,5 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -12,13 +9,11 @@ import { ModelService } from '../model.service';
 
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRouteStub, RouterStub } from '../../testing/router-stubs';
 import { AvatarStubComponent } from '../../testing/avatar-stub';
 
 import { AuthService } from '../auth.service';
-import { BasicAuthService } from '../basic-auth.service';
 
-class FakeModelService {
+class ModelStubService {
   lastPromise: Promise<any>;
 
   readUser(username: string): Promise<any> {
@@ -31,18 +26,21 @@ class FakeModelService {
   }
 
   readUserTags(username: string): Promise<any> {
+    username; // tslint:disable-line:no-unused-expression
     return this.lastPromise = Promise.resolve([]);
   }
+}
+
+class AuthStubService { }
+
+class ActivatedRouteStub {
+  params = Observable.of({ username: 'test-user' });
+  data = Observable.of({ user: { username: 'test-user' } });
 }
 
 describe('UserComponent', () => {
   let component: UserComponent;
   let fixture: ComponentFixture<UserComponent>;
-
-  const activatedRouteStub = {
-    params: Observable.of({ username: 'test-user' }),
-    data: Observable.of({ user: { username: 'test-user' } })
-  }
 
   beforeEach(async(() => {
 
@@ -50,10 +48,9 @@ describe('UserComponent', () => {
       declarations: [UserComponent, AvatarStubComponent],
       imports: [RouterTestingModule],
       providers: [
-        { provide: ModelService, useClass: FakeModelService },
-        { provide: ActivatedRoute, useValue: activatedRouteStub },
-        AuthService,
-        BasicAuthService
+        { provide: ModelService, useClass: ModelStubService },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: AuthService, useClass: AuthStubService }
       ]
     })
     .compileComponents();

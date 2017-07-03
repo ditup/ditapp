@@ -67,7 +67,7 @@ export class UserEditProfileComponent implements OnInit {
       ]]
     });
 
-    this.profileForm.valueChanges.subscribe(data => {
+    this.profileForm.valueChanges.subscribe(() => {
       this.generateErrors();
     });
   }
@@ -93,7 +93,7 @@ export class UserEditProfileComponent implements OnInit {
       const control = this.profileForm.get(field);
 
       // we'll collect error messages to this variable
-      let errorMessages = [];
+      const errorMessages = [];
 
       if (control && control.dirty && !control.valid) { // when control is invalid and dirty
         // get the array of all validation messages belonging to the field
@@ -116,7 +116,7 @@ export class UserEditProfileComponent implements OnInit {
     // Allow synchronous navigation (`true`) if no changes
 
 
-    let isUnchanged = isEqual(pick(this.user, this.profileFields), this.profileForm.value);
+    const isUnchanged = isEqual(pick(this.user, this.profileFields), this.profileForm.value);
 
     if (isUnchanged) {
       return true;

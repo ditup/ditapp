@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import * as _ from 'lodash';
 
 @Component({
@@ -17,6 +17,8 @@ export class ContactFormComponent implements OnInit {
     reference: ''
   };
 
+  @Input() isFormDisabled: boolean;
+
 
   @Output() onSubmit: EventEmitter<{ message?: string, trust?: number, reference?: string }>;
 
@@ -24,8 +26,6 @@ export class ContactFormComponent implements OnInit {
   public fields = ['message', 'trust', 'reference'];
 
   public disabledFields: string[];
-
-  public isFormDisabled = true;
 
   public trustLevels = [
     {
@@ -53,7 +53,6 @@ export class ContactFormComponent implements OnInit {
   ngOnInit() {
     this.disabledFields = _.difference(['message', 'trust', 'reference'], this.fields);
     this.buildForm();
-    this.isFormDisabled = false;
   }
 
   private buildForm(): void {
@@ -68,13 +67,7 @@ export class ContactFormComponent implements OnInit {
   }
 
   async onSubmitWrapper() {
-
-    // disable the form until the submitting is finished
-    this.isFormDisabled = true;
-
     this.onSubmit.emit(this.contactForm.value);
-
-    this.isFormDisabled = false;
   }
 
 }

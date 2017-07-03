@@ -5,8 +5,6 @@ import { ContactRequestSendComponent } from './contact-request-send.component';
 import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-
 import { RouterStub } from '../../../testing/router-stubs';
 
 import { AuthService } from '../../auth.service';
@@ -25,6 +23,7 @@ class ModelStubService {
 class ContactFormStubComponent {
   @Input() fields;
   @Input() data;
+  @Input() isFormDisabled;
 }
 
 @Component({ selector: 'app-contact-overview', template: '' })

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import * as _ from 'lodash';
 
@@ -49,7 +49,9 @@ export class SelectFromMyTagsComponent implements OnInit {
     return this.getSelection(true);
   }
 
-  public close(selectedTags: Tag[]) {}
+  public close(selectedTags: Tag[]) {
+    selectedTags; // tslint:disable-line:no-unused-expression
+  }
 
   public get unselectedTags(): Tag[] {
     return this.getSelection(false);

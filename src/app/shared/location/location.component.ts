@@ -1,15 +1,8 @@
-import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
-
-import * as _ from 'lodash';
-import { Map, LatLng, TileLayer, Circle, Marker } from 'leaflet';
+import { Map, LatLng, TileLayer, Marker } from 'leaflet';
 import * as L from 'leaflet';
-import { MarkerClusterGroup } from 'leaflet.markercluster';
 import 'leaflet.markercluster';
-
-import { ModelService } from '../../model.service';
-import { User } from '../types';
 
 @Component({
   selector: 'app-location',

@@ -1,7 +1,7 @@
 <div>
   <!-- A form to update tag's story.
     It's used in a md-dialog in user-edit-tags.component -->
-  <form (ngSubmit)="onSubmit()" [formGroup]="updateTagStoryForm">
+  <form (ngSubmit)="submitForm()" [formGroup]="updateTagStoryForm">
     <fieldset [disabled]="isFormDisabled">
       <div>
         Edit story of <md-icon alt="tag">label</md-icon> {{userTag.tag.tagname}}

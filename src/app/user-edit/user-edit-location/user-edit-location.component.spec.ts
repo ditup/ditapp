@@ -6,14 +6,10 @@ import { Observable } from 'rxjs/Observable';
 
 import { UserEditLocationComponent } from './user-edit-location.component';
 
-import { ModelService } from '../../model.service';
-
 @Component({ selector: 'app-select-location', template: '' })
 class SelectLocationStubComponent {
   @Input() location;
 }
-
-class ModelStubService { }
 
 class ActivatedRouteStub {
   parent = {
@@ -32,8 +28,7 @@ describe('UserEditLocationComponent', () => {
         SelectLocationStubComponent
       ],
       providers: [
-        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-        { provide: ModelService, useClass: ModelStubService }
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub }
       ]
     })
     .compileComponents();

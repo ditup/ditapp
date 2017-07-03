@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { User } from '../../shared/types';
-import { ModelService } from '../../model.service';
 
 @Component({
   selector: 'app-user-edit-location',
@@ -14,7 +13,7 @@ export class UserEditLocationComponent implements OnInit {
 
   public user: User;
 
-  constructor(private model: ModelService, private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.parent.data.subscribe(({ user }: { user: User }) => {

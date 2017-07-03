@@ -8,8 +8,6 @@ import { DndModule } from 'ng2-dnd';
 import { MarkdownModule } from 'angular2-markdown';
 import { MomentModule } from 'angular2-moment';
 
-import { SimpleNotificationsModule } from 'angular2-notifications';
-
 import 'hammerjs';  // for angular material
 
 import { AppComponent } from './app.component';
@@ -120,7 +118,6 @@ import { UserCardComponent } from './shared/user-card/user-card.component';
     HttpModule,
     MaterialModule, // angular material material.angular.io
     AppRoutingModule,
-    SimpleNotificationsModule,
     DndModule.forRoot(), // drag and drop: ng2-dnd
     MarkdownModule,
     MomentModule

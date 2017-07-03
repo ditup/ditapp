@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Tag } from '../shared/types';
-import { ModelService } from '../model.service';
 
 @Component({
   selector: 'app-tag',

@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@angular/material';
 
@@ -24,6 +23,7 @@ class FakeModelService {
   lastPromise: Promise<any>;
 
   createUser(newUser: User): Promise<void> {
+    newUser; // tslint:disable-line:no-unused-expression
     return this.lastPromise = Promise.resolve();
   }
 
@@ -36,12 +36,13 @@ class FakeModelService {
     });
   }
 
-  updateUser(username: string, profile: any): Promise<any> {
+  updateUser(username: string, profile: any): Promise<User> {
+    const { givenName, familyName, description } = profile;
     return this.lastPromise = Promise.resolve({
-      username: username,
-      givenName: '',
-      familyName: '',
-      description: ''
+      username,
+      givenName,
+      familyName,
+      description
     });
   }
 

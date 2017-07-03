@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ModelService } from '../../model.service';
 
@@ -51,11 +51,11 @@ export class MessageFormComponent implements OnInit {
       ]]
     });
 
-    this.messageForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.messageForm.valueChanges.subscribe(() => this.onValueChanged());
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any) {
+  onValueChanged() {
     // whenever we edit any values, we want to generate errors
     this.generateErrors();
   }
@@ -67,7 +67,7 @@ export class MessageFormComponent implements OnInit {
         const control = this.messageForm.get(field);
 
         // we'll collect error messages to this variable
-        let errorMessages = [];
+        const errorMessages = [];
 
         if (control && control.dirty && !control.valid) { // when control is invalid and dirty
           // get the array of all validation messages belonging to the field

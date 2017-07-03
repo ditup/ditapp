@@ -68,13 +68,14 @@ export class ModelService {
       .map((resp: Response) => {
         if (resp.status === 200) { return false; }
       })
-      .catch((err, observable): Observable<boolean> => {
+      .catch((err): Observable<boolean> => {
         if (err.status === 404) { return new Observable(observer => observer.next(true)); }
       });
   }
 
   async verifyEmail(username: string, code: string): Promise<string> {
 
+    /* TODO use later during refactor. Refactor!
     const requestBody = {
       data: {
         type: 'users',
@@ -85,6 +86,7 @@ export class ModelService {
         }
       }
     };
+    */
 
     const headers = new Headers({ 'Content-Type': 'application/vnd.api+json' });
 
@@ -245,7 +247,7 @@ export class ModelService {
       .map((resp: Response) => {
         if (resp.status === 200) { return false; }
       })
-      .catch((err, observable): Observable<boolean> => {
+      .catch((err): Observable<boolean> => {
         if (err.status === 404) {
           return new Observable(observer => observer.next(true));
         }
@@ -320,7 +322,7 @@ export class ModelService {
     return this.http
       .patch(`${this.baseUrl}/users/${username}/tags/${tagname}`, JSON.stringify(requestBody), { headers })
       .toPromise()
-      .then((response: Response) => {
+      .then(() => {
         // const data = response.json().data;
       });
   }
@@ -782,7 +784,7 @@ export class ModelService {
     return new Contact({ from, to, isConfirmed, confirmed, created, trust, reference, message, creator });
   }
 
-  private deserializeUser(userData: any, included?: any): User {
+  private deserializeUser(userData: any): User {
     const attrs = ['givenName', 'familyName', 'description', 'location', 'preciseLocation', 'email'];
     const rawUser = _.extend({ username: userData.id }, _.pick(userData.attributes, attrs));
 

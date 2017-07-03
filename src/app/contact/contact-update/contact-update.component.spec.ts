@@ -21,6 +21,7 @@ class ModelStubService { }
 class ContactFormStubComponent {
   @Input() fields;
   @Input() data;
+  @Input() isFormDisabled;
 }
 
 @Component({ selector: 'app-contact-delete-button', template: '' })

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MdSnackBar } from '@angular/material';
-import * as _ from 'lodash';
 
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';

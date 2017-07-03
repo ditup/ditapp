@@ -1,22 +1,15 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate, Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  NavigationExtras
-} from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot } from '@angular/router';
 
 import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthMeGuard implements CanActivate {
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService) {}
 
-  canActivate(route: ActivatedRouteSnapshot,
-              state: RouterStateSnapshot): boolean {
-    let url: string = state.url;
-    let username: string = route.params['username'];
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    const username: string = route.params['username'];
     console.log(route.url, route.params);
 
     return this.checkIsMe(username);

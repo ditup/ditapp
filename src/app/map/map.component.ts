@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { Subscription } from 'rxjs/Subscription';
 
 import * as _ from 'lodash';
-import { Map, LatLng, TileLayer, Circle, Marker } from 'leaflet';
+import { Map, LatLng, TileLayer, Marker } from 'leaflet';
 import * as L from 'leaflet';
 import { MarkerClusterGroup } from 'leaflet.markercluster';
 import 'leaflet.markercluster';
@@ -51,7 +51,7 @@ export class MapComponent implements OnInit {
 
     this.findAndUpdateUsers();
 
-    this.map.on('moveend', async (evt) => {
+    this.map.on('moveend', async () => {
       this.findAndUpdateUsers();
     });
   }
@@ -112,7 +112,7 @@ export class MapComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.fitMapToPage();
   }
 

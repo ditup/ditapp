@@ -8,4 +8,5 @@
 <app-contact-overview [from]="from" [to]="to"></app-contact-overview>
 <app-contact-form
   (onSubmit)="updateContactRequest($event)"
+  [isFormDisabled]="saving"
   [data]="initialFormData"></app-contact-form>

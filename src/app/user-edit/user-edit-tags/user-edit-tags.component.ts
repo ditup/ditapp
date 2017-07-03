@@ -1,9 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
-
-import { Observable } from 'rxjs/Observable';
 
 import * as _ from 'lodash';
 
@@ -45,7 +43,7 @@ export class UserEditTagsComponent implements OnInit {
       this.tags = tags;
 
       // sort tags into their tagList by relevance
-      for (let tag of tags) {
+      for (const tag of tags) {
         this.tagLists[tag.relevance].push(tag);
       }
 

@@ -1,7 +1,5 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import * as _ from 'lodash';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { UserTag } from '../../../shared/types';
 
@@ -26,12 +24,6 @@ export class TagStoryFormComponent implements OnInit {
   public formErrors = {
     story: ''
   };
-
-  private validationMeasages = {
-    story: {
-      maxlength: 'The story is too long.'
-    }
-  }
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -60,6 +52,7 @@ export class TagStoryFormComponent implements OnInit {
   // It is likely to be overwritten.
   @Output('onSubmit')
   public processForm(tag: { tagname: string, story: string }): Promise<void> {
+    tag; // tslint:disable-line:no-unused-expression
     return Promise.resolve();
   }
 

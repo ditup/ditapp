@@ -1,10 +1,9 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 
 import * as _ from 'lodash';
 
-import { TagList, UserList, UserTag, Tag } from '../../shared/types';
+import { TagList, UserList, Tag } from '../../shared/types';
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
 

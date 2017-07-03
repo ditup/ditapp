@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import * as _ from 'lodash';
-
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
 import { User } from '../../shared/types';
@@ -16,6 +14,7 @@ export class ContactRequestSendComponent implements OnInit {
 
   public to: User;
   public from: User;
+  public saving = false;
 
   constructor(private model: ModelService,
               private route: ActivatedRoute,
@@ -28,7 +27,9 @@ export class ContactRequestSendComponent implements OnInit {
   }
 
   async sendRequest({ trust, reference, message }: any): Promise<void> {
+    this.saving = true;
     await this.model.sendContactRequestTo(this.to.username, { trust, reference, message });
     this.router.navigate([`/user/${this.to.username}`]);
+    this.saving = false;
   }
 }
