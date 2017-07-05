@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { User } from '../../shared/types';
+import { ModelService } from '../../model.service';
 
 @Component({
   selector: 'app-user-edit-location',
@@ -13,7 +14,9 @@ export class UserEditLocationComponent implements OnInit {
 
   public user: User;
 
-  constructor(private route: ActivatedRoute) { }
+  public isSelectLocationDisabled = false;
+
+  constructor(private route: ActivatedRoute, private model: ModelService) { }
 
   ngOnInit() {
     this.route.parent.data.subscribe(({ user }: { user: User }) => {
@@ -21,12 +24,14 @@ export class UserEditLocationComponent implements OnInit {
     });
   }
 
-  public get updateLocation() {
-    return (async function (location: [number, number]) {
-      const updatedUser = await this.model.updateUser(this.user.username, { location });
-      this.user.preciseLocation = updatedUser.preciseLocation;
-      this.user.location = updatedUser.location;
-    }).bind(this);
+  async updateLocation(location: [number, number]) {
+    this.isSelectLocationDisabled = true;
+
+    const updatedUser = await this.model.updateUser(this.user.username, { location });
+    this.user.preciseLocation = updatedUser.preciseLocation;
+    this.user.location = updatedUser.location;
+
+    this.isSelectLocationDisabled = false;
   }
 
 }

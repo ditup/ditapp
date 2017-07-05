@@ -4,11 +4,14 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
+import { ModelService } from '../../model.service';
+
 import { UserEditLocationComponent } from './user-edit-location.component';
 
 @Component({ selector: 'app-select-location', template: '' })
 class SelectLocationStubComponent {
   @Input() location;
+  @Input() disabled;
 }
 
 class ActivatedRouteStub {
@@ -16,6 +19,8 @@ class ActivatedRouteStub {
     data: Observable.of({ user: {} })
   };
 }
+
+class ModelStubService { }
 
 describe('UserEditLocationComponent', () => {
   let component: UserEditLocationComponent;
@@ -28,7 +33,8 @@ describe('UserEditLocationComponent', () => {
         SelectLocationStubComponent
       ],
       providers: [
-        { provide: ActivatedRoute, useClass: ActivatedRouteStub }
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: ModelService, useClass: ModelStubService }
       ]
     })
     .compileComponents();

@@ -16,10 +16,10 @@ export class SelectLocationComponent implements OnInit {
 
   private map: L.Map;
 
-  public isButtonDisabled = true;
-
   @Input()
   public location: [number, number];
+
+  @Input() disabled = false;
 
   @Output()
   public onSubmit = new EventEmitter<[number, number]>();
@@ -44,9 +44,6 @@ export class SelectLocationComponent implements OnInit {
 
     this.map.invalidateSize(false);
 
-    // enable the button
-    this.isButtonDisabled = false;
-
     // if the center of the map gets outside of the world, move it back
     this.map.on('moveend', () => {
       let center = this.map.getCenter();
@@ -67,16 +64,12 @@ export class SelectLocationComponent implements OnInit {
     });
   }
 
-  public async updateLocation() {
+  public updateLocation() {
     // disable the button while the location is updated
-    this.isButtonDisabled = true;
-
     const { lat, lng } = this.map.getCenter();
     const location: [number, number] = [lat, lng];
 
-    await this.onSubmit.emit(location);
-
-    this.isButtonDisabled = false;
+    this.onSubmit.emit(location);
   }
 
 }
