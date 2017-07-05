@@ -1,27 +1,59 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, async, inject } from '@angular/core/testing';
+
+import { FakeBackend } from 'ngx-http-test';
+
 import { ModelService } from './model.service';
 
 import { AuthService } from './auth.service';
 
-import { BaseRequestOptions, ConnectionBackend, Http, RequestOptions } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
-
-class AuthStubService { }
+class AuthStubService {
+  credentials = {
+    username: 'test',
+    password: 'password'
+  };
+}
 
 describe('ModelService', () => {
+  let service,
+      backend;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         ModelService,
-        Http,
         { provide: AuthService, useClass: AuthStubService },
-        { provide: ConnectionBackend, useClass: MockBackend },
-        { provide: RequestOptions, useClass: BaseRequestOptions }
+        FakeBackend.getProviders()
       ]
     });
   });
 
-  it('should ...', inject([ModelService], (service: ModelService) => {
-    expect(service).toBeTruthy();
+  beforeEach(inject([ModelService, FakeBackend], (_service: ModelService, _backend: FakeBackend) => {
+    service = _service;
+    backend = _backend;
   }));
+
+  it('tests should be setup', () => {
+    expect(service).toBeTruthy();
+  });
+
+  describe('verify email: verifyEmail(username: string, code: string)', () => {
+
+    it('should success', async(async () => {
+      backend.expectPatch('https://dev.ditup.org/api/account', {
+        data: {
+          type: 'users',
+          id: 'test-user',
+          attributes: {
+            emailVerificationCode: 'verificationCode'
+          }
+        }
+      }).respond({});
+      const response = await service.verifyEmail('test-user', 'verificationCode');
+      console.log(response);
+      expect(response).toEqual('some-email');
+    }));
+
+  });
+
+
 });

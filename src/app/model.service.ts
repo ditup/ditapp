@@ -49,6 +49,10 @@ export class ModelService {
       });
   }
 
+  private get notLoggedHeaders() {
+    return new Headers(this.contentTypeHeader);
+  }
+
   private get loggedHeaders() {
     return new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
   }
@@ -75,23 +79,20 @@ export class ModelService {
 
   async verifyEmail(username: string, code: string): Promise<string> {
 
-    /* TODO use later during refactor. Refactor!
-    const requestBody = {
+    const body = {
       data: {
         type: 'users',
         id: username,
         attributes: {
-          username: username,
-          code: code
+          emailVerificationCode: code
         }
       }
     };
-    */
 
-    const headers = new Headers({ 'Content-Type': 'application/vnd.api+json' });
+    console.log(this.notLoggedHeaders);
 
     const response = await this.http
-      .get(`${this.baseUrl}/users/${username}/account/email/verify/${code}`, { headers })
+      .patch(`${this.baseUrl}/account`, body, { headers: this.notLoggedHeaders })
       .toPromise();
 
     console.log('responded!', response);
