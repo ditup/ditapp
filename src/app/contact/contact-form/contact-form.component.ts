@@ -17,10 +17,10 @@ export class ContactFormComponent implements OnInit {
     reference: ''
   };
 
-  @Input() isFormDisabled: boolean;
+  @Input() isFormDisabled = false;
 
 
-  @Output() onSubmit: EventEmitter<{ message?: string, trust?: number, reference?: string }>;
+  @Output() onSubmit = new EventEmitter<{ message?: string, trust?: number, reference?: string }>();
 
   @Input()
   public fields = ['message', 'trust', 'reference'];
