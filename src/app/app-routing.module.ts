@@ -25,6 +25,14 @@ import { ResetPasswordUpdateComponent } from './reset-password-update/reset-pass
 import { AccountComponent } from './account/account.component';
 import { ContactsComponent } from './user/contacts/contacts.component';
 import { ProfileComponent } from './user/profile/profile.component';
+// tags
+import { TagsComponent } from './tags/tags.component';
+import { TagsRelatedToMyTagsComponent } from './tags/tags-related-to-my-tags/tags-related-to-my-tags.component';
+import { TagsRelatedToTagsComponent } from './tags/tags-related-to-tags/tags-related-to-tags.component';
+import { TagsNewComponent } from './tags/tags-new/tags-new.component';
+import { TagsRandomComponent } from './tags/tags-random/tags-random.component';
+
+// 404
 import { FofComponent } from './fof/fof.component';
 
 // contacts
@@ -123,6 +131,43 @@ const routes: Routes = [
     resolve: {
       tag: TagResolver
     }
+  },
+  {
+    path: 'tags',
+    component: TagsComponent,
+    children: [
+      {
+        path: '',
+        component: TagsRelatedToMyTagsComponent,
+        /*
+        resolve: {
+          tags: TagsRelatedToMyTagsResolver
+        }
+        */
+      },
+      {
+        path: 'relatedToTags',
+        component: TagsRelatedToTagsComponent
+      },
+      {
+        path: 'new',
+        component: TagsNewComponent,
+        /*
+        resolve: {
+          tags: TagsNewResolver
+        }
+        */
+      },
+      {
+        path: 'random',
+        component: TagsRandomComponent,
+        /*
+        resolve: {
+          tags: TagsRandomResolver
+        }
+        */
+      },
+    ]
   },
   {
     path: 'people',

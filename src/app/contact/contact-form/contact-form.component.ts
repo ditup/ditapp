@@ -63,6 +63,8 @@ export class ContactFormComponent implements OnInit {
 
     console.log(initialFormData, this.disabledFields);
 
+    // TODO validation
+
     this.contactForm = this.formBuilder.group(initialFormData);
   }
 

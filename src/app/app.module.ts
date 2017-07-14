@@ -59,6 +59,11 @@ import { UserContactComponent } from './user/contacts/user-contact/user-contact.
 import { UserEditProfileComponent } from './user-edit/user-edit-profile/user-edit-profile.component';
 import { SelectLocationComponent } from './shared/select-location/select-location.component';
 import { UserCardComponent } from './shared/user-card/user-card.component';
+import { TagsComponent } from './tags/tags.component';
+import { TagsRelatedToMyTagsComponent } from './tags/tags-related-to-my-tags/tags-related-to-my-tags.component';
+import { TagsRelatedToTagsComponent } from './tags/tags-related-to-tags/tags-related-to-tags.component';
+import { TagsNewComponent } from './tags/tags-new/tags-new.component';
+import { TagsRandomComponent } from './tags/tags-random/tags-random.component';
 
 @NgModule({
   declarations: [
@@ -109,7 +114,12 @@ import { UserCardComponent } from './shared/user-card/user-card.component';
     UserContactComponent,
     UserEditProfileComponent,
     SelectLocationComponent,
-    UserCardComponent
+    UserCardComponent,
+    TagsComponent,
+    TagsRelatedToMyTagsComponent,
+    TagsRelatedToTagsComponent,
+    TagsNewComponent,
+    TagsRandomComponent
   ],
   imports: [
     BrowserModule,
