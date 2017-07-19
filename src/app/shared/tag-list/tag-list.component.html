@@ -1,0 +1,4 @@
+<md-chip-list>
+  <md-chip class="tag" *ngFor="let tag of tags"
+    [routerLink]="'/tag/' + tag.tagname">{{tag.tagname}}</md-chip>
+</md-chip-list>

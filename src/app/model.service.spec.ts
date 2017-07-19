@@ -55,5 +55,22 @@ describe('ModelService', () => {
 
   });
 
+  describe('findTagsByMyTags()', () => {
+
+    it('should success', async(async () => {
+      backend.expectGet('https://dev.ditup.org/api/tags?filter[relatedToMyTags]').respond({
+        data: [
+          { type: 'tags', id: 'tag0' },
+          { type: 'tags', id: 'tag1' },
+          { type: 'tags', id: 'tag2' },
+          { type: 'tags', id: 'tag3' }
+        ]
+      });
+      const response = await service.findTagsByMyTags();
+      console.log(response);
+      expect(response.length).toEqual(4);
+    }));
+
+  });
 
 });

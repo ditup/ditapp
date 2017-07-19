@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ActivatedRoute } from '@angular/router';
+
+import { Tag } from '../../shared/types';
+
 @Component({
   selector: 'app-tags-related-to-my-tags',
   templateUrl: './tags-related-to-my-tags.component.html',
@@ -7,9 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TagsRelatedToMyTagsComponent implements OnInit {
 
-  constructor() { }
+  public tags: Tag[];
+
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.data.subscribe(({ tags }) => {
+      this.tags = tags;
+    });
   }
 
 }

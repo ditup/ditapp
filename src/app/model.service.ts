@@ -504,6 +504,19 @@ export class ModelService {
       });
   }
 
+  public async findTagsByMyTags(): Promise<Tag[]> {
+    const headers = this.loggedHeaders;
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/tags?filter[relatedToMyTags]`, { headers })
+      .toPromise();
+
+    const { data } = response.json();
+
+    const tags: Tag[] = _.map(data, (tag) => this.deserializeTag(tag));
+    return tags;
+  }
+
   public async readMessagesWith(username: string): Promise<Message[]> {
     const headers = this.loggedHeaders;
 
@@ -792,5 +805,9 @@ export class ModelService {
     const user = new User(rawUser);
 
     return user;
+  }
+
+  private deserializeTag(tagData: any): Tag {
+    return { tagname: tagData.id };
   }
 }
