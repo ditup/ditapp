@@ -51,7 +51,7 @@ describe('TagsComponent', () => {
 
     // test link urls
     const urls = map(links, link => link.nativeElement.getAttribute('routerlink'));
-    expect(urls).toEqual(['/tags', '/tags/relatedToTags', '/tags/new', '/tags/random']);
+    expect(urls).toEqual(['/tags', '/tags/related-to-tags', '/tags/new', '/tags/random']);
 
     // test link labels
     const labels = map(links, link => link.nativeElement.innerHTML.trim());

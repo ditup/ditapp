@@ -145,7 +145,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'relatedToTags',
+        path: 'related-to-tags',
         component: TagsRelatedToTagsComponent
       },
       {
