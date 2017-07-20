@@ -13,14 +13,12 @@ export class PeopleWithMyTagsResolver implements Resolve<User[]> {
   }
 }
 
-/*
 @Injectable()
-export class RandomTagsResolver implements Resolve<Tag[]> {
+export class NewPeopleResolver implements Resolve<User[]> {
 
   constructor(private model: ModelService) { }
 
-  async resolve(): Promise<Tag[]> {
-    return await this.model.findRandomTags();
+  async resolve(): Promise<User[]> {
+    return await this.model.findNewUsers();
   }
 }
-*/

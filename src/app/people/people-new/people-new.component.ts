@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { User } from '../../shared/types';
 
 @Component({
   selector: 'app-people-new',
@@ -7,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PeopleNewComponent implements OnInit {
 
-  constructor() { }
+  public users: User[];
+
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.data.subscribe(({ users }: { users: User[] }) => {
+      this.users = users;
+    });
   }
 
 }

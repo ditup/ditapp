@@ -405,6 +405,22 @@ export class ModelService {
     }
   }
 
+  /**
+   * Read New Users
+   */
+  public async findNewUsers(): Promise<User[]> {
+    const headers = this.loggedHeaders;
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/users?sort=-created&page[offset]=0&page[limit]=5`, { headers })
+      .toPromise();
+
+    const responseJson = response.json();
+    const data = responseJson.data;
+
+    return _.map(data, (userData: any) => this.deserializeUser(userData)) as User[];
+  }
+
   public async findUsersByTags(tags: Tag[]): Promise<User[]> {
     const headers = this.loggedHeaders;
 

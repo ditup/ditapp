@@ -110,4 +110,21 @@ describe('ModelService', () => {
     }));
   });
 
+  describe('findNewUsers()', () => {
+    it('should success', async(async () => {
+      backend.expectGet('https://dev.ditup.org/api/users?sort=-created&page[offset]=0&page[limit]=5').respond({
+        data: [
+          { type: 'users', id: 'user0' },
+          { type: 'users', id: 'user1' },
+          { type: 'users', id: 'user2' },
+          { type: 'users', id: 'user3' },
+          { type: 'users', id: 'user4' }
+        ]
+      });
+      const response = await service.findNewUsers();
+      console.log(response);
+      expect(response.length).toEqual(5);
+    }));
+  });
+
 });

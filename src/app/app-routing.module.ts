@@ -58,8 +58,7 @@ import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
 import { TagsRelatedToMyTagsResolver, RandomTagsResolver } from './tags/tags-resolver.service';
-
-import { PeopleWithMyTagsResolver } from './people/people-resolver.service';
+import { PeopleWithMyTagsResolver, NewPeopleResolver } from './people/people-resolver.service';
 
 // services
 import { AuthService } from './auth.service';
@@ -195,11 +194,9 @@ const routes: Routes = [
       {
         path: 'new',
         component: PeopleNewComponent,
-        /*
         resolve: {
-          tags: TagsNewResolver
+          users: NewPeopleResolver
         }
-        */
       },
       {
         path: 'random',
@@ -269,6 +266,7 @@ const routes: Routes = [
     TagsRelatedToMyTagsResolver,
     RandomTagsResolver,
     PeopleWithMyTagsResolver,
+    NewPeopleResolver,
     AuthService,
     BasicAuthService,
     ModelService
