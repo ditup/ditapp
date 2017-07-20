@@ -405,8 +405,10 @@ export class ModelService {
     }
   }
 
-  public async findUsersByTags(tagnames: string[]) {
+  public async findUsersByTags(tags: Tag[]): Promise<User[]> {
     const headers = this.loggedHeaders;
+
+    const tagnames: string[] = _.map(tags, tag => tag.tagname);
 
     const tagnamesJoined: string = tagnames.join(',');
 
