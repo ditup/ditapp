@@ -49,7 +49,7 @@ import { TagResolver } from './tag/tag-resolver.service';
 import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
-import { TagsRelatedToMyTagsResolver } from './tags/tags-related-to-my-tags-resolver.service';
+import { TagsRelatedToMyTagsResolver, RandomTagsResolver } from './tags/tags-resolver.service';
 
 // services
 import { AuthService } from './auth.service';
@@ -160,11 +160,9 @@ const routes: Routes = [
       {
         path: 'random',
         component: TagsRandomComponent,
-        /*
         resolve: {
-          tags: TagsRandomResolver
+          tags: RandomTagsResolver
         }
-        */
       },
     ]
   },
@@ -228,6 +226,7 @@ const routes: Routes = [
     MessagesResolver,
     TagResolver,
     TagsRelatedToMyTagsResolver,
+    RandomTagsResolver,
     AuthService,
     BasicAuthService,
     ModelService

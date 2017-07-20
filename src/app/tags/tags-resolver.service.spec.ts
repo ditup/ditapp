@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { TagsRelatedToMyTagsResolver } from './tags-related-to-my-tags-resolver.service';
+import { TagsRelatedToMyTagsResolver, RandomTagsResolver } from './tags-resolver.service';
 
 import { ModelService } from '../model.service';
 
@@ -13,6 +13,12 @@ class ModelStubService {
       { tagname: 'tag2' },
       { tagname: 'tag3' },
       { tagname: 'tag4' }
+    ];
+  }
+
+  public async findRandomTags(): Promise<Tag[]> {
+    return [
+      { tagname: 'tag0' }
     ];
   }
 }
@@ -35,5 +41,26 @@ describe('TagsRelatedToMyTagsResolver', () => {
     const tags = await service.resolve();
 
     expect(tags.length).toEqual(4);
+  }));
+});
+
+describe('RandomTagsResolver', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        RandomTagsResolver,
+        { provide: ModelService, useClass: ModelStubService }
+      ],
+    });
+  });
+
+  it('should be created', inject([RandomTagsResolver], (service: RandomTagsResolver) => {
+    expect(service).toBeTruthy();
+  }));
+
+  it('should resolve with some tags', inject([RandomTagsResolver], async (service: RandomTagsResolver) => {
+    const tags = await service.resolve();
+
+    expect(tags.length).toEqual(1);
   }));
 });

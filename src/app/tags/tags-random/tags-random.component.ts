@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { Tag } from '../../shared/types';
+import { ModelService } from '../../model.service';
+
 
 @Component({
   selector: 'app-tags-random',
@@ -7,9 +12,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TagsRandomComponent implements OnInit {
 
-  constructor() { }
+  public tags: Tag[];
+
+  constructor(private route: ActivatedRoute, private model: ModelService) { }
 
   ngOnInit() {
+    this.route.data.subscribe(({ tags }: { tags: Tag[] }) => {
+      this.tags = tags;
+    });
+  }
+
+  public async reloadTags() {
+    this.tags = await this.model.findRandomTags();
   }
 
 }

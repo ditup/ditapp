@@ -97,4 +97,17 @@ describe('ModelService', () => {
 
   });
 
+  describe('findRandomTags()', () => {
+    it('should success', async(async () => {
+      backend.expectGet('https://dev.ditup.org/api/tags?filter[random]').respond({
+        data: [
+          { type: 'tags', id: 'tag3' }
+        ]
+      });
+      const response = await service.findRandomTags();
+      console.log(response);
+      expect(response.length).toEqual(1);
+    }));
+  });
+
 });

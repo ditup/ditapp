@@ -12,3 +12,13 @@ export class TagsRelatedToMyTagsResolver implements Resolve<Tag[]> {
     return await this.model.findTagsByMyTags();
   }
 }
+
+@Injectable()
+export class RandomTagsResolver implements Resolve<Tag[]> {
+
+  constructor(private model: ModelService) { }
+
+  async resolve(): Promise<Tag[]> {
+    return await this.model.findRandomTags();
+  }
+}
