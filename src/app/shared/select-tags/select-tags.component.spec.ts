@@ -110,4 +110,28 @@ describe('SelectTagsComponent', () => {
     const selectedTags = fixture.debugElement.queryAll(By.css('.tag-selected'));
     expect(selectedTags.length).toEqual(0);
   });
+
+  it('when clicking close button on a tag, the tag should be removed and smaller array emitted', () => {
+    // initial tags
+    component.tagList = new TagList([
+      { tagname: 'tag0' },
+      { tagname: 'tag1' },
+      { tagname: 'tag2' }
+    ]);
+
+    fixture.detectChanges();
+
+    const buttonClose = fixture.debugElement.query(By.css('.tag-selected-remove'));
+
+    expect(buttonClose).toBeTruthy();
+
+    buttonClose.triggerEventHandler('click', null);
+
+    fixture.detectChanges();
+
+    expect(emittedTags.length).toEqual(2);
+
+    const selectedTags = fixture.debugElement.queryAll(By.css('.tag-selected'));
+    expect(selectedTags.length).toEqual(2);
+  });
 });

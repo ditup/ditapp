@@ -40,6 +40,16 @@ export class SelectTagsComponent implements OnInit {
     }
   }
 
+  public removeTagFromList({ tagname }: Tag) {
+    try {
+      this.tagList.remove(tagname);
+      // send info to Output
+      this.emitSelection();
+    } catch (e) {
+      // TODO notify
+    }
+  }
+
   public clearSelection() {
     this.tagList.tags = [];
     // send info to Output
@@ -84,29 +94,6 @@ export class SelectTagsComponent implements OnInit {
       }
     }
     //
-  }
-
-
-  private async updateUserList() {
-
-    this.loadingUsers = true;
-
-    const users = await this.model.findUsersByTags(this.tagList.tagnames);
-
-    this.userList = new UserList(users);
-
-    this.loadingUsers = false;
-  }
-
-  public async removeTagFromList(tagname: string) {
-    try {
-      this.tagList.remove(tagname);
-      // send info to Output
-      this.onChangedTags.emit(this.tagList.tags);
-      await this.updateUserList();
-    } catch (e) {
-      this.snackBar.open(e.message, 'OK');
-    }
   }
 
   public complainNonexistentTag ({ tagname }: Tag) {

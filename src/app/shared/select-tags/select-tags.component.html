@@ -10,8 +10,10 @@
 <md-chip-list>
   <md-chip *ngFor="let tag of tagList.tags" class="tag-selected">
     {{tag.tagname}}
-    <!--button md-icon-button (click)="removeTagFromList(tag.tagname)">
+    <button md-icon-button
+      class="tag-selected-remove"
+      (click)="removeTagFromList(tag)">
       <md-icon alt="remove">close</md-icon>
-    </button-->
+    </button>
   </md-chip>
 </md-chip-list>
