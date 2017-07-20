@@ -1,12 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, /*fakeAsync, tick, */ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectTagsComponent } from './select-tags.component';
+import { SelectFromMyTagsComponent } from '../select-from-my-tags/select-from-my-tags.component';
 
 import { Component, EventEmitter, Output } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { MaterialModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Tag, TagList } from '../types';
+
+import { AuthService } from '../../auth.service';
+import { ModelService } from '../../model.service';
+
+class AuthStubService {
+}
+
+class ModelStubService {
+}
 
 @Component({ selector: 'app-tag-autocomplete', template: '' })
 class TagAutocompleteStubComponent {
@@ -23,10 +34,16 @@ describe('SelectTagsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         SelectTagsComponent,
-        TagAutocompleteStubComponent
+        TagAutocompleteStubComponent,
+        SelectFromMyTagsComponent
       ],
       imports: [
-        MaterialModule
+        MaterialModule,
+        BrowserAnimationsModule
+      ],
+      providers: [
+        { provide: AuthService, useClass: AuthStubService },
+        { provide: ModelService, useClass: ModelStubService }
       ]
     })
     .compileComponents();
@@ -134,4 +151,14 @@ describe('SelectTagsComponent', () => {
     const selectedTags = fixture.debugElement.queryAll(By.css('.tag-selected'));
     expect(selectedTags.length).toEqual(2);
   });
+
+  it('[click selectFromMyTags] open dialog with my tags', /* fakeAsync(() => {
+    const button = fixture.debugElement.query(By.css('.open-select-dialog'));
+    expect(button).toBeTruthy();
+    button.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    tick();
+
+
+  })*/() => { pending(); });
 });

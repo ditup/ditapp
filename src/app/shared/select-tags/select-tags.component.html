@@ -2,8 +2,9 @@
   placeholder="search tags"
   (action)="addTagToList($event)"
   (action404)="complainNonexistentTag($event)"></app-tag-autocomplete>
-<!--button md-raised-button
-  (click)="openMyTagsDialog()">Choose from My Tags</button-->
+<button md-raised-button
+  class="open-select-dialog"
+  (click)="openMyTagsDialog()">Choose from My Tags</button>
 <button md-raised-button class="clear-selection"
   (click)="clearSelection()">clear</button>
 

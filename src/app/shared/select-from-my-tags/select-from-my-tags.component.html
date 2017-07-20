@@ -3,7 +3,7 @@
 <div *ngIf="!loading">
   <md-chip-list [selectable]="false">
     <md-chip *ngFor="let myTag of myTags"
-      [color]="(myTag.selected) ? 'primary' : ''"
+      [color]="(myTag.selected) ? 'accent' : ''"
       [selected]="!myTag.originalSelection"
       (click)="toggleSelection(myTag)">{{myTag.tag.tagname}}</md-chip>
   </md-chip-list>
