@@ -1,5 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 
+@Component({
+  selector: 'app-people',
+  templateUrl: './people.component.html',
+  styleUrls: ['./people.component.scss']
+})
+export class PeopleComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+/*
+import { Component, OnInit } from '@angular/core';
+
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 import * as _ from 'lodash';
@@ -12,7 +29,7 @@ import { Tag } from '../shared/types';
 
 
 import { TagList, UserList, UserTag, Tag } from '../shared/types';
-*/
+* /
 @Component({
   selector: 'app-people',
   templateUrl: './people.component.html',
@@ -157,3 +174,4 @@ export class PeopleComponent implements OnInit {
   }
 
 }
+*/

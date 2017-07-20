@@ -1,35 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+
+import { map } from 'lodash';
 
 import { PeopleComponent } from './people.component';
 
-import { Component, Input } from '@angular/core';
-
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-
-import { RouterStub } from '../../testing/router-stubs';
-
-import { ModelService } from '../model.service';
-
-class ModelStubService { }
-
-class ActivatedRouteStub {
-  queryParams = Observable.of({});
-  snapshot = {
-    queryParams: {}
-  }
-}
-
-@Component({ selector: 'app-with-my-tags', template: '' })
-class WithMyTagsStubComponent {}
-
-@Component({ selector: 'app-with-tags', template: '' })
-class WithTagsStubComponent {
-  @Input() inputTags;
-}
+import { RouterLinkStubDirective, RouterLinkActiveStubDirective, RouterOutletStubComponent } from '../../testing/router-stubs';
 
 describe('PeopleComponent', () => {
   let component: PeopleComponent;
@@ -39,17 +18,13 @@ describe('PeopleComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         PeopleComponent,
-        WithMyTagsStubComponent,
-        WithTagsStubComponent
+        RouterOutletStubComponent,
+        RouterLinkStubDirective,
+        RouterLinkActiveStubDirective
       ],
       imports: [
         MaterialModule,
         BrowserAnimationsModule
-      ],
-      providers: [
-        { provide: ModelService, useClass: ModelStubService },
-        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-        { provide: Router, useClass: RouterStub }
       ]
     })
     .compileComponents();
@@ -63,5 +38,36 @@ describe('PeopleComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have title People', () => {
+    const title = fixture.debugElement.query(By.css('h1'));
+    expect(title).toBeTruthy();
+
+    expect(title.nativeElement.innerHTML).toEqual('People');
+  });
+
+  it('should have links to self, users related to tags, new, random', () => {
+    const links = fixture.debugElement.queryAll(By.css('[md-tab-link]'));
+
+    expect(links.length).toEqual(4);
+
+    // test link urls
+    const urls = map(links, link => link.nativeElement.getAttribute('routerlink'));
+    expect(urls).toEqual(['/people', '/people/with-tags', '/people/new', '/people/random']);
+
+    // test link labels
+    const labels = map(links, link => link.nativeElement.innerHTML.trim());
+    expect(labels).toEqual([
+      'with my tags',
+      'with tags',
+      'new',
+      'random'
+    ]);
+  });
+
+  it('should have router-outlet for the subpages', () => {
+    const routerOutlet = fixture.debugElement.query(By.css('router-outlet'));
+    expect(routerOutlet).toBeTruthy();
   });
 });

@@ -9,7 +9,6 @@ import { TagComponent } from './tag/tag.component';
 
 import { UserComponent } from './user/user.component';
 import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
-import { PeopleComponent } from './people/people.component';
 import { MapComponent } from './map/map.component';
 
 // user edit
@@ -25,6 +24,15 @@ import { ResetPasswordUpdateComponent } from './reset-password-update/reset-pass
 import { AccountComponent } from './account/account.component';
 import { ContactsComponent } from './user/contacts/contacts.component';
 import { ProfileComponent } from './user/profile/profile.component';
+
+// people
+import { PeopleComponent } from './people/people.component';
+import { PeopleWithMyTagsComponent } from './people/people-with-my-tags/people-with-my-tags.component';
+import { PeopleWithTagsComponent } from './people/people-with-tags/people-with-tags.component';
+import { PeopleNewComponent } from './people/people-new/people-new.component';
+import { PeopleRandomComponent } from './people/people-random/people-random.component';
+
+
 // tags
 import { TagsComponent } from './tags/tags.component';
 import { TagsRelatedToMyTagsComponent } from './tags/tags-related-to-my-tags/tags-related-to-my-tags.component';
@@ -50,6 +58,8 @@ import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
 import { TagsRelatedToMyTagsResolver, RandomTagsResolver } from './tags/tags-resolver.service';
+
+import { PeopleWithMyTagsResolver } from './people/people-resolver.service';
 
 // services
 import { AuthService } from './auth.service';
@@ -168,8 +178,39 @@ const routes: Routes = [
   },
   {
     path: 'people',
+    canActivate: [AuthGuard],
     component: PeopleComponent,
-    canActivate: [AuthGuard]
+    children: [
+      {
+        path: '',
+        component: PeopleWithMyTagsComponent,
+        resolve: {
+          users: PeopleWithMyTagsResolver
+        }
+      },
+      {
+        path: 'with-tags',
+        component: PeopleWithTagsComponent
+      },
+      {
+        path: 'new',
+        component: PeopleNewComponent,
+        /*
+        resolve: {
+          tags: TagsNewResolver
+        }
+        */
+      },
+      {
+        path: 'random',
+        component: PeopleRandomComponent,
+        /*
+        resolve: {
+          tags: RandomPeopleResolver
+        }
+        */
+      },
+    ]
   },
   {
     path: 'messages',
@@ -227,6 +268,7 @@ const routes: Routes = [
     TagResolver,
     TagsRelatedToMyTagsResolver,
     RandomTagsResolver,
+    PeopleWithMyTagsResolver,
     AuthService,
     BasicAuthService,
     ModelService

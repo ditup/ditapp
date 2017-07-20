@@ -1,9 +1,5 @@
-<div *ngIf="loadingUsers">
-  <md-progress-bar mode="indeterminate"></md-progress-bar>
-</div>
-
 <md-list>
-  <md-list-item *ngFor="let user of userList.users">
+  <md-list-item *ngFor="let user of users">
     <app-user-small [user]="user"></app-user-small>
     <app-user-tag-list
       [user]="user"

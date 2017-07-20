@@ -28,8 +28,6 @@ import { PeopleComponent } from './people/people.component';
 import { TagAutocompleteComponent } from './shared/tag-autocomplete/tag-autocomplete.component';
 import { UserSmallComponent } from './shared/user-small/user-small.component';
 import { UserTagListComponent } from './shared/user-tag-list/user-tag-list.component';
-import { WithMyTagsComponent } from './people/with-my-tags/with-my-tags.component';
-import { WithTagsComponent } from './people/with-tags/with-tags.component';
 import { SelectFromMyTagsComponent } from './shared/select-from-my-tags/select-from-my-tags.component';
 import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
 import { MessageFormComponent } from './messages-with-user/message-form/message-form.component';
@@ -66,6 +64,11 @@ import { TagsNewComponent } from './tags/tags-new/tags-new.component';
 import { TagsRandomComponent } from './tags/tags-random/tags-random.component';
 import { TagListComponent } from './shared/tag-list/tag-list.component';
 import { SelectTagsComponent } from './shared/select-tags/select-tags.component';
+import { PeopleWithTagsComponent } from './people/people-with-tags/people-with-tags.component';
+import { PeopleWithMyTagsComponent } from './people/people-with-my-tags/people-with-my-tags.component';
+import { PeopleNewComponent } from './people/people-new/people-new.component';
+import { PeopleRandomComponent } from './people/people-random/people-random.component';
+import { UserListWithTagsComponent } from './shared/user-list-with-tags/user-list-with-tags.component';
 
 @NgModule({
   declarations: [
@@ -86,8 +89,6 @@ import { SelectTagsComponent } from './shared/select-tags/select-tags.component'
     TagAutocompleteComponent,
     UserSmallComponent,
     UserTagListComponent,
-    WithMyTagsComponent,
-    WithTagsComponent,
     SelectFromMyTagsComponent,
     MessagesWithUserComponent,
     MessageFormComponent,
@@ -123,7 +124,12 @@ import { SelectTagsComponent } from './shared/select-tags/select-tags.component'
     TagsNewComponent,
     TagsRandomComponent,
     TagListComponent,
-    SelectTagsComponent
+    SelectTagsComponent,
+    PeopleWithTagsComponent,
+    PeopleWithMyTagsComponent,
+    PeopleNewComponent,
+    PeopleRandomComponent,
+    UserListWithTagsComponent
   ],
   imports: [
     BrowserModule,
