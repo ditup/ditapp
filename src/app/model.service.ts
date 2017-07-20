@@ -517,6 +517,21 @@ export class ModelService {
     return tags;
   }
 
+  public async findTagsByTags(tagsIn: Tag[]): Promise<Tag[]> {
+    const headers = this.loggedHeaders;
+
+    const tagQueryString = _.map(tagsIn, (tag: Tag) => tag.tagname).join(',');
+
+    const response: Response = await this.http
+      .get(`${this.baseUrl}/tags?filter[relatedToTags]=${tagQueryString}`, { headers })
+      .toPromise();
+
+    const { data } = response.json();
+
+    const tagsOut: Tag[] = _.map(data, (tag) => this.deserializeTag(tag));
+    return tagsOut;
+  }
+
   public async readMessagesWith(username: string): Promise<Message[]> {
     const headers = this.loggedHeaders;
 

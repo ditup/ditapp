@@ -6,6 +6,8 @@ import { ModelService } from './model.service';
 
 import { AuthService } from './auth.service';
 
+import { Tag } from './shared/types';
+
 class AuthStubService {
   credentials = {
     username: 'test',
@@ -67,6 +69,28 @@ describe('ModelService', () => {
         ]
       });
       const response = await service.findTagsByMyTags();
+      console.log(response);
+      expect(response.length).toEqual(4);
+    }));
+
+  });
+
+  describe('findTagsByTags()', () => {
+
+    it('should success', async(async () => {
+      backend.expectGet('https://dev.ditup.org/api/tags?filter[relatedToTags]=tag0,tag1,tag2').respond({
+        data: [
+          { type: 'tags', id: 'tag3' },
+          { type: 'tags', id: 'tag4' },
+          { type: 'tags', id: 'tag5' },
+          { type: 'tags', id: 'tag6' }
+        ]
+      });
+      const response = await service.findTagsByTags([
+        { tagname: 'tag0' },
+        { tagname: 'tag1' },
+        { tagname: 'tag2' }
+      ] as Tag[]);
       console.log(response);
       expect(response.length).toEqual(4);
     }));

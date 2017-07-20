@@ -65,6 +65,7 @@ import { TagsRelatedToTagsComponent } from './tags/tags-related-to-tags/tags-rel
 import { TagsNewComponent } from './tags/tags-new/tags-new.component';
 import { TagsRandomComponent } from './tags/tags-random/tags-random.component';
 import { TagListComponent } from './shared/tag-list/tag-list.component';
+import { SelectTagsComponent } from './shared/select-tags/select-tags.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +122,8 @@ import { TagListComponent } from './shared/tag-list/tag-list.component';
     TagsRelatedToTagsComponent,
     TagsNewComponent,
     TagsRandomComponent,
-    TagListComponent
+    TagListComponent,
+    SelectTagsComponent
   ],
   imports: [
     BrowserModule,

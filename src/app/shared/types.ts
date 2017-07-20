@@ -94,7 +94,11 @@ export class UserTag {
 }
 
 export class TagList {
-  public tags: Tag[] = [];
+  public tags: Tag[];
+
+  constructor(tags?: Tag[]) {
+    this.tags = tags || [] as Tag[];
+  }
 
   public get tagnames(): string[] {
     return _.map(this.tags, tag => tag.tagname);
