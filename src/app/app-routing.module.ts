@@ -5,8 +5,6 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginBasicComponent } from './login-basic/login-basic.component';
 import { MainComponent } from './main/main.component';
 
-import { TagComponent } from './tag/tag.component';
-
 import { UserComponent } from './user/user.component';
 import { MessagesWithUserComponent } from './messages-with-user/messages-with-user.component';
 import { MapComponent } from './map/map.component';
@@ -24,6 +22,11 @@ import { ResetPasswordUpdateComponent } from './reset-password-update/reset-pass
 import { AccountComponent } from './account/account.component';
 import { ContactsComponent } from './user/contacts/contacts.component';
 import { ProfileComponent } from './user/profile/profile.component';
+
+// tag
+import { TagComponent } from './tag/tag.component';
+import { TagRelatedTagsComponent } from './tag/tag-related-tags/tag-related-tags.component';
+import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-people.component';
 
 // people
 import { PeopleComponent } from './people/people.component';
@@ -57,7 +60,7 @@ import { TagResolver } from './tag/tag-resolver.service';
 import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
-import { TagsRelatedToMyTagsResolver, RandomTagsResolver } from './tags/tags-resolver.service';
+import { TagsRelatedToMyTagsResolver, RandomTagsResolver, TagsRelatedToTagResolver } from './tags/tags-resolver.service';
 import { PeopleWithMyTagsResolver, NewPeopleResolver } from './people/people-resolver.service';
 
 // services
@@ -140,7 +143,24 @@ const routes: Routes = [
     component: TagComponent,
     resolve: {
       tag: TagResolver
-    }
+    },
+    children: [
+      {
+        path: '',
+        component: TagRelatedTagsComponent,
+        resolve: {
+          tags: TagsRelatedToTagResolver
+        }
+      },
+      {
+        path: 'people',
+        component: TagRelatedPeopleComponent,
+        /*
+        resolve: {
+          people: TagRelatedPeopleResolver
+        }*/
+      }
+    ]
   },
   {
     path: 'tags',
@@ -264,6 +284,7 @@ const routes: Routes = [
     MessagesResolver,
     TagResolver,
     TagsRelatedToMyTagsResolver,
+    TagsRelatedToTagResolver,
     RandomTagsResolver,
     PeopleWithMyTagsResolver,
     NewPeopleResolver,

@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { TagsRelatedToMyTagsResolver, RandomTagsResolver } from './tags-resolver.service';
+import { TagsRelatedToMyTagsResolver, RandomTagsResolver, TagsRelatedToTagResolver } from './tags-resolver.service';
 
 import { ModelService } from '../model.service';
 
@@ -20,6 +20,27 @@ class ModelStubService {
     return [
       { tagname: 'tag0' }
     ];
+  }
+
+  public async findTagsByTags(tagsIn: Tag[]): Promise<Tag[]> {
+
+    // the tags to choose from
+    const tags: Tag[] =  [
+      { tagname: 'tag0' },
+      { tagname: 'tag1' },
+      { tagname: 'tag2' },
+      { tagname: 'tag3' },
+      { tagname: 'tag4' },
+      { tagname: 'tag5' }
+    ];
+
+    // provided tagnames
+    const tagnamesIn = tagsIn.map(tag => tag.tagname);
+
+    // we return all the tags other than the provided ones
+    const tagsOut = tags.filter(tag => tagnamesIn.indexOf(tag.tagname) === -1);
+
+    return tagsOut;
   }
 }
 
@@ -62,5 +83,29 @@ describe('RandomTagsResolver', () => {
     const tags = await service.resolve();
 
     expect(tags.length).toEqual(1);
+  }));
+});
+
+describe('TagsRelatedToTagResolver', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        TagsRelatedToTagResolver,
+        { provide: ModelService, useClass: ModelStubService }
+      ],
+    });
+  });
+
+  it('should be created', inject([TagsRelatedToTagResolver], (service: TagsRelatedToTagResolver) => {
+    expect(service).toBeTruthy();
+  }));
+
+  it('should resolve with some tags', inject([TagsRelatedToTagResolver], async (service: TagsRelatedToTagResolver) => {
+    const routeSnapshotStub: any = {
+      params: { tagname: 'tag1' }
+    };
+    const tags = await service.resolve(routeSnapshotStub);
+
+    expect(tags.length).toEqual(5);
   }));
 });

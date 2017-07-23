@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { ModelService } from '../model.service';
 import { Tag } from '../shared/types';
 
@@ -20,5 +20,15 @@ export class RandomTagsResolver implements Resolve<Tag[]> {
 
   async resolve(): Promise<Tag[]> {
     return await this.model.findRandomTags();
+  }
+}
+
+@Injectable()
+export class TagsRelatedToTagResolver implements Resolve<Tag[]> {
+  constructor(private model: ModelService) { }
+
+  async resolve(route: ActivatedRouteSnapshot): Promise<Tag[]> {
+    const tagname: string = route.params['tagname'];
+    return await this.model.findTagsByTags([{ tagname }]);
   }
 }

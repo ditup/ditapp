@@ -69,6 +69,8 @@ import { PeopleWithMyTagsComponent } from './people/people-with-my-tags/people-w
 import { PeopleNewComponent } from './people/people-new/people-new.component';
 import { PeopleRandomComponent } from './people/people-random/people-random.component';
 import { UserListWithTagsComponent } from './shared/user-list-with-tags/user-list-with-tags.component';
+import { TagRelatedTagsComponent } from './tag/tag-related-tags/tag-related-tags.component';
+import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-people.component';
 
 @NgModule({
   declarations: [
@@ -129,7 +131,9 @@ import { UserListWithTagsComponent } from './shared/user-list-with-tags/user-lis
     PeopleWithMyTagsComponent,
     PeopleNewComponent,
     PeopleRandomComponent,
-    UserListWithTagsComponent
+    UserListWithTagsComponent,
+    TagRelatedTagsComponent,
+    TagRelatedPeopleComponent
   ],
   imports: [
     BrowserModule,

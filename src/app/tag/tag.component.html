@@ -1,46 +1,41 @@
 <app-fof *ngIf="!tag" [message]="'tag not found'"></app-fof>
 
-<md-card *ngIf="tag">
-  <md-card-title><md-icon alt="tag">label</md-icon> {{tag.tagname}}</md-card-title>
+<div *ngIf="tag">
+  <h1><md-icon alt="tag">label</md-icon> <span class="tagname-title">{{tag.tagname}}</span></h1>
 
-  <md-card-content>
-    <md-tab-group>
+  <nav md-tab-nav-bar>
+    <a md-tab-link
+      [routerLink]="'/tag/' + tag.tagname"
+      routerLinkActive #myTagsLink="routerLinkActive"
+      [routerLinkActiveOptions]="{exact: true}"
+      [active]="myTagsLink.isActive">
+      tags
+    </a>
 
-      <md-tab label="Related Tags">
-        TODO
-        <md-icon alt="tag">label</md-icon>
-      </md-tab>
+    <a md-tab-link
+      [routerLink]="'/tag/' + tag.tagname + '/people'"
+      routerLinkActive #tagsLink="routerLinkActive"
+      [routerLinkActiveOptions]="{exact: true}"
+      [active]="tagsLink.isActive">
+      people
+    </a>
 
-      <md-tab>
-        <ng-template md-tab-label>
-          <md-icon alt="people">person</md-icon>
-        </ng-template>
-      </md-tab>
+    <!--a md-tab-link
+      routerLink="/people/new"
+      routerLinkActive #newLink="routerLinkActive"
+      [routerLinkActiveOptions]="{exact: true}"
+      [active]="newLink.isActive">
+      new
+    </a>
 
-      <!--md-tab>
-        <template md-tab-label>
-          <md-icon alt="ideas">lightbulb_outline</md-icon>
-        </template>
-      </md-tab>
+    <a md-tab-link
+      routerLink="/people/random"
+      routerLinkActive #randomLink="routerLinkActive"
+      [routerLinkActiveOptions]="{exact: true}"
+      [active]="randomLink.isActive">
+      random
+    </tesa-->
+  </nav>
 
-      <md-tab>
-        <template md-tab-label>
-          <md-icon alt="challenges">extension</md-icon>
-        </template>
-      </md-tab>
-
-      <md-tab>
-        <template md-tab-label>
-          <md-icon alt="projects">build</md-icon>
-        </template>
-      </md-tab>
-
-      <md-tab>
-        <template md-tab-label>
-          <md-icon alt="discussions">forum</md-icon>
-        </template>
-      </md-tab-->
-
-    </md-tab-group>
-  </md-card-content>
-</md-card>
+  <router-outlet></router-outlet>
+</div>
