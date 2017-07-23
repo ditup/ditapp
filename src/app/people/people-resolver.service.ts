@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { ModelService } from '../model.service';
 import { User } from '../shared/types';
 
@@ -20,5 +20,15 @@ export class NewPeopleResolver implements Resolve<User[]> {
 
   async resolve(): Promise<User[]> {
     return await this.model.findNewUsers();
+  }
+}
+
+@Injectable()
+export class PeopleWithTagResolver implements Resolve<User[]> {
+  constructor(private model: ModelService) { }
+
+  async resolve(route: ActivatedRouteSnapshot): Promise<User[]> {
+    const tagname: string = route.parent.params['tagname'];
+    return await this.model.findUsersByTags([{ tagname }]);
   }
 }

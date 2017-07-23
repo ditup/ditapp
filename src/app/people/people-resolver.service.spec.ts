@@ -1,10 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject, fakeAsync } from '@angular/core/testing';
 
-import { PeopleWithMyTagsResolver, NewPeopleResolver } from './people-resolver.service';
+import * as _ from 'lodash';
+
+import { PeopleWithMyTagsResolver, NewPeopleResolver, PeopleWithTagResolver } from './people-resolver.service';
 
 import { ModelService } from '../model.service';
 
-import { User } from '../shared/types';
+import { User, Tag } from '../shared/types';
 
 class ModelStubService {
   public async findUsersByMyTags(): Promise<User[]> {
@@ -24,6 +26,25 @@ class ModelStubService {
       { username: 'user3' },
       { username: 'user4' }
     ];
+  }
+
+  public async findUsersByTags(tags: Tag[]) {
+    const users = [
+      { username: 'user0', userTags: [{ tag: { tagname: 'tag1' } }] },
+      { username: 'user1', userTags: [{ tag: { tagname: 'tag1' } }] },
+      { username: 'user2', userTags: [] },
+      { username: 'user3', userTags: [{ tag: { tagname: 'tag1' } }] },
+      { username: 'user4', userTags: [] }
+    ];
+
+    const tagnamesIn = tags.map(tag => tag.tagname);
+
+    return users.filter(user => {
+      const userTagnames = user.userTags.map(userTag => userTag.tag.tagname);
+
+      // there are some common tags
+      return _.intersection(userTagnames, tagnamesIn).length > 0;
+    });
   }
 }
 
@@ -69,25 +90,26 @@ describe('NewPeopleResolver', () => {
   }));
 });
 
-/*
-describe('RandomTagsResolver', () => {
+describe('PeopleWithTagResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        RandomTagsResolver,
+        PeopleWithTagResolver,
         { provide: ModelService, useClass: ModelStubService }
       ],
     });
   });
 
-  it('should be created', inject([RandomTagsResolver], (service: RandomTagsResolver) => {
+  it('should be created', inject([PeopleWithTagResolver], (service: PeopleWithTagResolver) => {
     expect(service).toBeTruthy();
   }));
 
-  it('should resolve with some tags', inject([RandomTagsResolver], async (service: RandomTagsResolver) => {
-    const tags = await service.resolve();
+  it('should resolve with found users', inject([PeopleWithTagResolver], fakeAsync(async (service: PeopleWithTagResolver) => {
+    const routeSnapshotStub: any = {
+      parent: { params: { tagname: 'tag1' } }
+    };
+    const users = await service.resolve(routeSnapshotStub);
 
-    expect(tags.length).toEqual(1);
-  }));
+    expect(users.length).toEqual(3);
+  })));
 });
-*/

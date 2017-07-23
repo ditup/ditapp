@@ -61,7 +61,7 @@ import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
 import { TagsRelatedToMyTagsResolver, RandomTagsResolver, TagsRelatedToTagResolver } from './tags/tags-resolver.service';
-import { PeopleWithMyTagsResolver, NewPeopleResolver } from './people/people-resolver.service';
+import { PeopleWithMyTagsResolver, NewPeopleResolver, PeopleWithTagResolver } from './people/people-resolver.service';
 
 // services
 import { AuthService } from './auth.service';
@@ -155,10 +155,9 @@ const routes: Routes = [
       {
         path: 'people',
         component: TagRelatedPeopleComponent,
-        /*
         resolve: {
-          people: TagRelatedPeopleResolver
-        }*/
+          users: PeopleWithTagResolver
+        }
       }
     ]
   },
@@ -287,6 +286,7 @@ const routes: Routes = [
     TagsRelatedToTagResolver,
     RandomTagsResolver,
     PeopleWithMyTagsResolver,
+    PeopleWithTagResolver,
     NewPeopleResolver,
     AuthService,
     BasicAuthService,

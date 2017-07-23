@@ -54,30 +54,3 @@ describe('TagRelatedTagsComponent', () => {
     expect(tagList.componentInstance.tags.length).toEqual(4);
   });
 });
-
-/*
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-
-import { TagsRelatedToMyTagsComponent } from './tags-related-to-my-tags.component';
-
-
-@Component({ selector: 'app-tag-list', template: '' })
-class TagListStubComponent {
-  @Input() tags = [];
-}
-
-
-describe('TagsRelatedToMyTagsComponent', () => {
-  let component: TagsRelatedToMyTagsComponent;
-  let fixture: ComponentFixture<TagsRelatedToMyTagsComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TagsRelatedToMyTagsComponent, TagListStubComponent ],
-    })
-    .compileComponents();
-  }));
-
-});
-*/
