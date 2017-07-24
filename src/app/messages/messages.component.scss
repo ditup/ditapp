@@ -46,6 +46,8 @@ a {
   }
 
   width: 128px;
+  overflow: hidden;
+  white-space: nowrap;
   flex: none;
   -webkit-flex: none;
 }
