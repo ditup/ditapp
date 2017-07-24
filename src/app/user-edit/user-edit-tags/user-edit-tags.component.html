@@ -28,7 +28,10 @@
   <div *ngFor="let relevance of [5,4,3,2,1]"
     class="tag-relevance-container"
     [ngClass]="'tag-relevance-container-' + relevance"
-    dnd-droppable (onDropSuccess)="dropTagToRelevance($event, relevance)">
+    dnd-droppable (onDropSuccess)="dropTagToRelevance($event, relevance)"
+    (onDragEnter)="preventDefault($event)"
+    (onDragOver)="preventDefault($event)"
+    (onDragLeave)="preventDefault($event)">
     <md-chip-list>
       <md-chip *ngFor="let tag of tagLists[relevance]"
         [disabled]="tag.disabled"

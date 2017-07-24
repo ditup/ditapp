@@ -5,6 +5,8 @@ import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
 
 import * as _ from 'lodash';
 
+import { polyfill } from 'mobile-drag-drop';
+
 import { TagStoryFormComponent } from './tag-story-form/tag-story-form.component';
 
 import { ModelService } from '../../model.service';
@@ -32,7 +34,9 @@ export class UserEditTagsComponent implements OnInit {
   constructor(private model: ModelService,
               private snackBar: MdSnackBar,
               private route: ActivatedRoute,
-              private dialog: MdDialog) { }
+              private dialog: MdDialog) {
+                polyfill({});
+              }
 
   ngOnInit() {
     this.route.parent.data.subscribe(async ({ user }: { user: User }) => {
@@ -48,6 +52,12 @@ export class UserEditTagsComponent implements OnInit {
       }
 
     });
+  }
+
+  // prevent default events to make drag & drop work on touch devices with `mobile-drag-drop` library
+  public preventDefault(event) {
+    event.mouseEvent.preventDefault();
+    return false;
   }
 
   // this function opens a dialog to update user-tag story
