@@ -1,11 +1,56 @@
 @import "../shared/styles/colors";
+
+$height: 64px;
+
+/*  */
+@media (max-width: 384px) {
+  .header-navigation {
+    &>a {
+      flex: 1 1 0;
+    }
+  }
+
+  .fill-remaining-space {
+    display: none;
+  }
+}
+
+@media (min-width: 385px) {
+  .header-navigation {
+    &>a {
+      min-width: $height;
+    }
+  }
+}
+
+@media (max-width: 512px) {
+  .user-name {
+    display: none;
+  }
+
+  .user {
+    padding: 0 0;
+  }
+}
+
+@media (min-width: 513px) {
+  .user {
+    padding: 0 20px;
+  }
+}
+
 .app-header {
   background-color: $darker;
   color: $light;
+  height: $height;
 }
 
 .fill-remaining-space {
   flex: 1 1 auto;
+}
+
+.user-name {
+  padding-left: 5px;
 }
 
 .user-avatar {
@@ -13,8 +58,6 @@
   width: 24px;
   border-radius: 12px;
   overflow: hidden;
-  display: inline-block;
-  position: relative;
 }
 
 .ditup-logo {
@@ -22,8 +65,17 @@
   width: 36px;
 }
 
-.main-navigation {
-  [md-button] {
-    width: 36px;
+.header-navigation {
+  height: $height;
+  display: flex;
+  width: 100%;
+  &>a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover {
+      background-color: $accent;
+    }
   }
 }

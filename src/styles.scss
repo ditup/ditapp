@@ -11,6 +11,12 @@
 @import 'app/shared/styles/fonts';
 @import 'app/shared/styles/colors';
 
+@media (max-width: 320px) {
+  html, body {
+    width: 320px;
+  }
+}
+
 html, body {
   height: 100%;
   min-height: 100%;

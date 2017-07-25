@@ -1,93 +1,87 @@
-<md-toolbar *ngIf="display" class="app-header">
-  <nav class="main-navigation">
-    <a md-button routerLink="/"><img class="ditup-logo" src="/static/img/logo-white.png" alt="logo of ditup"></a>
+<nav *ngIf="display" class="app-header header-navigation">
+  <a routerLink="/"><img class="ditup-logo" src="/static/img/logo-white.png" alt="logo of ditup"></a>
 
-    <button md-button [mdMenuTriggerFor]="newMenu"
-      *ngIf="logged">
-      <md-icon alt="create">add</md-icon>
-    </button>
+  <a [mdMenuTriggerFor]="newMenu"
+    *ngIf="logged">
+    <md-icon alt="create">add</md-icon>
+  </a>
 
-    <md-menu #newMenu="mdMenu">
-      <a md-menu-item *ngIf="logged" disabled routerLink="/challenges/new">
-        <md-icon alt="challenge">extension</md-icon>
-        Challenge
-      </a>
-      <a md-menu-item *ngIf="logged" disabled routerLink="/ideas/new">
-        <md-icon alt="idea">lightbulb_outline</md-icon>
-        Idea
-      </a>
-      <a md-menu-item *ngIf="logged" disabled routerLink="/projects/new">
-        <md-icon alt="project">build</md-icon>
-        Project
-      </a>
-      <a md-menu-item *ngIf="logged" disabled routerLink="/discussions/new">
-        <md-icon alt="discussion">forum</md-icon>
-        Discussion
-      </a>
-    </md-menu>
-
-    <button md-button [mdMenuTriggerFor]="exploreMenu">
-      <md-icon alt="explore">search</md-icon>
-    </button>
-
-    <md-menu #exploreMenu="mdMenu">
-      <a md-menu-item *ngIf="logged" routerLink="/people">
-        <md-icon alt="people">person</md-icon>
-        People
-      </a>
-      <a md-menu-item routerLink="/tags">
-        <md-icon alt="tag">label</md-icon>
-        Tags
-      </a>
-      <a md-menu-item disabled routerLink="/challenges">
-        <md-icon alt="challenge">extension</md-icon>
-        Challenges
-      </a>
-      <a md-menu-item disabled routerLink="/ideas">
-        <md-icon alt="idea">lightbulb_outline</md-icon>
-        Ideas
-      </a>
-      <a md-menu-item disabled routerLink="/projects">
-        <md-icon alt="project">build</md-icon>
-        Projects
-      </a>
-      <a md-menu-item disabled routerLink="/discussions">
-        <md-icon alt="discussion">forum</md-icon>
-        Discussions
-      </a>
-    </md-menu>
-
-    <a md-button
-      routerLink="/map"
-      *ngIf="logged">
-      <md-icon alt="map">place</md-icon>
+  <md-menu #newMenu="mdMenu" [overlapTrigger]="false">
+    <a md-menu-item *ngIf="logged" disabled routerLink="/challenges/new">
+      <md-icon alt="challenge">extension</md-icon>
+      Challenge
     </a>
-  </nav>
+    <a md-menu-item *ngIf="logged" disabled routerLink="/ideas/new">
+      <md-icon alt="idea">lightbulb_outline</md-icon>
+      Idea
+    </a>
+    <a md-menu-item *ngIf="logged" disabled routerLink="/projects/new">
+      <md-icon alt="project">build</md-icon>
+      Project
+    </a>
+    <a md-menu-item *ngIf="logged" disabled routerLink="/discussions/new">
+      <md-icon alt="discussion">forum</md-icon>
+      Discussion
+    </a>
+  </md-menu>
+
+  <a [mdMenuTriggerFor]="exploreMenu">
+    <md-icon alt="explore">search</md-icon>
+  </a>
+
+  <md-menu #exploreMenu="mdMenu" [overlapTrigger]="false">
+    <a md-menu-item *ngIf="logged" routerLink="/people">
+      <md-icon alt="people">person</md-icon>
+      People
+    </a>
+    <a md-menu-item routerLink="/tags">
+      <md-icon alt="tag">label</md-icon>
+      Tags
+    </a>
+    <a md-menu-item disabled routerLink="/challenges">
+      <md-icon alt="challenge">extension</md-icon>
+      Challenges
+    </a>
+    <a md-menu-item disabled routerLink="/ideas">
+      <md-icon alt="idea">lightbulb_outline</md-icon>
+      Ideas
+    </a>
+    <a md-menu-item disabled routerLink="/projects">
+      <md-icon alt="project">build</md-icon>
+      Projects
+    </a>
+    <a md-menu-item disabled routerLink="/discussions">
+      <md-icon alt="discussion">forum</md-icon>
+      Discussions
+    </a>
+  </md-menu>
+
+  <a routerLink="/map"
+    *ngIf="logged">
+    <md-icon alt="map">place</md-icon>
+  </a>
 
   <span class="fill-remaining-space"></span>
 
-  <nav class="user-navigation">
-    <a md-button
-      routerLink="/messages"
-      *ngIf="logged">
-      <md-icon alt="messages">mail_outline</md-icon>
-      <span *ngIf="messageCount && messageCount > 0">({{messageCount}})</span>
-    </a>
+  <a routerLink="/messages"
+    *ngIf="logged">
+    <md-icon alt="messages">mail_outline</md-icon>
+    <span *ngIf="messageCount && messageCount > 0">{{messageCount}}</span>
+  </a>
 
-    <button md-button [mdMenuTriggerFor]="userMenu"
-      *ngIf="logged||loggedUnverified">
-      <app-avatar [username]="username" class="user-avatar"></app-avatar>
-      {{username}}
-    </button>
+  <a [mdMenuTriggerFor]="userMenu" class="user"
+    *ngIf="logged||loggedUnverified">
+    <app-avatar [username]="username" class="user-avatar"></app-avatar>
+    <span class="user-name">{{username}}</span>
+  </a>
 
-    <md-menu #userMenu="mdMenu">
-      <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
-      <a md-menu-item *ngIf="logged" routerLink="/profile/edit">Edit Profile</a>
-      <a md-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
-      <a md-menu-item routerLink="/account">Account</a>
-      <a md-menu-item routerLink="/" (click)="logout()">Logout</a>
-    </md-menu>
-    <a md-button *ngIf="!(logged||loggedUnverified)" routerLink="/login">Login</a>
-    <a md-button *ngIf="!(logged||loggedUnverified)" routerLink="/signup">Signup</a>
-  </nav>
-</md-toolbar>
+  <md-menu #userMenu="mdMenu" xPosition="before" [overlapTrigger]="false">
+    <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
+    <a md-menu-item *ngIf="logged" routerLink="/profile/edit">Edit Profile</a>
+    <a md-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
+    <a md-menu-item routerLink="/account">Account</a>
+    <a md-menu-item routerLink="/" (click)="logout()">Logout</a>
+  </md-menu>
+  <a *ngIf="!(logged||loggedUnverified)" routerLink="/login" class="user">Login</a>
+  <a *ngIf="!(logged||loggedUnverified)" routerLink="/signup" class="user">Signup</a>
+</nav>
