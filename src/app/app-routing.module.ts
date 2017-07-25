@@ -51,11 +51,10 @@ import { ManageContactComponent } from './contact/manage-contact/manage-contact.
 
 // importing guards and their dependencies
 import { AuthGuard } from './auth-guard.service';
-import { AuthMeGuard } from './auth-me-guard.service';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
 
 // resolvers
-import { UserResolver } from './user/user-resolver.service';
+import { UserResolver, LoggedUserResolver } from './user/user-resolver.service';
 import { TagResolver } from './tag/tag-resolver.service';
 import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
@@ -108,12 +107,12 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'user/:username/edit',
+    path: 'profile/edit',
     component: UserEditComponent,
-    canActivate: [AuthGuard, AuthMeGuard],
+    canActivate: [AuthGuard],
     canDeactivate: [CanDeactivateGuard],
     resolve: {
-      user: UserResolver
+      user: LoggedUserResolver
     },
     children: [
       {
@@ -275,9 +274,9 @@ const routes: Routes = [
   exports: [ RouterModule ],
   providers: [
     AuthGuard,
-    AuthMeGuard,
     CanDeactivateGuard,
     UserResolver,
+    LoggedUserResolver,
     ContactResolver,
     ThreadsResolver,
     MessagesResolver,

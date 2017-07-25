@@ -1,12 +1,12 @@
 <div class="container">
 
   <h1>
-    Edit Profile of <a routerLink="/user/{{user.username}}">{{user.username}}</a>
+    Edit <a routerLink="/user/{{user.username}}">your</a> profile
   </h1>
 
   <nav md-tab-nav-bar>
     <a md-tab-link
-      routerLink="/user/{{user.username}}/edit"
+      routerLink="/profile/edit"
       routerLinkActive #profileLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
       [active]="profileLink.isActive">
@@ -14,7 +14,7 @@
     </a>
 
     <a md-tab-link
-      routerLink="/user/{{user.username}}/edit/tags"
+      routerLink="/profile/edit/tags"
       routerLinkActive #tagsLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
       [active]="tagsLink.isActive">
@@ -22,7 +22,7 @@
     </a>
 
     <a md-tab-link
-      routerLink="/user/{{user.username}}/edit/location"
+      routerLink="/profile/edit/location"
       routerLinkActive #locationLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
       [active]="locationLink.isActive">

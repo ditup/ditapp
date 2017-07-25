@@ -13,7 +13,7 @@
 
     <nav class="user-links-container">
       <!-- edit profile -->
-      <a *ngIf="isMe === true" routerLink="/user/{{username}}/edit">Edit Profile</a>
+      <a *ngIf="isMe === true" routerLink="/profile/edit">Edit Profile</a>
       <!-- messages -->
       <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
 
