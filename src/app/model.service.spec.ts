@@ -1,5 +1,7 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
 import { FakeBackend } from 'ngx-http-test';
 
 import { ModelService } from './model.service';
@@ -13,25 +15,36 @@ class AuthStubService {
     username: 'test',
     password: 'password'
   };
+
+  get username () {
+    return this.credentials.username;
+  }
 }
 
 describe('ModelService', () => {
+  const baseUrl = 'https://dev.ditup.org/api';
   let service,
-      backend;
+      backend,
+      httpMock;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
       providers: [
         ModelService,
         { provide: AuthService, useClass: AuthStubService },
-        FakeBackend.getProviders()
+        FakeBackend.getProviders(),
       ]
     });
   });
 
-  beforeEach(inject([ModelService, FakeBackend], (_service: ModelService, _backend: FakeBackend) => {
+  beforeEach(inject([ModelService, FakeBackend, HttpTestingController],
+                    (_service: ModelService, _backend: FakeBackend, _httpMock: HttpTestingController) => {
     service = _service;
     backend = _backend;
+    httpMock = _httpMock;
   }));
 
   it('tests should be setup', () => {
@@ -51,7 +64,6 @@ describe('ModelService', () => {
         }
       }).respond({});
       const response = await service.verifyEmail('test-user', 'verificationCode');
-      console.log(response);
       expect(response).toEqual('some-email');
     }));
 
@@ -69,7 +81,6 @@ describe('ModelService', () => {
         ]
       });
       const response = await service.findTagsByMyTags();
-      console.log(response);
       expect(response.length).toEqual(4);
     }));
 
@@ -91,7 +102,6 @@ describe('ModelService', () => {
         { tagname: 'tag1' },
         { tagname: 'tag2' }
       ] as Tag[]);
-      console.log(response);
       expect(response.length).toEqual(4);
     }));
 
@@ -105,7 +115,6 @@ describe('ModelService', () => {
         ]
       });
       const response = await service.findRandomTags();
-      console.log(response);
       expect(response.length).toEqual(1);
     }));
   });
@@ -122,9 +131,29 @@ describe('ModelService', () => {
         ]
       });
       const response = await service.findNewUsers();
-      console.log(response);
       expect(response.length).toEqual(5);
     }));
+  });
+
+  describe('changePassword()', () => {
+    it('should make a correct request', async(async () => {
+      const changePasswordPromise = service.changePassword('pwd', 'pwd2');
+
+      const req = httpMock.expectOne(`${baseUrl}/account`);
+
+      expect(req.request.method).toEqual('PATCH');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization'));
+
+      req.flush(null);
+      await changePasswordPromise;
+    }));
+  });
+
+
+  // verify that there are no outstanding requests remaining
+  afterEach(() => {
+    httpMock.verify();
   });
 
 });

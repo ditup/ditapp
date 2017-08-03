@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LatLng } from 'leaflet';
 
@@ -25,7 +26,7 @@ export class ModelService {
     'Content-Type': 'application/vnd.api+json',
   };
 
-  constructor(private http: Http, private auth: AuthService) { }
+  constructor(private http: Http, private httpc: HttpClient, private auth: AuthService) { }
 
   createUser({ username, email, password }: User): Promise<void> {
     const requestBody = {
@@ -55,6 +56,15 @@ export class ModelService {
 
   private get loggedHeaders() {
     return new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+  }
+
+  // the logged headers as expected by HttpClient
+  private get loggedHttpHeaders() {
+
+    const [auth] = Object.entries(this.authHeader);
+    const [contentType] = Object.entries(this.contentTypeHeader);
+
+    return new HttpHeaders().append(auth[0], auth[1]).append(contentType[0], contentType[1]);
   }
 
   /**
@@ -694,11 +704,11 @@ export class ModelService {
     return;
   }
 
-  public async changePassword(username: string, oldPassword: string, newPassword: string): Promise<void> {
+  public async changePassword(oldPassword: string, newPassword: string): Promise<void> {
     const requestBody = {
       data: {
         type: 'users',
-        id: username,
+        id: this.auth.username,
         attributes: {
           oldPassword,
           password: newPassword
@@ -706,8 +716,10 @@ export class ModelService {
       }
     };
 
-    await this.http
-      .patch(`${this.baseUrl}/users/${username}/account`, JSON.stringify(requestBody), { headers: this.loggedHeaders }).toPromise();
+    console.log(requestBody);
+
+    await this.httpc
+      .patch(`${this.baseUrl}/account`, JSON.stringify(requestBody), { headers: this.loggedHttpHeaders }).toPromise();
 
     return;
   }

@@ -54,7 +54,7 @@ export class AccountComponent implements OnInit {
     const newPassword = this.changePasswordForm.value['newPassword'];
 
     try {
-      await this.model.changePassword(this.auth.username, oldPassword, newPassword);
+      await this.model.changePassword(oldPassword, newPassword);
       // update the auth password
       this.auth.login({ method: 'basic', credentials: { username: this.auth.username, password: newPassword, email: this.auth.email } });
 
