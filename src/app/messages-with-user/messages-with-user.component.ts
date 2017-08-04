@@ -26,16 +26,20 @@ export class MessagesWithUserComponent implements OnInit {
   ngOnInit() {
     // observe the username parameter
     this.route.data.subscribe(async ({ messages, otherUser }: { messages: Message[], otherUser: User }) => {
-      this.messages = messages.reverse();
+
+      // reverse mutates the original array
+      // but we want to keep the original to find the newest unread message
+      // therefore we use slice to clone the array
+      this.messages = messages.slice().reverse();
 
       this.otherUserExists = true;
 
       this.otherUser = otherUser;
 
       // now mark the messages as read if applicable
-      if (this.messages.length > 0) {
+      if (messages.length > 0) {
         // find the last message i received
-        const lastUnreadMsg = find(this.messages, (msg: Message) => {
+        const lastUnreadMsg = find(messages, (msg: Message) => {
           return msg.from.username === this.otherUser.username && !msg.read;
         });
 
