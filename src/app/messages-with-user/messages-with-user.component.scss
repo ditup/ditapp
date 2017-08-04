@@ -1,5 +1,29 @@
+@import '../shared/styles/colors';
+
 .message {
+
   &.unread {
     font-weight: bold;
   }
+
+  border: 2px solid $darker;
+  border-radius: 0.7em;
+  padding: 5px;
+  margin: 5px;
+
+  &.sent {
+    border-color: $accent;
+    text-align: right;
+  }
+
+  .message-created {
+    font-size: smaller;
+    color: gray;
+  }
+}
+
+app-avatar {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
 }

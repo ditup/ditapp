@@ -2,12 +2,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
 
+import { MomentModule } from 'angular2-moment';
+
 import { MessagesWithUserComponent } from './messages-with-user.component';
 
 import { FofComponent } from '../fof/fof.component';
 
 import { Component, Input } from '@angular/core';
-import { MaterialModule } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
@@ -18,6 +19,11 @@ import { Message, User } from '../shared/types';
 @Component({ selector: 'app-message-form', template: '' })
 class MessageFormStubComponent {
   @Input() receiver;
+}
+
+@Component({ selector: 'app-avatar', template: '' })
+class AvatarStubComponent {
+  @Input() username;
 }
 
 class ActivatedRouteStub {
@@ -99,10 +105,11 @@ describe('MessagesWithUserComponent', () => {
       declarations: [
         MessagesWithUserComponent,
         MessageFormStubComponent,
+        AvatarStubComponent,
         FofComponent
       ],
       imports: [
-        MaterialModule
+        MomentModule
       ],
       providers: [
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
@@ -126,6 +133,11 @@ describe('MessagesWithUserComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have a title "Conversation with <user>"', () => {
+    const title = fixture.debugElement.query(By.css('h1'));
+    expect(title.nativeElement.innerHTML).toMatch(/^Conversation with .* other-user$/);
   });
 
   it('should show 6 messages', () => {
