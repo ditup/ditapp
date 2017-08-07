@@ -5,13 +5,12 @@
   placeholder="Add Tag"></app-tag-autocomplete>
 
 <section>
-  <span *ngIf="tags===undefined">Loading tags ...</span>
-
   <!-- a container for newly added tags -->
   <!-- it is possible to drag them and drop to the relevance containers -->
   <div class="tag-relevance-container tag-relevance-container-initial">
     <md-chip-list>
       <md-chip *ngFor="let tag of tagLists[0]"
+        ngClass="user-tag"
         [disabled]="tag.disabled"
         (click)="openTagStoryDialog(tag)"
         dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, data: tag }">
@@ -35,7 +34,7 @@
     <md-chip-list>
       <md-chip *ngFor="let tag of tagLists[relevance]"
         [disabled]="tag.disabled"
-        [ngClass]="'tag-relevance-' + relevance"
+        [ngClass]="['tag-relevance-' + relevance, 'user-tag']"
         (click)="openTagStoryDialog(tag)"
         dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, data: tag }">
         {{tag.tagname}}

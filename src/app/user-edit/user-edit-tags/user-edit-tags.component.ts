@@ -39,18 +39,17 @@ export class UserEditTagsComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.route.parent.data.subscribe(async ({ user }: { user: User }) => {
+    this.route.parent.data.subscribe(({ user }: { user: User }) => {
       this.user = user;
+    });
 
-      const tags = await this.model.readUserTags(user.username);
-
-      this.tags = tags;
+    this.route.data.subscribe(({ userTags }: { userTags: UserTag[] }) => {
+      this.tags = userTags;
 
       // sort tags into their tagList by relevance
-      for (const tag of tags) {
+      for (const tag of this.tags) {
         this.tagLists[tag.relevance].push(tag);
       }
-
     });
   }
 
