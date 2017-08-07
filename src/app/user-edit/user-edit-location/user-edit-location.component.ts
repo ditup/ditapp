@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { User } from '../../shared/types';
 import { ModelService } from '../../model.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 @Component({
   selector: 'app-user-edit-location',
@@ -16,7 +17,7 @@ export class UserEditLocationComponent implements OnInit {
 
   public isSelectLocationDisabled = false;
 
-  constructor(private route: ActivatedRoute, private model: ModelService) { }
+  constructor(private route: ActivatedRoute, private model: ModelService, private notify: NotificationsService) { }
 
   ngOnInit() {
     this.route.parent.data.subscribe(({ user }: { user: User }) => {
@@ -32,6 +33,8 @@ export class UserEditLocationComponent implements OnInit {
     this.user.location = updatedUser.location;
 
     this.isSelectLocationDisabled = false;
+
+    this.notify.info('Your location was updated.');
   }
 
 }
