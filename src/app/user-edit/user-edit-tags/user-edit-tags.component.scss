@@ -1,4 +1,5 @@
 @import '../../shared/styles/colors';
+@import '../../shared/styles/tag-relevance';
 
 $tag-remove-size: 2em;
 
@@ -35,22 +36,9 @@ md-chip {
   // background-color: mix($accent, white, 60%);
 }
 
-.tag-relevance-container-5 {
-  background-color: $darker;
-}
-
-.tag-relevance-container-4 {
-  background-color: mix($darker, white, 80%);
-}
-
-.tag-relevance-container-3 {
-  background-color: mix($darker, white, 60%);
-}
-
-.tag-relevance-container-2 {
-  background-color: mix($darker, white, 40%);
-}
-
-.tag-relevance-container-1 {
-  background-color: mix($darker, white, 20%);
+// coloring of the containers for tags
+@for $i from 1 through 5 {
+  .tag-relevance-container-#{$i} {
+    border-left: 1em solid nth($tag-colors, $i);
+  }
 }

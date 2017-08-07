@@ -35,6 +35,7 @@
     <md-chip-list>
       <md-chip *ngFor="let tag of tagLists[relevance]"
         [disabled]="tag.disabled"
+        [ngClass]="'tag-relevance-' + relevance"
         (click)="openTagStoryDialog(tag)"
         dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, data: tag }">
         {{tag.tagname}}

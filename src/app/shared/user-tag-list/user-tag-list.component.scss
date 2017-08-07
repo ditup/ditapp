@@ -1,20 +1,2 @@
-// TODO make it nicer, not repetitive
-.relevance-1 {
-  background-color: #caf;
-}
-
-.relevance-2 {
-  background-color: #a8d;
-}
-
-.relevance-3 {
-  background-color: #86b;
-}
-
-.relevance-4 {
-  background-color: #649;
-}
-
-.relevance-5 {
-  background-color: #427;
-}
+// contains classes tag-relevance-{1-5}
+@import '../styles/tag-relevance';

@@ -1,0 +1,13 @@
+// styling colors of tags. the color should indicate the tag relevance.
+// we have a list of colors $tag-colors and classes .tag-relevance-{1-5} to use
+@import './colors';
+
+$main-tag-color: $darker;
+
+$tag-colors: mix($main-tag-color, white, 20%) mix($main-tag-color, white, 40%) mix($main-tag-color, white, 60%) mix($main-tag-color, white, 80%) $main-tag-color;
+
+@for $i from 1 through 5 {
+  .tag-relevance-#{$i} {
+    background-color: nth($tag-colors, $i);
+  }
+}
