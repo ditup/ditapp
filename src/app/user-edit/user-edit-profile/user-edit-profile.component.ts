@@ -6,6 +6,7 @@ import { pick, isEqual } from 'lodash';
 
 import { ModelService } from '../../model.service';
 import { DialogService } from '../../dialog.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 import { User } from '../../shared/types';
 
 @Component({
@@ -44,7 +45,8 @@ export class UserEditProfileComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private model: ModelService,
               private route: ActivatedRoute,
-              private dialog: DialogService) { }
+              private dialog: DialogService,
+              private notify: NotificationsService) { }
 
   async ngOnInit(): Promise<void> {
     this.route.parent.data
@@ -85,6 +87,8 @@ export class UserEditProfileComponent implements OnInit {
     await this.profileForm.setValue(pick(this.user, this.profileFields));
     // enable the form again
     this.isFormDisabled = false;
+
+    this.notify.info('Your profile was updated.');
   }
 
   private generateErrors(): void {
