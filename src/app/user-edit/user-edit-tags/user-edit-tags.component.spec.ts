@@ -32,11 +32,11 @@ class ActivatedRouteStub {
   };
 
   private userTags: UserTag[] = [
-    { user: this.user, tag: { tagname: 'tag' }, story: '', relevance: 5 },
-    { user: this.user, tag: { tagname: 'tag' }, story: '', relevance: 4 },
-    { user: this.user, tag: { tagname: 'tag' }, story: '', relevance: 3 },
-    { user: this.user, tag: { tagname: 'tag' }, story: '', relevance: 2 },
-    { user: this.user, tag: { tagname: 'tag' }, story: '', relevance: 1 }
+    { user: this.user, tag: { tagname: 'tag0' }, story: '', relevance: 5 },
+    { user: this.user, tag: { tagname: 'tag1' }, story: '', relevance: 4 },
+    { user: this.user, tag: { tagname: 'tag2' }, story: '', relevance: 3 },
+    { user: this.user, tag: { tagname: 'tag3' }, story: '', relevance: 2 },
+    { user: this.user, tag: { tagname: 'tag4' }, story: '', relevance: 1 }
   ];
 
   data = Observable.of({ userTags: this.userTags });
@@ -78,5 +78,6 @@ describe('UserEditTagsComponent', () => {
   it('should display a list of user\'s tags', () => {
     const userTags = fixture.debugElement.queryAll(By.css('.user-tag'));
     expect(userTags.length).toEqual(5);
+    expect(userTags[0].nativeElement.textContent).toMatch(/tag0/);
   });
 });

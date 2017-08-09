@@ -179,48 +179,17 @@ export class ModelService {
   /**
    * Get user-tags of a given user from API
    * @param {string} username: what user's tags we search
-   * @returns {Promise<UserTag>} array of formatted userTags
+   * @returns {Promise<UserTag[]>} array of formatted userTags
    */
-  readUserTags(username: string): Promise<any> {
-    const headers = new Headers(_.extend({}, this.authHeader, this.contentTypeHeader));
+  async readUserTags(username: string): Promise<UserTag[]> {
+    const response: any = await this.httpc
+      .get(`${this.baseUrl}/users/${username}/tags`, { headers: this.loggedHttpHeaders }).toPromise();
 
-    // send a request to the REST API
-    return this.http
-      .get(`${this.baseUrl}/users/${username}/tags`, { headers })
-      .toPromise()
-      .then((response: Response) => {
-        // response should contain an array of user-tags (data) and also an array
-        // of related tags (included)
-        const { data, included }: { data: any[], included: any[] } = response.json();
+    const { data, included }: { data: any[], included: any[] } = response;
 
-        // we map user-tags to a simpler structure
-        /* TODO improve?
-         *  {
-         *    tagname,
-         *    story,
-         *    tag: { // the included tag
-         *      tagname
-         *    }
-         *  }
-         */
-        const deserialized = _.map(data, (tag: { attributes: any, relationships: any }) => {
-          const tagDeserialized = tag.attributes;
-
-          // find the tag in included array
-          const tagname = tag.relationships.tag.data.id; // get tagname
-          // search the tagname in included[]
-          const includedTag = _.find(included, (element) => {
-            return element.type === 'tags' && element.id === tagname;
-          });
-
-          tagDeserialized.tag = includedTag.attributes;
-
-          return tagDeserialized;
-
-        });
-
-        return deserialized;
-      });
+    return data.map((rawUserTag) => {
+      return this.deserializeUserTag(rawUserTag, included);
+    });
   }
 
   async createTag({ tagname }: Tag): Promise<void> {
@@ -867,14 +836,30 @@ export class ModelService {
 
   private deserializeUser(userData: any): User {
     const attrs = ['givenName', 'familyName', 'description', 'location', 'preciseLocation', 'email'];
-    const rawUser = _.extend({ username: userData.id }, _.pick(userData.attributes, attrs));
-
-    const user = new User(rawUser);
+    const user: User = _.extend({ username: userData.id }, _.pick(userData.attributes, attrs));
 
     return user;
   }
 
   private deserializeTag(tagData: any): Tag {
     return { tagname: tagData.id };
+  }
+
+  private deserializeUserTag(rawUserTag: any, included: any[]): UserTag {
+    const [username, tagname] = rawUserTag.id.split('--');
+
+    const rawTag = included.find((inclusion) => {
+      return inclusion.type === 'tags' && inclusion.id === tagname;
+    });
+    const tag: Tag = this.deserializeTag(rawTag)
+
+    const rawUser = included.find((inclusion) => {
+      return inclusion.type === 'users' && inclusion.id === username;
+    });
+    const user: User = this.deserializeUser(rawUser);
+
+    const { story, relevance } = rawUserTag.attributes;
+
+    return { user, tag, story, relevance } as UserTag;
   }
 }

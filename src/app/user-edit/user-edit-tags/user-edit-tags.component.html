@@ -9,21 +9,21 @@
   <!-- it is possible to drag them and drop to the relevance containers -->
   <div class="tag-relevance-container tag-relevance-container-initial">
     <md-chip-list>
-      <md-chip *ngFor="let tag of tagLists[0]"
+      <md-chip *ngFor="let userTag of tagLists[0]"
         ngClass="user-tag"
-        [disabled]="tag.disabled"
-        (click)="openTagStoryDialog(tag)"
-        dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, data: tag }">
-        {{tag.tagname}}
-        <button (click)="removeTag(tag.tagname); $event.stopPropagation()">
+        [disabled]="userTag.disabled"
+        (click)="openTagStoryDialog(userTag)"
+        dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, data: userTag }">
+        {{userTag.tag.tagname}}
+        <button (click)="removeTag(userTag.tag.tagname); $event.stopPropagation()">
           <md-icon alt="remove">close</md-icon>
         </button>
       </md-chip>
     </md-chip-list>
   </div>
 
-  <!-- containers for tags by different relevance (1-5) -->
-  <!-- it is possible to drag and drop tags to change their relevance -->
+  <!-- containers for userTags by different relevance (1-5) -->
+  <!-- it is possible to drag and drop userTags to change their relevance -->
   <div *ngFor="let relevance of [5,4,3,2,1]"
     class="tag-relevance-container"
     [ngClass]="'tag-relevance-container-' + relevance"
@@ -32,13 +32,13 @@
     (onDragOver)="preventDefault($event)"
     (onDragLeave)="preventDefault($event)">
     <md-chip-list>
-      <md-chip *ngFor="let tag of tagLists[relevance]"
-        [disabled]="tag.disabled"
+      <md-chip *ngFor="let userTag of tagLists[relevance]"
+        [disabled]="userTag.disabled"
         [ngClass]="['tag-relevance-' + relevance, 'user-tag']"
-        (click)="openTagStoryDialog(tag)"
-        dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, data: tag }">
-        {{tag.tagname}}
-        <button (click)="removeTag(tag.tagname); $event.stopPropagation()">
+        (click)="openTagStoryDialog(userTag)"
+        dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, data: userTag }">
+        {{userTag.tag.tagname}}
+        <button (click)="removeTag(userTag.tag.tagname); $event.stopPropagation()">
           <md-icon alt="remove">close</md-icon>
         </button>
       </md-chip>

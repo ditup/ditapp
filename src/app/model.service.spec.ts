@@ -8,7 +8,7 @@ import { ModelService } from './model.service';
 
 import { AuthService } from './auth.service';
 
-import { Tag } from './shared/types';
+import { Tag, UserTag } from './shared/types';
 
 class AuthStubService {
   credentials = {
@@ -150,6 +150,70 @@ describe('ModelService', () => {
     }));
   });
 
+  describe('readUserTags()', () => {
+
+    it('should make a correct request', async(async () => {
+
+      const username = 'username';
+
+      // execute the function
+      const readUserTagsPromise = service.readUserTags(username);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/users/${username}/tags`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization'));
+
+      req.flush({
+        data: [],
+        included: []
+      });
+      await readUserTagsPromise;
+    }));
+
+    it('should return an array of UserTags', async(async () => {
+      const username = 'user';
+
+      const readUserTagsPromise = service.readUserTags(username);
+
+      const req = httpMock.expectOne(`${baseUrl}/users/${username}/tags`);
+
+      // send the response
+      req.flush({
+        data: [
+          {
+            type: 'user-tags',
+            id: `${username}--tag0`,
+            attributes: { story: 'story', relevance: 5 },
+            relationships: {
+              user: { data: { type: 'users', id: username } },
+              tag: { data: {type: 'tags', id: 'tag0' } }
+            }
+          },
+        ],
+        included: [
+          {
+            type: 'users',
+            id: username,
+            attributes: { givenName: '', familyName: '', username, description: '' }
+          },
+          { type: 'tags', id: 'tag0', attributes: { tagname: 'tag0' } }
+        ]
+      });
+
+      const userTags: UserTag[] = await readUserTagsPromise;
+
+      expect(userTags.length).toEqual(1);
+      expect(userTags[0]).toEqual(jasmine.objectContaining({
+        user: { username, givenName: '', familyName: '', description: '' },
+        tag: { tagname: 'tag0' },
+        story: 'story',
+        relevance: 5
+      }));
+    }));
+  });
 
   // verify that there are no outstanding requests remaining
   afterEach(() => {
