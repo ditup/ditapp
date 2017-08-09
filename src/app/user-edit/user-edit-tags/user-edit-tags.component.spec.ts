@@ -94,4 +94,23 @@ describe('UserEditTagsComponent', () => {
     expect(spyNotificationsInfo.calls.count()).toEqual(1);
     expect(spyNotificationsInfo.calls.first().args[0]).toEqual('Your tag story was updated.');
   }));
+
+  it('should update the tag relevance when dropped to a new relevance box', async(async () => {
+
+    const modelService = fixture.debugElement.injector.get(ModelService);
+    const spyUpdate = spyOn(modelService, 'updateUserTag').and.callThrough();
+
+    await component.dropTagToRelevance({ from: 5, userTag: component.tagLists[5][0] }, 3);
+    // model.updateUserTag should be called with the right data
+    expect(spyUpdate.calls.count()).toEqual(1);
+    expect(spyUpdate.calls.first().args).toEqual(['user', 'tag0', { relevance: 3 }]);
+    fixture.detectChanges();
+    // the tag should be removed from the original box
+    const box5 = fixture.debugElement.queryAll(By.css('.tag-relevance-container-5 .user-tag'));
+    expect(box5.length).toEqual(0);
+    // the tag should be added to the new box
+    const box3 = fixture.debugElement.queryAll(By.css('.tag-relevance-container-3 .user-tag'));
+    expect(box3.length).toEqual(2);
+  }));
+
 });

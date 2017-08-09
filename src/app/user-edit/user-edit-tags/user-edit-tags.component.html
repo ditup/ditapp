@@ -13,7 +13,7 @@
         ngClass="user-tag"
         [disabled]="userTag.disabled"
         (click)="openTagStoryDialog(userTag)"
-        dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, data: userTag }">
+        dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, userTag: userTag }">
         {{userTag.tag.tagname}}
         <button (click)="removeTag(userTag.tag.tagname); $event.stopPropagation()">
           <md-icon alt="remove">close</md-icon>
@@ -27,7 +27,7 @@
   <div *ngFor="let relevance of [5,4,3,2,1]"
     class="tag-relevance-container"
     [ngClass]="'tag-relevance-container-' + relevance"
-    dnd-droppable (onDropSuccess)="dropTagToRelevance($event, relevance)"
+    dnd-droppable (onDropSuccess)="dropTagToRelevance($event.dragData, relevance)"
     (onDragEnter)="preventDefault($event)"
     (onDragOver)="preventDefault($event)"
     (onDragLeave)="preventDefault($event)">
@@ -36,7 +36,7 @@
         [disabled]="userTag.disabled"
         [ngClass]="['tag-relevance-' + relevance, 'user-tag']"
         (click)="openTagStoryDialog(userTag)"
-        dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, data: userTag }">
+        dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, userTag: userTag }">
         {{userTag.tag.tagname}}
         <button (click)="removeTag(userTag.tag.tagname); $event.stopPropagation()">
           <md-icon alt="remove">close</md-icon>

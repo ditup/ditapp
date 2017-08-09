@@ -141,12 +141,9 @@ export class UserEditTagsComponent implements OnInit {
   }
 
   // what to do when a tag is dropped to a new relevance
-  async dropTagToRelevance(evt: any, to: number) {
-    const from: number = evt.dragData.from;
-    const tag = evt.dragData.data;
-
+  async dropTagToRelevance({ from, userTag }: { from: number, userTag: UserTag }, to: number) {
     const { username } = this.user;
-    const { tagname } = tag;
+    const { tagname } = userTag.tag;
 
     // check if the relevance is new
     if (from === to) {
@@ -154,27 +151,27 @@ export class UserEditTagsComponent implements OnInit {
     }
 
     // add the tag to the new relevance
-    this.tagLists[to].push(tag);
+    this.tagLists[to].push(userTag);
     // disable the tag while moving
-    tag.disabled = true;
+    userTag['disabled'] = true;
 
     try {
       await this.model.updateUserTag(username, tagname, { relevance: to });
 
       // change the relevance of the tag object
-      tag.relevance = to;
+      userTag.relevance = to;
       // remove the tag from the old relevance
-      _.pull(this.tagLists[from], tag);
+      _.pull(this.tagLists[from], userTag);
     } catch (e) {
       console.error(e);
       // remove the tag from the new relevance
-      _.pull(this.tagLists[to], tag);
+      _.pull(this.tagLists[to], userTag);
 
       // snackbar info
       this.snackBar.open(`changing relevance of ${tagname} failed`);
     } finally {
       // enable the tag again
-      delete tag.disabled;
+      delete userTag['disabled'];
     }
   }
 
