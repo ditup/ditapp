@@ -12,6 +12,7 @@ import { DndModule } from 'ng2-dnd';
 
 import { UserEditTagsComponent } from './user-edit-tags.component';
 import { ModelService } from '../../model.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 import { UserTag } from '../../shared/types';
 
@@ -20,8 +21,8 @@ class TagAutocompleteStubComponent {
 }
 
 class ModelStubService {
-  async readUserTags() {
-    return [];
+  async updateUserTag(_username: string, _tagname: string, _data: { story?: string, relevance?: number}): Promise<any> {
+    return;
   }
 }
 
@@ -45,6 +46,7 @@ class ActivatedRouteStub {
 describe('UserEditTagsComponent', () => {
   let component: UserEditTagsComponent;
   let fixture: ComponentFixture<UserEditTagsComponent>;
+  let spyNotificationsInfo: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -59,7 +61,7 @@ describe('UserEditTagsComponent', () => {
       providers: [
         { provide: ModelService, useClass: ModelStubService },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-
+        NotificationsService
       ]
     })
     .compileComponents();
@@ -68,6 +70,11 @@ describe('UserEditTagsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserEditTagsComponent);
     component = fixture.componentInstance;
+
+    // spy on the NotificationsService.info()
+    const notificationsService = fixture.debugElement.injector.get(NotificationsService);
+    spyNotificationsInfo = spyOn(notificationsService, 'info');
+
     fixture.detectChanges();
   });
 
@@ -80,4 +87,11 @@ describe('UserEditTagsComponent', () => {
     expect(userTags.length).toEqual(5);
     expect(userTags[0].nativeElement.textContent).toMatch(/tag0/);
   });
+
+  it('should notify when user story is updated', async(async () => {
+    await component.updateTagStory({ tagname: 'tag0', story: 'story' });
+
+    expect(spyNotificationsInfo.calls.count()).toEqual(1);
+    expect(spyNotificationsInfo.calls.first().args[0]).toEqual('Your tag story was updated.');
+  }));
 });

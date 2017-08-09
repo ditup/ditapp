@@ -81,7 +81,7 @@ describe('UserEditProfileComponent', () => {
     const spyUpdate = spyOn(modelService, 'updateUser').and.callThrough();
     // submit the form
     const form = fixture.debugElement.query(By.css('form'));
-    form.triggerEventHandler('submit', {});
+    form.triggerEventHandler('submit', null);
 
     // wait for asynchronous actions to resolve
     tick();

@@ -10,6 +10,7 @@ import { polyfill } from 'mobile-drag-drop';
 import { TagStoryFormComponent } from './tag-story-form/tag-story-form.component';
 
 import { ModelService } from '../../model.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 import { Tag, UserTag, User } from '../../shared/types';
 
@@ -34,7 +35,8 @@ export class UserEditTagsComponent implements OnInit {
   constructor(private model: ModelService,
               private snackBar: MdSnackBar,
               private route: ActivatedRoute,
-              private dialog: MdDialog) {
+              private dialog: MdDialog,
+              private notify: NotificationsService) {
                 polyfill({});
               }
 
@@ -81,13 +83,18 @@ export class UserEditTagsComponent implements OnInit {
 
     // update the story in the tag object of this component
     // find the tag by tagname and update its story
-    const tag = _.find(_.concat.apply(this, this.tagLists), (_tag: { tagname: string, story: string }) => {
-      return _tag.tagname === tagname;
+    const tag = _.find(this.tags, (userTag: UserTag) => {
+      return userTag.tag.tagname === tagname;
     });
+
     tag.story = story;
 
     // close the dialog
-    this.tagStoryDialogRef.close();
+    if (this.tagStoryDialogRef) {
+      this.tagStoryDialogRef.close();
+    }
+
+    this.notify.info('Your tag story was updated.');
   }
 
   public async addTag({ tagname }: Tag): Promise<void> {
