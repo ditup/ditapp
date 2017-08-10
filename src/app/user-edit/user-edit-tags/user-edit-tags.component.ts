@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 import * as _ from 'lodash';
 
@@ -33,7 +33,6 @@ export class UserEditTagsComponent implements OnInit {
   tagLists: UserTag[][] = [[], [], [], [], [], []];
 
   constructor(private model: ModelService,
-              private snackBar: MdSnackBar,
               private route: ActivatedRoute,
               private dialog: MdDialog,
               private notify: NotificationsService) {
@@ -107,20 +106,15 @@ export class UserEditTagsComponent implements OnInit {
       this.tagLists[0].push(newTag);
 
     } catch (e) {
-
-      console.log(e.json());
-
-      const resp = e.json();
-
       switch (e.status) {
         case 404:
-          this.snackBar.open(`The tag ${tagname} doesn't exist`, 'OK');
+          this.notify.error(`The tag ${tagname} doesn't exist.`);
           break;
         case 409:
-          this.snackBar.open(`The tag ${tagname} was already added to you`, 'OK');
+          this.notify.error(`The tag ${tagname} was already added to you.`);
           break;
         default:
-          this.snackBar.open(`An Unexpected Error. ${resp.toString()}`, 'OK');
+          this.notify.error(`An unexpected error. ${e.message}`);
       }
 
     }

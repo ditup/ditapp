@@ -6,6 +6,7 @@ import { By } from '@angular/platform-browser';
 
 import { MaterialModule } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { DndModule } from 'ng2-dnd';
@@ -168,4 +169,49 @@ describe('UserEditTagsComponent', () => {
     expect(addedTags[0].nativeElement.textContent).toMatch(/tag5/);
   }));
 
+  it('adding tag should notify error when tag was already added', fakeAsync(() => {
+
+    // rejecting response
+    const err = new HttpErrorResponse({ status: 409 });
+    spyOn(modelService, 'addTagToUser').and.returnValue(Promise.reject(err));
+
+    component.addTag({ tagname: 'tag4' });
+
+    tick();
+
+    // notification error should be raised
+    expect(spyNotificationsError.calls.count()).toEqual(1);
+    expect(spyNotificationsError.calls.first().args[0]).toEqual('The tag tag4 was already added to you.');
+  }));
+
+  it('adding (only) tag should notify error when tag doesn\'t exist', fakeAsync(() => {
+    // in reality this case shouldn't happen. when tag doesn't exist, we call createAddTag instead of addTag
+
+    // rejecting response
+    const err = new HttpErrorResponse({ status: 404 });
+    spyOn(modelService, 'addTagToUser').and.returnValue(Promise.reject(err));
+
+    component.addTag({ tagname: 'nonexistent-tag' });
+
+    tick();
+
+    // notification error should be raised
+    expect(spyNotificationsError.calls.count()).toEqual(1);
+    expect(spyNotificationsError.calls.first().args[0]).toEqual('The tag nonexistent-tag doesn\'t exist.');
+  }));
+
+  it('adding tag should notify error on a generic fail', fakeAsync(() => {
+
+    // rejecting response
+    const err = new HttpErrorResponse({ status: 500, statusText: 'Internal Server Error' });
+    spyOn(modelService, 'addTagToUser').and.returnValue(Promise.reject(err));
+
+    component.addTag({ tagname: 'nonexistent-tag' });
+
+    tick();
+
+    // notification error should be raised
+    expect(spyNotificationsError.calls.count()).toEqual(1);
+    expect(spyNotificationsError.calls.first().args[0]).toMatch(/^An unexpected error/);
+  }));
 });
