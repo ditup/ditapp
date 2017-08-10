@@ -36,7 +36,7 @@ h1 {
 }
 
 /* make a margin around all the content */
-router-outlet + :not(app-main):not(app-map), router-outlet + app-main > app-logged {
+router-outlet + :not(app-map) {
   max-width: 768px;
   margin: 1em auto;
   display: block;

@@ -1,76 +1,44 @@
-@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700');
-@import url('https://fonts.googleapis.com/css?family=Josefin+Slab:400,700');
+@import '../../shared/styles/fonts';
+@import '../../shared/styles/colors';
 
-$main-font: 'Libre Baskerville', serif;
-$font-2: 'Josefin Slab', serif;
-$bg-color: white;
-$dark-color: #011149;
-$light-color: #0194fe;
-$bg-darker-color: #ebf6ff;
+$dark-color: $dark;
+$light-color: $darker;
+$main-font: $font-content;
+$font-2: $font-header;
+$bg-color: $light;
 
-* {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-
-a, a:visited {
+.name-part {
   color: $light-color;
-  border: 2px solid $dark-color;
-}
-
-a:hover {
-  color: $bg-color;
-  background-color: $dark-color;
-}
-
-.colored {
-  color: $light-color;
-}
-
-.button {
-  font-family: $font-2;
-  font-size: 25px;
-  text-decoration: none;
-  padding: 7px 10px;
-  margin: 5px;
-  transition: all 200ms ease;
 }
 
 #about {
-  color: $dark-color;
-  background-color: $bg-darker-color;
-  font-family: $main-font;
-  padding:60px;
+  background-color: $bg-color;
 
   h1 {
-    font-family: $font-2;
-    font-size: 50px;
-    font-weight: bold;
+    display: none;
   }
+
 }
 
 .page {
-  min-height:100%;
-  width:100%;
+  min-height: 100vh; // viewport height
+  width: 100%;
 }
 
-#content {
-  z-index:10;
+#introduction {
   background-color: $bg-color;
   color: $dark-color;
-  padding-top: 50px;
-  font-family: $main-font !important;
+  padding: 50px 0 20px;
+  font: 20px $main-font;
   text-align: center;
-  font-size: 20px;
 }
 
-.page-url {
-  font-family: $font-2;
+.app-url {
+  font: 70px $font-2;
   font-weight: bold;
-  font-size: 70px;
-  margin-top:30px;
+  margin-top: 30px;
 }
+
 .app-summary {
   font-family: $main-font;
   font-style: italic;
@@ -78,7 +46,75 @@ a:hover {
   margin-bottom: 40px;
 }
 
-.introduction {
-  font-family: $main-font;
-  font-size: 30px;
+.app-name-meaning {
+  font: 30px/1.2 $main-font;
+}
+
+#email-contact {
+  font-style: italic;
+}
+
+.button-container {
+  text-align: center;
+
+  .button {
+    font: 25px $font-2;
+    text-decoration: none;
+    padding: 7px 10px;
+    margin: 5px;
+    transition: all 200ms ease;
+    display: inline-block;
+
+    color: $light-color;
+    border: 2px solid $dark-color;
+
+    &:hover {
+      color: $bg-color;
+      background-color: $dark-color;
+    }
+
+    &[disabled] {
+      color: gray;
+      background-color: $bg-color;
+    }
+  }
+
+}
+
+.info-section {
+  color: $dark-color;
+  font: 1.2em/1.5 $main-font;
+
+
+  h1 {
+    font: 60px $font-2;
+    font-weight: bold;
+    color: $light-color;
+  }
+
+  h2 {
+    font: 50px $font-2;
+    font-weight: bold;
+    padding: 20px 0 10px;
+    color: $light-color;
+  }
+
+  ul {
+    padding: 1em 20px;
+    list-style: disc;
+  }
+
+  p {
+    padding: 0.5em 0;
+  }
+}
+
+a {
+  color: $light-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $bg-color;
+    background-color: $dark-color;
+  }
 }
