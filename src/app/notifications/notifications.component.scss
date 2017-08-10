@@ -1,20 +1,23 @@
+@import '../shared/styles/colors';
+
 .notification {
   padding: 0.9em;
   color: white;
 }
 
 .notification-error {
-  background-color: red;
+  background-color: $notify-error;
 }
 
 .notification-info {
-  background-color: green;
+  background-color: $notify-info;
 }
 
 .notifications-container {
   position: fixed;
   bottom: 0px;
   width: 100%;
+  z-index: 1001; // display over leaflet maps which have 1000 on control
 }
 
 .notifications-container.notifications-placeholder {
