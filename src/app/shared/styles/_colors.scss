@@ -1,9 +1,12 @@
-$dark: #011149;
-$light: white;
-$darker: #6ca6ca;
-$lighter: #ccc;
+/* http://colorpalettes.net/color-palette-2616/ */
+/* http://colorpalettes.net/color-palette-2505/ */
 
-$accent: #d64078;
+$dark: #213a51;//#011149;
+$light: white;
+$lighter: #b5c2d3;//#ccc;
+$accent: #cb9a01;//#d64078;
+$darker: $accent;//#4a7d66; //#3a6766; //#213a51;// #6ca6ca;
+
 // notification colors
 $notify-info: #5c965d;
 $notify-error: #81011e;
