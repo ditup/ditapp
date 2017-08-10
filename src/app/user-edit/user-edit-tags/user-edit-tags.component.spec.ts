@@ -29,6 +29,8 @@ class ModelStubService {
   async addTagToUser({ username, tagname, relevance, story }): Promise<UserTag> {
     return { user: { username }, tag: { tagname }, relevance, story };
   }
+
+  async removeUserTag(_username: string, _tagname: string) {}
 }
 
 class ActivatedRouteStub {
@@ -214,4 +216,42 @@ describe('UserEditTagsComponent', () => {
     expect(spyNotificationsError.calls.count()).toEqual(1);
     expect(spyNotificationsError.calls.first().args[0]).toMatch(/^An unexpected error/);
   }));
+
+  describe('removing tag', () => {
+
+    it('should call a correct model function', fakeAsync(() => {
+      // spy on model.addTagToUser
+      const spyRemoveTag = spyOn(modelService, 'removeUserTag').and.callThrough();
+
+      // execute
+      component.removeTag('tag0');
+      // wait for promises
+      tick();
+
+      // calling model with correct data?
+      expect(spyRemoveTag.calls.count()).toEqual(1);
+      expect(spyRemoveTag.calls.first().args).toEqual(['user', 'tag0']);
+    }));
+
+    it('should remove the tag from the tag list', fakeAsync(() => {
+      // now the tag should be present in view
+      const tags5 = fixture.debugElement.queryAll(By.css('.tag-relevance-container-5 .user-tag'));
+      expect(tags5.length).toEqual(1);
+
+      // execute
+      component.removeTag('tag0');
+      // wait for promises
+      tick();
+
+      fixture.detectChanges();
+      // was the tag removed from view?
+      const tags5after = fixture.debugElement.queryAll(By.css('.tag-relevance-container-5 .user-tag'));
+      expect(tags5after.length).toEqual(0);
+
+      // but the others should stay
+      const tags1 = fixture.debugElement.queryAll(By.css('.tag-relevance-container-1 .user-tag'));
+      expect(tags1.length).toEqual(1);
+    }));
+
+  });
 });

@@ -130,7 +130,7 @@ export class UserEditTagsComponent implements OnInit {
     await this.model.removeUserTag(username, tagname)
     console.log('tag successfully removed');
     _.forEach(this.tagLists, (list) => {
-      _.pullAllBy(list, [{ tagname }], 'tagname');
+      _.pullAllBy(list, [{ tag: { tagname } }], 'tag.tagname');
     });
   }
 
