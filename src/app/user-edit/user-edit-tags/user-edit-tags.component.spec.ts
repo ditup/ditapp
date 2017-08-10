@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -24,6 +24,10 @@ class ModelStubService {
   async updateUserTag(_username: string, _tagname: string, _data: { story?: string, relevance?: number}): Promise<any> {
     return;
   }
+
+  async addTagToUser({ username, tagname, relevance, story }): Promise<UserTag> {
+    return { user: { username }, tag: { tagname }, relevance, story };
+  }
 }
 
 class ActivatedRouteStub {
@@ -47,6 +51,8 @@ describe('UserEditTagsComponent', () => {
   let component: UserEditTagsComponent;
   let fixture: ComponentFixture<UserEditTagsComponent>;
   let spyNotificationsInfo: jasmine.Spy;
+  let spyNotificationsError: jasmine.Spy;
+  let modelService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -74,6 +80,9 @@ describe('UserEditTagsComponent', () => {
     // spy on the NotificationsService.info()
     const notificationsService = fixture.debugElement.injector.get(NotificationsService);
     spyNotificationsInfo = spyOn(notificationsService, 'info');
+    spyNotificationsError = spyOn(notificationsService, 'error');
+
+    modelService = fixture.debugElement.injector.get(ModelService);
 
     fixture.detectChanges();
   });
@@ -88,19 +97,22 @@ describe('UserEditTagsComponent', () => {
     expect(userTags[0].nativeElement.textContent).toMatch(/tag0/);
   });
 
-  it('should notify when user story is updated', async(async () => {
-    await component.updateTagStory({ tagname: 'tag0', story: 'story' });
+  it('should notify when user story is updated', fakeAsync(() => {
+    component.updateTagStory({ tagname: 'tag0', story: 'story' });
+
+    tick();
 
     expect(spyNotificationsInfo.calls.count()).toEqual(1);
     expect(spyNotificationsInfo.calls.first().args[0]).toEqual('Your tag story was updated.');
   }));
 
-  it('should update the tag relevance when dropped to a new relevance box', async(async () => {
+  it('should update the tag relevance when dropped to a new relevance box', fakeAsync(() => {
 
-    const modelService = fixture.debugElement.injector.get(ModelService);
     const spyUpdate = spyOn(modelService, 'updateUserTag').and.callThrough();
 
-    await component.dropTagToRelevance({ from: 5, userTag: component.tagLists[5][0] }, 3);
+    component.dropTagToRelevance({ from: 5, userTag: component.tagLists[5][0] }, 3);
+    tick();
+
     // model.updateUserTag should be called with the right data
     expect(spyUpdate.calls.count()).toEqual(1);
     expect(spyUpdate.calls.first().args).toEqual(['user', 'tag0', { relevance: 3 }]);
@@ -111,6 +123,49 @@ describe('UserEditTagsComponent', () => {
     // the tag should be added to the new box
     const box3 = fixture.debugElement.queryAll(By.css('.tag-relevance-container-3 .user-tag'));
     expect(box3.length).toEqual(2);
+  }));
+
+  it('should notify error when updating tag relevance fails', fakeAsync(() => {
+
+
+    // rejecting response
+    const err = new Error('');
+    spyOn(modelService, 'updateUserTag').and.returnValue(Promise.reject(err));
+
+    const [userTag] = component.tagLists[5];
+
+    component.dropTagToRelevance({ from: 5, userTag }, 3);
+
+    tick();
+
+    // notification error should be raised
+    expect(spyNotificationsError.calls.count()).toEqual(1);
+    expect(spyNotificationsError.calls.first().args[0]).toEqual(`Changing relevance of ${userTag.tag.tagname} failed.`);
+  }));
+
+  it('adding tag should work', fakeAsync(() => {
+    // spy on model.addTagToUser
+    const spyAddTag = spyOn(modelService, 'addTagToUser').and.callThrough();
+
+    // execute
+    component.addTag({ tagname: 'tag5' });
+    // wait for promises
+    tick();
+
+    // calling model with correct data?
+    expect(spyAddTag.calls.count()).toEqual(1);
+    expect(spyAddTag.calls.first().args[0]).toEqual({
+      username: 'user',
+      tagname: 'tag5',
+      relevance: 3,
+      story: ''
+    });
+
+    fixture.detectChanges();
+    // display the tag?
+    const addedTags = fixture.debugElement.queryAll(By.css('.tag-relevance-container-initial .user-tag'));
+    expect(addedTags.length).toEqual(1);
+    expect(addedTags[0].nativeElement.textContent).toMatch(/tag5/);
   }));
 
 });

@@ -101,7 +101,7 @@ export class UserEditTagsComponent implements OnInit {
     const { username } = this.user;
     try {
       console.log('adding tag to', username, tagname);
-      const newTag = await this.model.addTagToUser({ username, tagname, relevance: 3, story: ''});
+      const newTag: UserTag = await this.model.addTagToUser({ username, tagname, relevance: 3, story: ''});
 
       // add to the tag lists
       this.tagLists[0].push(newTag);
@@ -167,8 +167,8 @@ export class UserEditTagsComponent implements OnInit {
       // remove the tag from the new relevance
       _.pull(this.tagLists[to], userTag);
 
-      // snackbar info
-      this.snackBar.open(`changing relevance of ${tagname} failed`);
+      // notify about the error
+      this.notify.error(`Changing relevance of ${tagname} failed.`);
     } finally {
       // enable the tag again
       delete userTag['disabled'];
@@ -176,10 +176,8 @@ export class UserEditTagsComponent implements OnInit {
   }
 
   async createAddTag({ tagname }: Tag): Promise<void> {
-
+    // create the tag, then add it to the user
     await this.model.createTag({ tagname });
-
-    console.log('submitting the tag to the user');
     await this.addTag({ tagname });
   }
 

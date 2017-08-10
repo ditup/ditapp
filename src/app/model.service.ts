@@ -236,17 +236,12 @@ export class ModelService {
       });
   }
 
-  addTagToUser({ username, tagname, relevance, story }:
-               { username: string, tagname: string, relevance?: number, story?: string }): Promise<any> {
+  async addTagToUser({ username, tagname, relevance, story }:
+               { username: string, tagname: string, relevance?: number, story?: string }): Promise<UserTag> {
 
     // defaults
-
     relevance = relevance || 3;
     story = story || '';
-
-    console.log('adding tag', tagname, 'to user', username);
-
-    const headers = this.loggedHeaders;
 
     const requestBody = {
       data: {
@@ -266,13 +261,11 @@ export class ModelService {
       }
     };
 
-    return this.http
-      .post(`${this.baseUrl}/users/${username}/tags`, JSON.stringify(requestBody), { headers })
-      .toPromise()
-      .then((response: Response) => {
-        console.log('responded!', response);
-        return response.json().data.attributes;
-      });
+    const { data, included }: any = await this.httpc
+      .post(`${this.baseUrl}/users/${username}/tags`, requestBody, { headers: this.loggedHttpHeaders })
+      .toPromise();
+
+    return this.deserializeUserTag(data, included);
 
   }
 

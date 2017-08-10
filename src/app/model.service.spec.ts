@@ -215,6 +215,90 @@ describe('ModelService', () => {
     }));
   });
 
+  describe('addTagToUser()', () => {
+
+    it('should make a correct request', async(async () => {
+
+      const username = 'user';
+      const tagname = 'tag';
+
+      // execute the function
+      const addTagToUserPromise = service.addTagToUser({ username, tagname, story: '', relevance: 3 });
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/users/${username}/tags`);
+
+      expect(req.request.method).toEqual('POST');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization'));
+
+      req.flush({
+        data: {
+          type: 'user-tags',
+          id: `${username}--${tagname}`,
+          attributes: {
+            story: '',
+            relevance: 3
+          },
+          relationships: {
+            user: { data: { type: 'users', id: username } },
+            tag: { data: { type: 'tags', id: tagname } }
+          }
+        },
+        included: [
+          { type: 'users', id: username, attributes: { username, givenName: 'g', familyName: 'f', description: 'd' } },
+          { type: 'tags', id: tagname, attributes: { tagname }}
+        ]
+      });
+
+      await addTagToUserPromise;
+    }));
+
+    it('should return the new UserTag', async(async () => {
+
+      const username = 'user';
+      const tagname = 'tag';
+
+      // execute the function
+      const addTagToUserPromise = service.addTagToUser({ username, tagname, story: '', relevance: 3 });
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/users/${username}/tags`);
+
+      expect(req.request.method).toEqual('POST');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization'));
+
+      req.flush({
+        data: {
+          type: 'user-tags',
+          id: `${username}--${tagname}`,
+          attributes: {
+            story: '',
+            relevance: 3
+          },
+          relationships: {
+            user: { data: { type: 'users', id: username } },
+            tag: { data: { type: 'tags', id: tagname } }
+          }
+        },
+        included: [
+          { type: 'users', id: username, attributes: { username, givenName: 'g', familyName: 'f', description: 'd' } },
+          { type: 'tags', id: tagname, attributes: { tagname }}
+        ]
+      });
+
+      const userTag = await addTagToUserPromise;
+
+      expect(userTag).toEqual({
+        user: { username, givenName: 'g', familyName: 'f', description: 'd' },
+        tag: { tagname },
+        story: '',
+        relevance: 3
+      })
+    }));
+  });
+
   // verify that there are no outstanding requests remaining
   afterEach(() => {
     httpMock.verify();
