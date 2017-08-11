@@ -2,6 +2,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Observable } from 'rxjs/Observable';
+import { MaterialModule } from '@angular/material';
 
 import { UserComponent } from './user.component';
 
@@ -25,8 +26,7 @@ class ModelStubService {
     });
   }
 
-  readUserTags(username: string): Promise<any> {
-    username; // tslint:disable-line:no-unused-expression
+  readUserTags(_username: string): Promise<any> {
     return this.lastPromise = Promise.resolve([]);
   }
 }
@@ -45,8 +45,14 @@ describe('UserComponent', () => {
   beforeEach(async(() => {
 
     TestBed.configureTestingModule({
-      declarations: [UserComponent, AvatarStubComponent],
-      imports: [RouterTestingModule],
+      declarations: [
+        UserComponent,
+        AvatarStubComponent
+      ],
+      imports: [
+        RouterTestingModule,
+        MaterialModule
+      ],
       providers: [
         { provide: ModelService, useClass: ModelStubService },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
