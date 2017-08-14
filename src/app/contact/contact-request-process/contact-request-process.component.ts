@@ -22,7 +22,7 @@ export class ContactRequestProcessComponent implements OnInit {
 
   ngOnInit() {
     this.route.data
-      .subscribe(async ({ contact: { toMe } }: { contact: { toMe: Contact } }) => {
+      .subscribe(({ contact: { toMe } }: { contact: { toMe: Contact } }) => {
         this.to = toMe.to;
         this.from = toMe.from;
 

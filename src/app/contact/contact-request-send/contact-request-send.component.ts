@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 import { User } from '../../shared/types';
 
 @Component({
@@ -17,6 +18,7 @@ export class ContactRequestSendComponent implements OnInit {
   public saving = false;
 
   constructor(private model: ModelService,
+              private notify: NotificationsService,
               private route: ActivatedRoute,
               private router: Router,
               private auth: AuthService) { }
@@ -29,7 +31,8 @@ export class ContactRequestSendComponent implements OnInit {
   async sendRequest({ trust, reference, message }: any): Promise<void> {
     this.saving = true;
     await this.model.sendContactRequestTo(this.to.username, { trust, reference, message });
-    this.router.navigate([`/user/${this.to.username}`]);
     this.saving = false;
+    this.notify.info(`Contact request to ${this.to.username} was sent.`);
+    await this.router.navigate([`/user/${this.from.username}/contacts`]);
   }
 }
