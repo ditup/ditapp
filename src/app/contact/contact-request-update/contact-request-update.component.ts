@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { ModelService } from '../../model.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 import { Contact, User } from '../../shared/types';
 
 export class FormData {
@@ -27,6 +28,7 @@ export class ContactRequestUpdateComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private model: ModelService,
+              private notify: NotificationsService,
               private router: Router) { }
 
   ngOnInit() {
@@ -42,9 +44,9 @@ export class ContactRequestUpdateComponent implements OnInit {
   public async updateContactRequest({ message, trust, reference }: FormData): Promise<void> {
     this.saving = true;
     await this.model.updateContactWith(this.to.username, { message, trust, reference });
-    this.router.navigate([`/user/${this.to.username}`]);
+    this.notify.info(`Contact request to ${this.to.username} was updated.`);
+    await this.router.navigate([`/user/${this.from.username}/contacts`]);
     this.saving = false;
   }
-
 
 }

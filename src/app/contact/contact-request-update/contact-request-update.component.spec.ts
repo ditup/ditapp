@@ -10,12 +10,15 @@ import { Observable } from 'rxjs/Observable';
 import { RouterStub } from '../../../testing/router-stubs';
 
 import { ModelService } from '../../model.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 class ActivatedRouteStub {
-  data = Observable.of({ contact: { fromMe: {} } });
+  data = Observable.of({ contact: { fromMe: { to: { username: 'other-user' }, from: { username: 'user-me' } } } });
 }
 
-class ModelStubService { }
+class ModelStubService {
+  async updateContactWith(_username: string, _data): Promise<void> { }
+}
 
 @Component({ selector: 'app-contact-form', template: '' })
 class ContactFormStubComponent {
@@ -50,7 +53,8 @@ describe('ContactRequestUpdateComponent', () => {
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-        { provide: ModelService, useClass: ModelStubService }
+        { provide: ModelService, useClass: ModelStubService },
+        NotificationsService
       ]
     })
     .compileComponents();
@@ -65,4 +69,31 @@ describe('ContactRequestUpdateComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('[on successful update] should redirect to my contacts', async(async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const router = fixture.debugElement.injector.get(Router);
+
+    const routerSpy = spyOn(router, 'navigate');
+
+    await component.updateContactRequest({ trust: 3, reference: 'reference', message: 'msg' });
+    expect(routerSpy.calls.count()).toEqual(1);
+
+    expect(routerSpy.calls.first().args[0]).toEqual(['/user/user-me/contacts']);
+
+  }));
+
+  it('[on successful update] should notify about success', async(async () => {
+    const notify = fixture.debugElement.injector.get(NotificationsService);
+
+    const notifySpy = spyOn(notify, 'info');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    await component.updateContactRequest({ trust: 3, reference: 'reference', message: 'msg' });
+    expect(notifySpy.calls.count()).toEqual(1);
+
+    expect(notifySpy.calls.first().args[0]).toEqual('Contact request to other-user was updated.');
+  }));
+
 });
