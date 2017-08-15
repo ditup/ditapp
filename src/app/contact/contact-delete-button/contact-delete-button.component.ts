@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { User } from '../../shared/types';
 import { ModelService } from '../../model.service';
+import { AuthService } from '../../auth.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 @Component({
   selector: 'app-contact-delete-button',
@@ -17,6 +19,8 @@ export class ContactDeleteButtonComponent implements OnInit {
   public isActivated = false;
 
   constructor(private model: ModelService,
+              private auth: AuthService,
+              private notify: NotificationsService,
               private router: Router) { }
 
   ngOnInit() {
@@ -25,7 +29,9 @@ export class ContactDeleteButtonComponent implements OnInit {
   public async deleteContact() {
     await this.model.deleteContactWith(this.otherUser.username);
 
-    this.router.navigate([`/user/${this.otherUser.username}`]);
+    this.notify.info(`Contact with ${this.otherUser.username} was deleted.`)
+
+    await this.router.navigate([`/user/${this.auth.username}/contacts`]);
   }
 
   public activate(toBeActivated: boolean) {
