@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ModelService } from '../../model.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 import { Contact, User } from '../../shared/types';
 
 @Component({
@@ -18,6 +19,7 @@ export class ContactRequestProcessComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private model: ModelService,
+              private notify: NotificationsService,
               private router: Router) { }
 
   ngOnInit() {
@@ -34,7 +36,10 @@ export class ContactRequestProcessComponent implements OnInit {
     this.saving = true;
 
     await this.model.confirmContactRequestFrom(this.from.username, { trust, reference });
-    this.router.navigate([`/user/${this.from.username}`]);
+
+    this.notify.info(`Contact with ${this.from.username} was confirmed.`);
+
+    await this.router.navigate([`/user/${this.to.username}/contacts`]);
     this.saving = false;
   }
 
