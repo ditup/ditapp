@@ -71,8 +71,6 @@ describe('ContactRequestUpdateComponent', () => {
   });
 
   it('[on successful update] should redirect to my contacts', async(async () => {
-    await fixture.whenStable();
-    fixture.detectChanges();
     const router = fixture.debugElement.injector.get(Router);
 
     const routerSpy = spyOn(router, 'navigate');
@@ -88,8 +86,6 @@ describe('ContactRequestUpdateComponent', () => {
     const notify = fixture.debugElement.injector.get(NotificationsService);
 
     const notifySpy = spyOn(notify, 'info');
-    await fixture.whenStable();
-    fixture.detectChanges();
     await component.updateContactRequest({ trust: 3, reference: 'reference', message: 'msg' });
     expect(notifySpy.calls.count()).toEqual(1);
 
