@@ -72,6 +72,7 @@ import { PeopleRandomComponent } from './people/people-random/people-random.comp
 import { UserListWithTagsComponent } from './shared/user-list-with-tags/user-list-with-tags.component';
 import { TagRelatedTagsComponent } from './tag/tag-related-tags/tag-related-tags.component';
 import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-people.component';
+import { ChangePasswordComponent } from './account/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,8 @@ import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-
     PeopleRandomComponent,
     UserListWithTagsComponent,
     TagRelatedTagsComponent,
-    TagRelatedPeopleComponent
+    TagRelatedPeopleComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

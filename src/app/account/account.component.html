@@ -4,26 +4,7 @@
 
 <h3>Change password</h3>
 
-<fieldset [disabled]="false">
-  <form (ngSubmit)="onSubmit()" [formGroup]="changePasswordForm">
-    <div>
-      <md-input-container>
-        <input mdInput type="password" placeholder="Old Password"
-        formControlName="oldPassword" required>
-      </md-input-container>
-    </div>
-
-    <div>
-      <md-input-container>
-        <input mdInput type="password" placeholder="New Password"
-          formControlName="newPassword" required>
-      </md-input-container>
-    </div>
-
-    <button md-raised-button type="submit"
-      [disabled]="!changePasswordForm.valid">Change Password</button>
-  </form>
-</fieldset>
+<app-change-password></app-change-password>
 
 <h2>Email</h2>
 
