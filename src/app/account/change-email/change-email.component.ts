@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MdSnackBar } from '@angular/material';
 
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 @Component({
   selector: 'app-change-email',
@@ -22,7 +22,7 @@ export class ChangeEmailComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private model: ModelService,
               private auth: AuthService,
-              private snackBar: MdSnackBar) { }
+              private notify: NotificationsService) { }
 
   ngOnInit(): void {
     // initialize the reactive form
@@ -50,10 +50,27 @@ export class ChangeEmailComponent implements OnInit {
       await this.model.changeEmail(this.auth.username, email, password);
 
       // notify about success
-      this.snackBar.open('Email updated. A message with verification link should arrive to your mailbox soon.', 'OK');
+      this.notify.info('Your email was updated. A message with verification link should arrive to your mailbox soon.');
 
     } catch (e) {
-      this.snackBar.open('Error.', 'OK');
+      let errMessage: string;
+
+      switch (e.status) {
+        case 403: {
+          errMessage = 'The password is wrong.';
+          break;
+        }
+        case 400: {
+          errMessage = 'The provided data are invalid.';
+          break;
+        }
+        default: {
+          errMessage = 'Unexpected error.';
+        }
+      }
+
+      this.notify.error(errMessage);
+
     } finally {
       this.isSubmitting = false;
       this.changeEmailForm.reset();
