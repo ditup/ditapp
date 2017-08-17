@@ -29,10 +29,25 @@ body {
   font-style: $font-content;
 }
 
-h1 {
+h1,
+h2,
+h3 {
   color: $darker;
+}
+
+h1 {
   font: 3em $font-header;
   margin: 0.83em 0;
+}
+
+h2 {
+  font: 2.3em $font-header;
+  margin: 0.7em 0;
+}
+
+h3 {
+  font: 2em $font-header;
+  margin: 0.4em 0;
 }
 
 /* make a margin around all the content */
