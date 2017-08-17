@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
-import * as _ from 'lodash';
 
 import { ModelService } from '../model.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Component({
   selector: 'app-reset-password-update',
@@ -26,9 +25,9 @@ export class ResetPasswordUpdateComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private model: ModelService,
-              private snackBar: MdSnackBar) { }
+              private notify: NotificationsService) { }
 
-ngOnInit(): void {
+  ngOnInit(): void {
     this.username = this.route.snapshot.params['username'];
     // initialize the reactive form
     this.buildForm();
@@ -53,13 +52,29 @@ ngOnInit(): void {
 
     try {
       await this.model.resetPassword(username, password, code);
-      this.router.navigate(['/login']);
+      // notify about success
+      this.notify.info('Password was updated.');
+      // go to login page
+      await this.router.navigate(['/login']);
     } catch (e) {
-      const messages: string[] = _.map(e.json().errors, (err: any) => (typeof(err.meta) === 'string') ? err.meta : err.meta.msg);
+      // notify about errors
+      let message: string;
 
-      const message: string = messages.join('; ');
+      switch (e.status) {
+        case 400: {
+          message = 'Reset link is invalid or expired.';
+          break;
+        }
+        case 404: {
+          message = 'User doesn\'t exist.';
+          break;
+        }
+        default: {
+          message = 'Unexpected error.';
+        }
+      }
 
-      this.snackBar.open(message || 'Unexpected Error', 'OK');
+      this.notify.error(message);
     } finally {
       this.isSubmitting = false;
     }
