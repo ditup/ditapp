@@ -78,4 +78,17 @@ describe('ChangePasswordComponent', () => {
 
   }));
 
+  it('[submit and error 400] notify error', async(async () => {
+    const model = fixture.debugElement.injector.get(ModelService);
+    const err = new Error('');
+    err['status'] = 400;
+    spyOn(model, 'changePassword').and.returnValue(Promise.reject(err));
+
+    await component.onSubmit();
+
+    expect(notifyErrorSpy.calls.count()).toEqual(1);
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('Old or new password is invalid.');
+
+  }));
+
 });

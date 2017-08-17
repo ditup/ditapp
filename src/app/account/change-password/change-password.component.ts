@@ -63,6 +63,10 @@ export class ChangePasswordComponent implements OnInit {
           msg = 'Old password is wrong.';
           break;
         }
+        case 400: {
+          msg = 'Old or new password is invalid.';
+          break;
+        }
         default: {
           msg = 'Unexpected error.'
         }
