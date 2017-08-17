@@ -12,6 +12,7 @@ import { Tag, TagList } from '../types';
 
 import { AuthService } from '../../auth.service';
 import { ModelService } from '../../model.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 class AuthStubService {
 }
@@ -22,11 +23,14 @@ class ModelStubService {
 @Component({ selector: 'app-tag-autocomplete', template: '' })
 class TagAutocompleteStubComponent {
   @Output() action = new EventEmitter<Tag>();
+  @Output() action404 = new EventEmitter<Tag>();
 }
 
 describe('SelectTagsComponent', () => {
   let component: SelectTagsComponent;
   let fixture: ComponentFixture<SelectTagsComponent>;
+  let autocompleteComponent;
+  let notifyErrorSpy: jasmine.Spy;
 
   let emittedTags: Tag[];
 
@@ -43,7 +47,8 @@ describe('SelectTagsComponent', () => {
       ],
       providers: [
         { provide: AuthService, useClass: AuthStubService },
-        { provide: ModelService, useClass: ModelStubService }
+        { provide: ModelService, useClass: ModelStubService },
+        NotificationsService
       ]
     })
     .compileComponents();
@@ -53,6 +58,14 @@ describe('SelectTagsComponent', () => {
     fixture = TestBed.createComponent(SelectTagsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    // get a handle of app-tag-autocomplete
+    autocompleteComponent = fixture.debugElement.query(By.css('app-tag-autocomplete')).componentInstance;
+
+    // mock the notifications
+    const notify = fixture.debugElement.injector.get(NotificationsService);
+    notifyErrorSpy = spyOn(notify, 'error');
+
   });
 
   beforeEach(() => {
@@ -60,8 +73,6 @@ describe('SelectTagsComponent', () => {
     component.onSelected.subscribe((tags: Tag[]) => {
       emittedTags = tags;
     });
-
-
   });
 
   it('should be created', () => {
@@ -75,10 +86,6 @@ describe('SelectTagsComponent', () => {
       { tagname: 'tag1' },
       { tagname: 'tag2' }
     ]);
-
-    // get a handle of app-tag-autocomplete
-    const autocompleteComponent = fixture.debugElement.query(By.css('app-tag-autocomplete')).componentInstance;
-
 
     fixture.detectChanges();
 
@@ -95,10 +102,6 @@ describe('SelectTagsComponent', () => {
     const selectedTags = fixture.debugElement.queryAll(By.css('.tag-selected'));
     expect(selectedTags.length).toEqual(4);
 
-  });
-
-  it('[autocomplete tag in list already] should notify about error and not emit existent tags', () => {
-    pending();
   });
 
   it('when clicking Clear button, selection should be removed and empty array emitted', () => {
@@ -161,4 +164,33 @@ describe('SelectTagsComponent', () => {
 
 
   })*/() => { pending(); });
+
+  it('[adding tag already in list] should notify error', async(async () => {
+
+    // let's have some tags at the beginning
+    component.tagList = new TagList([
+      { tagname: 'tag0' },
+      { tagname: 'added-tag' },
+      { tagname: 'tag2' }
+    ]);
+
+    fixture.detectChanges();
+
+    // adding the tag to list
+    autocompleteComponent.action.emit({ tagname: 'added-tag' });
+
+    await fixture.whenStable();
+
+    // expect error notification
+    expect(notifyErrorSpy.calls.count()).toEqual(1);
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('The tag added-tag is already added.');
+
+  }));
+
+  it('[adding nonexistent tag] notify error', () => {
+    autocompleteComponent.action404.emit({ tagname: 'nonexistent-tag' } as Tag);
+
+    expect(notifyErrorSpy.calls.count()).toEqual(1);
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('Tag nonexistent-tag doesn\'t exist.');
+  });
 });

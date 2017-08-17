@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 import { SelectFromMyTagsComponent } from '../../shared/select-from-my-tags/select-from-my-tags.component';
 
@@ -25,6 +26,7 @@ export class SelectTagsComponent implements OnInit {
 
   constructor(private auth: AuthService,
               private model: ModelService,
+              private notify: NotificationsService,
               private dialog: MdDialog) { }
 
   ngOnInit() {
@@ -36,7 +38,8 @@ export class SelectTagsComponent implements OnInit {
       this.tagList.add(tagname);
       this.emitSelection();
     } catch (e) {
-      // TODO notify
+      // TODO other errors?
+      this.notify.error(`The tag ${tagname} is already added.`);
     }
   }
 
@@ -59,8 +62,7 @@ export class SelectTagsComponent implements OnInit {
     });
 
     if (alreadyAdded.length > 0) {
-      // TODO notify
-      // old: this.snackBar.open('Some tags were already added. Not to happen.', 'OK');
+      // TODO This shouldn't happen. But perhaps notify error?
     }
 
     // send info to Output
@@ -107,6 +109,10 @@ export class SelectTagsComponent implements OnInit {
     this.onSelected.emit(this.tagList.tags);
   }
 
+  public complainNonexistentTag ({ tagname }: Tag) {
+    this.notify.error(`Tag ${tagname} doesn't exist.`);
+  }
+
 /*
   @Input()
   public inputTags: Tag[];
@@ -141,9 +147,6 @@ export class SelectTagsComponent implements OnInit {
     //
   }
 
-  public complainNonexistentTag ({ tagname }: Tag) {
-    this.snackBar.open(`tag ${tagname} doesn't exist`, 'OK');
-  }
 
 
 */
