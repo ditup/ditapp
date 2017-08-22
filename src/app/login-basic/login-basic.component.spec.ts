@@ -4,6 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NotificationsService } from '../notifications/notifications.service';
@@ -14,9 +15,19 @@ import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
 
 import { RouterStub } from '../../testing/router-stubs';
+import { User } from '../shared/types';
 
 class ModelStubService {
-  async basicAuth() {}
+  async basicAuth({ username, password: _password }: { username: string, password: string }): Promise<User> {
+    console.log(username, ['user1'].includes(username), ['a'].includes('a'));
+    if (['user1'].includes(username)) {
+      return { username } as User;
+    }
+
+    const err = new Error('Not Authenticated');
+    err['status'] = 401;
+    throw err;
+  }
 }
 
 class ActivatedRouteStub {
@@ -25,11 +36,17 @@ class ActivatedRouteStub {
   };
 }
 
-class AuthStubService {}
+class AuthStubService {
+  logout() {}
+  login() {}
+}
 
 describe('LoginBasicComponent', () => {
   let component: LoginBasicComponent;
   let fixture: ComponentFixture<LoginBasicComponent>;
+
+  let notifyInfoSpy: jasmine.Spy;
+  let notifyErrorSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -55,9 +72,58 @@ describe('LoginBasicComponent', () => {
     fixture = TestBed.createComponent(LoginBasicComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    const notify = fixture.debugElement.injector.get(NotificationsService);
+    notifyInfoSpy = spyOn(notify, 'info');
+    notifyErrorSpy = spyOn(notify, 'error');
   });
+
+  async function submitForm(username: string, password: string) {
+    // fill form
+    component.loginForm.controls['username'].setValue(username);
+    component.loginForm.controls['password'].setValue(password);
+    fixture.detectChanges();
+
+    // submit form
+    const form = fixture.debugElement.query(By.css('form'));
+    form.triggerEventHandler('submit', null);
+
+    await fixture.whenStable();
+  }
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should notify on successful login', async(async () => {
+    await submitForm('user1', 'password');
+
+    // check notifications
+    expect(notifyInfoSpy.calls.count()).toEqual(1);
+    expect(notifyInfoSpy.calls.first().args[0]).toEqual('You were authenticated.');
+  }));
+
+  it('should notify on wrong credentials error', async(async () => {
+    await submitForm('nonexistent-user', 'password');
+
+    // check notifications
+    expect(notifyErrorSpy.calls.count()).toEqual(1);
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('Username or password don\'t match.');
+  }));
+
+  it('should notify on other errors', async(async () => {
+    // provide unexpected error
+    const model = fixture.debugElement.injector.get(ModelService);
+
+    const err = new Error('Internal Server Error');
+    err['status'] = 500;
+    spyOn(model, 'basicAuth').and.returnValue(Promise.reject(err));
+
+    // submit form
+    await submitForm('error-user', 'password');
+
+    // check notifications
+    expect(notifyErrorSpy.calls.count()).toEqual(1);
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('Unexpected error.');
+  }));
 });

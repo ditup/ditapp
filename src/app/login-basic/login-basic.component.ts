@@ -69,7 +69,7 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
       console.log('authenticated');
 
       this.notifications.clear();
-      this.notifications.info('you were authenticated', { ttl: 5000 });
+      this.notifications.info('You were authenticated.');
 
       // redirect to the url provided in ?redirect=url or to default redirect
       const redirectUrl = this.route.snapshot.queryParams['redirect'] || `/user/${this.auth.username}`;
@@ -78,14 +78,27 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
       this.loginForm.reset();
 
     } catch (err) {
-      this.notifications.clear();
-      this.notifications.error('username or password don\'t match');
 
       this.loginForm.reset({
         username: credentials.username,
         password: ''
       });
 
+      this.notifications.clear();
+
+      let message = 'Unexpected error';
+      switch (err.status) {
+        case 401: {
+          message = 'Username or password don\'t match.';
+          break;
+        }
+        default: {
+          // TODO throw this error instead, and handle in a global error handler
+          message = 'Unexpected error.';
+        }
+      }
+
+      this.notifications.error(message);
     } finally {
       this.isFormDisabled = false;
     }
