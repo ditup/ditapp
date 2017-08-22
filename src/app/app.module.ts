@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
@@ -10,6 +10,8 @@ import { MarkdownModule } from 'angular2-markdown';
 import { MomentModule } from 'angular2-moment';
 
 import 'hammerjs';  // for angular material
+
+import { GlobalErrorHandler } from './error-handler';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -73,6 +75,8 @@ import { UserListWithTagsComponent } from './shared/user-list-with-tags/user-lis
 import { TagRelatedTagsComponent } from './tag/tag-related-tags/tag-related-tags.component';
 import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-people.component';
 import { ChangePasswordComponent } from './account/change-password/change-password.component';
+
+import { NotificationsService } from './notifications/notifications.service';
 
 @NgModule({
   declarations: [
@@ -150,7 +154,10 @@ import { ChangePasswordComponent } from './account/change-password/change-passwo
     MarkdownModule,
     MomentModule
   ],
-  providers: [],
+  providers: [
+    NotificationsService,
+    { provide: ErrorHandler, useClass: GlobalErrorHandler } // custom global error handler
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     TagStoryFormComponent,

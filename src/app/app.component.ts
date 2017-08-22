@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import * as _ from 'lodash';
 
-import { NotificationsService } from './notifications/notifications.service';
+// import { NotificationsService } from './notifications/notifications.service';
 import { ModelService } from './model.service';
 import { BasicAuthService } from './basic-auth.service';
 import { AuthService } from './auth.service';
@@ -22,8 +22,8 @@ import { DialogService } from './dialog.service';
     BasicAuthService,
     AuthService,
     HeaderControlService,
-    DialogService,
-    NotificationsService
+    DialogService
+    // NotificationsService
   ]
 })
 export class AppComponent implements OnInit, OnDestroy {
