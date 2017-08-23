@@ -8,7 +8,7 @@ import { ModelService } from './model.service';
 
 import { AuthService } from './auth.service';
 
-import { Tag, UserTag, Message } from './shared/types';
+import { Tag, UserTag, Message, Contact } from './shared/types';
 
 class AuthStubService {
   credentials = {
@@ -1173,6 +1173,345 @@ describe('ModelService', () => {
         }
       });
     });
+  });
+
+  describe('requestResetPassword(usernameOrEmail)', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user1';
+      const email = `${username}@example.com`;
+
+      // execute the function
+      const requestResetPasswordPromise = service.requestResetPassword(email);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/account?reset-password`);
+
+      expect(req.request.method).toEqual('PATCH');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(false);
+
+      req.flush('');
+
+      await requestResetPasswordPromise;
+    }));
+  });
+
+  describe('resetPassword(username, password, code)', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user1';
+      const password = 'password';
+      const code = 'code';
+
+      // execute the function
+      const resetPasswordPromise = service.resetPassword(username, password, code);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/account`);
+
+      expect(req.request.method).toEqual('PATCH');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(false);
+
+      req.flush('');
+
+      await resetPasswordPromise;
+    }));
+  });
+
+  describe('changeEmail(username, email, password)', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user1';
+      const email = 'user1@example.com';
+      const password = 'password';
+
+      // execute the function
+      const changeEmailPromise = service.changeEmail(username, email, password);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/account`);
+
+      expect(req.request.method).toEqual('PATCH');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush('');
+
+      await changeEmailPromise;
+    }));
+  });
+
+  describe('sendContactRequestTo(username, { message, trust, reference })', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user1';
+      const contact = { message: 'hello', trust: 3, reference: 'friend' };
+
+      // execute the function
+      const sendContactRequestToPromise = service.sendContactRequestTo(username, contact);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/contacts`);
+
+      expect(req.request.method).toEqual('POST');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+      expect(req.request.body).toEqual({
+        data: {
+          type: 'contacts',
+          attributes: contact,
+          relationships: { to: { data: { type: 'users', id: username } } }
+        }
+      })
+
+      req.flush({
+        data: {
+          type: 'contacts',
+          id: `me--${username}`,
+          attributes: {
+            isConfirmed: false,
+            created: Date.now(),
+            reference: contact.reference,
+            trust: contact.trust
+          },
+          relationships: {
+            from: { data: { type: 'users', id: 'me' } },
+            to: { data: { type: 'users', id: username } }
+          }
+        }
+      });
+
+      await sendContactRequestToPromise;
+    }));
+  });
+
+  describe('updateContactWith(username, { message?, trust?, reference?, isConfirmed? })', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user1';
+      const contact = { trust: 2, reference: 'friend', isConfirmed: true };
+
+      // execute the function
+      const updateContactWithPromise = service.updateContactWith(username, contact);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/contacts/test/${username}`);
+
+      expect(req.request.method).toEqual('PATCH');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+      expect(req.request.body).toEqual({
+        data: {
+          type: 'contacts',
+          id: `test--${username}`,
+          attributes: contact
+        }
+      })
+
+      req.flush({
+        data: {
+          type: 'contacts',
+          id: `me--${username}`,
+          attributes: contact,
+          relationships: {
+            from: { data: { type: 'users', id: 'test' } },
+            to: { data: { type: 'users', id: username } }
+          }
+        }
+      });
+
+      await updateContactWithPromise;
+    }));
+  });
+
+  describe('deleteContactWith(username)', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user1';
+
+      // execute the function
+      const deleteContactWithPromise = service.deleteContactWith(username);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/contacts/test/${username}`);
+
+      expect(req.request.method).toEqual('DELETE');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush('');
+
+      await deleteContactWithPromise;
+    }));
+  });
+
+  describe('confirmContactRequestFrom(username, { message?, trust?, reference?, isConfirmed? })', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user1';
+      const contact = { trust: 2, reference: 'friend', isConfirmed: true };
+
+      // execute the function
+      const confirmContactRequestFromPromise = service.confirmContactRequestFrom(username, contact);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/contacts/test/${username}`);
+
+      expect(req.request.method).toEqual('PATCH');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+      expect(req.request.body).toEqual({
+        data: {
+          type: 'contacts',
+          id: `test--${username}`,
+          attributes: contact
+        }
+      })
+
+      req.flush({
+        data: {
+          type: 'contacts',
+          id: `me--${username}`,
+          attributes: contact,
+          relationships: {
+            from: { data: { type: 'users', id: 'test' } },
+            to: { data: { type: 'users', id: username } }
+          }
+        }
+      });
+
+      await confirmContactRequestFromPromise;
+    }));
+  });
+
+  describe('readContactsTo(username)', () => {
+    it('should make a correct request', async(async () => {
+
+      const username = 'user-to';
+
+      // execute the function
+      const readContactsToPromise = service.readContactsTo(username);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/contacts?filter[to]=${username}`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush({
+        data: [
+          {
+            type: 'contacts',
+            id: `user1--${username}`,
+            attributes: {
+              isConfirmed: true,
+              created: 123,
+              confirmed: 123,
+              trust: 2,
+              reference: 'ref1'
+            },
+            relationships: {
+              from: { data: { type: 'users', id: 'user1' } },
+              to: { data: { type: 'users', id: username } },
+              creator: { data: { type: 'users', id: 'user1' } }
+            },
+          },
+          {
+            type: 'contacts',
+            id: `user2--${username}`,
+            attributes: {
+              isConfirmed: true,
+              created: 123,
+              confirmed: 123,
+              trust: 4,
+              reference: 'ref2'
+            },
+            relationships: {
+              from: { data: { type: 'users', id: 'user2' } },
+              to: { data: { type: 'users', id: username } },
+              creator: { data: { type: 'users', id: username } }
+            },
+          }
+        ],
+        included: [
+          { type: 'users', id: username, attributes: {} },
+          { type: 'users', id: 'user1', attributes: {} },
+          { type: 'users', id: 'user2', attributes: {} },
+        ]
+      });
+
+      const contacts = await readContactsToPromise;
+      expect(contacts).toEqual([
+        new Contact({
+          from: { username: 'user1' },
+          to: { username },
+          creator: { username: 'user1' },
+          isConfirmed: true,
+          trust: 2, reference: 'ref1', created: 123, confirmed: 123
+        }),
+        new Contact({
+          from: { username: 'user2' },
+          to: { username },
+          creator: { username },
+          isConfirmed: true,
+          trust: 4, reference: 'ref2', created: 123, confirmed: 123
+        })
+      ]);
+    }));
+  });
+
+  describe('readContact(from, to)', () => {
+    it('should make a correct request', async(async () => {
+
+      const from = 'user-from';
+      const to = 'user-to';
+
+      // execute the function
+      const readContactPromise = service.readContact(from, to);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/contacts/${from}/${to}`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush({
+        data: {
+          type: 'contacts',
+          id: `${from}--${to}`,
+          attributes: {
+            isConfirmed: true,
+            created: 123,
+            confirmed: 123,
+            trust: 2,
+            reference: 'ref1'
+          },
+          relationships: {
+            from: { data: { type: 'users', id: from } },
+            to: { data: { type: 'users', id: to } },
+            creator: { data: { type: 'users', id: to } }
+          },
+        },
+        included: [
+          { type: 'users', id: from, attributes: {} },
+          { type: 'users', id: to, attributes: {} },
+        ]
+      });
+
+      const contacts = await readContactPromise;
+
+      expect(contacts).toEqual(new Contact({
+        from: { username: from },
+        to: { username: to },
+        creator: { username: to },
+        isConfirmed: true,
+        trust: 2, reference: 'ref1', created: 123, confirmed: 123
+      }));
+    }));
   });
 
   // verify that there are no outstanding requests remaining
