@@ -869,7 +869,6 @@ describe('ModelService', () => {
         }
       ], included: [
         { type: 'tags', id: 'tag1' },
-        { type: 'users', id: 'user1' },
         { type: 'user-tags', id: 'user1--tag1',
           attributes: {
             story: '', relevance: 3

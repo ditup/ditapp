@@ -752,7 +752,7 @@ export class ModelService {
     const userTags = tagRels.map(
       tagRel => this.deserializeUserTag(
         included.find(c => c.type === 'user-tags' && c.id === tagRel.id),
-        included
+        included.concat(userData) // users are missing in included. Providing them.
       )
     );
 
