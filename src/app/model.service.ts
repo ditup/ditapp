@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Headers, Http } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LatLng } from 'leaflet';
 
@@ -28,7 +28,7 @@ export class ModelService {
 
   constructor(private http: Http, private httpc: HttpClient, private auth: AuthService) { }
 
-  createUser({ username, email, password }: User): Promise<void> {
+  async createUser({ username, email, password }: User): Promise<User> {
     const requestBody = {
       data: {
         type: 'users',
@@ -40,14 +40,13 @@ export class ModelService {
       }
     };
 
-    const headers = new Headers({ 'Content-Type': 'application/vnd.api+json' });
+    const headers = this.notLoggedHttpHeaders;
 
-    return this.http
-      .post(`${this.baseUrl}/users`, JSON.stringify(requestBody), { headers })
-      .toPromise()
-      .then((response) => {
-        console.log('responded!', response);
-      });
+    const response: any = await this.httpc
+      .post(`${this.baseUrl}/users`, requestBody, { headers })
+      .toPromise();
+
+    return this.deserializeUser(response.data);
   }
 
   private get notLoggedHeaders() {
@@ -67,6 +66,13 @@ export class ModelService {
     return new HttpHeaders().append(auth[0], auth[1]).append(contentType[0], contentType[1]);
   }
 
+  private get notLoggedHttpHeaders() {
+
+    const [contentType] = Object.entries(this.contentTypeHeader);
+
+    return new HttpHeaders().append(contentType[0], contentType[1]);
+  }
+
   /**
    * @TODO this function is hugely imperfect. we don't know how to work with Observables catch etc
    *
@@ -75,11 +81,11 @@ export class ModelService {
   isUsernameAvailable(username: string): Observable<boolean> {
     console.log('searching for availability of', username);
 
-    const headers = new Headers({ 'Content-Type': 'application/vnd.api+json' });
+    const headers = this.notLoggedHttpHeaders;
 
-    return this.http
-      .get(`${this.baseUrl}/users/${username}`, { headers })
-      .map((resp: Response) => {
+    return this.httpc
+      .head(`${this.baseUrl}/users/${username}`, { headers, observe: 'response' })
+      .map((resp: HttpResponse<any>) => {
         if (resp.status === 200) { return false; }
       })
       .catch((err): Observable<boolean> => {
@@ -99,10 +105,8 @@ export class ModelService {
       }
     };
 
-    console.log(this.notLoggedHeaders);
-
-    const response = await this.http
-      .patch(`${this.baseUrl}/account`, body, { headers: this.notLoggedHeaders })
+    const response = await this.httpc
+      .patch(`${this.baseUrl}/account`, body, { headers: this.notLoggedHttpHeaders })
       .toPromise();
 
     console.log('responded!', response);
@@ -130,22 +134,22 @@ export class ModelService {
     // generate an Authorization header
     const authHeader = this.createBasicAuthHeader({ username, password });
 
-    const headers = new Headers(_.assign({}, authHeader, this.contentTypeHeader));
+    const headers = new HttpHeaders(Object.assign({}, authHeader, this.contentTypeHeader));
 
-    const response = await this.http
-      .get(`${this.baseUrl}/auth/basic`, { headers })
+    const response: HttpResponse<any> = await this.httpc
+      .get(`${this.baseUrl}/auth/basic`, { headers, observe: 'response' })
       .toPromise();
 
-    return this.deserializeUser(response.json().data);
+    return this.deserializeUser(response.body.data);
   }
 
   async readUser(username: string): Promise<User> { // @TODO better return type
 
-    const response = await this.http
-      .get(`${this.baseUrl}/users/${username}`, { headers: this.loggedHeaders })
+    const response: any = await this.httpc
+      .get(`${this.baseUrl}/users/${username}`, { headers: this.loggedHttpHeaders })
       .toPromise();
 
-    return this.deserializeUser(response.json().data);
+    return this.deserializeUser(response.data);
   }
 
   /**
@@ -160,7 +164,7 @@ export class ModelService {
   async updateUser(username: string, fields: {
     givenName?: string, familyName?: string, description?: string, location?: [number, number]
   }): Promise<User> {
-    console.log('updating the user!', username, fields);
+
     const requestBody = {
       data: {
         type: 'users',
@@ -169,11 +173,11 @@ export class ModelService {
       }
     };
 
-    const response: Response = await this.http
-      .patch(`${this.baseUrl}/users/${username}`, JSON.stringify(requestBody), { headers: this.loggedHeaders })
+    const response: any = await this.httpc
+      .patch(`${this.baseUrl}/users/${username}`, requestBody, { headers: this.loggedHttpHeaders })
       .toPromise();
 
-    return this.deserializeUser(response.json().data);
+    return this.deserializeUser(response.data);
   }
 
   /**
@@ -192,7 +196,7 @@ export class ModelService {
     });
   }
 
-  async createTag({ tagname }: Tag): Promise<void> {
+  async createTag({ tagname }: Tag): Promise<Tag> {
 
     const requestBody = {
       data: {
@@ -203,13 +207,13 @@ export class ModelService {
       }
     };
 
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const response: Response = await this.http
-      .post(`${this.baseUrl}/tags`, JSON.stringify(requestBody), { headers })
+    const response: any = await this.httpc
+      .post(`${this.baseUrl}/tags`, requestBody, { headers })
       .toPromise();
 
-    console.log('responded!', response.json());
+    return this.deserializeTag(response.data);
   }
 
   /**
@@ -218,13 +222,11 @@ export class ModelService {
    *
    */
   isTagnameAvailable(tagname: string): Observable<boolean> {
-    console.log('searching for availability of', tagname);
+    const headers = this.loggedHttpHeaders;
 
-    const headers = this.loggedHeaders;
-
-    return this.http
-      .head(`${this.baseUrl}/tags/${tagname}`, { headers })
-      .map((resp: Response) => {
+    return this.httpc
+      .head(`${this.baseUrl}/tags/${tagname}`, { headers, observe: 'response' })
+      .map((resp: HttpResponse<any>) => {
         if (resp.status === 200) { return false; }
       })
       .catch((err): Observable<boolean> => {
@@ -269,19 +271,16 @@ export class ModelService {
 
   }
 
-  readTagsLike(value: string): Observable<any[]> {
+  readTagsLike(value: string): Observable<Tag[]> {
 
-    console.log('searching tags like', value);
+    const headers = this.loggedHttpHeaders;
 
-    const headers = this.loggedHeaders;
-
-    return this.http
-      .get(`${this.baseUrl}/tags?filter${encodeURIComponent('[tagname][like]')}=${encodeURIComponent(value)}`, { headers })
-      .map(response => _.map(response.json().data, (d: any) => d.attributes));
+    return this.httpc
+      .get(`${this.baseUrl}/tags?filter[tagname][like]=${encodeURIComponent(value)}`, { headers })
+      .map((response: any) => response.data.map((tagDatum: any) => this.deserializeTag(tagDatum)));
   }
 
-  updateUserTag(username: string, tagname: string, data: { story?: string, relevance?: number}): Promise<any> {
-    console.log('updating user-tag', username, tagname);
+  async updateUserTag(username: string, tagname: string, data: { story?: string, relevance?: number}): Promise<UserTag> {
     const requestBody = {
       data: {
         type: 'users',
@@ -290,86 +289,55 @@ export class ModelService {
       }
     };
 
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    return this.http
-      .patch(`${this.baseUrl}/users/${username}/tags/${tagname}`, JSON.stringify(requestBody), { headers })
-      .toPromise()
-      .then(() => {
-        // const data = response.json().data;
-      });
+    const response: any = await this.httpc
+      .patch(`${this.baseUrl}/users/${username}/tags/${tagname}`, requestBody, { headers })
+      .toPromise();
+
+    const { data: rawTag, included } = response;
+    return this.deserializeUserTag(rawTag, included);
+
   }
 
-  removeUserTag(username: string, tagname: string): Promise<any> {
+  async removeUserTag(username: string, tagname: string): Promise<void> {
 
-    console.log('removing tag', tagname, 'from user', username);
+    const headers = this.loggedHttpHeaders;
 
-    const headers = this.loggedHeaders;
-
-    return this.http
+    await this.httpc
       .delete(`${this.baseUrl}/users/${username}/tags/${tagname}`, { headers })
-      .toPromise()
-      .then((response: Response) => {
-        console.log('responded!', response);
-        return response;
-      });
-
+      .toPromise();
   }
 
-  readAvatar(username: string): Promise<any> {
-    const headers = this.loggedHeaders;
+  async readAvatar(username: string): Promise<any> {
+    const headers = this.loggedHttpHeaders;
 
-    return this.http
+    const response: any = await this.httpc
       .get(`${this.baseUrl}/users/${username}/avatar`, { headers })
-      .toPromise()
-      .then((response: Response) => {
-        const data = response.json().data;
-        return data.attributes;
-      });
+      .toPromise();
+
+    const { data } = response;
+    return data.attributes;
   }
 
-  readTag(tagname: string): Promise<Tag> {
-    const headers = this.loggedHeaders;
+  async readTag(tagname: string): Promise<Tag> {
+    const headers = this.loggedHttpHeaders;
 
-    return this.http
+    const response: any = await this.httpc
       .get(`${this.baseUrl}/tags/${tagname}`, { headers })
-      .toPromise()
-      .then((response: Response) => {
-        const data = response.json().data;
-        return data.attributes;
-      });
+      .toPromise();
+
+    const { data } = response;
+    return this.deserializeTag(data);
   }
 
   async tagExists(tagname: string): Promise<boolean> {
-    const isValid: boolean = (function (tgname: string): boolean {
-      const isSizeValid = tgname.length >= 1 && tgname.length <= 64;
-      const isNameValid = /^[a-z0-9]+(\-[a-z0-9]+)*$/.test(tgname);
-
-      return isSizeValid && isNameValid;
-
-    }(tagname));
-
-    if (!isValid) {
-      return false;
-    }
-
-    const headers = this.loggedHeaders;
 
     try {
-      const { status } = await this.http
-        .head(`${this.baseUrl}/tags/${tagname}`, { headers })
-        .toPromise();
-
-      if (status === 200) {
-        return true;
-      }
-
-      throw new Error(`Unexpected success status ${status}`);
-
+      const available = await this.isTagnameAvailable(tagname).toPromise();
+      return !available;
     } catch (e) {
-      const { status } = e;
-
-      if (status === 404) {
+      if (e.status === 400) {
         return false;
       }
 
@@ -381,116 +349,59 @@ export class ModelService {
    * Read New Users
    */
   public async findNewUsers(): Promise<User[]> {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const response: Response = await this.http
+    const response: any = await this.httpc
       .get(`${this.baseUrl}/users?sort=-created&page[offset]=0&page[limit]=5`, { headers })
       .toPromise();
 
-    const responseJson = response.json();
-    const data = responseJson.data;
+    const { data } = response;
 
-    return _.map(data, (userData: any) => this.deserializeUser(userData)) as User[];
+    return data.map((userData: any) => this.deserializeUser(userData)) as User[];
   }
 
-  public async findUsersByTags(tags: Tag[]): Promise<User[]> {
-    const headers = this.loggedHeaders;
+  async findUsersByTags(tags: Tag[]): Promise<User[]> {
+    const headers = this.loggedHttpHeaders;
 
-    const tagnames: string[] = _.map(tags, tag => tag.tagname);
+    const tagnames: string = tags.map(tag => tag.tagname).join(',');
 
-    const tagnamesJoined: string = tagnames.join(',');
+    console.log(`${this.baseUrl}/users?filter[tag]=${tagnames}`);
 
-    const response: Response = await this.http
-      .get(`${this.baseUrl}/users?filter${encodeURIComponent('[tag]')}=${encodeURIComponent(tagnamesJoined)}`, { headers })
+    const response: any = await this.httpc
+      .get(`${this.baseUrl}/users?filter[tag]=${tagnames}`, { headers })
       .toPromise();
 
-    const responseJson = response.json();
-    const data = responseJson.data;
-    const included = responseJson.included;
+    const { data, included } = response;
 
-    const users: User[] = _.map(data, (userData: any) => {
-
-      const user = userData.attributes as User;
-      user.userTags = [];
-
-      _.each(userData.relationships.tags.data, (userTagRel: any) => {
-        const userTagData = _.find(included, (userTag: any) => {
-          return userTag.type === 'user-tags' && userTag.id === userTagRel.id;
-        });
-
-        const userTag = userTagData.attributes as UserTag;
-
-        const tagData = _.find(included, (tag: any) => {
-          const tagRel = userTagData.relationships.tag.data;
-          return tag.type === 'tags' && tag.id === tagRel.id;
-        });
-
-        userTag.tag = tagData.attributes as Tag;
-
-        user.userTags.push(userTag);
-
-      });
-
-      return user;
-    });
+    const users: User[] = data.map((userData: any) => this.deserializeUserWithTags(userData, included));
 
     return users;
   }
 
   public async findUsersByMyTags() {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const response: Response = await this.http
-      .get(`${this.baseUrl}/users?filter${encodeURIComponent('[byMyTags]')}=true`, { headers })
+    const response: any = await this.httpc
+      .get(`${this.baseUrl}/users?filter[byMyTags]`, { headers })
       .toPromise();
 
-    const responseJson = response.json();
-    const data = responseJson.data;
-    const included = responseJson.included;
+    const { data, included } = response;
 
-    const users: User[] = _.map(data, (userData: any) => {
-
-      const user = userData.attributes as User;
-      user.userTags = [];
-
-      _.each(userData.relationships.tags.data, (userTagRel: any) => {
-        const userTagData = _.find(included, (userTag: any) => {
-          return userTag.type === 'user-tags' && userTag.id === userTagRel.id;
-        });
-
-        const userTag = userTagData.attributes as UserTag;
-
-        const tagData = _.find(included, (tag: any) => {
-          const tagRel = userTagData.relationships.tag.data;
-          return tag.type === 'tags' && tag.id === tagRel.id;
-        });
-
-        userTag.tag = tagData.attributes as Tag;
-
-        user.userTags.push(userTag);
-
-      });
-
-      return user;
-    });
-
+    const users: User[] = data.map(userData => this.deserializeUserWithTags(userData, included));
     return users;
   }
 
   public findUsersWithinRectangle(sw: LatLng, ne: LatLng): Observable<User[]> {
-    const headers = this.loggedHeaders;
-
-    console.log(sw, ne);
+    const headers = this.loggedHttpHeaders;
 
     const locationString = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
 
-    return this.http
-      .get(`${this.baseUrl}/users?filter${encodeURIComponent('[location]')}=${locationString}`, { headers })
-      .map((response: Response) => {
-        const responseJson = response.json();
-        const data = responseJson.data;
+    return this.httpc
+      .get(`${this.baseUrl}/users?filter[location]=${locationString}`, { headers })
+      .map((response: any) => {
+        const { data } = response;
 
-        return _.map(data, (user: any) => this.deserializeUser(user));
+        return data.map((user: any) => this.deserializeUser(user));
       });
   }
 
@@ -499,15 +410,15 @@ export class ModelService {
    * @returns Promise<Tag[]>
    */
   public async findTagsByMyTags(): Promise<Tag[]> {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const response: Response = await this.http
+    const response: any = await this.httpc
       .get(`${this.baseUrl}/tags?filter[relatedToMyTags]`, { headers })
       .toPromise();
 
-    const { data } = response.json();
+    const { data } = response;
 
-    const tags: Tag[] = _.map(data, (tag) => this.deserializeTag(tag));
+    const tags: Tag[] = data.map(tag => this.deserializeTag(tag));
     return tags;
   }
 
@@ -517,43 +428,44 @@ export class ModelService {
    * @returns Tag[] - found tags
    */
   public async findTagsByTags(tagsIn: Tag[]): Promise<Tag[]> {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const tagQueryString = _.map(tagsIn, (tag: Tag) => tag.tagname).join(',');
+    const tagQueryString = tagsIn.map((tag: Tag) => tag.tagname).join(',');
 
-    const response: Response = await this.http
+    const response: any = await this.httpc
       .get(`${this.baseUrl}/tags?filter[relatedToTags]=${tagQueryString}`, { headers })
       .toPromise();
 
-    const { data } = response.json();
+    const { data } = response;
+    console.log(typeof(response), response.status);
 
-    const tagsOut: Tag[] = _.map(data, (tag) => this.deserializeTag(tag));
+    const tagsOut: Tag[] = data.map((tag) => this.deserializeTag(tag));
     return tagsOut;
   }
 
   public async findRandomTags(): Promise<Tag[]> {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const response: Response = await this.http
+    const response: any = await this.httpc
       .get(`${this.baseUrl}/tags?filter[random]`, { headers })
       .toPromise();
 
-    const { data } = response.json();
+    const { data } = response;
 
-    const tags: Tag[] = _.map(data, (tag) => this.deserializeTag(tag));
+    const tags: Tag[] = data.map(tag => this.deserializeTag(tag));
     return tags;
   }
 
   public async readMessagesWith(username: string): Promise<Message[]> {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const response: Response = await this.http
-      .get(`${this.baseUrl}/messages?filter${encodeURIComponent('[with]')}=${username}`, { headers })
+    const response: any = await this.httpc
+      .get(`${this.baseUrl}/messages?filter[with]=${username}`, { headers })
       .toPromise();
 
-    const { data, included } = response.json();
+    const { data, included } = response;
 
-    const messages: Message[] = _.map(data, (msgData: any) => {
+    const messages: Message[] = data.map((msgData: any) => {
       return this.deserializeMessage(msgData, included);
     });
 
@@ -561,24 +473,24 @@ export class ModelService {
   }
 
   public async readThreads(): Promise<Message[]> {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
-    const response: Response = await this.http
-      .get(`${this.baseUrl}/messages?filter${encodeURIComponent('[threads]')}`, { headers })
+    const response: any = await this.httpc
+      .get(`${this.baseUrl}/messages?filter[threads]`, { headers })
       .toPromise();
 
-    const { data, included } = response.json();
+    const { data, included } = response;
 
-    const messages: Message[] = _.map(data, (msgData: any) => {
+    const messages: Message[] = data.map((msgData: any) => {
       return this.deserializeMessage(msgData, included);
     });
 
     return messages;
   }
 
-  public async sendMessage(to: string, { body }: { body: string }): Promise<any> {
+  public async sendMessage(to: string, { body }: { body: string }): Promise<Message> {
 
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHttpHeaders;
 
     const requestBody = {
       data: {
@@ -592,16 +504,19 @@ export class ModelService {
       }
     };
 
-    const response: Response = await this.http
-      .post(`${this.baseUrl}/messages`, JSON.stringify(requestBody), { headers })
+    const response: any = await this.httpc
+      .post(`${this.baseUrl}/messages`, requestBody, { headers })
       .toPromise();
 
-      const { data, included } = response.json();
+      const { data, included } = response;
 
       return this.deserializeMessage(data, included);
   }
 
   public async updateMessageToRead(message: Message) {
+
+    const headers = this.loggedHttpHeaders;
+
     const requestBody = {
       data: {
         type: 'messages',
@@ -612,24 +527,21 @@ export class ModelService {
       }
     };
 
-    const response: Response = await this.http
-      .patch(`${this.baseUrl}/messages/${message.id}`, JSON.stringify(requestBody), { headers: this.loggedHeaders })
+    const response: any = await this.httpc
+      .patch(`${this.baseUrl}/messages/${message.id}`, requestBody, { headers })
       .toPromise();
 
-      const { data } = response.json();
+      const { data, included } = response;
 
-      return data;
+      return this.deserializeMessage(data, included);
   }
 
   public countUnreadMessages(): Observable<number> {
-    console.log('counting unread messages');
-    return this.http
-      .get(`${this.baseUrl}/messages?filter${encodeURIComponent('[count]')}`, { headers: this.loggedHeaders })
-      .map((resp: Response) => {
-        console.log(resp.json(), resp.json().meta);
-        return resp.json().meta.unread;
+    return this.httpc
+      .get(`${this.baseUrl}/messages?filter[count]`, { headers: this.loggedHttpHeaders })
+      .map((resp: any) => {
+        return resp.meta.unread;
       });
-
   }
 
   public async requestResetPassword(usernameOrEmail: string): Promise<void> {
@@ -831,6 +743,20 @@ export class ModelService {
     const attrs = ['givenName', 'familyName', 'description', 'location', 'preciseLocation', 'email'];
     const user: User = _.extend({ username: userData.id }, _.pick(userData.attributes, attrs));
 
+    return user;
+  }
+
+  private deserializeUserWithTags(userData: any, included: any[]): User {
+    const user = this.deserializeUser(userData);
+    const tagRels = userData.relationships.tags.data;
+    const userTags = tagRels.map(
+      tagRel => this.deserializeUserTag(
+        included.find(c => c.type === 'user-tags' && c.id === tagRel.id),
+        included
+      )
+    );
+
+    user.userTags = userTags;
     return user;
   }
 
