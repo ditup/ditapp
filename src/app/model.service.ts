@@ -324,14 +324,15 @@ export class ModelService {
 
   async tagExists(tagname: string): Promise<boolean> {
 
-    try {
-      const available = await this.isTagnameAvailable(tagname).toPromise();
-      return !available;
-    } catch (e) {
-      if (e.status === 400) {
-        return false;
-      }
+    const headers = this.loggedHeaders;
 
+    try {
+      const response: HttpResponse<any> = await this.http
+        .head(`${this.baseUrl}/tags/${tagname}`, { headers, observe: 'response' }).toPromise();
+
+      if (response.status === 200) { return true; }
+    } catch (e) {
+      if (e.status === 404 || e.status === 400) { return false; }
       throw e;
     }
   }
@@ -434,11 +435,11 @@ export class ModelService {
     return tagsOut;
   }
 
-  public async findRandomTags(): Promise<Tag[]> {
+  public async findRandomTags(limit = 3): Promise<Tag[]> {
     const headers = this.loggedHeaders;
 
     const response: any = await this.http
-      .get(`${this.baseUrl}/tags?filter[random]`, { headers })
+      .get(`${this.baseUrl}/tags?filter[random]&page[offset]=0&page[limit]=${limit}`, { headers })
       .toPromise();
 
     const { data } = response;

@@ -131,11 +131,11 @@ describe('ModelService', () => {
 
   });
 
-  describe('findRandomTags()', () => {
+  describe('findRandomTags(limit = 3)', () => {
     it('should success', async(async () => {
-      const findRandomTagsPromise = service.findRandomTags();
+      const findRandomTagsPromise = service.findRandomTags(4);
 
-      const req = httpMock.expectOne(`${baseUrl}/tags?filter[random]`);
+      const req = httpMock.expectOne(`${baseUrl}/tags?filter[random]&page[offset]=0&page[limit]=4`);
 
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
@@ -143,12 +143,15 @@ describe('ModelService', () => {
 
       req.flush({
         data: [
-          { type: 'tags', id: 'tag3' }
+          { type: 'tags', id: 'tag3' },
+          { type: 'tags', id: 'tag4' },
+          { type: 'tags', id: 'tag6' },
+          { type: 'tags', id: 'tag0' }
         ]
       });
 
       const response = await findRandomTagsPromise;
-      expect(response.length).toEqual(1);
+      expect(response.length).toEqual(4);
     }));
   });
 
