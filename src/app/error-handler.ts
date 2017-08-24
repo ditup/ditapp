@@ -3,13 +3,16 @@ import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { NotificationsService } from './notifications/notifications.service';
 
 @Injectable()
-export class GlobalErrorHandler implements ErrorHandler {
+export class GlobalErrorHandler extends ErrorHandler implements ErrorHandler {
 
-  constructor(private injector: Injector) { }
+  constructor(private injector: Injector) { super(); }
 
   handleError(error) {
-    console.error(error);
-    let message = `Unexpected error: ${error.message || error}`;
+
+    // execute the ErrorHandler.handleError()
+    super.handleError(error);
+
+    let message = `Unexpected error: ${error.message || error.msg || error}`;
 
     // handle special cases
     switch (error.status) {
@@ -21,8 +24,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     // notify the error
     const notify = this.injector.get(NotificationsService);
-    notify.error(message);
-    throw error;
+    notify.error(message, { ttl: 0 });
   }
 
 }

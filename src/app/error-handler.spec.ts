@@ -25,26 +25,20 @@ describe('GlobalErrorHandler', () => {
 
   it('should notify about unexpected error', inject([GlobalErrorHandler], (service: GlobalErrorHandler) => {
     const err = new Error('unexpected error');
-    try {
-      service.handleError(err);
-    } catch(e) {
-      if (e !== err) throw e;
-      expect(notifyErrorSpy.calls.count()).toEqual(1);
-      expect(notifyErrorSpy.calls.first().args[0]).toEqual('Unexpected error: unexpected error');
-    }
+    service.handleError(err);
+
+    expect(notifyErrorSpy.calls.count()).toEqual(1);
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('Unexpected error: unexpected error');
 
   }));
 
   it('should notify about unreachable API (502: Bad Gateway)', inject([GlobalErrorHandler], (service: GlobalErrorHandler) => {
     const err = new Error('Bad Gateway');
     err['status'] = 502;
-    try {
-      service.handleError(err);
-    } catch(e) {
-      if (e !== err) throw e;
-      expect(notifyErrorSpy.calls.count()).toEqual(1);
-      expect(notifyErrorSpy.calls.first().args[0]).toEqual('API is down. Please report to server administrators.');
-    }
+
+    service.handleError(err);
+    expect(notifyErrorSpy.calls.count()).toEqual(1);
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('API is down. Please report to server administrators.');
 
   }));
 });
