@@ -21,24 +21,18 @@ export class ModelService {
 
   private generateAuthHeader = this.generateBasicAuthHeader;
 
-  private contentTypeHeader = {
-    'Content-Type': 'application/vnd.api+json',
-  };
+  private contentTypeHeader: [string, string] = ['Content-Type', 'application/vnd.api+json'];
 
   // the logged headers as expected by HttpClient
   private get loggedHeaders() {
 
-    const [auth] = Object.entries(this.authHeader);
-    const [contentType] = Object.entries(this.contentTypeHeader);
-
-    return new HttpHeaders().append(auth[0], auth[1]).append(contentType[0], contentType[1]);
+    return new HttpHeaders()
+      .append(this.contentTypeHeader[0], this.contentTypeHeader[1])
+      .append(this.authHeader[0], this.authHeader[1]);
   }
 
   private get notLoggedHeaders() {
-
-    const [contentType] = Object.entries(this.contentTypeHeader);
-
-    return new HttpHeaders().append(contentType[0], contentType[1]);
+    return new HttpHeaders().append(this.contentTypeHeader[0], this.contentTypeHeader[1]);
   }
 
   constructor(private http: HttpClient, private auth: AuthService) { }
@@ -115,17 +109,17 @@ export class ModelService {
     return this.createBasicAuthHeader(credentials);
   }
 
-  private createBasicAuthHeader({ username, password }: { username: string, password: string }): { Authorization: string } {
-    return {
-      Authorization: 'Basic ' + new Buffer(`${username}:${password}`).toString('base64')
-    };
+  private createBasicAuthHeader({ username, password }: { username: string, password: string }): [string, string] {
+    return ['Authorization', 'Basic ' + new Buffer(`${username}:${password}`).toString('base64')] as [string, string];
   }
 
   async basicAuth({ username, password }: User): Promise<User> {
     // generate an Authorization header
     const authHeader = this.createBasicAuthHeader({ username, password });
 
-    const headers = new HttpHeaders(Object.assign({}, authHeader, this.contentTypeHeader));
+    const headers = new HttpHeaders()
+      .append(authHeader[0], authHeader[1])
+      .append(this.contentTypeHeader[0], this.contentTypeHeader[1]);
 
     const response: HttpResponse<any> = await this.http
       .get(`${this.baseUrl}/auth/basic`, { headers, observe: 'response' })
