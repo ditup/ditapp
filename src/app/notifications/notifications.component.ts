@@ -29,7 +29,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   public notifySubscription: Subscription;
 
-  constructor(private notifyControl: NotificationsService) {
+  constructor(public notifyControl: NotificationsService) {
     // subscribe to observing whether to display the header or not
     this.notifySubscription = this.notifyControl.notificationsChanged$.subscribe((notifications: Notification[]) => {
       this.notifications = notifications;

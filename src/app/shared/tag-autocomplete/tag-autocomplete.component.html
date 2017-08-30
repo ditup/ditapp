@@ -6,7 +6,7 @@
   </md-input-container>
 
   <!-- autocomplete of tags -->
-  <md-autocomplete #auto="mdAutocomplete">
+  <md-autocomplete #auto>
     <md-option *ngFor="let tag of suggestedTags | async" [value]="tag.tagname"
       (click)="submitFromAutosuggestion(tag.tagname)">
       {{ tag.tagname }}

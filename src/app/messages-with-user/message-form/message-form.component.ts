@@ -24,7 +24,7 @@ export class MessageFormComponent implements OnInit {
   public isFormDisabled = false;
   private message: { body: string } = { body: '' };
 
-  private formErrors = {
+  public formErrors = {
     body: ''
   };
 

@@ -18,7 +18,7 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
   // the form object
   public loginForm: FormGroup;
 
-  private isFormDisabled: boolean;
+  public isFormDisabled: boolean;
 
   // inject modules, services
   constructor(private formBuilder: FormBuilder,

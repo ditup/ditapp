@@ -32,8 +32,8 @@ export class ContactsComponent implements OnInit {
       });
   }
 
-  public get myUsername() {
-    return this.auth.username;
+  public get me() {
+    return this.auth.user;
   }
 
   public get confirmedContacts() {
