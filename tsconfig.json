@@ -1,27 +1,22 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
-    "baseUrl": "src",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["es6", "dom", "es2017.object", "es2017"],
-    "module": "es6",
-    "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": [
-      "hammerjs"
-    ]
-  },
-  "compileOnSave": true,
-  "exclude": [
-    "node_modules/*",
-    "**/*-aot.ts"
-  ]
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": []
+  }
 }

@@ -2,7 +2,7 @@
 // https://karma-runner.github.io/0.13/config/configuration-file.html
 
 module.exports = function (config) {
-  let configuration = {
+  const configuration = {
     basePath: '',
     frameworks: ['jasmine', '@angular/cli'],
     plugins: [
@@ -13,6 +13,9 @@ module.exports = function (config) {
       require('karma-coverage-istanbul-reporter'),
       require('@angular/cli/plugins/karma'),
     ],
+    client: {
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    }
     files: [
       { pattern: './src/test.ts', watched: false },
       // include angular material core theme

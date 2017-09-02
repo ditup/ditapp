@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 import { Map, LatLng, TileLayer, Marker } from 'leaflet';
 import * as L from 'leaflet';
-import { MarkerClusterGroup } from 'leaflet.markercluster';
+// import { MarkerClusterGroup } from 'leaflet.markercluster';
 import 'leaflet.markercluster';
 
 import { ModelService } from '../model.service';
@@ -24,7 +24,7 @@ export class MapComponent implements OnInit {
   mapContainer: ElementRef;
 
   private map: Map;
-  private markers: MarkerClusterGroup;
+  private markers: any; //MarkerClusterGroup;
   private userIcon = L.icon({
     iconUrl: '/static/img/user-icon.svg'
   });
