@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/startWith';
 
 import { Tag } from '../types';
 import { ModelService } from '../../model.service';

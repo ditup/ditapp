@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
 import { RouterStub } from '../../../testing/router-stubs';
 

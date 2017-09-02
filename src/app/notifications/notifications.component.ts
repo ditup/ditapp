@@ -4,7 +4,7 @@ import { NotificationsService } from './notifications.service';
 
 import { Notification } from '../shared/types';
 
-import { Subscription }   from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-notifications',

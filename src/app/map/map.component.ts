@@ -24,7 +24,7 @@ export class MapComponent implements OnInit {
   mapContainer: ElementRef;
 
   private map: Map;
-  private markers: any; //MarkerClusterGroup;
+  private markers: any; // MarkerClusterGroup;
   private userIcon = L.icon({
     iconUrl: '/static/img/user-icon.svg'
   });

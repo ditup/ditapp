@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject }    from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 
 import { BasicAuthService } from './basic-auth.service';
 import { User } from './shared/types';

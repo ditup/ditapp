@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription }   from 'rxjs/Subscription';
-import { Observable }   from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/timer';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/timer';
 
 import { HeaderControlService } from '../header-control.service';
 import { AuthService } from '../auth.service';
