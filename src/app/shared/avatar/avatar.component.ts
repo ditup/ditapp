@@ -1,4 +1,5 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { ModelService } from '../../model.service';
 
@@ -9,18 +10,19 @@ import { ModelService } from '../../model.service';
 })
 export class AvatarComponent implements OnInit, OnChanges {
 
-  @Input()
-  username: string;
+  @Input() username: string;
+  @Input() size = 128;
 
-  public avatar: { base64: string, format: string };
+  public avatarUrl: string|SafeUrl; // { base64: string, format: string };
 
-  constructor(private model: ModelService) { }
+  constructor(private model: ModelService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {}
 
   async ngOnChanges() {
     // get avatar and assign it to this.avatar
-    this.avatar = await this.model.readAvatar(this.username);
+    const avatarUrl = await this.model.readAvatar(this.username, this.size);
+    this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(avatarUrl);
   }
 
 }

@@ -7,5 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class AvatarStubComponent {
   @Input() username;
+  @Input() size;
   constructor() { }
 }

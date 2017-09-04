@@ -1,16 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { UserSmallComponent } from './user-small.component';
 
-import { MaterialModule } from '@angular/material';
-
-import { ModelService } from '../../model.service';
-
-import { RouterLinkStubDirective } from '../../../testing/router-stubs';
-
-class ModelStubService {
-  public readAvatar() {}
-}
+import { AvatarStubComponent } from '../../../testing/avatar-stub';
 
 describe('UserSmallComponent', () => {
   let component: UserSmallComponent;
@@ -20,14 +13,12 @@ describe('UserSmallComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         UserSmallComponent,
-        RouterLinkStubDirective
+        AvatarStubComponent
       ],
       imports: [
-        MaterialModule
+        RouterTestingModule
       ],
-      providers: [
-        { provide: ModelService, useClass: ModelStubService }
-      ]
+      providers: []
     })
     .compileComponents();
   }));

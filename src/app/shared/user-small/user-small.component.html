@@ -1,10 +1,4 @@
 <a routerLink="/user/{{user.username}}">
-
-  <div style="display:inline-block;" *ngIf="!avatarLoaded">
-    <md-spinner class="avatar"></md-spinner>
-  </div>
-  <img class="avatar"
-    *ngIf="avatarLoaded"
-    src="data:image/{{avatar.format}};base64,{{avatar.base64}}"
-    alt="Profile Picture of {{user.username}}"/>
-    {{user.username}}</a>
+  <app-avatar [ngClass]="['avatar']" [username]="user.username" [size]="32"></app-avatar>
+  <span>{{user.username}}</span>
+</a>

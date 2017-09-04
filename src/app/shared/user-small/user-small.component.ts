@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { User } from '../types';
-import { ModelService } from '../../model.service';
 
 @Component({
   selector: 'app-user-small',
@@ -10,18 +9,10 @@ import { ModelService } from '../../model.service';
 })
 export class UserSmallComponent implements OnInit {
 
-  public avatar: { base64: string, format: string };
-
-  public avatarLoaded = false;
-
   @Input()
   public user: User;
 
-  constructor(private model: ModelService) { }
+  constructor() { }
 
-  async ngOnInit() {
-    this.avatar = await this.model.readAvatar(this.user.username);
-    this.avatarLoaded = true;
-  }
-
+  ngOnInit() { }
 }

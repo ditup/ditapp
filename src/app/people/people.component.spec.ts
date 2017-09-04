@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 
 import { map } from 'lodash';
@@ -8,8 +9,6 @@ import { PeopleComponent } from './people.component';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { RouterLinkStubDirective, RouterLinkActiveStubDirective, RouterOutletStubComponent } from '../../testing/router-stubs';
-
 describe('PeopleComponent', () => {
   let component: PeopleComponent;
   let fixture: ComponentFixture<PeopleComponent>;
@@ -18,13 +17,11 @@ describe('PeopleComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         PeopleComponent,
-        RouterOutletStubComponent,
-        RouterLinkStubDirective,
-        RouterLinkActiveStubDirective
       ],
       imports: [
         MaterialModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        RouterTestingModule
       ]
     })
     .compileComponents();

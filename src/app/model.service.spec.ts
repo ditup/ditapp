@@ -10,6 +10,10 @@ import { AuthService } from './auth.service';
 
 import { Tag, UserTag, Message, Contact } from './shared/types';
 
+// TODO better typing of this library?
+import * as b64 from 'b64-to-blob';
+const b64ToBlob = b64 as any;
+
 class AuthStubService {
   credentials = {
     username: 'test',
@@ -733,9 +737,9 @@ describe('ModelService', () => {
     }));
   });
 
-  describe('readAvatar(username)', () => {
+  describe('readAvatar(username, size=128)', () => {
 
-    it('should read the avatar of user', async(async () => {
+    it('should read the default svg avatar of user', async(async () => {
 
       const username = 'user1';
 
@@ -743,24 +747,56 @@ describe('ModelService', () => {
       const readAvatarPromise = service.readAvatar(username);
 
       // mock the backend
-      const req = httpMock.expectOne(`${baseUrl}/users/${username}/avatar`);
+      const req = httpMock.expectOne(`${baseUrl}/users/${username}/avatar?filter[size]=128`);
 
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
       expect(req.request.headers.has('authorization')).toEqual(true);
 
-      req.flush({ data: {
-        type: 'user-avatars',
-        id: username,
-        attributes: {
-          base64: 'aabcde',
-          format: 'png'
-        }
-      } });
+      req.flush(b64ToBlob(btoa('<svg></svg>'), 'image/svg+xml'));
 
       const avatar = await readAvatarPromise;
-      expect(avatar.format).toEqual('png');
-      expect(avatar.base64).toEqual('aabcde');
+      expect(avatar).toMatch(/^data:image\/svg\+xml;base64/);
+    }));
+
+    it('should read a uploaded jpeg avatar of user', async(async () => {
+
+      const username = 'user1';
+
+      // execute the function
+      const readAvatarPromise = service.readAvatar(username);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/users/${username}/avatar?filter[size]=128`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush(b64ToBlob(btoa('AAAA'), 'image/jpeg'));
+
+      const avatar = await readAvatarPromise;
+      expect(avatar).toMatch(/^data:image\/jpeg;base64/);
+    }));
+
+    it('can specify the avatar size', async(async () => {
+
+      const username = 'user1';
+
+      // execute the function with specific size
+      const readAvatarPromise = service.readAvatar(username, 64);
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/users/${username}/avatar?filter[size]=64`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush(b64ToBlob(btoa('AAAA'), 'image/jpeg'));
+
+      const avatar = await readAvatarPromise;
+      expect(avatar).toMatch(/^data:image\/jpeg;base64/);
     }));
   });
 

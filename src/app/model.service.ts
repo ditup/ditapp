@@ -294,15 +294,29 @@ export class ModelService {
       .toPromise();
   }
 
-  async readAvatar(username: string): Promise<any> {
+  /**
+   * provide a blob, the encoded blob as base64 data url will be returned
+   */
+  private blobToDataUrl(blob): Promise<string> {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise((resolve) => {
+      reader.onloadend = function() {
+        const base64data = reader.result;
+        resolve(base64data);
+      }
+    });
+  }
+
+  async readAvatar(username: string, size = 128): Promise<string> {
     const headers = this.loggedHeaders;
 
     const response: any = await this.http
-      .get(`${this.baseUrl}/users/${username}/avatar`, { headers })
+      .get(`${this.baseUrl}/users/${username}/avatar?filter[size]=${size}`, { headers, responseType: 'blob', observe: 'response' })
       .toPromise();
 
-    const { data } = response;
-    return data.attributes;
+    // blob to base64 data url
+    return await this.blobToDataUrl(response.body);
   }
 
   async readTag(tagname: string): Promise<Tag> {

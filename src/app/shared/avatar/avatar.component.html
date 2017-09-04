@@ -1,4 +1,4 @@
-<img *ngIf="avatar"
+<img *ngIf="avatarUrl"
   class="avatar"
-  src="data:image/{{avatar.format}};base64,{{avatar.base64}}"
+  [src]="avatarUrl"
   alt="Profile Picture of {{username}}">
