@@ -61,7 +61,7 @@
       "spec": true
     },
     "serve": {
-      "host" : "dev.ditup.org",
+      "host" : "89.221.210.112",
       "port" : "4200"
     }
   }
