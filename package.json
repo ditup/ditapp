@@ -33,6 +33,7 @@
     "lodash": "^4.17.4",
     "mobile-drag-drop": "^2.0.0",
     "ng2-dnd": "^2.2.2",
+    "ng2-fancy-image-uploader": "^1.6.1",
     "ng2-validation": "^3.0.2",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"

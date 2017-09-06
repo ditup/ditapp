@@ -25,6 +25,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public loggedUnverified: boolean;
   // if logged, what is her username?
   public username: string;
+  // avatar username is separate, for reloading avatar image
+  public avatarUsername: string;
   // how many unread messages do we have?
   public messageCount: number;
 
@@ -34,6 +36,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private authSubscription: Subscription;
   private messageTimerSubscription: Subscription;
+  // subscription for reloading avatar image
+  private updateAvatarSubscription: Subscription;
 
   constructor(private headerControl: HeaderControlService,
               private auth: AuthService,
@@ -53,6 +57,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.username = username;
       this.loggedUnverified = loggedUnverified;
       this.subscribeToMessageCount();
+    });
+
+    /*
+     * Reloading avatar image
+     */
+    this.updateAvatarSubscription = this.headerControl.updateAvatar$.subscribe(() => {
+      // avatar.component loads image onChanges, so we change username
+      this.avatarUsername = null;
+      // needs to happen in next tick, to detect changes and reload avatar
+      setTimeout(() => {
+        this.avatarUsername = this.username;
+      }, 0);
     });
   }
 
@@ -95,6 +111,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.logged = this.auth.logged;
     this.loggedUnverified = this.auth.loggedUnverified;
     this.username = this.auth.username;
+    this.avatarUsername = this.username;
 
     this.subscribeToMessageCount();
   }
@@ -103,12 +120,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // avoid memory leaks by unsubscribing from observables
     this.subscription.unsubscribe();
     this.authSubscription.unsubscribe();
+    this.updateAvatarSubscription.unsubscribe();
+
     if (this.messageTimerSubscription) {
       this.messageTimerSubscription.unsubscribe();
     }
     if (this.modelCountSubscription) {
       this.modelCountSubscription.unsubscribe();
     }
+
   }
 
 }

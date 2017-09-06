@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { LatLng } from 'leaflet';
+import { api } from './config';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -17,7 +18,7 @@ declare const Buffer; // fixing a weird error (not declared Buffer)
 @Injectable()
 export class ModelService {
 
-  private baseUrl = 'https://dev.ditup.org/api';
+  private baseUrl = api.baseUrl;
 
   private generateAuthHeader = this.generateBasicAuthHeader;
 
@@ -318,6 +319,37 @@ export class ModelService {
     // blob to base64 data url
     return await this.blobToDataUrl(response.body);
   }
+
+  /*
+   * TODO for future reference
+   * currently the method doesn't work
+   * and we use ng2-fancy-image-uploader instead
+   * probably because 'Content-Type': 'multipart/form-data' doesn't contain boundaries information
+   * related stackoverflow question: https://stackoverflow.com/questions/46059226/upload-image-with-httpclient
+   */
+  /*
+  async updateAvatar(file: File): Promise<void> {
+    // authentication header without content-type
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'multipart/form-data')
+      .append(this.authHeader[0], this.authHeader[1]);
+
+
+    const username = this.auth.username;
+
+    const formData: FormData = new FormData();
+    formData.append('avatar', file, file.name);
+
+    console.log(formData);
+
+    const response: any = await this.http
+      .patch(`${this.baseUrl}/users/${username}/avatar`, formData, { headers, observe: 'response' })
+      .toPromise();
+
+    console.log(response.status);
+
+  }
+  */
 
   async readTag(tagname: string): Promise<Tag> {
     const headers = this.loggedHeaders;

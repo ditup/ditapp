@@ -20,9 +20,11 @@ export class AvatarComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   async ngOnChanges() {
-    // get avatar and assign it to this.avatar
-    const avatarUrl = await this.model.readAvatar(this.username, this.size);
-    this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(avatarUrl);
+    if (this.username) {
+      // get avatar image and assign it to this.avatarUrl
+      const avatarUrl = await this.model.readAvatar(this.username, this.size);
+      this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(avatarUrl);
+    }
   }
 
 }

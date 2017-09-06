@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DndModule } from 'ng2-dnd';
 import { MarkdownModule } from 'angular2-markdown';
 import { MomentModule } from 'angular2-moment';
+import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 
 import 'hammerjs';  // for angular material
 
@@ -77,6 +78,7 @@ import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-
 import { ChangePasswordComponent } from './account/change-password/change-password.component';
 
 import { NotificationsService } from './notifications/notifications.service';
+import { AvatarUploadComponent } from './user-edit/avatar-upload/avatar-upload.component';
 
 @NgModule({
   declarations: [
@@ -140,7 +142,8 @@ import { NotificationsService } from './notifications/notifications.service';
     UserListWithTagsComponent,
     TagRelatedTagsComponent,
     TagRelatedPeopleComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    AvatarUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -152,7 +155,8 @@ import { NotificationsService } from './notifications/notifications.service';
     AppRoutingModule,
     DndModule.forRoot(), // drag and drop: ng2-dnd
     MarkdownModule,
-    MomentModule
+    MomentModule,
+    FancyImageUploaderModule
   ],
   providers: [
     NotificationsService,

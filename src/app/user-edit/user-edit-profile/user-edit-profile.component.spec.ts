@@ -1,5 +1,6 @@
 import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MaterialModule } from '@angular/material';
@@ -15,6 +16,9 @@ import { User } from '../../shared/types';
 import { NotificationsService } from '../../notifications/notifications.service';
 
 import { UserEditProfileComponent } from './user-edit-profile.component';
+
+@Component({ selector: 'app-avatar-upload', template: '' })
+class AvatarUploadStubComponent { }
 
 class ModelStubService {
   async updateUser(username: string, profile: { givenName: string, familyName: string, description: string }): Promise<User> {
@@ -43,7 +47,10 @@ describe('UserEditProfileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserEditProfileComponent ],
+      declarations: [
+        UserEditProfileComponent,
+        AvatarUploadStubComponent
+      ],
       imports: [
         ReactiveFormsModule,
         MaterialModule,
