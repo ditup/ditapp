@@ -30,7 +30,7 @@ class ModelStubService {
     return { user: { username }, tag: { tagname }, relevance, story };
   }
 
-  async removeUserTag(_username: string, _tagname: string) {}
+  async removeUserTag(_username: string, _tagname: string) { }
 }
 
 class ActivatedRouteStub {
@@ -44,7 +44,8 @@ class ActivatedRouteStub {
     { user: this.user, tag: { tagname: 'tag1' }, story: '', relevance: 4 },
     { user: this.user, tag: { tagname: 'tag2' }, story: '', relevance: 3 },
     { user: this.user, tag: { tagname: 'tag3' }, story: '', relevance: 2 },
-    { user: this.user, tag: { tagname: 'tag4' }, story: '', relevance: 1 }
+    { user: this.user, tag: { tagname: 'tag4' }, story: '', relevance: 1 },
+    { user: this.user, tag: { tagname: 'tag5' }, story: 'tag to delete', relevance: 1 }
   ];
 
   data = Observable.of({ userTags: this.userTags });
@@ -96,7 +97,7 @@ describe('UserEditTagsComponent', () => {
 
   it('should display a list of user\'s tags', () => {
     const userTags = fixture.debugElement.queryAll(By.css('.user-tag'));
-    expect(userTags.length).toEqual(5);
+    expect(userTags.length).toEqual(6);
     expect(userTags[0].nativeElement.textContent).toMatch(/tag0/);
   });
 
@@ -219,6 +220,32 @@ describe('UserEditTagsComponent', () => {
 
   describe('removing tag', () => {
 
+    it('should ask for confirmation before removing', async(async () => {
+      const openRemoveTagDialogSpy = spyOn(component, 'openRemoveTagDialog');
+      // get a handler of the second tag from relevance container 1
+      const tagToRemove = fixture.debugElement.queryAll(By.css('.tag-relevance-container-1 .user-tag'))[1];
+      expect(tagToRemove).toBeTruthy();
+      // get a handler of the closing button
+      const deleteButton = tagToRemove.query(By.css('button'));
+      expect(deleteButton).toBeTruthy();
+
+      // click the delete button
+      deleteButton.triggerEventHandler('click', null);
+
+      await fixture.whenStable();
+      fixture.detectChanges();
+      // now a modal with options yes and no should be displayed
+      // but we just test that the opening function was called
+      expect(openRemoveTagDialogSpy.calls.count()).toEqual(1);
+      expect(openRemoveTagDialogSpy.calls.first().args[0]).toEqual({
+        user: { username: 'user' },
+        tag: { tagname: 'tag5' },
+        story: 'tag to delete',
+        relevance: 1
+      });
+
+    }));
+
     it('should call a correct model function', fakeAsync(() => {
       // spy on model.addTagToUser
       const spyRemoveTag = spyOn(modelService, 'removeUserTag').and.callThrough();
@@ -250,7 +277,7 @@ describe('UserEditTagsComponent', () => {
 
       // but the others should stay
       const tags1 = fixture.debugElement.queryAll(By.css('.tag-relevance-container-1 .user-tag'));
-      expect(tags1.length).toEqual(1);
+      expect(tags1.length).toEqual(2);
     }));
 
   });

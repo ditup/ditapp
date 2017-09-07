@@ -15,7 +15,7 @@
         (click)="openTagStoryDialog(userTag)"
         dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, userTag: userTag }">
         {{userTag.tag.tagname}}
-        <button (click)="removeTag(userTag.tag.tagname); $event.stopPropagation()">
+        <button (click)="openRemoveTagDialog(userTag); $event.stopPropagation()">
           <md-icon alt="remove">close</md-icon>
         </button>
       </md-chip>
@@ -38,7 +38,7 @@
         (click)="openTagStoryDialog(userTag)"
         dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, userTag: userTag }">
         {{userTag.tag.tagname}}
-        <button (click)="removeTag(userTag.tag.tagname); $event.stopPropagation()">
+        <button (click)="openRemoveTagDialog(userTag); $event.stopPropagation()">
           <md-icon alt="remove">close</md-icon>
         </button>
       </md-chip>

@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { polyfill } from 'mobile-drag-drop';
 
 import { TagStoryFormComponent } from './tag-story-form/tag-story-form.component';
+import { TagRemoveConfirmComponent } from './tag-remove-confirm/tag-remove-confirm.component';
 
 import { ModelService } from '../../model.service';
 import { NotificationsService } from '../../notifications/notifications.service';
@@ -23,9 +24,8 @@ export class UserEditTagsComponent implements OnInit {
 
   public user: User;
 
-  public tags: UserTag[];
-
   public tagStoryDialogRef: MdDialogRef<TagStoryFormComponent>;
+  public removeTagDialogRef: MdDialogRef<TagRemoveConfirmComponent>;
 
   // lists of tags, by relevance
   // 1-5 tags by relevance
@@ -45,13 +45,16 @@ export class UserEditTagsComponent implements OnInit {
     });
 
     this.route.data.subscribe(({ userTags }: { userTags: UserTag[] }) => {
-      this.tags = userTags;
-
       // sort tags into their tagList by relevance
-      for (const tag of this.tags) {
+      for (const tag of userTags) {
         this.tagLists[tag.relevance].push(tag);
       }
     });
+  }
+
+  get tags(): UserTag[] {
+    // join the tagLists to a single list
+    return [].concat(...this.tagLists);
   }
 
   // prevent default events to make drag & drop work on touch devices with `mobile-drag-drop` library
@@ -120,6 +123,27 @@ export class UserEditTagsComponent implements OnInit {
     }
   }
 
+  // this function opens a dialog to confirm removing userTag
+  openRemoveTagDialog(userTag: UserTag) {
+    // open the dialog
+    this.removeTagDialogRef = this.dialog.open(TagRemoveConfirmComponent);
+    const dialogRef = this.removeTagDialogRef;
+
+    const component = dialogRef.componentInstance;
+
+    // initialize the dialog with the provided tag
+    component.userTag = userTag;
+
+    // subscribe to dialog confirmation
+    const subscription: any = component.onConfirm.subscribe(async (userTagConfirmed: UserTag) => {
+      console.log('confirming tag deletion');
+      await dialogRef.close();
+      await this.removeTag(userTagConfirmed.tag.tagname);
+      subscription.unsubscribe();
+    });
+
+  }
+
   async removeTag(tagname: string) {
 
     // @TODO make the state of adding and removing a tag visible
@@ -129,7 +153,7 @@ export class UserEditTagsComponent implements OnInit {
 
     await this.model.removeUserTag(username, tagname)
     console.log('tag successfully removed');
-    _.forEach(this.tagLists, (list) => {
+    this.tagLists.forEach((list) => {
       _.pullAllBy(list, [{ tag: { tagname } }], 'tag.tagname');
     });
   }

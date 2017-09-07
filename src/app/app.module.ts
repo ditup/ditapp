@@ -79,6 +79,7 @@ import { ChangePasswordComponent } from './account/change-password/change-passwo
 
 import { NotificationsService } from './notifications/notifications.service';
 import { AvatarUploadComponent } from './user-edit/avatar-upload/avatar-upload.component';
+import { TagRemoveConfirmComponent } from './user-edit/user-edit-tags/tag-remove-confirm/tag-remove-confirm.component';
 
 @NgModule({
   declarations: [
@@ -143,7 +144,8 @@ import { AvatarUploadComponent } from './user-edit/avatar-upload/avatar-upload.c
     TagRelatedTagsComponent,
     TagRelatedPeopleComponent,
     ChangePasswordComponent,
-    AvatarUploadComponent
+    AvatarUploadComponent,
+    TagRemoveConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -165,6 +167,7 @@ import { AvatarUploadComponent } from './user-edit/avatar-upload/avatar-upload.c
   bootstrap: [AppComponent],
   entryComponents: [
     TagStoryFormComponent,
+    TagRemoveConfirmComponent,
     UserTagDetailComponent,
     SelectFromMyTagsComponent
   ]
