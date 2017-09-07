@@ -7,8 +7,8 @@
     </md-input-container>
 
     <div class="form-field trust-field" *ngIf="fields.indexOf('trust') > -1">
-      <h2>Trust</h2>
-      <md-radio-group formControlName="trust">
+      <h2>Trust*</h2>
+      <md-radio-group formControlName="trust" required>
         <md-radio-button *ngFor="let tl of trustLevels" [value]="tl.value">
           {{tl.label}}
         </md-radio-button>

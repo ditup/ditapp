@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 
 @Component({
@@ -56,20 +56,26 @@ export class ContactFormComponent implements OnInit {
   }
 
   private buildForm(): void {
-    const initialFormData = this.data;
+
+    // general form structure
+    const initialFormData = {
+      message: this.data.message,
+      trust: [this.data.trust, [Validators.required]],
+      reference: this.data.reference
+    }
+
+    // remove the fields which shouldn't be present in this form
     for (const field of this.disabledFields) {
       delete initialFormData[field];
     }
 
-    console.log(initialFormData, this.disabledFields);
-
-    // TODO validation
-
     this.contactForm = this.formBuilder.group(initialFormData);
   }
 
-  async onSubmitWrapper() {
-    this.onSubmit.emit(this.contactForm.value);
+  onSubmitWrapper() {
+    if (this.contactForm.valid) {
+      this.onSubmit.emit(this.contactForm.value);
+    }
   }
 
 }
