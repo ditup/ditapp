@@ -8,6 +8,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 
 import { VerifyEmailComponent } from './verify-email.component';
 import { ModelService } from '../model.service';
+import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
 import { ActivatedRouteStub, RouterStub } from '../../testing/router-stubs';
 
@@ -20,18 +21,17 @@ class ModelStubService {
   async verifyEmail() { }
 }
 
-class HeaderControlStubService {
-  displayChanged$;
-
-  display(value: boolean) {
-    value; // tslint:disable-line:no-unused-expression
+class AuthStubService {
+  logged = true;
+  logout() {
+    this.logged = false;
   }
-
 }
 
 describe('VerifyEmailComponent', () => {
   let component: VerifyEmailComponent;
   let fixture: ComponentFixture<VerifyEmailComponent>;
+  let notifyInfoSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
@@ -41,8 +41,9 @@ describe('VerifyEmailComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         NotificationsService,
-        { provide: HeaderControlService, useClass: HeaderControlStubService },
+        HeaderControlService,
         { provide: ModelService, useClass: ModelStubService },
+        { provide: AuthService, useClass: AuthStubService },
         { provide: Router, useClass: RouterStub }
       ]
     })
@@ -53,11 +54,23 @@ describe('VerifyEmailComponent', () => {
     fixture = TestBed.createComponent(VerifyEmailComponent);
     component = fixture.componentInstance;
     activatedRoute.testParams = { username: 'test-user' };
+
+    const notify = fixture.debugElement.injector.get(NotificationsService);
+    notifyInfoSpy = spyOn(notify, 'info');
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should log user out when logged in and inform about it in a notification', () => {
+    const auth = fixture.debugElement.injector.get(AuthService);
+    expect(auth.logged).toEqual(false);
+
+    expect(notifyInfoSpy.calls.count()).toEqual(1);
+    expect(notifyInfoSpy.calls.argsFor(0)[0]).toEqual('The previous user was logged out.');
   });
 
   it('should show a form to provide email verification code', () => {

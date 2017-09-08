@@ -6,6 +6,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { has } from 'lodash';
 
 import { ModelService } from '../model.service';
+import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
 
 @Component({
@@ -25,9 +26,10 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   public verificationSuccess: boolean;
 
   constructor(private formBuilder: FormBuilder,
+              private auth: AuthService,
               private route: ActivatedRoute,
               private router: Router,
-              private notifications: NotificationsService,
+              private notify: NotificationsService,
               private model: ModelService,
               private headerControl: HeaderControlService) { }
 
@@ -36,10 +38,21 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+
+    // is somebody logged in now?
+    const isLogged = this.auth.logged;
+    // log current user out
+    this.auth.logout();
+    // and notify about it
+    if (isLogged) {
+      this.notify.info('The previous user was logged out.');
+    }
+
+
     // hide the header
     this.headerControl.display(false);
 
-    const params = this.route.snapshot.params;
+    const { params } = this.route.snapshot;
 
     // fetch the username (and code if provided in url)
     this.username = params['username'];
@@ -94,12 +107,12 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
       const email = await this.model.verifyEmail(this.username, this.code);
       // notify success
       // show success notification
-      this.notifications.info(`your email ${email} was successfully verified`);
+      this.notify.info(`your email ${email} was successfully verified`);
       // show the after-success part of the page
       this.verificationSuccess = true;
     } catch (e) {
       // TODO notify error in more detail
-      this.notifications.error('there was an error');
+      this.notify.error('there was an error');
       throw e;
     }
   }
