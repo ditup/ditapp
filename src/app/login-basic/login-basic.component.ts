@@ -23,7 +23,7 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
   // inject modules, services
   constructor(private formBuilder: FormBuilder,
               private model: ModelService,
-              private notifications: NotificationsService,
+              private notify: NotificationsService,
               private auth: AuthService,
               private router: Router,
               private route: ActivatedRoute,
@@ -31,6 +31,14 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
 
   // this will execute when the page is loaded
   ngOnInit(): void {
+    // check whether user is logged in
+    const logged = this.auth.logged;
+    // log user out at the beginning
+    this.auth.logout();
+    // notify that we logged somebody out, if we did so
+    if (logged) {
+      this.notify.info('The previous user was logged out.');
+    }
     // don't display the page header
     this.headerControl.display(false);
     // initialize the reactive form
@@ -66,10 +74,8 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
       // log in the auth service
       this.auth.login({ method: 'basic', credentials: user});
 
-      console.log('authenticated');
-
-      this.notifications.clear();
-      this.notifications.info('You were authenticated.');
+      this.notify.clear();
+      this.notify.info('You were authenticated.');
 
       // redirect to the url provided in ?redirect=url or to default redirect
       const redirectUrl = this.route.snapshot.queryParams['redirect'] || `/user/${this.auth.username}`;
@@ -84,7 +90,7 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
         password: ''
       });
 
-      this.notifications.clear();
+      this.notify.clear();
 
       let message = 'Unexpected error';
       switch (err.status) {
@@ -98,7 +104,7 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.notifications.error(message);
+      this.notify.error(message);
     } finally {
       this.isFormDisabled = false;
     }
