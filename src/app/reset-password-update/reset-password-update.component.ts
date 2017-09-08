@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { AuthService } from '../auth.service';
 import { ModelService } from '../model.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
@@ -24,10 +25,20 @@ export class ResetPasswordUpdateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
+              private auth: AuthService,
               private model: ModelService,
               private notify: NotificationsService) { }
 
   ngOnInit(): void {
+    // is somebody logged in?
+    const isLogged = this.auth.logged;
+    // log current user out
+    this.auth.logout();
+    // notify if logging somebody out
+    if (isLogged) {
+      this.notify.info('The previous user was logged out.');
+    }
+
     this.username = this.route.snapshot.params['username'];
     // initialize the reactive form
     this.buildForm();
