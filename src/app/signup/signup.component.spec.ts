@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { SignupComponent } from './signup.component';
 import { ModelService } from '../model.service';
+import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
@@ -18,7 +19,14 @@ class RouterStub {
   navigate(url: any[]) { return url.join('/'); }
 }
 
-class FakeModelService {
+class AuthStubService {
+  logged = true;
+  logout() {
+    this.logged = false;
+  }
+}
+
+class ModelStubService {
   lastPromise: Promise<any>;
 
   createUser(newUser: User): Promise<void> {
@@ -41,6 +49,7 @@ describe('SignupComponent', () => {
 
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
+  let notifyInfoSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -52,7 +61,8 @@ describe('SignupComponent', () => {
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
-        { provide: ModelService, useClass: FakeModelService },
+        { provide: ModelService, useClass: ModelStubService },
+        { provide: AuthService, useClass: AuthStubService },
         HeaderControlService,
         NotificationsService
       ]
@@ -63,11 +73,24 @@ describe('SignupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SignupComponent);
     component = fixture.componentInstance;
+
+    const notify = fixture.debugElement.injector.get(NotificationsService);
+    notifyInfoSpy = spyOn(notify, 'info');
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should log out if somebody is logged in, and notify about it', () => {
+    const auth = fixture.debugElement.injector.get(AuthService);
+    expect(auth.logged).toEqual(false);
+
+    expect(notifyInfoSpy.calls.count()).toEqual(1);
+    expect(notifyInfoSpy.calls.argsFor(0)[0]).toEqual('The previous user was logged out.');
+
   });
 
   it('should show an empty signup form', () => {

@@ -8,8 +8,8 @@ import 'rxjs/add/operator/distinctUntilChanged';
 
 import { CustomValidators } from 'ng2-validation';
 
-// import { UniqueUsernameValidator } from '../shared/unique-username.directive';
 import { ModelService } from '../model.service';
+import { AuthService } from '../auth.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { HeaderControlService } from '../header-control.service';
 
@@ -60,12 +60,26 @@ export class SignupComponent implements OnInit, OnDestroy {
   // inject modules, services
   constructor(private router: Router,
               private formBuilder: FormBuilder,
+              private auth: AuthService,
               private model: ModelService,
-              private notifications: NotificationsService,
+              private notify: NotificationsService,
               private headerControl: HeaderControlService) { }
 
   // this will execute when the page is loaded
   ngOnInit(): void {
+
+    // is somebody logged in?
+    const isLogged = this.auth.logged;
+
+    // log current user out
+    this.auth.logout();
+
+    // notify if logging somebody out
+    if (isLogged) {
+      this.notify.info('The previous user was logged out.');
+    }
+
+
     // don't display the page header
     this.headerControl.display(false);
     // prepare the reactive form
@@ -194,7 +208,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       // redirect to email verification form
       await this.router.navigate(['/user', user.username, 'verify-email']);
     } catch (e) {
-      this.notifications.error(e.message);
+      this.notify.error(e.message);
     } finally {
       this.isFormDisabled = false;
     }
