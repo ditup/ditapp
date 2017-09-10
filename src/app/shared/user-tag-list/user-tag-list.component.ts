@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
 
-import { User, UserTag } from '../types';
+import { UserTag } from '../types';
 import { UserTagDetailComponent } from '../user-tag-detail/user-tag-detail.component';
 
 @Component({
@@ -12,9 +12,6 @@ import { UserTagDetailComponent } from '../user-tag-detail/user-tag-detail.compo
 export class UserTagListComponent implements OnInit {
   @Input()
   public userTags: UserTag[];
-
-  @Input()
-  public user: User;
 
   constructor(private dialog: MdDialog) { }
 

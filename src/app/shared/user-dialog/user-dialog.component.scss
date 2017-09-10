@@ -1,0 +1,28 @@
+// TODO overflow hidden, text-overflow ellipsis doesn't work as expected for .user-description
+.user-info {
+  display: block;
+  height: 128px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.74em;
+  position: relative;
+}
+
+app-avatar {
+  width: 128px;
+  height: 128px;
+  margin-right: 0.74em;
+  float: left;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.user-username {
+  color: gray;
+}
+
+.user-description {
+  margin-top: 0.74em;
+}

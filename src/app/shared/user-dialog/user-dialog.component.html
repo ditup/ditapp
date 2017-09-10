@@ -1,0 +1,14 @@
+<md-dialog-content>
+  <section class="user-info">
+    <app-avatar [username]="user.username" [size]="128"></app-avatar>
+    <section class="user-name">{{user.givenName}} {{user.familyName}}</section>
+    <section class="user-username">{{user.username}}</section>
+    <section class="user-description">{{user.description}}</section>
+  </section>
+  <app-user-tag-list [userTags]="userTags" *ngIf="userTags"></app-user-tag-list>
+  <div *ngIf="!userTags">loading tags...</div>
+</md-dialog-content>
+<md-dialog-actions>
+  <a md-raised-button (click)="close()" [routerLink]="'/user/' + user.username">Visit profile</a>
+  <button md-raised-button (click)="close()">Close</button>
+</md-dialog-actions>

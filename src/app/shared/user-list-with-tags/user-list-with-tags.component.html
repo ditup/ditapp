@@ -2,7 +2,6 @@
   <md-list-item *ngFor="let user of users">
     <app-user-small [user]="user"></app-user-small>
     <app-user-tag-list
-      [user]="user"
       [userTags]="user.userTags"></app-user-tag-list>
   </md-list-item>
 </md-list>

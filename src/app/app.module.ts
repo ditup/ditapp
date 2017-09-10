@@ -80,6 +80,7 @@ import { ChangePasswordComponent } from './account/change-password/change-passwo
 import { NotificationsService } from './notifications/notifications.service';
 import { AvatarUploadComponent } from './user-edit/avatar-upload/avatar-upload.component';
 import { TagRemoveConfirmComponent } from './user-edit/user-edit-tags/tag-remove-confirm/tag-remove-confirm.component';
+import { UserDialogComponent } from './shared/user-dialog/user-dialog.component';
 
 @NgModule({
   declarations: [
@@ -145,7 +146,8 @@ import { TagRemoveConfirmComponent } from './user-edit/user-edit-tags/tag-remove
     TagRelatedPeopleComponent,
     ChangePasswordComponent,
     AvatarUploadComponent,
-    TagRemoveConfirmComponent
+    TagRemoveConfirmComponent,
+    UserDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -169,6 +171,7 @@ import { TagRemoveConfirmComponent } from './user-edit/user-edit-tags/tag-remove
     TagStoryFormComponent,
     TagRemoveConfirmComponent,
     UserTagDetailComponent,
+    UserDialogComponent,
     SelectFromMyTagsComponent
   ]
 })
