@@ -9,17 +9,10 @@
         : (!msg.read)
         ? 'unread'
         : 'read'">
+      <app-avatar class="message-from" [username]="msg.from.username"></app-avatar>
       <div class="message-created">{{ msg.created | amTimeAgo }}</div>
       <div class="message-body">
-        <app-avatar
-          *ngIf="msg.from.username === otherUser.username"
-          class="message-from"
-          [username]="msg.from.username"></app-avatar>
-        {{ msg.body }}
-        <app-avatar
-          *ngIf="msg.to.username === otherUser.username"
-          class="message-from"
-          [username]="msg.from.username"></app-avatar>
+        <span Markdown>{{ msg.body }}</span>
       </div>
     </li>
   </ul>

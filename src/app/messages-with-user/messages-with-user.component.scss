@@ -13,13 +13,18 @@
 
   &.sent {
     border-color: $accent;
-    text-align: right;
+    // text-align: right;
   }
 
   .message-created {
+    display: inline-block;
     font-size: smaller;
     color: gray;
   }
+}
+
+.message-body span {
+  text-align: justify;
 }
 
 app-avatar {
