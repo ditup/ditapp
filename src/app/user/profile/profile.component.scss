@@ -2,22 +2,45 @@
   width: 300px;
   height: 300px;
   position: relative;
-  display: inline-block;
 }
 
 .user-description {
-  display: inline-block;
-  flex: 1 1 auto;
-  -webkit-flex: 1 1 auto;
-}
-
-.user-loc-desc-wrapper {
-  display: flex;
-  display: -webkit-flex;
-  vertical-align: top;
+  position: relative;
 }
 
 app-user-tag-list {
   margin-bottom: 1em;
   display: block;
+}
+
+// display location next to description, or below if screen is 600px and less;
+@media (min-width: 601px) {
+  .user-loc-desc-wrapper {
+    display: flex;
+    display: -webkit-flex;
+    vertical-align: top;
+  }
+
+  .user-location {
+    flex: 0 0 300px;
+    -webkit-flex: 0 0 300px;
+  }
+
+  .user-description,
+  .user-location {
+    display: inline-block;
+  }
+
+  .user-description {
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-location,
+  .user-description {
+    display: block;
+    margin: auto;
+  }
 }
