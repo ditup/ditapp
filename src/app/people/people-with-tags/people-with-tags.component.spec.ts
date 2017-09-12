@@ -103,7 +103,7 @@ describe('PeopleWithTagsComponent', () => {
 
     fixture.detectChanges();
 
-    console.log(userListComponent.users)
+    console.log(userListComponent.users);
 
     expect(userListComponent.users.length).toEqual(4);
   }));

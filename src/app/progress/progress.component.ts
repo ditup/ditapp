@@ -50,7 +50,7 @@ export class ProgressComponent implements OnInit, AfterViewInit {
 
   // returns a function which will be provided to this.progressBars.<find|findIndex>
   private findInArray(idToFind: number) {
-    return ({ id, progress: _progress }) => { return id === idToFind; }
+    return ({ id, progress: _progress }) => { return id === idToFind; };
   }
 
 }

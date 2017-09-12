@@ -68,7 +68,7 @@ export class ChangePasswordComponent implements OnInit {
           break;
         }
         default: {
-          msg = 'Unexpected error.'
+          msg = 'Unexpected error.';
         }
       }
       this.notify.error(msg);

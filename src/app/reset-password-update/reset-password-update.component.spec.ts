@@ -29,7 +29,7 @@ class ActivatedRouteStub {
       username: 'username',
       code: 'code'
     }
-  }
+  };
 }
 
 describe('ResetPasswordUpdateComponent', () => {

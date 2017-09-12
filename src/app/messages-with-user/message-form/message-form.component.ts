@@ -30,7 +30,7 @@ export class MessageFormComponent implements OnInit {
 
   private validationMessages = {
     body: {
-      get required() { return this.pattern },
+      get required() { return this.pattern; },
       pattern: 'Message can\'t be empty'
     }
   };

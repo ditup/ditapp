@@ -85,7 +85,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         Validators.required
       ]]
     });
-  };
+  }
 
   async onSubmit(): Promise<void> {
     this.isSubmitting = true;

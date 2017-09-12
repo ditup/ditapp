@@ -70,7 +70,7 @@ describe('ModelService', () => {
             emailVerificationCode: 'verificationCode'
           }
         }
-      })
+      });
 
       req.flush({ });
       const response = await verifyEmailPromise;
@@ -345,7 +345,7 @@ describe('ModelService', () => {
         tag: { tagname },
         story: '',
         relevance: 3
-      })
+      });
     }));
   });
 
@@ -959,7 +959,7 @@ describe('ModelService', () => {
     it('should read messages with user', async(async () => {
 
       // usernames
-      const me = 'user-me'
+      const me = 'user-me';
       const other = 'other-user';
 
       // execute the function
@@ -1019,7 +1019,7 @@ describe('ModelService', () => {
     it('should read last messages in latest active threads', async(async () => {
 
       // usernames
-      const me = 'user-me'
+      const me = 'user-me';
       const other = 'other-user';
 
       // execute the function
@@ -1079,7 +1079,7 @@ describe('ModelService', () => {
     it('should send a message to a user', async(async () => {
 
       // usernames
-      const me = 'user-me'
+      const me = 'user-me';
       const other = 'other-user';
 
       // execute the function
@@ -1137,9 +1137,9 @@ describe('ModelService', () => {
     it('should mark a message as read', async(async () => {
 
       // usernames
-      const me = 'user-me'
+      const me = 'user-me';
       const other = 'other-user';
-      const id = '111'
+      const id = '111';
 
       // execute the function
       const updateMessageToReadPromise = service.updateMessageToRead({ id });
@@ -1303,7 +1303,7 @@ describe('ModelService', () => {
           attributes: contact,
           relationships: { to: { data: { type: 'users', id: username } } }
         }
-      })
+      });
 
       req.flush({
         data: {
@@ -1347,7 +1347,7 @@ describe('ModelService', () => {
           id: `test--${username}`,
           attributes: contact
         }
-      })
+      });
 
       req.flush({
         data: {
@@ -1407,7 +1407,7 @@ describe('ModelService', () => {
           id: `test--${username}`,
           attributes: contact
         }
-      })
+      });
 
       req.flush({
         data: {

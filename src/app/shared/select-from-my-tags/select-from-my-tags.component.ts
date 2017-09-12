@@ -30,7 +30,7 @@ export class SelectFromMyTagsComponent implements OnInit {
   public loading = false;
 
   @Output()
-  public onSubmit = new EventEmitter<Tag[]>()
+  public onSubmit = new EventEmitter<Tag[]>();
 
   public ref: MdDialogRef<SelectFromMyTagsComponent>;
 
@@ -73,7 +73,7 @@ export class SelectFromMyTagsComponent implements OnInit {
   private getSelection(getSelected: boolean) {
     return _.map(
       _.filter(this.myTags, myTag => {
-        return myTag.selected === getSelected && myTag.originalSelection === false
+        return myTag.selected === getSelected && myTag.originalSelection === false;
       }), myTag => myTag.tag);
   }
 

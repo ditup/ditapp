@@ -75,7 +75,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // expose the logout function
   public logout() {
     this.auth.logout();
-  };
+  }
 
   /*
    * we want to refresh the timer when we

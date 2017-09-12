@@ -305,7 +305,7 @@ export class ModelService {
       reader.onloadend = function() {
         const base64data = reader.result;
         resolve(base64data);
-      }
+      };
     });
   }
 
@@ -798,7 +798,7 @@ export class ModelService {
     const rawTag = included.find((inclusion) => {
       return inclusion.type === 'tags' && inclusion.id === tagname;
     });
-    const tag: Tag = this.deserializeTag(rawTag)
+    const tag: Tag = this.deserializeTag(rawTag);
 
     const rawUser = included.find((inclusion) => {
       return inclusion.type === 'users' && inclusion.id === username;

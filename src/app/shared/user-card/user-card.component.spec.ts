@@ -28,7 +28,7 @@ describe('UserCardComponent', () => {
     component = fixture.componentInstance;
     component.user = {
       username: 'test-user'
-    }
+    };
     fixture.detectChanges();
   });
 

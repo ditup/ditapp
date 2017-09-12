@@ -62,7 +62,7 @@ export class ContactFormComponent implements OnInit {
       message: this.data.message,
       trust: [this.data.trust, [Validators.required]],
       reference: this.data.reference
-    }
+    };
 
     // remove the fields which shouldn't be present in this form
     for (const field of this.disabledFields) {

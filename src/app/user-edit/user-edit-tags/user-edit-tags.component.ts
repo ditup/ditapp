@@ -151,7 +151,7 @@ export class UserEditTagsComponent implements OnInit {
     // add the tag immediately with different color. when saved, make the color normal
     const { username } = this.user;
 
-    await this.model.removeUserTag(username, tagname)
+    await this.model.removeUserTag(username, tagname);
     console.log('tag successfully removed');
     this.tagLists.forEach((list) => {
       _.pullAllBy(list, [{ tag: { tagname } }], 'tag.tagname');

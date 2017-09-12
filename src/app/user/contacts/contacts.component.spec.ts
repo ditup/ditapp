@@ -18,7 +18,7 @@ class ModelStubService {
 class ActivatedRouteStub {
   parent = {
     data: Observable.of({ user: {} })
-  }
+  };
 }
 
 @Component({ selector: 'app-user-contact', template: '' })
