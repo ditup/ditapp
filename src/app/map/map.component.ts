@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -18,7 +18,7 @@ import { User } from '../shared/types';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
 
   public mapHeight: number = window.innerHeight;
 
@@ -34,8 +34,6 @@ export class MapComponent implements OnInit {
     iconAnchor: [8, 8]
   });
   private subscription: Subscription;
-
-  public loadingUsers = false;
 
   constructor(private model: ModelService,
               private dialog: MdDialog) {}
@@ -64,6 +62,13 @@ export class MapComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    // cancel all ongoing requests when leaving
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   private moveMapInRange () {
     let center = this.map.getCenter();
     while (!inRange(center.lng, -180, 180)) {
@@ -83,7 +88,6 @@ export class MapComponent implements OnInit {
   }
 
   private findAndUpdateUsers() {
-    this.setLoadingUsers(true);
     const rawBounds = this.map.getBounds();
 
     const sw = rawBounds.getSouthWest();
@@ -126,18 +130,12 @@ export class MapComponent implements OnInit {
 
         this.map.addLayer(this.markers);
 
-        this.setLoadingUsers(false);
         if (this.subscription) {
           this.subscription.unsubscribe();
         }
 
       });
     return this.subscription;
-  }
-
-  private setLoadingUsers(loading: boolean) {
-    this.loadingUsers = loading;
-    this.fitMapToPage();
   }
 
   private fitMapToPage() {

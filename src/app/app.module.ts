@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -78,9 +78,14 @@ import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-
 import { ChangePasswordComponent } from './account/change-password/change-password.component';
 
 import { NotificationsService } from './notifications/notifications.service';
+import { ProgressService } from './progress/progress.service';
+
 import { AvatarUploadComponent } from './user-edit/avatar-upload/avatar-upload.component';
 import { TagRemoveConfirmComponent } from './user-edit/user-edit-tags/tag-remove-confirm/tag-remove-confirm.component';
 import { UserDialogComponent } from './shared/user-dialog/user-dialog.component';
+import { ProgressComponent } from './progress/progress.component';
+
+import { HttpProgressInterceptor } from './progress/progress.interceptor';
 
 @NgModule({
   declarations: [
@@ -147,7 +152,8 @@ import { UserDialogComponent } from './shared/user-dialog/user-dialog.component'
     ChangePasswordComponent,
     AvatarUploadComponent,
     TagRemoveConfirmComponent,
-    UserDialogComponent
+    UserDialogComponent,
+    ProgressComponent
   ],
   imports: [
     BrowserModule,
@@ -164,6 +170,8 @@ import { UserDialogComponent } from './shared/user-dialog/user-dialog.component'
   ],
   providers: [
     NotificationsService,
+    ProgressService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpProgressInterceptor, multi: true },
     { provide: ErrorHandler, useClass: GlobalErrorHandler } // custom global error handler
   ],
   bootstrap: [AppComponent],
