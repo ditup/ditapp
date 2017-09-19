@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -17,6 +17,9 @@ import { ModelService } from '../model.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  // expose avatar component to be able to reload the avatar image
+  @ViewChild('avatar') avatar;
+
   // should the header be displayed? default = true.
   public display = true;
   // is the user logged in and verified email?
@@ -25,8 +28,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public loggedUnverified: boolean;
   // if logged, what is her username?
   public username: string;
-  // avatar username is separate, for reloading avatar image
-  public avatarUsername: string;
   // how many unread messages do we have?
   public messageCount: number;
 
@@ -63,12 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
      * Reloading avatar image
      */
     this.updateAvatarSubscription = this.headerControl.updateAvatar$.subscribe(() => {
-      // avatar.component loads image onChanges, so we change username
-      this.avatarUsername = null;
-      // needs to happen in next tick, to detect changes and reload avatar
-      setTimeout(() => {
-        this.avatarUsername = this.username;
-      }, 0);
+      this.avatar.reload();
     });
   }
 
@@ -111,7 +107,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.logged = this.auth.logged;
     this.loggedUnverified = this.auth.loggedUnverified;
     this.username = this.auth.username;
-    this.avatarUsername = this.username;
 
     this.subscribeToMessageCount();
   }
