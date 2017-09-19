@@ -1174,10 +1174,7 @@ describe('ModelService', () => {
             }
           }
         }
-      }, included: [
-        { type: 'users', id: me, attributes: {} },
-        { type: 'users', id: other, attributes: {} }
-      ] });
+      } });
 
       const message = await updateMessageToReadPromise;
       expect(message).toEqual(new Message({

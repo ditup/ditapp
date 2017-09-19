@@ -718,18 +718,18 @@ export class ModelService {
     return this.deserializeContact(data, included);
   }
 
-  private deserializeMessage(msgData: any, included: any): Message {
+  private deserializeMessage(msgData: any, included: any = []): Message {
 
     const fromUsername: string = msgData.relationships.from.data.id;
     const toUsername: string = msgData.relationships.to.data.id;
 
-    const fromData = _.find(included, (user: any) => {
+    const fromData = included.find((user: any) => {
       return user.type === 'users' && user.id === fromUsername;
-    });
+    }) || msgData.relationships.from.data;
 
-    const toData = _.find(included, (user: any) => {
+    const toData = included.find((user: any) => {
       return user.type === 'users' && user.id === toUsername;
-    });
+    }) || msgData.relationships.to.data;
 
     const from = this.deserializeUser(fromData);
     const to = this.deserializeUser(toData);
