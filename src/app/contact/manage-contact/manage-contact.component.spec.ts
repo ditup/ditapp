@@ -1,18 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ManageContactComponent } from './manage-contact.component';
-
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { By } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 
-class ActivatedRouteStub {
-  data = Observable.of({ contact: {} });
-}
+import { ManageContactComponent } from './manage-contact.component';
+import { FofComponent } from '../../fof/fof.component';
 
-@Component({ selector: 'app-fof', template: '' })
-class FofStubComponent {}
+class ActivatedRouteStub {
+  data = Observable.of({ contact: { }, user: { username: 'other-user' } });
+}
 
 @Component({ selector: 'app-contact-request-send', template: '' })
 class ContactRequestSendStubComponent {}
@@ -29,12 +26,13 @@ class ContactUpdateStubComponent {}
 describe('ManageContactComponent', () => {
   let component: ManageContactComponent;
   let fixture: ComponentFixture<ManageContactComponent>;
+  let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         ManageContactComponent,
-        FofStubComponent,
+        FofComponent,
         ContactRequestSendStubComponent,
         ContactRequestUpdateStubComponent,
         ContactRequestProcessStubComponent,
@@ -50,10 +48,31 @@ describe('ManageContactComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageContactComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('user exists', () => {
+
+    beforeEach(() => {
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+  });
+
+  describe('user doesn\'t exist', () => {
+    beforeEach(() => {
+      activatedRoute.data = Observable.of({ contact: null, user: null });
+      fixture.detectChanges();
+    });
+
+    it('should show 404 page when other user doesn\'t exist', () => {
+      const fof = fixture.debugElement.queryAll(By.css('app-fof'));
+
+      expect(fof.length).toEqual(1);
+      expect(fof[0].componentInstance.message).toEqual('user doesn\'t exist');
+    });
   });
 });

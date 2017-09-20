@@ -12,8 +12,7 @@ import { User, Contact } from '../shared/types';
 })
 export class UserComponent implements OnInit {
 
-  public username: string;
-  public user: any;
+  public user: User|null;
   public isMe: boolean;
   public avatar: { base64: string, format: string };
   public contactFromMe?: Contact;
@@ -21,35 +20,39 @@ export class UserComponent implements OnInit {
 
   public contactStatus: string; // 'confirmed', 'sent', 'received', 'nonexistent'
 
-
-
   constructor(private model: ModelService,
               private route: ActivatedRoute,
               private auth: AuthService
              ) { }
 
+  get username() {
+    return this.user.username;
+  }
+
   ngOnInit() {
     this.route.data
       .subscribe(async ({ user }: { user: User }) => {
-        this.username = user.username;
         this.user = user;
-        this.isMe = this.username === this.auth.username;
 
-        if (!this.isMe) {
-          try {
-            this.contactToMe = await this.model.readContact(this.username, this.auth.username);
-            this.contactFromMe = await this.model.readContact(this.auth.username, this.username);
+        if (this.user) {
+          this.isMe = this.username === this.auth.username;
 
-            const { isConfirmed, to: me, creator } = this.contactToMe;
+          if (!this.isMe) {
+            try {
+              this.contactToMe = await this.model.readContact(this.username, this.auth.username);
+              this.contactFromMe = await this.model.readContact(this.auth.username, this.username);
 
-            this.contactStatus = (isConfirmed)
-              ? 'confirmed'
-              : (me.username === creator.username)
-              ? 'sent'
-              : 'received';
+              const { isConfirmed, to: me, creator } = this.contactToMe;
 
-          } catch (e) {
-            this.contactStatus = 'nonexistent';
+              this.contactStatus = (isConfirmed)
+                ? 'confirmed'
+                : (me.username === creator.username)
+                ? 'sent'
+                : 'received';
+
+            } catch (e) {
+              this.contactStatus = 'nonexistent';
+            }
           }
         }
       });

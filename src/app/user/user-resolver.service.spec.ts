@@ -1,7 +1,4 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { Router } from '@angular/router';
-
-import { RouterStub } from '../../testing/router-stubs';
 
 import { UserResolver, LoggedUserResolver } from './user-resolver.service';
 import { ModelService } from '../model.service';
@@ -23,8 +20,7 @@ describe('UserResolver', () => {
     TestBed.configureTestingModule({
       providers: [
         UserResolver,
-        { provide: ModelService, useClass: ModelStubService },
-        { provide: Router, useClass: RouterStub },
+        { provide: ModelService, useClass: ModelStubService }
       ]
     });
   });

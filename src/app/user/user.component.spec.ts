@@ -1,18 +1,20 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { Observable } from 'rxjs/Observable';
+import { By } from '@angular/platform-browser';
 import { MaterialModule } from '@angular/material';
-
-import { UserComponent } from './user.component';
-
-import { ModelService } from '../model.service';
-
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { Observable } from 'rxjs/Observable';
+
+import { UserComponent } from './user.component';
+import { FofComponent } from '../fof/fof.component';
 import { AvatarStubComponent } from '../../testing/avatar-stub';
 
+import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
+
+import { User } from '../shared/types';
 
 class ModelStubService {
   lastPromise: Promise<any>;
@@ -35,7 +37,7 @@ class AuthStubService { }
 
 class ActivatedRouteStub {
   params = Observable.of({ username: 'test-user' });
-  data = Observable.of({ user: { username: 'test-user' } });
+  data = Observable.of({ user: { username: 'test-user' } as User });
 }
 
 describe('UserComponent', () => {
@@ -47,7 +49,8 @@ describe('UserComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         UserComponent,
-        AvatarStubComponent
+        AvatarStubComponent,
+        FofComponent
       ],
       imports: [
         RouterTestingModule,
@@ -65,10 +68,31 @@ describe('UserComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('user found', () => {
+
+    beforeEach(() => {
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+  });
+
+  describe('user not found', () => {
+
+    beforeEach(() => {
+      const activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
+      activatedRoute.data = Observable.of({ user: null });
+      fixture.detectChanges();
+    });
+
+    it('should show 404 page when user is resolved to null', () => {
+      const fof = fixture.debugElement.queryAll(By.css('app-fof'));
+      expect(fof.length).toEqual(1);
+      expect(fof[0].componentInstance.message).toEqual('user doesn\'t exist');
+    });
   });
 });

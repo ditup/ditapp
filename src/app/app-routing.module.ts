@@ -86,7 +86,8 @@ const routes: Routes = [
     component: ManageContactComponent,
     canActivate: [AuthGuard],
     resolve: {
-      contact: ContactResolver
+      contact: ContactResolver,
+      user: UserResolver
     }
   },
   {

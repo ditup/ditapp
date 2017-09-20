@@ -1,4 +1,6 @@
-<section class="user-profile">
+<app-fof *ngIf="!user" message="user doesn't exist"></app-fof>
+
+<section *ngIf="user" class="user-profile">
 
   <section class="user-info">
 

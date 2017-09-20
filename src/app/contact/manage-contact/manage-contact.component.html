@@ -1,7 +1,8 @@
-<app-fof *ngIf="isSelf===true">
-</app-fof>
+<app-fof *ngIf="!user" message="user doesn't exist"></app-fof>
 
-<div *ngIf="isSelf!==true">
+<app-fof *ngIf="user && isSelf === true" message="it is you"></app-fof>
+
+<div *ngIf="user && isSelf !== true">
   <!-- nonexistent -->
   <app-contact-request-send *ngIf="contactStatus === 'nonexistent'">
   </app-contact-request-send>
