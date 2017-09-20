@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { has } from 'lodash';
-
 import { Contact, User } from '../../shared/types';
 
 @Component({
@@ -20,21 +18,28 @@ export class ManageContactComponent implements OnInit {
 
   ngOnInit() {
     this.route.data
-      .subscribe((data: { user: User, contact: { toMe: Contact } } | { user: User, contact: null } | { user: null, contact: null }) => {
-        this.user = data.user;
+      .subscribe(({ user, contact }: { user: User|null, contact: { toMe: Contact }|null|'self' }) => {
+        this.user = user;
 
-        if (this.user) {
-          if (has(data, 'contact.toMe')) {
-            const { isConfirmed, to: me, creator } = data.contact.toMe;
+        if (this.user) { // user exists
+          switch (contact) {
+            case 'self': {
+              this.isSelf = true;
+              break;
+            }
+            case null: {
+              this.contactStatus = 'nonexistent';
+              break;
+            }
+            default: {
+              const { isConfirmed, to: me, creator } = contact.toMe;
 
-            this.contactStatus = (isConfirmed)
-              ? 'confirmed'
-              : (me.username === creator.username)
-              ? 'sent'
-              : 'received';
-
-          } else {
-            this.contactStatus = 'nonexistent';
+              this.contactStatus = (isConfirmed)
+                ? 'confirmed'
+                : (me.username === creator.username)
+                ? 'sent'
+                : 'received';
+            }
           }
         }
       });

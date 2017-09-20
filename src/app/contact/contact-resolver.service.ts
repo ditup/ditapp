@@ -10,12 +10,12 @@ export class ContactResolver implements Resolve<{ fromMe: Contact, toMe: Contact
   constructor(private model: ModelService,
               private auth: AuthService) { }
 
-  async resolve(route: ActivatedRouteSnapshot): Promise<{ fromMe: Contact, toMe: Contact }> {
+  async resolve(route: ActivatedRouteSnapshot): Promise<{ fromMe: Contact, toMe: Contact }|null|'self'> {
     const username = route.params['username'];
     const me = this.auth.username;
 
     if (username === me) {
-      throw new Error('self contact');
+      return 'self';
     }
 
     try {
@@ -23,7 +23,12 @@ export class ContactResolver implements Resolve<{ fromMe: Contact, toMe: Contact
       const toMe = await this.model.readContact(username, me);
       return { fromMe, toMe };
     } catch (e) {
-      return null;
+      // contact doesn't exist
+      if (e.status === 404) {
+        return null;
+      }
+
+      throw e;
     }
   }
 }

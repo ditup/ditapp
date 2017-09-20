@@ -8,7 +8,7 @@ import { ManageContactComponent } from './manage-contact.component';
 import { FofComponent } from '../../fof/fof.component';
 
 class ActivatedRouteStub {
-  data = Observable.of({ contact: { }, user: { username: 'other-user' } });
+  data = Observable.of({ contact: null, user: { username: 'other-user' } });
 }
 
 @Component({ selector: 'app-contact-request-send', template: '' })
@@ -51,15 +51,103 @@ describe('ManageContactComponent', () => {
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
   });
 
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
   describe('user exists', () => {
 
-    beforeEach(() => {
-      fixture.detectChanges();
+    describe('contact with myself', () => {
+
+      beforeEach(() => {
+        activatedRoute.data = Observable.of({ contact: 'self', user: { username: 'me' } });
+        fixture.detectChanges();
+      });
+
+      it('show error: "it is you"', () => {
+        const fof = fixture.debugElement.queryAll(By.css('app-fof'));
+
+        expect(fof.length).toEqual(1);
+        expect(fof[0].componentInstance.message).toEqual('it is you');
+      });
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
+    describe('contact doesn\'t exist', () => {
+
+      beforeEach(() => {
+        activatedRoute.data = Observable.of({ contact: null, user: { username: 'other-user' } });
+        fixture.detectChanges();
+      });
+
+      it('offer sending a contact request', () => {
+        const innerComponent = fixture.debugElement.queryAll(By.css('app-contact-request-send'));
+        expect(innerComponent.length).toEqual(1);
+      });
     });
+
+    describe('contact exists and is confirmed', () => {
+
+      beforeEach(() => {
+        activatedRoute.data = Observable.of({ contact: { toMe: { isConfirmed: true } }, user: { username: 'other-user' } });
+        fixture.detectChanges();
+      });
+
+      it('offer updating contact', () => {
+        const innerComponent = fixture.debugElement.queryAll(By.css('app-contact-update'));
+        expect(innerComponent.length).toEqual(1);
+
+      });
+    });
+
+    describe('contact is from me and unconfirmed', () => {
+
+      beforeEach(() => {
+        const data = {
+          contact: {
+            toMe: {
+              to: { username: 'me' },
+              creator: { username: 'me' }
+            }
+          },
+          user: {
+            username: 'other'
+          }
+        };
+        activatedRoute.data = Observable.of(data);
+        fixture.detectChanges();
+      });
+
+      it('offer updating contact request', () => {
+        const innerComponent = fixture.debugElement.queryAll(By.css('app-contact-request-update'));
+        expect(innerComponent.length).toEqual(1);
+      });
+    });
+
+    describe('contact is to me and unconfirmed', () => {
+
+      beforeEach(() => {
+        const data = {
+          contact: {
+            toMe: {
+              to: { username: 'me' },
+              creator: { username: 'other' }
+            }
+          },
+          user: {
+            username: 'other'
+          }
+        };
+        activatedRoute.data = Observable.of(data);
+        fixture.detectChanges();
+      });
+
+      it('offer confirming contact', () => {
+        const innerComponent = fixture.debugElement.queryAll(By.css('app-contact-request-process'));
+        expect(innerComponent.length).toEqual(1);
+
+      });
+    });
+
   });
 
   describe('user doesn\'t exist', () => {
