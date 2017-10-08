@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -17,9 +17,6 @@ import { ModelService } from '../model.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  // expose avatar component to be able to reload the avatar image
-  @ViewChild('avatar') avatar;
-
   // should the header be displayed? default = true.
   public display = true;
   // is the user logged in and verified email?
@@ -37,8 +34,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private authSubscription: Subscription;
   private messageTimerSubscription: Subscription;
-  // subscription for reloading avatar image
-  private updateAvatarSubscription: Subscription;
 
   constructor(private headerControl: HeaderControlService,
               private auth: AuthService,
@@ -60,12 +55,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.subscribeToMessageCount();
     });
 
-    /*
-     * Reloading avatar image
-     */
-    this.updateAvatarSubscription = this.headerControl.updateAvatar$.subscribe(() => {
-      this.avatar.reload();
-    });
   }
 
   // expose the logout function
@@ -115,7 +104,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // avoid memory leaks by unsubscribing from observables
     this.subscription.unsubscribe();
     this.authSubscription.unsubscribe();
-    this.updateAvatarSubscription.unsubscribe();
 
     if (this.messageTimerSubscription) {
       this.messageTimerSubscription.unsubscribe();

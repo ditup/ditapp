@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
 
 import { AvatarComponent } from './avatar.component';
 
@@ -8,15 +9,22 @@ class ModelStubService {
   async readAvatar(_username: string) { }
 }
 
+@Component({
+  template: '<app-avatar [username]="username"></app-avatar>'
+})
+class TestHostComponent {
+  username: string;
+}
+
 describe('AvatarComponent', () => {
-  let component: AvatarComponent;
-  let fixture: ComponentFixture<AvatarComponent>;
+  let component: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   let readAvatarSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AvatarComponent ],
+      declarations: [ AvatarComponent, TestHostComponent ],
       providers: [
         { provide: ModelService, useClass: ModelStubService }
       ]
@@ -25,8 +33,10 @@ describe('AvatarComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AvatarComponent);
+    fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
+
+    component.username = 'test-user';
 
     // spy on model's readAvatar(username);
     const model = fixture.debugElement.injector.get(ModelService);
@@ -39,15 +49,16 @@ describe('AvatarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should reload the avatar when calling the reload function', async(async () => {
+  it('should reload the avatar when changing username', () => {
 
     // avatar was loaded at the beginning
     expect(readAvatarSpy.calls.count()).toEqual(1);
 
     readAvatarSpy.calls.reset();
 
-    await component.reload();
+    component.username = 'other-user';
+    fixture.detectChanges();
 
     expect(readAvatarSpy.calls.count()).toEqual(1);
-  }));
+  });
 });

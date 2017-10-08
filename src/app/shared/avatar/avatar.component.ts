@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { ModelService } from '../../model.service';
@@ -8,7 +8,7 @@ import { ModelService } from '../../model.service';
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss']
 })
-export class AvatarComponent implements OnInit {
+export class AvatarComponent implements OnChanges {
 
   @Input() username: string;
   @Input() size = 128;
@@ -17,15 +17,15 @@ export class AvatarComponent implements OnInit {
 
   constructor(private model: ModelService, private sanitizer: DomSanitizer) { }
 
-  async ngOnInit() {
-    await this.loadAvatar();
-  }
-
-  async reload() {
-    await this.loadAvatar();
+  async ngOnChanges(changes: SimpleChanges) {
+    // (re)load avatar when username changes
+    if (changes.username && changes.username.previousValue !== changes.username.currentValue) {
+      await this.loadAvatar();
+    }
   }
 
   private async loadAvatar() {
+    delete this.avatarUrl;
     const avatarUrl = await this.model.readAvatar(this.username, this.size);
     this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(avatarUrl);
   }
