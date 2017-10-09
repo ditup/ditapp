@@ -60,3 +60,8 @@ router-outlet + :not(app-map) {
   margin: 1em auto;
   display: block;
 }
+
+/* styles for editor.component (medium editor contenteditable div) */
+[contenteditable=true] {
+  @import 'app/shared/styles/_user-content';
+}
