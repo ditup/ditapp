@@ -14,14 +14,15 @@ form {
 }
 
 .form-field {
+  h2 {
+    color: gray;
+  }
+
   width: 100%;
   display: block;
 }
 
 .trust-field {
-  h2 {
-    color: gray;
-  }
   mat-radio-button {
     display: block;
   }

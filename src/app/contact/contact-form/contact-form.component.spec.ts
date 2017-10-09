@@ -6,6 +6,7 @@ import { ContactFormComponent } from './contact-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../../material.module';
+import { EditorComponent } from '../../shared/editor/editor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContactFormComponent', () => {
@@ -14,7 +15,10 @@ describe('ContactFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContactFormComponent ],
+      declarations: [
+        ContactFormComponent,
+        EditorComponent
+      ],
       imports: [
         ReactiveFormsModule,
         MaterialModule,
