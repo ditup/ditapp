@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { ProfileComponent } from './profile.component';
+import { EditorOutputComponent } from '../../shared/editor-output/editor-output.component';
 
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
@@ -40,7 +41,12 @@ describe('ProfileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProfileComponent, UserTagListStubComponent, LocationStubComponent],
+      declarations: [
+        ProfileComponent,
+        UserTagListStubComponent,
+        LocationStubComponent,
+        EditorOutputComponent
+      ],
       imports: [MaterialModule],
       providers: [
         { provide: ModelService, useClass: ModelStubService },

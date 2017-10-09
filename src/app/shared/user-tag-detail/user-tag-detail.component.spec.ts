@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserTagDetailComponent } from './user-tag-detail.component';
+import { EditorOutputComponent } from '../editor-output/editor-output.component';
 
 import { MaterialModule } from '../../material.module';
 
@@ -12,7 +13,11 @@ describe('UserTagDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [UserTagDetailComponent, RouterLinkStubDirective],
+      declarations: [
+        UserTagDetailComponent,
+        RouterLinkStubDirective,
+        EditorOutputComponent
+      ],
       imports: [
         MaterialModule
       ]

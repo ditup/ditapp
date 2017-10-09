@@ -9,7 +9,9 @@
       </a>
     </div>
     <div class="thread-message">
-      <a routerLink="/messages/{{msg.with(me).username}}">{{msg.body}}</a>
+      <a routerLink="/messages/{{msg.with(me).username}}">
+        <app-editor-output [value]="msg.body"></app-editor-output>
+      </a>
     </div>
     <div class="thread-message-from">
       <mat-icon *ngIf="msg.from.username === me.username">reply</mat-icon>

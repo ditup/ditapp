@@ -5,6 +5,7 @@ import { MaterialModule } from '../../../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TagStoryFormComponent } from './tag-story-form.component';
+import { EditorComponent } from '../../../shared/editor/editor.component';
 
 describe('TagStoryFormComponent', () => {
   let component: TagStoryFormComponent;
@@ -12,7 +13,10 @@ describe('TagStoryFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagStoryFormComponent ],
+      declarations: [
+        TagStoryFormComponent,
+        EditorComponent
+      ],
       imports: [
         ReactiveFormsModule,
         MaterialModule,

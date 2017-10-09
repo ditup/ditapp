@@ -16,6 +16,7 @@ import { User } from '../../shared/types';
 import { NotificationsService } from '../../notifications/notifications.service';
 
 import { UserEditProfileComponent } from './user-edit-profile.component';
+import { EditorComponent } from '../../shared/editor/editor.component';
 
 @Component({ selector: 'app-avatar-upload', template: '' })
 class AvatarUploadStubComponent { }
@@ -49,7 +50,8 @@ describe('UserEditProfileComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         UserEditProfileComponent,
-        AvatarUploadStubComponent
+        AvatarUploadStubComponent,
+        EditorComponent
       ],
       imports: [
         ReactiveFormsModule,

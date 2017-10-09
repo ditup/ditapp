@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>
   {{userTag.tag.tagname}}
 </h1>
-<mat-dialog-content Markdown>
-  {{userTag.story || '_no user story yet_'}}
+<mat-dialog-content>
+  <app-editor-output [value]="userTag.story || '_no user story yet_'"></app-editor-output>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button (click)="close()">Close</button>
