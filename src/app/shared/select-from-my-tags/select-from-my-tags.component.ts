@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 
 import { UserTag, Tag } from '../types';
 
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 
 
 class MyTag {
@@ -32,7 +32,7 @@ export class SelectFromMyTagsComponent implements OnInit {
   @Output()
   public onSubmit = new EventEmitter<Tag[]>();
 
-  public ref: MdDialogRef<SelectFromMyTagsComponent>;
+  public ref: MatDialogRef<SelectFromMyTagsComponent>;
 
   public myTags: MyTag[];
 

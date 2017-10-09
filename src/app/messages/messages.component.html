@@ -12,7 +12,7 @@
       <a routerLink="/messages/{{msg.with(me).username}}">{{msg.body}}</a>
     </div>
     <div class="thread-message-from">
-      <md-icon *ngIf="msg.from.username === me.username">reply</md-icon>
+      <mat-icon *ngIf="msg.from.username === me.username">reply</mat-icon>
     </div>
     <div class="thread-message-created">
       {{msg.created | amTimeAgo}}

@@ -3,17 +3,17 @@
     <fieldset [disabled]="isFormDisabled">
 
       <div>
-        <md-input-container
+        <mat-form-field
           [dividerColor]="formErrors.body ? 'warn' : ''"
           [hintLabel]="formErrors.body || null">
-          <textarea mdInput placeholder="Message"
+          <textarea matInput placeholder="Message"
             formControlName="body"></textarea>
-        </md-input-container>
+        </mat-form-field>
       </div>
 
-      <button md-raised-button type="submit"
+      <button mat-raised-button type="submit"
         [disabled]="!messageForm.valid">Send</button>
-      <span *ngIf="sending"><md-spinner></md-spinner></span>
+      <span *ngIf="sending"><mat-spinner></mat-spinner></span>
 
     </fieldset>
   </form>

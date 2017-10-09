@@ -42,8 +42,8 @@
 
   <section class="user-detail">
 
-    <nav md-tab-nav-bar class="user-pages-navigation">
-      <a md-tab-link
+    <nav mat-tab-nav-bar class="user-pages-navigation">
+      <a mat-tab-link
         routerLink="/user/{{username}}"
         routerLinkActive #profileLink="routerLinkActive"
         [routerLinkActiveOptions]="{exact: true}"
@@ -51,7 +51,7 @@
         Profile
       </a>
 
-      <a md-tab-link
+      <a mat-tab-link
         routerLink="/user/{{username}}/contacts"
         routerLinkActive #contactsLink="routerLinkActive"
         [routerLinkActiveOptions]="{exact: true}"

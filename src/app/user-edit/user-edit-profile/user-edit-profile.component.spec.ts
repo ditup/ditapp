@@ -3,7 +3,7 @@ import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 

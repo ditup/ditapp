@@ -12,7 +12,7 @@ import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
 import { ActivatedRouteStub, RouterStub } from '../../testing/router-stubs';
 
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 let activatedRoute: ActivatedRouteStub;

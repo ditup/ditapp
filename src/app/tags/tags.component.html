@@ -1,7 +1,7 @@
 <h1>Tags</h1>
 
-<nav md-tab-nav-bar>
-  <a md-tab-link
+<nav mat-tab-nav-bar>
+  <a mat-tab-link
     routerLink="/tags"
     routerLinkActive #myTagsLink="routerLinkActive"
     [routerLinkActiveOptions]="{exact: true}"
@@ -9,7 +9,7 @@
     related to my tags
   </a>
 
-  <a md-tab-link
+  <a mat-tab-link
     routerLink="/tags/related-to-tags"
     routerLinkActive #tagsLink="routerLinkActive"
     [routerLinkActiveOptions]="{exact: true}"
@@ -17,7 +17,7 @@
     related to tags
   </a>
 
-  <a md-tab-link
+  <a mat-tab-link
     routerLink="/tags/new"
     routerLinkActive #newLink="routerLinkActive"
     [routerLinkActiveOptions]="{exact: true}"
@@ -25,7 +25,7 @@
     new
   </a>
 
-  <a md-tab-link
+  <a mat-tab-link
     routerLink="/tags/random"
     routerLinkActive #randomLink="routerLinkActive"
     [routerLinkActiveOptions]="{exact: true}"

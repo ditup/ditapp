@@ -2,7 +2,7 @@ import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core
 import { By } from '@angular/platform-browser';
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { Observable } from 'rxjs/Observable';
 
 import { TagsRandomComponent } from './tags-random.component';

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 
 import { User, UserTag } from '../types';
 
@@ -12,7 +12,7 @@ export class UserDialogComponent implements OnInit {
 
   @Input() user: User;
   @Input() userTags: UserTag[];
-  public ref: MdDialogRef<UserDialogComponent>;
+  public ref: MatDialogRef<UserDialogComponent>;
 
   constructor() { }
 

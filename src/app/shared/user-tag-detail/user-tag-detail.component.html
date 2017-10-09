@@ -1,13 +1,11 @@
-<md-card>
-  <md-card-title>
-    {{userTag.tag.tagname}}
-  </md-card-title>
-  <md-card-content Markdown>
-    {{userTag.story || '_no user story yet_'}}
-  </md-card-content>
-  <md-card-actions>
-    <button md-raised-button (click)="close()">Close</button>
-    <a md-raised-button routerLink="/tag/{{userTag.tag.tagname}}"
-      (click)="close()">Visit Tag Page</a>
-  </md-card-actions>
-</md-card>
+<h1 mat-dialog-title>
+  {{userTag.tag.tagname}}
+</h1>
+<mat-dialog-content Markdown>
+  {{userTag.story || '_no user story yet_'}}
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button (click)="close()">Close</button>
+  <a mat-raised-button routerLink="/tag/{{userTag.tag.tagname}}"
+    (click)="close()">Visit Tag Page</a>
+</mat-dialog-actions>

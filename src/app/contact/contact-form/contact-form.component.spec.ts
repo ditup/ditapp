@@ -5,7 +5,7 @@ import { ContactFormComponent } from './contact-form.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContactFormComponent', () => {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 
 import * as _ from 'lodash';
 
@@ -24,8 +24,8 @@ export class UserEditTagsComponent implements OnInit {
 
   public user: User;
 
-  public tagStoryDialogRef: MdDialogRef<TagStoryFormComponent>;
-  public removeTagDialogRef: MdDialogRef<TagRemoveConfirmComponent>;
+  public tagStoryDialogRef: MatDialogRef<TagStoryFormComponent>;
+  public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
 
   // lists of tags, by relevance
   // 1-5 tags by relevance
@@ -34,7 +34,7 @@ export class UserEditTagsComponent implements OnInit {
 
   constructor(private model: ModelService,
               private route: ActivatedRoute,
-              private dialog: MdDialog,
+              private dialog: MatDialog,
               private notify: NotificationsService) {
                 polyfill({});
               }

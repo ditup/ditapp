@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TagListComponent } from './tag-list.component';
 
 import { By } from '@angular/platform-browser';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { Tag } from '../types';
 import { RouterLinkStubDirective } from '../../../testing/router-stubs';
 

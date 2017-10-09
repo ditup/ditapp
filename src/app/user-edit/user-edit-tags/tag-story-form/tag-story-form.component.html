@@ -1,24 +1,24 @@
 <div>
   <!-- A form to update tag's story.
-    It's used in a md-dialog in user-edit-tags.component -->
+    It's used in a mat-dialog in user-edit-tags.component -->
   <form (ngSubmit)="onSubmit()" [formGroup]="updateTagStoryForm">
     <fieldset [disabled]="isFormDisabled">
       <div>
-        Edit story of <md-icon alt="tag">label</md-icon> {{userTag.tag.tagname}}
+        Edit story of <mat-icon alt="tag">label</mat-icon> {{userTag.tag.tagname}}
       </div>
 
       <div>
-        <md-input-container>
-          <textarea mdInput placeholder="Why do you care about {{userTag.tag.tagname}}?"
+        <mat-form-field>
+          <textarea matInput placeholder="Why do you care about {{userTag.tag.tagname}}?"
             formControlName="story">{{userTag.story}}</textarea>
-        </md-input-container>
+        </mat-form-field>
 
         <div *ngIf="formErrors.story" class="alert alert-danger">
           {{formErrors.story}}
         </div>
       </div>
 
-      <button md-raised-button type="submit"
+      <button mat-raised-button type="submit"
         [disabled]="!updateTagStoryForm.valid">Save</button>
 
     </fieldset>

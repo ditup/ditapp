@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactOverviewComponent } from './contact-overview.component';
 
 import { Component, Input } from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 
 @Component({ selector: 'app-user-card', template: '' })
 class UserCardStubComponent {

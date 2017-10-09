@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserTagDetailComponent } from './user-tag-detail.component';
 
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 
 import { RouterLinkStubDirective } from '../../../testing/router-stubs';
 

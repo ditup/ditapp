@@ -4,7 +4,7 @@ import { async, fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 

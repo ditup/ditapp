@@ -1,87 +1,87 @@
 <nav *ngIf="display" class="app-header header-navigation">
   <a routerLink="/"><img class="ditup-logo" src="/static/img/logo-white.png" alt="logo of ditup"></a>
 
-  <a [mdMenuTriggerFor]="newMenu"
+  <a [matMenuTriggerFor]="newMenu"
     *ngIf="logged">
-    <md-icon alt="create">add</md-icon>
+    <mat-icon alt="create">add</mat-icon>
   </a>
 
-  <md-menu #newMenu="mdMenu" [overlapTrigger]="false">
-    <a md-menu-item *ngIf="logged" disabled routerLink="/challenges/new">
-      <md-icon alt="challenge">extension</md-icon>
+  <mat-menu #newMenu [overlapTrigger]="false">
+    <a mat-menu-item *ngIf="logged" disabled routerLink="/challenges/new">
+      <mat-icon alt="challenge">extension</mat-icon>
       Challenge
     </a>
-    <a md-menu-item *ngIf="logged" disabled routerLink="/ideas/new">
-      <md-icon alt="idea">lightbulb_outline</md-icon>
+    <a mat-menu-item *ngIf="logged" disabled routerLink="/ideas/new">
+      <mat-icon alt="idea">lightbulb_outline</mat-icon>
       Idea
     </a>
-    <a md-menu-item *ngIf="logged" disabled routerLink="/projects/new">
-      <md-icon alt="project">build</md-icon>
+    <a mat-menu-item *ngIf="logged" disabled routerLink="/projects/new">
+      <mat-icon alt="project">build</mat-icon>
       Project
     </a>
-    <a md-menu-item *ngIf="logged" disabled routerLink="/discussions/new">
-      <md-icon alt="discussion">forum</md-icon>
+    <a mat-menu-item *ngIf="logged" disabled routerLink="/discussions/new">
+      <mat-icon alt="discussion">forum</mat-icon>
       Discussion
     </a>
-  </md-menu>
+  </mat-menu>
 
-  <a [mdMenuTriggerFor]="exploreMenu">
-    <md-icon alt="explore">search</md-icon>
+  <a [matMenuTriggerFor]="exploreMenu">
+    <mat-icon alt="explore">search</mat-icon>
   </a>
 
-  <md-menu #exploreMenu="mdMenu" [overlapTrigger]="false">
-    <a md-menu-item *ngIf="logged" routerLink="/people">
-      <md-icon alt="people">person</md-icon>
+  <mat-menu #exploreMenu [overlapTrigger]="false">
+    <a mat-menu-item *ngIf="logged" routerLink="/people">
+      <mat-icon alt="people">person</mat-icon>
       People
     </a>
-    <a md-menu-item routerLink="/tags">
-      <md-icon alt="tag">label</md-icon>
+    <a mat-menu-item routerLink="/tags">
+      <mat-icon alt="tag">label</mat-icon>
       Tags
     </a>
-    <a md-menu-item disabled routerLink="/challenges">
-      <md-icon alt="challenge">extension</md-icon>
+    <a mat-menu-item disabled routerLink="/challenges">
+      <mat-icon alt="challenge">extension</mat-icon>
       Challenges
     </a>
-    <a md-menu-item disabled routerLink="/ideas">
-      <md-icon alt="idea">lightbulb_outline</md-icon>
+    <a mat-menu-item disabled routerLink="/ideas">
+      <mat-icon alt="idea">lightbulb_outline</mat-icon>
       Ideas
     </a>
-    <a md-menu-item disabled routerLink="/projects">
-      <md-icon alt="project">build</md-icon>
+    <a mat-menu-item disabled routerLink="/projects">
+      <mat-icon alt="project">build</mat-icon>
       Projects
     </a>
-    <a md-menu-item disabled routerLink="/discussions">
-      <md-icon alt="discussion">forum</md-icon>
+    <a mat-menu-item disabled routerLink="/discussions">
+      <mat-icon alt="discussion">forum</mat-icon>
       Discussions
     </a>
-  </md-menu>
+  </mat-menu>
 
   <a routerLink="/map"
     *ngIf="logged">
-    <md-icon alt="map">place</md-icon>
+    <mat-icon alt="map">place</mat-icon>
   </a>
 
   <span class="fill-remaining-space"></span>
 
   <a routerLink="/messages"
     *ngIf="logged">
-    <md-icon alt="messages">mail_outline</md-icon>
+    <mat-icon alt="messages">mail_outline</mat-icon>
     <span *ngIf="messageCount && messageCount > 0">{{messageCount}}</span>
   </a>
 
-  <a [mdMenuTriggerFor]="userMenu" class="user"
+  <a [matMenuTriggerFor]="userMenu" class="user"
     *ngIf="logged||loggedUnverified">
     <app-avatar [username]="username" [size]="32" class="user-avatar"></app-avatar>
     <span class="user-name">{{username}}</span>
   </a>
 
-  <md-menu #userMenu="mdMenu" xPosition="before" [overlapTrigger]="false">
-    <a md-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
-    <a md-menu-item *ngIf="logged" routerLink="/profile/edit">Edit Profile</a>
-    <a md-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
-    <a md-menu-item routerLink="/account">Account</a>
-    <a md-menu-item routerLink="/" (click)="logout()">Logout</a>
-  </md-menu>
+  <mat-menu #userMenu xPosition="before" [overlapTrigger]="false">
+    <a mat-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
+    <a mat-menu-item *ngIf="logged" routerLink="/profile/edit">Edit Profile</a>
+    <a mat-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
+    <a mat-menu-item routerLink="/account">Account</a>
+    <a mat-menu-item routerLink="/" (click)="logout()">Logout</a>
+  </mat-menu>
   <a *ngIf="!(logged||loggedUnverified)" routerLink="/login" class="user">Login</a>
   <a *ngIf="!(logged||loggedUnverified)" routerLink="/signup" class="user">Signup</a>
 </nav>

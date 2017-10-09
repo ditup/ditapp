@@ -6,7 +6,7 @@ import { map } from 'lodash';
 
 import { PeopleComponent } from './people.component';
 
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('PeopleComponent', () => {
@@ -45,7 +45,7 @@ describe('PeopleComponent', () => {
   });
 
   it('should have links to self, users related to tags, new, random', () => {
-    const links = fixture.debugElement.queryAll(By.css('[md-tab-link]'));
+    const links = fixture.debugElement.queryAll(By.css('[mat-tab-link]'));
 
     expect(links.length).toEqual(4);
 

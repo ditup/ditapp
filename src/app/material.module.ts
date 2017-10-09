@@ -1,0 +1,31 @@
+import { NgModule } from '@angular/core';
+
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+const MATERIAL_MODULES = [
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatChipsModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatRadioModule,
+  MatTabsModule,
+  MatTooltipModule
+];
+
+@NgModule({
+  imports: MATERIAL_MODULES,
+  exports: MATERIAL_MODULES
+})
+export class MaterialModule { }

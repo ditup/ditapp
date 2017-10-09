@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 
 import { Component, Input } from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import 'hammerjs';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';

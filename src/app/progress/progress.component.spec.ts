@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../material.module';
 
 import { ProgressComponent } from './progress.component';
 import { ProgressService } from './progress.service';

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import * as _ from 'lodash';
 
@@ -27,7 +27,7 @@ export class SelectTagsComponent implements OnInit {
   constructor(private auth: AuthService,
               private model: ModelService,
               private notify: NotificationsService,
-              private dialog: MdDialog) { }
+              private dialog: MatDialog) { }
 
   ngOnInit() {
   }
@@ -117,7 +117,7 @@ export class SelectTagsComponent implements OnInit {
   @Input()
   public inputTags: Tag[];
 
-  private myTagsDialog: MdDialogRef<SelectFromMyTagsComponent>;
+  private myTagsDialog: MatDialogRef<SelectFromMyTagsComponent>;
 
   // showing a progress bar when users loading is in progress
   public loadingUsers = false;
@@ -125,7 +125,7 @@ export class SelectTagsComponent implements OnInit {
   constructor(private snackBar: MdSnackBar,
               private auth: AuthService,
               private model: ModelService,
-              private dialog: MdDialog) { }
+              private dialog: MatDialog) { }
 
 
   ngOnChanges(changes: SimpleChanges) {

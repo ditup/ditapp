@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangePasswordComponent } from './change-password.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AuthService } from '../../auth.service';

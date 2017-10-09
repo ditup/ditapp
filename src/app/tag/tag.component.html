@@ -1,10 +1,10 @@
 <app-fof *ngIf="!tag" [message]="'tag not found'"></app-fof>
 
 <div *ngIf="tag">
-  <h1><md-icon alt="tag">label</md-icon> <span class="tagname-title">{{tag.tagname}}</span></h1>
+  <h1><mat-icon alt="tag">label</mat-icon> <span class="tagname-title">{{tag.tagname}}</span></h1>
 
-  <nav md-tab-nav-bar>
-    <a md-tab-link
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link
       [routerLink]="'/tag/' + tag.tagname"
       routerLinkActive #myTagsLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
@@ -12,7 +12,7 @@
       tags
     </a>
 
-    <a md-tab-link
+    <a mat-tab-link
       [routerLink]="'/tag/' + tag.tagname + '/people'"
       routerLinkActive #tagsLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
@@ -20,7 +20,7 @@
       people
     </a>
 
-    <!--a md-tab-link
+    <!--a mat-tab-link
       routerLink="/people/new"
       routerLinkActive #newLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
@@ -28,7 +28,7 @@
       new
     </a>
 
-    <a md-tab-link
+    <a mat-tab-link
       routerLink="/people/random"
       routerLinkActive #randomLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"

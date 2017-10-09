@@ -4,8 +4,8 @@
     Edit <a routerLink="/user/{{user.username}}">your</a> profile
   </h1>
 
-  <nav md-tab-nav-bar>
-    <a md-tab-link
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link
       routerLink="/profile/edit"
       routerLinkActive #profileLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
@@ -13,7 +13,7 @@
       Info
     </a>
 
-    <a md-tab-link
+    <a mat-tab-link
       routerLink="/profile/edit/tags"
       routerLinkActive #tagsLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"
@@ -21,7 +21,7 @@
       Tags
     </a>
 
-    <a md-tab-link
+    <a mat-tab-link
       routerLink="/profile/edit/location"
       routerLinkActive #locationLink="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}"

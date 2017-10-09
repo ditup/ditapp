@@ -4,7 +4,7 @@ import { MessagesComponent } from './messages.component';
 
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../material.module';
 
 import { Observable } from 'rxjs/Observable';
 import { MomentModule } from 'angular2-moment';

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } fro
 import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
 
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 
 import { Map, LatLng, TileLayer, Marker } from 'leaflet';
 import * as L from 'leaflet';
@@ -25,7 +25,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChild('mapContainer')
   mapContainer: ElementRef;
 
-  private userDetailDialogRef: MdDialogRef<UserDialogComponent>;
+  private userDetailDialogRef: MatDialogRef<UserDialogComponent>;
   private map: Map;
   private markers: any; // MarkerClusterGroup;
   private userIcon = L.icon({
@@ -36,7 +36,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(private model: ModelService,
-              private dialog: MdDialog) {}
+              private dialog: MatDialog) {}
 
   async ngOnInit() {
     this.fitMapToPage();

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input } from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { By } from '@angular/platform-browser';
 
 import { UserListWithTagsComponent } from './user-list-with-tags.component';

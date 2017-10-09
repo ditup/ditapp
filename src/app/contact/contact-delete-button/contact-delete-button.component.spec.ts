@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 
 import { ContactDeleteButtonComponent } from './contact-delete-button.component';
 
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { Router } from '@angular/router';
 
 import { ModelService } from '../../model.service';

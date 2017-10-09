@@ -5,25 +5,25 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
   <fieldset [disabled]="isFormDisabled">
 
-    <md-input-container>
-      <input mdInput type="text" placeholder="Given Name"
+    <mat-form-field>
+      <input matInput type="text" placeholder="Given Name"
       formControlName="givenName">
-      <md-error *ngFor="let error of formErrors.givenName">{{error}}</md-error>
-    </md-input-container>
+      <mat-error *ngFor="let error of formErrors.givenName">{{error}}</mat-error>
+    </mat-form-field>
 
-    <md-input-container>
-      <input mdInput type="text" placeholder="Family Name"
+    <mat-form-field>
+      <input matInput type="text" placeholder="Family Name"
       formControlName="familyName">
-      <md-error *ngFor="let error of formErrors.familyName">{{error}}</md-error>
-    </md-input-container>
+      <mat-error *ngFor="let error of formErrors.familyName">{{error}}</mat-error>
+    </mat-form-field>
 
-    <md-input-container>
-      <textarea mdInput placeholder="Description"
+    <mat-form-field>
+      <textarea matInput placeholder="Description"
         formControlName="description"></textarea>
-      <md-error *ngFor="let error of formErrors.description">{{error}}</md-error>
-    </md-input-container>
+      <mat-error *ngFor="let error of formErrors.description">{{error}}</mat-error>
+    </mat-form-field>
 
-    <button md-raised-button type="submit"
+    <button mat-raised-button type="submit"
       [disabled]="!profileForm.valid">Submit</button>
 
   </fieldset>

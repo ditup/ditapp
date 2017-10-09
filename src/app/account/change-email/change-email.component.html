@@ -1,20 +1,20 @@
 <fieldset [disabled]="false">
   <form (ngSubmit)="onSubmit()" [formGroup]="changeEmailForm">
     <div>
-      <md-input-container>
-        <input mdInput type="text" placeholder="email"
+      <mat-form-field>
+        <input matInput type="text" placeholder="email"
         formControlName="email" required>
-      </md-input-container>
+      </mat-form-field>
     </div>
 
     <div>
-      <md-input-container>
-        <input mdInput type="password" placeholder="password (changing sensitive data)"
+      <mat-form-field>
+        <input matInput type="password" placeholder="password (changing sensitive data)"
           formControlName="password" required>
-      </md-input-container>
+      </mat-form-field>
     </div>
 
-    <button md-raised-button type="submit"
+    <button mat-raised-button type="submit"
       [disabled]="!changeEmailForm.valid">Change Email</button>
   </form>
 </fieldset>

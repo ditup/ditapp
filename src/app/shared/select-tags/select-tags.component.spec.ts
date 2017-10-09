@@ -5,7 +5,7 @@ import { SelectFromMyTagsComponent } from '../select-from-my-tags/select-from-my
 
 import { Component, EventEmitter, Output } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Tag, TagList } from '../types';

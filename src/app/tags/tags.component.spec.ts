@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule } from '../material.module';
 
 import { map } from 'lodash';
 
@@ -45,7 +45,7 @@ describe('TagsComponent', () => {
   });
 
   it('should have links to self, tags related to tags, new, random', () => {
-    const links = fixture.debugElement.queryAll(By.css('[md-tab-link]'));
+    const links = fixture.debugElement.queryAll(By.css('[mat-tab-link]'));
 
     expect(links.length).toEqual(4);
 
