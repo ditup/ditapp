@@ -24,6 +24,10 @@ export class AvatarComponent implements OnChanges {
     }
   }
 
+  async reload() {
+    await this.loadAvatar();
+  }
+
   private async loadAvatar() {
     delete this.avatarUrl;
     const avatarUrl = await this.model.readAvatar(this.username, this.size);

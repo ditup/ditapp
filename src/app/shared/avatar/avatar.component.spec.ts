@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import { AvatarComponent } from './avatar.component';
 
@@ -61,4 +62,17 @@ describe('AvatarComponent', () => {
 
     expect(readAvatarSpy.calls.count()).toEqual(1);
   });
+
+  it('should reload the avatar when calling the reload function', async(async () => {
+    const avatarComponent: AvatarComponent = fixture.debugElement.query(By.css('app-avatar')).componentInstance;
+
+    // avatar was loaded at the beginning
+    expect(readAvatarSpy.calls.count()).toEqual(1);
+
+    readAvatarSpy.calls.reset();
+
+    await avatarComponent.reload();
+
+    expect(readAvatarSpy.calls.count()).toEqual(1);
+  }));
 });
