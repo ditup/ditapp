@@ -9,19 +9,23 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NotificationsService } from '../notifications/notifications.service';
 
-import { LoginBasicComponent } from './login-basic.component';
+import { LoginComponent } from './login.component';
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
 import { HeaderControlService } from '../header-control.service';
 
 import { RouterStub } from '../../testing/router-stubs';
-import { User } from '../shared/types';
 
 class ModelStubService {
-  async basicAuth({ username, password: _password }: { username: string, password: string }): Promise<User> {
-    console.log(username, ['user1'].includes(username), ['a'].includes('a'));
+
+  async getJwtToken(username: string, _password: string): Promise<string> {
+
     if (['user1'].includes(username)) {
-      return { username } as User;
+      return [
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+        'eyJ1c2VybmFtZSI6InVzZXIxIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9',
+        'LGDiZd_ZPFuHrQmkTh39s8UEcqNprqB1T5k-OYOTTO8'
+      ].join('.');
     }
 
     const err = new Error('Not Authenticated');
@@ -47,16 +51,16 @@ class AuthStubService {
   }
 }
 
-describe('LoginBasicComponent', () => {
-  let component: LoginBasicComponent;
-  let fixture: ComponentFixture<LoginBasicComponent>;
+describe('LoginComponent', () => {
+  let component: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
 
   let notifyInfoSpy: jasmine.Spy;
   let notifyErrorSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginBasicComponent],
+      declarations: [LoginComponent],
       imports: [
         ReactiveFormsModule,
         MaterialModule,
@@ -75,7 +79,7 @@ describe('LoginBasicComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginBasicComponent);
+    fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
 
     const notify = fixture.debugElement.injector.get(NotificationsService);
@@ -141,7 +145,7 @@ describe('LoginBasicComponent', () => {
 
     const err = new Error('Internal Server Error');
     err['status'] = 500;
-    spyOn(model, 'basicAuth').and.returnValue(Promise.reject(err));
+    spyOn(model, 'getJwtToken').and.returnValue(Promise.reject(err));
 
     // submit form
     await submitForm('error-user', 'password');

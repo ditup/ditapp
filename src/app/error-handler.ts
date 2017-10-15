@@ -20,11 +20,15 @@ export class GlobalErrorHandler extends ErrorHandler implements ErrorHandler {
         message = 'API is down. Please report to server administrators.';
         break;
       }
+      case 403: {
+        message = 'Your authentication expired. Please copy your work to somewhere, log out and log in.';
+        break;
+      }
     }
 
     // notify the error
     const notify = this.injector.get(NotificationsService);
-    notify.error(message, { ttl: 0 });
+    notify.error(message);
   }
 
 }

@@ -8,11 +8,14 @@ import { NotificationsService } from '../../notifications/notifications.service'
 import { HeaderControlService } from '../../header-control.service';
 import * as config from '../../config';
 
+const TOKEN = [
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+  'eyJ1c2VybmFtZSI6InVzZXIwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9',
+  'yGU-p9O7Q4lP-vrWP9GigxDaJHBS0Rxd2aVvf2eniQA'
+].join('.');
+
 class AuthStubService {
-  credentials = {
-    username: 'user0',
-    password: 'password0'
-  };
+  token = TOKEN;
 
   username = 'user0';
 }
@@ -69,8 +72,8 @@ describe('AvatarUploadComponent', () => {
     expect(uploadComponent.options).toEqual({
       uploadUrl: `${config.api.baseUrl}/users/user0/avatar`,
       httpMethod: 'PATCH',
-      authTokenPrefix: 'Basic',
-      authToken: btoa('user0:password0'),
+      authTokenPrefix: 'Bearer',
+      authToken: TOKEN,
       fieldName: 'avatar',
       autoUpload: true,
       maxImageSize: 2,

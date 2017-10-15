@@ -33,7 +33,7 @@ export class ContactsComponent implements OnInit {
   }
 
   public get me() {
-    return this.auth.user;
+    return new User({ username: this.auth.username });
   }
 
   public get confirmedContacts() {

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-import { BasicAuthService } from './basic-auth.service';
-import { User } from './shared/types';
+import * as jwt from 'jsonwebtoken';
+
+// import { ModelService } from './model.service';
+// import { User } from './shared/types';
 
 @Injectable()
 export class AuthService {
@@ -14,10 +16,24 @@ export class AuthService {
 
   loggedStatusChanged$ = this.loggedSource.asObservable();
 
-  constructor(private basicAuth: BasicAuthService) { }
+  // a wrapper of localStorage
+  storage = {
+    set(name: string, value: any) {
+      localStorage.setItem(name, JSON.stringify(value));
+    },
+    get(name: string): any {
+      return JSON.parse(localStorage.getItem(name));
+    },
+    clear() {
+      localStorage.clear();
+    }
+  };
+
+  constructor(/*private model: ModelService*/) { }
 
   logout() {
-    this.basicAuth.logout();
+    this.storage.clear();
+
     this.loggedSource.next({
       logged: this.logged,
       loggedUnverified: this.loggedUnverified,
@@ -25,44 +41,50 @@ export class AuthService {
     });
   }
 
-  login({ method, credentials }: { method: string, credentials: any }) {
+  login(token: string) {
 
-    switch (method) {
-      case 'basic':
-        this.basicAuth.login(credentials);
-        this.loggedSource.next({
-          logged: this.logged,
-          loggedUnverified: this.loggedUnverified,
-          username: this.username
-        });
-        break;
-      default:
-    }
+    // get the payload of the token
+    const {
+      username,
+      verified: isEmailVerified
+    }: {
+      username: string,
+      verified: boolean,
+    } = jwt.decode(token) as any;
+
+    // store login values in local storage
+    this.storage.set('token', token);
+    this.storage.set('username', username);
+    this.storage.set('isEmailVerified', isEmailVerified);
+
+    this.loggedSource.next({
+      logged: this.logged,
+      loggedUnverified: this.loggedUnverified,
+      username: this.username
+    });
+  }
+
+  get header() {
+    return `Bearer ${this.token}`;
   }
 
   get logged(): boolean {
-    return this.basicAuth.logged;
+    return Boolean(this.username && this.isEmailVerified);
   }
 
   get loggedUnverified(): boolean {
-    return this.basicAuth.loggedUnverified;
-  }
-
-  get user(): User {
-    const { username } = this.basicAuth;
-    return new User({ username });
+    return Boolean(this.username && !this.isEmailVerified);
   }
 
   get username(): string {
-    return this.basicAuth.username;
+    return this.storage.get('username');
   }
 
-  get email(): string|undefined {
-    return this.basicAuth.email;
+  private get isEmailVerified(): boolean {
+    return this.storage.get('isEmailVerified');
   }
 
-  get credentials(): { username: string, password: string } {
-    return this.basicAuth.credentials;
+  get token(): string {
+    return this.storage.get('token');
   }
-
 }

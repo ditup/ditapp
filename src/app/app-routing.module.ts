@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { SignupComponent } from './signup/signup.component';
-import { LoginBasicComponent } from './login-basic/login-basic.component';
+import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 
 import { UserComponent } from './user/user.component';
@@ -65,7 +65,6 @@ import { PeopleWithMyTagsResolver, NewPeopleResolver, PeopleWithTagResolver } fr
 
 // services
 import { AuthService } from './auth.service';
-import { BasicAuthService } from './basic-auth.service';
 import { ModelService } from './model.service';
 
 const routes: Routes = [
@@ -79,7 +78,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginBasicComponent
+    component: LoginComponent
   },
   {
     path: 'contact-with/:username',
@@ -266,7 +265,10 @@ const routes: Routes = [
   {
     path: 'account',
     component: AccountComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {
+      user: LoggedUserResolver
+    }
   },
   {
     path: '**',
@@ -294,7 +296,6 @@ const routes: Routes = [
     PeopleWithTagResolver,
     NewPeopleResolver,
     AuthService,
-    BasicAuthService,
     ModelService
   ]
 })

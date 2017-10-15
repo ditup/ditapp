@@ -13,8 +13,6 @@ import * as _ from 'lodash';
 import { Tag, User, UserTag, Message, Contact } from './shared/types';
 import { AuthService } from './auth.service';
 
-declare const Buffer; // fixing a weird error (not declared Buffer)
-
 @Injectable()
 export class ModelService {
 
@@ -24,25 +22,21 @@ export class ModelService {
     avatar: { }
   };
 
-  private generateAuthHeader = this.generateBasicAuthHeader;
-
-  private contentTypeHeader: [string, string] = ['Content-Type', 'application/vnd.api+json'];
-
   // the logged headers as expected by HttpClient
   private get loggedHeaders() {
-
-    return new HttpHeaders()
-      .append(this.contentTypeHeader[0], this.contentTypeHeader[1])
-      .append(this.authHeader[0], this.authHeader[1]);
+    return this.notLoggedHeaders
+      .set('Authorization', this.auth.header);
   }
 
   private get notLoggedHeaders() {
-    return new HttpHeaders().append(this.contentTypeHeader[0], this.contentTypeHeader[1]);
+    return new HttpHeaders()
+      .set('Content-Type', 'application/vnd.api+json')
+      .set('Accept', 'application/vnd.api+json');
   }
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
-  async createUser({ username, email, password }: User): Promise<User> {
+  async createUser({ username, email, password }: { username: string, email: string, password: string }): Promise<User> {
     const requestBody = {
       data: {
         type: 'users',
@@ -113,32 +107,16 @@ export class ModelService {
     return 'some-email';
   }
 
-  private get authHeader() {
-    return this.generateAuthHeader();
-  }
+  async getJwtToken(username: string, password: string): Promise<string> {
+    const basicAuthHeader = `Basic ${new Buffer(`${username}:${password}`).toString('base64')}`;
 
-  private generateBasicAuthHeader() {
-    const credentials = this.auth.credentials;
-    return this.createBasicAuthHeader(credentials);
-  }
+    const headers: HttpHeaders = this.notLoggedHeaders.append('Authorization', basicAuthHeader);
 
-  private createBasicAuthHeader({ username, password }: { username: string, password: string }): [string, string] {
-    return ['Authorization', 'Basic ' + new Buffer(`${username}:${password}`).toString('base64')] as [string, string];
-  }
-
-  async basicAuth({ username, password }: User): Promise<User> {
-    // generate an Authorization header
-    const authHeader = this.createBasicAuthHeader({ username, password });
-
-    const headers = new HttpHeaders()
-      .append(authHeader[0], authHeader[1])
-      .append(this.contentTypeHeader[0], this.contentTypeHeader[1]);
-
-    const response: HttpResponse<any> = await this.http
-      .get(`${this.baseUrl}/auth/basic`, { headers, observe: 'response' })
+    const { meta: { token } }: any = await this.http
+      .get(`${this.baseUrl}/auth/token`, { headers })
       .toPromise();
 
-    return this.deserializeUser(response.body.data);
+    return token;
   }
 
   async readUser(username: string): Promise<User> { // @TODO better return type

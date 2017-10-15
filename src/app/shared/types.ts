@@ -10,19 +10,17 @@ export class User {
   public preciseLocation?: [number, number];
   public userTags?: UserTag[];
   public email?: string;
-  public password?: string;
 
-  constructor({ username, givenName, familyName, description, location, preciseLocation, email, password }: {
+  constructor({ username, givenName, familyName, description, location, preciseLocation, email }: {
     username: string,
     givenName?: string,
     familyName?: string,
     description?: string,
     location?: [number, number],
     preciseLocation?: [number, number],
-    email?: string,
-    password?: string
+    email?: string
   }) {
-    _.assign(this, { username, givenName, familyName, description, location, preciseLocation, email, password });
+    _.assign(this, { username, givenName, familyName, description, location, preciseLocation, email });
   }
 }
 

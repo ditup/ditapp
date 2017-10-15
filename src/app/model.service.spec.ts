@@ -15,14 +15,8 @@ import * as b64 from 'b64-to-blob';
 const b64ToBlob = b64 as any;
 
 class AuthStubService {
-  credentials = {
-    username: 'test',
-    password: 'password'
-  };
-
-  get username () {
-    return this.credentials.username;
-  }
+  header = 'Bearer xxx.yyy.zzz';
+  username = 'test';
 }
 
 describe('ModelService', () => {
@@ -389,37 +383,33 @@ describe('ModelService', () => {
     });
   });
 
-  describe('basicAuth', () => {
+  describe('getJwtToken', () => {
     it('should make a correct request', async(async () => {
 
       const username = 'user';
       const password = 'password';
+
+      const basicAuthHeader = `Basic ${new Buffer(`${username}:${password}`).toString('base64')}`;
       // execute the function
-      const basicAuthPromise = service.basicAuth({ username, password });
+      const tokenPromise = service.getJwtToken(username, password);
 
       // mock the backend
-      const req = httpMock.expectOne(`${baseUrl}/auth/basic`);
+      const req = httpMock.expectOne(`${baseUrl}/auth/token`);
 
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
-      expect(req.request.headers.has('authorization')).toEqual(true);
+      expect(req.request.headers.get('accept')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.get('authorization')).toEqual(basicAuthHeader);
 
       req.flush({
-        data: {
-          type: 'users',
-          id: username,
-          attributes: {
-            givenName: '',
-            familyName: '',
-            description: ''
-          }
+        meta: {
+          token: 'xxxx.yyyy.zzzz'
         }
       });
 
-      const loggedUser = await basicAuthPromise;
-      expect(loggedUser).toEqual(jasmine.objectContaining({
-        username, givenName: '', familyName: '', description: ''
-      }));
+      const token = await tokenPromise;
+
+      expect(token).toEqual('xxxx.yyyy.zzzz');
     }));
 
   });

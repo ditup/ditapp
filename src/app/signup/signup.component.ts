@@ -13,8 +13,6 @@ import { AuthService } from '../auth.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { HeaderControlService } from '../header-control.service';
 
-import { User } from '../shared/types';
-
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -197,7 +195,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // on submit, we want to send http request POST /users to the server
     // on success (201 response) we want to redirect to a page which is awaiting the email verification code
-    const user = this.signupForm.value as User;
+    const user: { username: string, email: string, password: string } = this.signupForm.value;
 
     this.isFormDisabled = true;
 

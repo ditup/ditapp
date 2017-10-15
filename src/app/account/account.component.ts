@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { AuthService } from '../auth.service';
+import { User } from '../shared/types';
 
 @Component({
   selector: 'app-account',
@@ -13,11 +14,13 @@ export class AccountComponent implements OnInit {
   public email: string;
 
   // inject modules, services
-  constructor(private auth: AuthService) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.username = this.auth.username;
-    this.email = this.auth.email;
+    this.route.data.subscribe(({ user }: { user: User }) => {
+      this.username = user.username;
+      this.email = user.email;
+    });
   }
 
 }

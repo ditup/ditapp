@@ -6,13 +6,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AuthService } from '../../auth.service';
 import { ModelService } from '../../model.service';
 import { NotificationsService } from '../../notifications/notifications.service';
 
-class AuthStubService {
-  login() {}
-}
 class ModelStubService {
   async changePassword(_oldPassword: string, _newPassword: string): Promise<void> { }
 }
@@ -34,7 +30,6 @@ describe('ChangePasswordComponent', () => {
         BrowserAnimationsModule
       ],
       providers: [
-        { provide: AuthService, useClass: AuthStubService },
         { provide: ModelService, useClass: ModelStubService },
         NotificationsService
       ]

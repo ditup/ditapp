@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModelService } from '../../model.service';
-import { AuthService } from '../../auth.service';
 import { NotificationsService } from '../../notifications/notifications.service';
 
 @Component({
@@ -19,8 +18,7 @@ export class ChangePasswordComponent implements OnInit {
   // inject modules, services
   constructor(private formBuilder: FormBuilder,
               private model: ModelService,
-              private notify: NotificationsService,
-              private auth: AuthService) { }
+              private notify: NotificationsService) { }
 
   ngOnInit(): void {
     // initialize the reactive form
@@ -48,8 +46,6 @@ export class ChangePasswordComponent implements OnInit {
 
     try {
       await this.model.changePassword(oldPassword, newPassword);
-      // update the auth password
-      this.auth.login({ method: 'basic', credentials: { username: this.auth.username, password: newPassword, email: this.auth.email } });
 
       // notify about success
       this.notify.info('Your password was updated.');

@@ -6,12 +6,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AuthGuard } from './auth-guard.service';
 
 import { AuthService } from './auth.service';
-import { BasicAuthService } from './basic-auth.service';
 
 describe('AuthGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AuthGuard, AuthService, BasicAuthService],
+      providers: [AuthGuard, AuthService],
       imports: [RouterTestingModule]
     });
   });

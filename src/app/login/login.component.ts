@@ -2,18 +2,17 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
+import { ModelService } from '../model.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { HeaderControlService } from '../header-control.service';
-import { User } from '../shared/types';
 
 @Component({
-  selector: 'app-login-basic',
-  templateUrl: './login-basic.component.html',
-  styleUrls: ['./login-basic.component.scss']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
-export class LoginBasicComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
 
   // the form object
   public loginForm: FormGroup;
@@ -22,9 +21,9 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
 
   // inject modules, services
   constructor(private formBuilder: FormBuilder,
-              private model: ModelService,
               private notify: NotificationsService,
               private auth: AuthService,
+              private model: ModelService,
               private router: Router,
               private route: ActivatedRoute,
               private headerControl: HeaderControlService) { }
@@ -32,12 +31,15 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
   // this will execute when the page is loaded
   ngOnInit(): void {
     // check whether user is logged in
-    const logged = this.auth.logged;
-    // log user out at the beginning
-    this.auth.logout();
-    // notify that we logged somebody out, if we did so
-    if (logged) {
-      this.notify.info('The previous user was logged out.');
+    try {
+      const logged = this.auth.logged;
+      // notify that we logged somebody out, if we did so
+      if (logged) {
+        this.notify.info('The previous user was logged out.');
+      }
+    } finally {
+      // log user out at the beginning
+      this.auth.logout();
     }
     // don't display the page header
     this.headerControl.display(false);
@@ -64,15 +66,11 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
   async onSubmit(): Promise<void> {
     this.isFormDisabled = true;
     this.auth.logout();
-    const credentials = this.loginForm.value as User;
+    const { username, password }: { username: string, password: string } = this.loginForm.value as any;
 
     try {
-      const user = await this.model.basicAuth(credentials);
-
-      user.password = credentials.password;
-
-      // log in the auth service
-      this.auth.login({ method: 'basic', credentials: user});
+      const token = await this.model.getJwtToken(username, password);
+      this.auth.login(token);
 
       this.notify.clear();
       this.notify.info('You were authenticated.');
@@ -86,7 +84,7 @@ export class LoginBasicComponent implements OnInit, OnDestroy {
     } catch (err) {
 
       this.loginForm.reset({
-        username: credentials.username,
+        username,
         password: ''
       });
 

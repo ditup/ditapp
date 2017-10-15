@@ -19,7 +19,7 @@ import { SignupComponent } from './signup/signup.component';
 import { MainComponent } from './main/main.component';
 import { FofComponent } from './fof/fof.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
-import { LoginBasicComponent } from './login-basic/login-basic.component';
+import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
@@ -96,7 +96,7 @@ import { TabNavComponent } from './shared/tab-nav/tab-nav.component';
     MainComponent,
     FofComponent,
     VerifyEmailComponent,
-    LoginBasicComponent,
+    LoginComponent,
     HeaderComponent,
     UserComponent,
     UserEditComponent,

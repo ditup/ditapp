@@ -8,7 +8,6 @@ import * as _ from 'lodash';
 
 // import { NotificationsService } from './notifications/notifications.service';
 import { ModelService } from './model.service';
-import { BasicAuthService } from './basic-auth.service';
 import { AuthService } from './auth.service';
 import { HeaderControlService } from './header-control.service';
 import { DialogService } from './dialog.service';
@@ -19,7 +18,6 @@ import { DialogService } from './dialog.service';
   styleUrls: ['./app.component.scss'],
   providers: [
     ModelService,
-    BasicAuthService,
     AuthService,
     HeaderControlService,
     DialogService

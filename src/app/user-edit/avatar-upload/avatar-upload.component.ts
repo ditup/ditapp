@@ -19,8 +19,8 @@ export class AvatarUploadComponent implements OnInit {
     return{
       uploadUrl: `${api.baseUrl}/users/${this.auth.username}/avatar`,
       httpMethod: 'PATCH',
-      authTokenPrefix: 'Basic',
-      authToken: btoa(`${this.auth.credentials.username}:${this.auth.credentials.password}`),
+      authTokenPrefix: 'Bearer',
+      authToken: this.auth.token,
       fieldName: 'avatar',
       autoUpload: true,
       maxImageSize: 2,
