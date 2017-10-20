@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { ModelService } from '../model.service';
+import { EditorOutputComponent } from '../shared/editor-output/editor-output.component';
 
 import { Message, User } from '../shared/types';
 
@@ -106,6 +107,7 @@ describe('MessagesWithUserComponent', () => {
         MessagesWithUserComponent,
         MessageFormStubComponent,
         AvatarStubComponent,
+        EditorOutputComponent,
         FofComponent
       ],
       imports: [

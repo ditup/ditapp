@@ -3,12 +3,16 @@
     <fieldset [disabled]="isFormDisabled">
 
       <div>
-        <mat-form-field
+        <!--mat-form-field
           [dividerColor]="formErrors.body ? 'warn' : ''"
           [hintLabel]="formErrors.body || null">
           <textarea matInput placeholder="Message"
             formControlName="body"></textarea>
-        </mat-form-field>
+          </mat-form-field-->
+
+        <textarea placeholder="Message"
+          appEditor [form]="messageForm" #editor
+          formControlName="body"></textarea>
       </div>
 
       <button mat-raised-button type="submit"

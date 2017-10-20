@@ -12,7 +12,7 @@
       <app-avatar class="message-from" [username]="msg.from.username"></app-avatar>
       <div class="message-created">{{ msg.created | amTimeAgo }}</div>
       <div class="message-body">
-        <span Markdown>{{ msg.body }}</span>
+        <app-editor-output [value]="msg.body"></app-editor-output>
       </div>
     </li>
   </ul>

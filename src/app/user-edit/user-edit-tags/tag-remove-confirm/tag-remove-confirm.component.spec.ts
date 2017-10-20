@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TagRemoveConfirmComponent } from './tag-remove-confirm.component';
+import { EditorOutputComponent } from '../../../shared/editor-output/editor-output.component';
 
 describe('TagRemoveConfirmComponent', () => {
   let component: TagRemoveConfirmComponent;
@@ -8,7 +9,10 @@ describe('TagRemoveConfirmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagRemoveConfirmComponent ]
+      declarations: [
+        TagRemoveConfirmComponent,
+        EditorOutputComponent
+      ]
     })
     .compileComponents();
   }));

@@ -7,6 +7,7 @@ import { MaterialModule } from '../../material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ModelService } from '../../model.service';
+import { EditorComponent } from '../../shared/editor/editor.component';
 
 class ModelStubService { }
 
@@ -16,7 +17,7 @@ describe('MessageFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MessageFormComponent ],
+      declarations: [ MessageFormComponent, EditorComponent ],
       imports: [
         ReactiveFormsModule,
         MaterialModule,

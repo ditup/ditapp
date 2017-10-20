@@ -7,17 +7,21 @@
 @import '~leaflet.markercluster/dist/MarkerCluster.css';
 @import '~leaflet.markercluster/dist/MarkerCluster.Default.css';
 @import '~mobile-drag-drop/default.css';
+@import '~medium-editor/src/sass/medium-editor.scss';
+@import '~medium-editor/src/sass/themes/default.scss';
 
 @import 'app/shared/styles/fonts';
 @import 'app/shared/styles/colors';
 
 @media (max-width: 320px) {
-  html, body {
+  html,
+  body {
     width: 320px;
   }
 }
 
-html, body {
+html,
+body {
   height: 100%;
   min-height: 100%;
 }
@@ -55,4 +59,9 @@ router-outlet + :not(app-map) {
   max-width: 768px;
   margin: 1em auto;
   display: block;
+}
+
+/* styles for editor.component (medium editor contenteditable div) */
+[contenteditable=true] {
+  @import 'app/shared/styles/_user-content';
 }

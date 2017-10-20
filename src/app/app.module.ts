@@ -6,7 +6,6 @@ import { HttpModule } from '@angular/http';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DndModule } from 'ng2-dnd';
-import { MarkdownModule } from 'angular2-markdown';
 import { MomentModule } from 'angular2-moment';
 import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 
@@ -86,6 +85,8 @@ import { UserDialogComponent } from './shared/user-dialog/user-dialog.component'
 import { ProgressComponent } from './progress/progress.component';
 
 import { HttpProgressInterceptor } from './progress/progress.interceptor';
+import { EditorComponent } from './shared/editor/editor.component';
+import { EditorOutputComponent } from './shared/editor-output/editor-output.component';
 
 @NgModule({
   declarations: [
@@ -153,7 +154,9 @@ import { HttpProgressInterceptor } from './progress/progress.interceptor';
     AvatarUploadComponent,
     TagRemoveConfirmComponent,
     UserDialogComponent,
-    ProgressComponent
+    ProgressComponent,
+    EditorComponent,
+    EditorOutputComponent
   ],
   imports: [
     BrowserModule,
@@ -164,7 +167,6 @@ import { HttpProgressInterceptor } from './progress/progress.interceptor';
     MaterialModule, // angular material material.angular.io
     AppRoutingModule,
     DndModule.forRoot(), // drag and drop: ng2-dnd
-    MarkdownModule,
     MomentModule,
     FancyImageUploaderModule
   ],

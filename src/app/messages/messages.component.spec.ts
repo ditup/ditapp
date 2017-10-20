@@ -12,6 +12,7 @@ import { MomentModule } from 'angular2-moment';
 import { RouterLinkStubDirective } from '../../testing/router-stubs';
 
 import { AuthService } from '../auth.service';
+import { EditorOutputComponent } from '../shared/editor-output/editor-output.component';
 
 class AuthStubService { }
 
@@ -35,7 +36,8 @@ describe('MessagesComponent', () => {
       declarations: [
         MessagesComponent,
         RouterLinkStubDirective,
-        AvatarStubComponent
+        AvatarStubComponent,
+        EditorOutputComponent
       ],
       providers: [
         { provide: AuthService, useClass: AuthStubService },

@@ -1,4 +1,6 @@
 <h1>Remove tag {{userTag.tag.tagname}}?</h1>
-<section *ngIf="userTag.story"><i>You said:</i> {{userTag.story}}</section>
+<section *ngIf="userTag.story"><i>You said:</i>
+  <app-editor-output [value]="userTag.story"></app-editor-output>
+</section>
 <button (click)="confirm(true)" mat-raised-button>yes</button>
 <button (click)="confirm(false)" mat-raised-button matDialogClose>no</button>

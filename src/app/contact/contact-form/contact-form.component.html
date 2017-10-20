@@ -1,10 +1,12 @@
 <form (ngSubmit)="onSubmitWrapper()" [formGroup]="contactForm">
   <fieldset [disabled]="isFormDisabled">
 
-    <mat-form-field class="form-field message-field" *ngIf="fields.indexOf('message') > -1">
-      <textarea matInput placeholder="Message"
+    <div class="form-field message-field" *ngIf="fields.indexOf('message') > -1">
+      <h2>Message</h2>
+      <textarea placeholder="Tell the user why you want to create the contact"
+        appEditor [form]="contactForm" [value]="data.message"
         formControlName="message"></textarea>
-    </mat-form-field>
+    </div>
 
     <div class="form-field trust-field" *ngIf="fields.indexOf('trust') > -1">
       <h2>Trust*</h2>
@@ -15,10 +17,12 @@
       </mat-radio-group>
     </div>
 
-    <mat-form-field class="form-field reference-field" *ngIf="fields.indexOf('reference') > -1">
-      <textarea matInput placeholder="Reference"
+    <div class="form-field reference-field" *ngIf="fields.indexOf('reference') > -1">
+      <h2>Reference</h2>
+      <textarea placeholder="Write a reference for the user"
+        appEditor [form]="contactForm" [value]="data.reference"
         formControlName="reference"></textarea>
-    </mat-form-field>
+    </div>
 
     <button mat-raised-button type="submit"
       [disabled]="!contactForm.valid">Submit</button>

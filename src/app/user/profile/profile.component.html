@@ -7,8 +7,8 @@
 </app-user-tag-list>
 
 <section class="user-loc-desc-wrapper">
-  <section class="user-description" Markdown>
-    {{user.description}}
+  <section class="user-description">
+    <app-editor-output [value]="user.description"></app-editor-output>
   </section>
 
   <app-location class="user-location" *ngIf="user.location" [location]="user.location"></app-location>

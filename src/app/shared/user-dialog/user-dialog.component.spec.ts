@@ -3,6 +3,7 @@ import { MaterialModule } from '../../material.module';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { UserDialogComponent } from './user-dialog.component';
+import { EditorOutputComponent } from '../editor-output/editor-output.component';
 
 import { AvatarStubComponent } from '../../../testing/avatar-stub';
 import { UserTagListStubComponent } from '../../../testing/user-tag-list-stub';
@@ -16,6 +17,7 @@ describe('UserDialogComponent', () => {
       declarations: [
         UserDialogComponent,
         AvatarStubComponent,
+        EditorOutputComponent,
         UserTagListStubComponent
       ],
       imports: [

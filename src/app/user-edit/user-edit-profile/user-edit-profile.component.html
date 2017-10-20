@@ -17,11 +17,10 @@
       <mat-error *ngFor="let error of formErrors.familyName">{{error}}</mat-error>
     </mat-form-field>
 
-    <mat-form-field>
-      <textarea matInput placeholder="Description"
-        formControlName="description"></textarea>
-      <mat-error *ngFor="let error of formErrors.description">{{error}}</mat-error>
-    </mat-form-field>
+    <textarea placeholder="Description"
+      appEditor [form]="profileForm" [value]="user.description"
+      formControlName="description"></textarea>
+    <div *ngFor="let error of formErrors.description">{{error}}</div>
 
     <button mat-raised-button type="submit"
       [disabled]="!profileForm.valid">Submit</button>
