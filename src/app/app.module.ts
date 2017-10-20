@@ -161,7 +161,7 @@ import { TabNavComponent } from './shared/tab-nav/tab-nav.component';
     TabNavComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'ditapp-srv' }),
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
