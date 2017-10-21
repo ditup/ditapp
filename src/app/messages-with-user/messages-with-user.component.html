@@ -1,7 +1,7 @@
-<div *ngIf="otherUserExists === true">
+<div [ngClass]="'main-container'" *ngIf="otherUserExists === true">
   <h1>Conversation with <app-avatar [username]="otherUser.username"></app-avatar> {{otherUser.username}}</h1>
 
-  <ul>
+  <ul #messagesList [ngClass]="'message-list'">
     <li *ngFor="let msg of messages"
       class="message"
       [ngClass]="(msg.to.username === otherUser.username)
@@ -9,7 +9,7 @@
         : (!msg.read)
         ? 'unread'
         : 'read'">
-      <app-avatar class="message-from" [username]="msg.from.username"></app-avatar>
+      <app-avatar [title]="msg.from.username" class="message-from" [username]="msg.from.username"></app-avatar>
       <div class="message-created">{{ msg.created | amTimeAgo }}</div>
       <div class="message-body">
         <app-editor-output [value]="msg.body"></app-editor-output>
@@ -19,6 +19,7 @@
 
   <app-message-form [receiver]="otherUser" (onMessageSent)="onNewMessage($event)">
   </app-message-form>
+
 </div>
 
 <div *ngIf="otherUserExists === false">

@@ -6,13 +6,22 @@
       <span class="contact-username">{{contact.from.username}}</span>
       <span *ngIf="contact.trust" class="contact-trust"[ngClass]="'contact-trust-' + contact.trust">&#9679;</span>
     </div>
-
   </a>
-  <span *ngIf="!contact.isConfirmed">
-    (pending)
-    <a routerLink="/contact-with/{{contact.from.username}}">
-      <span *ngIf="contact.creator.username === me.username">Update Contact Request</span>
-      <span *ngIf="contact.creator.username !== me.username">Confirm/Delete Contact Request</span>
-    </a>
-  </span>
+
+  <div class="contact-actions" *ngIf="!contact.isConfirmed">
+    <div><i>pending</i></div>
+    <div>
+      <a ngClass="link-button"
+        routerLink="/contact-with/{{contact.from.username}}">
+
+        <span *ngIf="!contact.isConfirmed">
+          <span *ngIf="contact.creator.username === me.username">
+            Update Request
+          </span>
+          <span *ngIf="contact.creator.username !== me.username">Confirm/Delete Request</span>
+        </span>
+
+      </a>
+    </div>
+  </div>
 </div>

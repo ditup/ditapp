@@ -9,6 +9,6 @@
   <div *ngIf="!userTags">loading tags...</div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <a mat-raised-button (click)="close()" [routerLink]="'/user/' + user.username">Visit profile</a>
-  <button mat-raised-button (click)="close()">Close</button>
+  <a class="link-button" (click)="close()" [routerLink]="'/user/' + user.username">Visit profile</a>
+  <button (click)="close()">Close</button>
 </mat-dialog-actions>

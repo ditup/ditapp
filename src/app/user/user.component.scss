@@ -37,11 +37,6 @@
 
 .user-links-container {
   display: inline-block;
-
-  & > * {
-    display: block;
-    text-align: right;
-  }
 }
 
 .user-avatar {

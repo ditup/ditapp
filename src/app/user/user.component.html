@@ -15,9 +15,9 @@
 
     <nav class="user-links-container">
       <!-- edit profile -->
-      <a *ngIf="isMe === true" routerLink="/profile/edit">Edit Profile</a>
+      <a class="link-button" *ngIf="isMe === true" routerLink="/profile/edit">Edit Profile</a>
       <!-- messages -->
-      <a *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
+      <a class="link-button" *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
 
 
       <!-- contact link  -->
@@ -26,7 +26,7 @@
         <!-- loading -->
         <span *ngIf="contactStatus === null">Fetching contact info...</span>
 
-        <a *ngIf="contactStatus !== null" routerLink="/contact-with/{{username}}">
+        <a class="link-button" *ngIf="contactStatus !== null" routerLink="/contact-with/{{username}}">
           <!-- nonexistent -->
           <span *ngIf="contactStatus === 'nonexistent'">Send a contact request</span>
           <!-- confirmed -->

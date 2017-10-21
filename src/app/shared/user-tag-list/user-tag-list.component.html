@@ -1,8 +1,8 @@
-<mat-chip-list>
-  <mat-chip *ngFor="let userTag of userTags"
+<ul>
+  <li *ngFor="let userTag of userTags"
     [ngClass]="'tag-relevance-' + userTag.relevance"
-    matTooltip="{{userTag.story || 'no story yet'}}"
     (click)="openTagDetail(userTag)">
     {{userTag.tag.tagname}}
-  </mat-chip>
-</mat-chip-list>
+    <span class="story-indicator" *ngIf="userTag.story">&#9679;</span>
+  </li>
+</ul>

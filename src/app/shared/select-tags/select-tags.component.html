@@ -1,12 +1,14 @@
-<app-tag-autocomplete
-  placeholder="search tags"
-  (action)="addTagToList($event)"
-  (action404)="complainNonexistentTag($event)"></app-tag-autocomplete>
-<button mat-raised-button
-  class="open-select-dialog"
-  (click)="openMyTagsDialog()">Choose from My Tags</button>
-<button mat-raised-button class="clear-selection"
-  (click)="clearSelection()">clear</button>
+<div class="controls-container">
+  <app-tag-autocomplete
+    placeholder="search tags"
+    (action)="addTagToList($event)"
+    (action404)="complainNonexistentTag($event)"></app-tag-autocomplete>
+
+  <button class="open-select-dialog"
+    (click)="openMyTagsDialog()">Choose from My Tags</button>
+  <button class="clear-selection"
+    (click)="clearSelection()">clear</button>
+</div>
 
 <mat-chip-list>
   <mat-chip *ngFor="let tag of tagList.tags" class="tag-selected">

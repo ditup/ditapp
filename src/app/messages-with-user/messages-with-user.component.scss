@@ -32,3 +32,28 @@ app-avatar {
   height: 1em;
   width: 1em;
 }
+
+.main-container {
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  top: 64px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/* margin around messages */
+.main-container {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.message-list {
+  overflow: auto;
+  flex: 1 1 auto;
+}
+
+h1 {
+  display: none;
+}

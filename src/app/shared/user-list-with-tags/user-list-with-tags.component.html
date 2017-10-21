@@ -1,7 +1,7 @@
-<mat-list>
-  <mat-list-item *ngFor="let user of users">
+<ul>
+  <li *ngFor="let user of users">
     <app-user-small [user]="user"></app-user-small>
     <app-user-tag-list
       [userTags]="user.userTags"></app-user-tag-list>
-  </mat-list-item>
-</mat-list>
+  </li>
+</ul>

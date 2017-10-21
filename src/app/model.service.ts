@@ -70,12 +70,20 @@ export class ModelService {
     const headers = this.notLoggedHeaders;
 
     return this.http
-      .head(`${this.baseUrl}/users/${username}`, { headers, observe: 'response' })
+      .head(`${this.baseUrl}/users/${username}`, { headers, observe: 'response', responseType: 'text' })
       .map((resp: HttpResponse<any>) => {
-        if (resp.status === 200) { return false; }
+        console.log('***', resp);
+        if (resp.status === 200) {
+          console.log(200);
+          return false;
+        }
       })
       .catch((err): Observable<boolean> => {
-        if (err.status === 404) { return new Observable(observer => observer.next(true)); }
+        console.log('error', err.status, err);
+        if (err.status === 404) {
+          console.log(404);
+          return new Observable(observer => observer.next(true));
+        }
       });
   }
 
@@ -211,7 +219,7 @@ export class ModelService {
     const headers = this.loggedHeaders;
 
     return this.http
-      .head(`${this.baseUrl}/tags/${tagname}`, { headers, observe: 'response' })
+      .head(`${this.baseUrl}/tags/${tagname}`, { headers, observe: 'response', responseType: 'text' })
       .map((resp: HttpResponse<any>) => {
         if (resp.status === 200) { return false; }
       })

@@ -63,6 +63,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // destroy the map
+    this.map.remove();
+
     // cancel all ongoing requests when leaving
     if (this.subscription) {
       this.subscription.unsubscribe();

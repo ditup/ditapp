@@ -3,21 +3,15 @@
     <fieldset [disabled]="isFormDisabled">
 
       <div>
-        <!--mat-form-field
-          [dividerColor]="formErrors.body ? 'warn' : ''"
-          [hintLabel]="formErrors.body || null">
-          <textarea matInput placeholder="Message"
-            formControlName="body"></textarea>
-          </mat-form-field-->
-
         <textarea placeholder="Message"
           appEditor [form]="messageForm" #editor
           formControlName="body"></textarea>
       </div>
 
-      <button mat-raised-button type="submit"
-        [disabled]="!messageForm.valid">Send</button>
-      <span *ngIf="sending"><mat-spinner></mat-spinner></span>
+      <div class="button-container">
+        <button type="submit"
+          [disabled]="!messageForm.valid">Send</button>
+      </div>
 
     </fieldset>
   </form>

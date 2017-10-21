@@ -9,21 +9,14 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmailForm">
     <fieldset [disabled]="isFormDisabled">
 
-      <mat-form-field>
-        <input matInput type="text" placeholder="Verification Code"
-          formControlName="code" required>
-      </mat-form-field>
+      <input type="text" placeholder="Verification Code"
+        formControlName="code" required>
 
-      <button mat-raised-button type="submit" class="btn btn-default"
+      <button type="submit" class="btn btn-default"
         [disabled]="!verifyEmailForm.valid">Verify Email</button>
       <mat-spinner *ngIf="isSubmitting"></mat-spinner>
     </fieldset>
   </form>
-</section>
-
-<section *ngIf="!verificationSuccess && isCodeProvided" class="verification-container">
-  <h1>Verifying email</h1>
-  <mat-spinner></mat-spinner>
 </section>
 
 <section *ngIf="verificationSuccess" class="verification-container">
