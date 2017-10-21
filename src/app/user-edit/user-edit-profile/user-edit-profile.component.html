@@ -5,24 +5,29 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
   <fieldset [disabled]="isFormDisabled">
 
-    <mat-form-field>
-      <input matInput type="text" placeholder="Given Name"
-      formControlName="givenName">
-      <mat-error *ngFor="let error of formErrors.givenName">{{error}}</mat-error>
-    </mat-form-field>
+    <label for="givenName">Given name</label>
+    <input type="text"
+    formControlName="givenName">
+    <ul>
+      <li *ngFor="let error of formErrors.givenName">{{error}}</li>
+    </ul>
 
-    <mat-form-field>
-      <input matInput type="text" placeholder="Family Name"
-      formControlName="familyName">
-      <mat-error *ngFor="let error of formErrors.familyName">{{error}}</mat-error>
-    </mat-form-field>
+    <label for="familyName">Family name</label>
+    <input type="text"
+    formControlName="familyName">
+    <ul>
+      <li *ngFor="let error of formErrors.familyName">{{error}}</li>
+    </ul>
 
-    <textarea placeholder="Description"
+    <label for="description">Description</label>
+    <textarea placeholder="Write about yourself"
       appEditor [form]="profileForm" [value]="user.description"
       formControlName="description"></textarea>
-    <div *ngFor="let error of formErrors.description">{{error}}</div>
+    <ul>
+      <li *ngFor="let error of formErrors.description">{{error}}</li>
+    </ul>
 
-    <button mat-raised-button type="submit"
+    <button type="submit"
       [disabled]="!profileForm.valid">Submit</button>
 
   </fieldset>

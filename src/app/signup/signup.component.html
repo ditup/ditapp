@@ -8,27 +8,30 @@
 
   <form (ngSubmit)="onSubmit()" [formGroup]="signupForm" class="signup-form">
     <fieldset [disabled]="isFormDisabled">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Username"
+
+      <label for="username">Username</label>
+      <input type="text" placeholder="your-unique.user_name"
         formControlName="username" required>
-        <mat-error *ngFor="let error of formErrors.username">{{error}}</mat-error>
-      </mat-form-field>
+      <ul>
+        <li *ngFor="let error of formErrors.username">{{error}}</li>
+      </ul>
 
-      <mat-form-field>
-        <input matInput type="email" placeholder="Email"
-          formControlName="email" required>
-        <mat-error *ngFor="let error of formErrors.email">{{error}}</mat-error>
-      </mat-form-field>
+      <label for="email">Email</label>
+      <input type="email" placeholder="your.email@example.com"
+        formControlName="email" required>
+      <ul>
+        <li *ngFor="let error of formErrors.email">{{error}}</li>
+      </ul>
 
-      <mat-form-field>
-        <input matInput type="password" placeholder="Password"
-          formControlName="password" required>
-        <mat-error *ngFor="let error of formErrors.password">{{error}}</mat-error>
-      </mat-form-field>
+      <label for="password">Password</label>
+      <input type="password" placeholder="min. 8 characters"
+        formControlName="password" required>
+      <ul>
+        <li *ngFor="let error of formErrors.password">{{error}}</li>
+      </ul>
 
+      <button type="submit" [disabled]="!signupForm.valid">Sign Up</button>
 
-      <button mat-raised-button type="submit" class="btn btn-default"
-        [disabled]="!signupForm.valid">Sign Up</button>
     </fieldset>
   </form>
 

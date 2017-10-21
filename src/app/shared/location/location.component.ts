@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 
 import { Map, LatLng, TileLayer, Marker } from 'leaflet';
 import * as L from 'leaflet';
@@ -29,7 +29,18 @@ export class LocationComponent implements OnInit, OnChanges {
 
   ngOnInit() {}
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    // (re)load map when location changes
+    if (changes.location && changes.location.previousValue !== changes.location.currentValue) {
+      this.loadMap();
+    }
+  }
+
+  private loadMap() {
+    if (this.map) {
+      this.map.remove();
+    }
+
     const [lat, lng] = this.location;
 
     const loc = new LatLng(lat, lng);
@@ -49,7 +60,7 @@ export class LocationComponent implements OnInit, OnChanges {
       attributionControl: false,
       boxZoom: false,
       doubleClickZoom: 'center',
-      scrollWheelZoom: 'center',
+      scrollWheelZoom: false,
       touchZoom: 'center',
       dragging: false
     });

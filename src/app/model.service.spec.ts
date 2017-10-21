@@ -366,12 +366,7 @@ describe('ModelService', () => {
       expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
       expect(req.request.headers.has('authorization')).toEqual(false);
 
-      req.flush({
-        data: {
-          type: 'users',
-          id: username
-        }
-      }, { status: 200, statusText: 'Success' });
+      req.flush('', { status: 200, statusText: 'Success' });
     });
 
     it('[username doesn\'t exist] should reply true', () => {

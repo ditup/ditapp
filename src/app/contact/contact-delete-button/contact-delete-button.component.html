@@ -1,8 +1,8 @@
-<button mat-raised-button (click)="activate(!isActivated)"><ng-content></ng-content></button>
+<button (click)="activate(!isActivated)"><ng-content></ng-content></button>
 <div *ngIf="isActivated">
   Really delete?
   <div>
-    <button mat-raised-button (click)="deleteContact()">yes</button>
-    <button mat-raised-button (click)="activate(false)">no</button>
+    <button (click)="deleteContact()">yes</button>
+    <button (click)="activate(false)">no</button>
   </div>
 </div>

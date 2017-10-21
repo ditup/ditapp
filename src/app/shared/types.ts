@@ -106,8 +106,8 @@ export class TagList {
 
   public add(tagname: string) {
     // is the tag already added to the list?
-    const tagIndex: number = _.findIndex(this.tags, (tag) => {
-      return tag.tagname === tagname;
+    const tagIndex: number = _.findIndex(this.tags, (_tag) => {
+      return _tag.tagname === tagname;
     });
 
     const isAdded: boolean = (tagIndex === -1) ? false : true;

@@ -17,8 +17,10 @@ form {
   margin-bottom: 50px;
 }
 
-mat-form-field {
+input,
+button[type=submit] {
   width: 100%;
+  display: block;
 }
 
 .login-link {

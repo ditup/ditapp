@@ -34,11 +34,11 @@ export class HttpProgressInterceptor implements HttpInterceptor {
           // this.progress.update(id, 10);
           break;
         }
+        /*
         case (HttpEventType.Response): {
           return event;
         }
         // TODO needed when reporting progress
-        /*
         case (HttpEventType.UploadProgress): {
           const loaded = (event.total === 0) ? 1 : event.loaded / event.total;
           this.progress.update(id, 10 + loaded * 30);
@@ -59,6 +59,8 @@ export class HttpProgressInterceptor implements HttpInterceptor {
         }
         */
       }
+
+      return event;
     })
       .finally(() => {
         this.progress.remove(id);

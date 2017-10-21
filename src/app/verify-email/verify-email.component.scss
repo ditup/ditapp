@@ -17,12 +17,10 @@ form {
   margin-bottom: 50px;
 }
 
-mat-form-field {
+input,
+button[type=submit] {
   width: 100%;
-}
-
-mat-spinner {
-  margin: 0 auto;
+  display: block;
 }
 
 .home-mushroom-link {

@@ -65,3 +65,53 @@ router-outlet + :not(app-map) {
 [contenteditable=true] {
   @import 'app/shared/styles/_user-content';
 }
+
+input,
+button,
+.link-button,
+[contenteditable=true] {
+  border-radius: 2px;
+  padding: 0.5em;
+  margin: 0.1em 0 0.4em;
+}
+
+$shadow: 0px 1px 3px 0px #aaa;
+
+input,
+[contenteditable=true] {
+  border: 1px solid #aaa;
+  box-shadow: inset $shadow;
+  // width: 100%;
+}
+
+form label {
+  font-size: smaller;
+  display: block;
+  text-align: left;
+}
+
+.link-button {
+  display: inline-block;
+}
+
+button,
+.link-button {
+  text-align: center;
+
+  &:not([disabled]) {
+    cursor: pointer;
+    background-color: $darker;
+    color: white;
+    box-shadow: $shadow;
+  }
+}
+
+input.ng-invalid.ng-touched {
+  border-color: $accent;
+}
+
+form li {
+  font-size: small;
+  text-align: left;
+  color: gray;
+}

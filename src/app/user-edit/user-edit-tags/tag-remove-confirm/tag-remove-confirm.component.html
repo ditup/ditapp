@@ -2,5 +2,5 @@
 <section *ngIf="userTag.story"><i>You said:</i>
   <app-editor-output [value]="userTag.story"></app-editor-output>
 </section>
-<button (click)="confirm(true)" mat-raised-button>yes</button>
-<button (click)="confirm(false)" mat-raised-button matDialogClose>no</button>
+<button (click)="confirm(true)">yes</button>
+<button (click)="confirm(false)" matDialogClose>no</button>

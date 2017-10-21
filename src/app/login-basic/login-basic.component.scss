@@ -17,10 +17,6 @@ form {
   margin-bottom: 50px;
 }
 
-mat-form-field {
-  width: 100%;
-}
-
 .reset-password-link {
   text-align: center;
 }
@@ -28,4 +24,10 @@ mat-form-field {
 .home-mushroom-link {
   margin-top: 50px;
   text-align: center;
+}
+
+input,
+button[type=submit] {
+  display: block;
+  width: 100%;
 }

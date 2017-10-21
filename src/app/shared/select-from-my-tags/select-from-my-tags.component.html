@@ -7,6 +7,6 @@
       [selected]="!myTag.originalSelection"
       (click)="toggleSelection(myTag)">{{myTag.tag.tagname}}</mat-chip>
   </mat-chip-list>
-  <button mat-raised-button (click)="close(selectedTags)">OK</button>
-  <button mat-raised-button (click)="close([])">Cancel</button>
+  <button (click)="close(selectedTags)">OK</button>
+  <button (click)="close([])">Cancel</button>
 </div>

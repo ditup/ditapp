@@ -1,3 +1,5 @@
+@import '../../../shared/styles/colors';
+
 $contact-width: 150px;
 $avatar-size: 120px;
 $trust-diameter: 1em;
@@ -7,7 +9,8 @@ $trust-color-2: yellow;
 
 .user-contact-wrapper {
   width: $contact-width;
-  border: 1px solid gray;
+  border: 3px solid $darker;
+  border-radius: 2px;
 }
 
 .user-contact-avatar {
@@ -41,4 +44,8 @@ $trust-color-2: yellow;
 
 .contact-username {
   color: gray;
+}
+
+.contact-actions {
+  text-align: center;
 }

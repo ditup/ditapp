@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
@@ -18,7 +17,6 @@ const MATERIAL_MODULES = [
   MatChipsModule,
   MatDialogModule,
   MatIconModule,
-  MatInputModule,
   MatMenuModule,
   MatProgressBarModule,
   MatRadioModule,
