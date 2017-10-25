@@ -1,4 +1,4 @@
-<mat-chip-list>
-  <mat-chip class="tag" *ngFor="let tag of tags"
-    [routerLink]="'/tag/' + tag.tagname">{{tag.tagname}}</mat-chip>
-</mat-chip-list>
+<ul>
+  <li *ngFor="let tag of tags"
+    [routerLink]="'/tag/' + tag.tagname">{{tag.tagname}}</li>
+</ul>

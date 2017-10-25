@@ -87,6 +87,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { HttpProgressInterceptor } from './progress/progress.interceptor';
 import { EditorComponent } from './shared/editor/editor.component';
 import { EditorOutputComponent } from './shared/editor-output/editor-output.component';
+import { TabNavComponent } from './shared/tab-nav/tab-nav.component';
 
 @NgModule({
   declarations: [
@@ -156,7 +157,8 @@ import { EditorOutputComponent } from './shared/editor-output/editor-output.comp
     UserDialogComponent,
     ProgressComponent,
     EditorComponent,
-    EditorOutputComponent
+    EditorOutputComponent,
+    TabNavComponent
   ],
   imports: [
     BrowserModule,

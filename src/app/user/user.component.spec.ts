@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { MaterialModule } from '../material.module';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -9,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { UserComponent } from './user.component';
 import { FofComponent } from '../fof/fof.component';
+import { TabNavComponent } from '../shared/tab-nav/tab-nav.component';
 import { AvatarStubComponent } from '../../testing/avatar-stub';
 
 import { ModelService } from '../model.service';
@@ -16,22 +16,7 @@ import { AuthService } from '../auth.service';
 
 import { User } from '../shared/types';
 
-class ModelStubService {
-  lastPromise: Promise<any>;
-
-  readUser(username: string): Promise<any> {
-    return this.lastPromise = Promise.resolve({
-      username: username,
-      givenName: '',
-      familyName: '',
-      description: ''
-    });
-  }
-
-  readUserTags(_username: string): Promise<any> {
-    return this.lastPromise = Promise.resolve([]);
-  }
-}
+class ModelStubService { }
 
 class AuthStubService { }
 
@@ -50,11 +35,11 @@ describe('UserComponent', () => {
       declarations: [
         UserComponent,
         AvatarStubComponent,
-        FofComponent
+        FofComponent,
+        TabNavComponent
       ],
       imports: [
-        RouterTestingModule,
-        MaterialModule
+        RouterTestingModule
       ],
       providers: [
         { provide: ModelService, useClass: ModelStubService },

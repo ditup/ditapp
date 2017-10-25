@@ -1,17 +1,17 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MaterialModule } from '../material.module';
 import { ActivatedRoute } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs/Observable';
 
 import { TagComponent } from './tag.component';
 import { FofComponent } from '../fof/fof.component';
+import { TabNavComponent } from '../shared/tab-nav/tab-nav.component';
 import { Tag } from '../shared/types';
-import { RouterOutletStubComponent, RouterLinkStubDirective, RouterLinkActiveStubDirective } from '../../testing/router-stubs';
 
 const tag: Tag = {
   tagname: 'testing-tagname'
@@ -30,11 +30,12 @@ describe('TagComponent', () => {
       declarations: [
         TagComponent,
         FofComponent,
-        RouterOutletStubComponent,
-        RouterLinkStubDirective,
-        RouterLinkActiveStubDirective
+        TabNavComponent
       ],
-      imports: [MaterialModule, BrowserAnimationsModule],
+      imports: [
+        MaterialModule,
+        RouterTestingModule
+      ],
       providers: [
         { provide: ActivatedRoute, useClass: ActivatedRouteStub }
       ]
@@ -61,19 +62,17 @@ describe('TagComponent', () => {
 
   it('should show tabs with related tags, related users, ...', () => {
     const { tagname } = tag;
-    const links = fixture.debugElement.queryAll(By.css('[mat-tab-link]'));
+    const tabsDebugElement = fixture.debugElement.query(By.css('app-tab-nav'));
+    const tabs = tabsDebugElement.componentInstance.navRoutes;
 
-    expect(links.length).toEqual(2);
+    expect(tabs.length).toEqual(2);
 
     // test link urls
-    const urls = links.map(link => {
-      const dir = link.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective;
-      return dir.routerLink;
-    });
+    const urls = tabs.map((tab: any) => tab.link);
     expect(urls).toEqual([`/tag/${tagname}`, `/tag/${tagname}/people`]);
 
     // test link labels
-    const labels = links.map(link => link.nativeElement.innerHTML.trim());
+    const labels = tabs.map((tab: any) => tab.title);
     expect(labels).toEqual([
       'tags',
       'people'

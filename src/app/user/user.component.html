@@ -23,18 +23,19 @@
       <!-- contact link  -->
       <span *ngIf="isMe === false">
 
-        <!-- loading -->
-        <span *ngIf="contactStatus === null">Fetching contact info...</span>
-
-        <a class="link-button" *ngIf="contactStatus !== null" routerLink="/contact-with/{{username}}">
+        <a class="link-button"
+          [ngSwitch]="contactStatus"
+          routerLink="/contact-with/{{username}}">
           <!-- nonexistent -->
-          <span *ngIf="contactStatus === 'nonexistent'">Send a contact request</span>
+          <span *ngSwitchCase="'nonexistent'">Send a contact request</span>
           <!-- confirmed -->
-          <span *ngIf="contactStatus === 'confirmed'">Update contact</span>
+          <span *ngSwitchCase="'confirmed'">Update contact</span>
           <!-- unconfirmed, sent -->
-          <span *ngIf="contactStatus === 'sent'">Update contact request</span>
+          <span *ngSwitchCase="'sent'">Update contact request</span>
           <!-- unconfirmed, received -->
-          <span *ngIf="contactStatus === 'received'">Accept or Decline contact request</span>
+          <span *ngSwitchCase="'received'">Accept or Decline contact request</span>
+          <!-- loading -->
+          <span *ngSwitchDefault>Loading contact...</span>
         </a>
       </span>
     </nav>
@@ -42,23 +43,11 @@
 
   <section class="user-detail">
 
-    <nav mat-tab-nav-bar class="user-pages-navigation">
-      <a mat-tab-link
-        routerLink="/user/{{username}}"
-        routerLinkActive #profileLink="routerLinkActive"
-        [routerLinkActiveOptions]="{exact: true}"
-        [active]="profileLink.isActive">
-        Profile
-      </a>
-
-      <a mat-tab-link
-        routerLink="/user/{{username}}/contacts"
-        routerLinkActive #contactsLink="routerLinkActive"
-        [routerLinkActiveOptions]="{exact: true}"
-        [active]="contactsLink.isActive">
-        Contacts
-      </a>
-    </nav>
+    <app-tab-nav
+      [navRoutes]="[
+        { title: 'Profile', link: '/user/' + user.username },
+        { title: 'Contacts', link: '/user/' + user.username + '/contacts' }
+      ]"></app-tab-nav>
 
     <router-outlet></router-outlet>
 

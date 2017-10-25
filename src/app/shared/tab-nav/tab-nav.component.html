@@ -1,0 +1,8 @@
+<nav>
+  <a *ngFor="let navRoute of navRoutes"
+    [routerLink]="navRoute.link"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{exact: true}">
+    {{navRoute.title}}
+  </a>
+</nav>

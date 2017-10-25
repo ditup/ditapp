@@ -1,0 +1,20 @@
+nav {
+  margin-bottom: 1em;
+  border-bottom: 3px solid #6ca6ca;
+  border-radius: 2px;
+  font-size: larger;
+
+  a {
+    display: inline-block;
+    padding: 0.5em;
+    border-radius: 2px 2px 0 0;
+    color: #6ca6ca;
+  }
+
+  .active-link,
+  a:hover {
+    background-color: #6ca6ca;
+    color: white;
+  }
+}
+

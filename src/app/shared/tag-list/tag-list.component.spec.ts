@@ -38,7 +38,7 @@ describe('TagListComponent', () => {
 
     fixture.detectChanges();
 
-    const tags = fixture.debugElement.queryAll(By.css('.tag'));
+    const tags = fixture.debugElement.queryAll(By.css('li'));
     expect(tags.length).toEqual(2);
   });
 
@@ -48,7 +48,7 @@ describe('TagListComponent', () => {
 
     fixture.detectChanges();
 
-    const tag = fixture.debugElement.query(By.css('.tag'));
+    const tag = fixture.debugElement.query(By.css('li'));
     const link = tag.nativeElement.getAttribute('ng-reflect-router-link');
     expect(link).toEqual('/tag/tag1');
   });
