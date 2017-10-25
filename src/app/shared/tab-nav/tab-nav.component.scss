@@ -1,6 +1,8 @@
+@import '../styles/colors';
+
 nav {
   margin-bottom: 1em;
-  border-bottom: 3px solid #6ca6ca;
+  border-bottom: 3px solid $darker;
   border-radius: 2px;
   font-size: larger;
 
@@ -13,7 +15,7 @@ nav {
 
   .active-link,
   a:hover {
-    background-color: #6ca6ca;
+    background-color: $darker;
     color: white;
   }
 }
