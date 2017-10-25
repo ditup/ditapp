@@ -4,31 +4,12 @@
     Edit <a routerLink="/user/{{user.username}}">your</a> profile
   </h1>
 
-  <nav mat-tab-nav-bar>
-    <a mat-tab-link
-      routerLink="/profile/edit"
-      routerLinkActive #profileLink="routerLinkActive"
-      [routerLinkActiveOptions]="{exact: true}"
-      [active]="profileLink.isActive">
-      Info
-    </a>
-
-    <a mat-tab-link
-      routerLink="/profile/edit/tags"
-      routerLinkActive #tagsLink="routerLinkActive"
-      [routerLinkActiveOptions]="{exact: true}"
-      [active]="tagsLink.isActive">
-      Tags
-    </a>
-
-    <a mat-tab-link
-      routerLink="/profile/edit/location"
-      routerLinkActive #locationLink="routerLinkActive"
-      [routerLinkActiveOptions]="{exact: true}"
-      [active]="locationLink.isActive">
-      Location
-    </a>
-  </nav>
+  <app-tab-nav
+    [navRoutes]="[
+      { title: 'Info', link: '/profile/edit' },
+      { title: 'Tags', link: '/profile/edit/tags' },
+      { title: 'Location', link: '/profile/edit/location' }
+    ]"></app-tab-nav>
 
   <router-outlet></router-outlet>
 </div>

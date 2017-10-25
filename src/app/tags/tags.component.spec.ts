@@ -1,12 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
-import { MaterialModule } from '../material.module';
 
 import { map } from 'lodash';
 
 import { TagsComponent } from './tags.component';
-
-import { RouterLinkStubDirective, RouterLinkActiveStubDirective, RouterOutletStubComponent } from '../../testing/router-stubs';
+import { TabNavComponent } from '../shared/tab-nav/tab-nav.component';
 
 describe('TagsComponent', () => {
   let component: TagsComponent;
@@ -16,12 +15,10 @@ describe('TagsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         TagsComponent,
-        RouterOutletStubComponent,
-        RouterLinkStubDirective,
-        RouterLinkActiveStubDirective
+        TabNavComponent
       ],
       imports: [
-        MaterialModule
+        RouterTestingModule
       ]
     })
     .compileComponents();
@@ -45,16 +42,18 @@ describe('TagsComponent', () => {
   });
 
   it('should have links to self, tags related to tags, new, random', () => {
-    const links = fixture.debugElement.queryAll(By.css('[mat-tab-link]'));
+    const tabDebug = fixture.debugElement.query(By.css('app-tab-nav'));
 
-    expect(links.length).toEqual(4);
+    const tabs = tabDebug.componentInstance.navRoutes;
+
+    expect(tabs.length).toEqual(4);
 
     // test link urls
-    const urls = map(links, link => link.nativeElement.getAttribute('routerlink'));
+    const urls = map(tabs, (tab: any) => tab.link);
     expect(urls).toEqual(['/tags', '/tags/related-to-tags', '/tags/new', '/tags/random']);
 
     // test link labels
-    const labels = map(links, link => link.nativeElement.innerHTML.trim());
+    const labels = map(tabs, (tab: any) => tab.title);
     expect(labels).toEqual([
       'related to my tags',
       'related to tags',

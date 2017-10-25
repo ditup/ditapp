@@ -1,37 +1,10 @@
 <h1>People</h1>
 
-<nav mat-tab-nav-bar>
-  <a mat-tab-link
-    routerLink="/people"
-    routerLinkActive #myTagsLink="routerLinkActive"
-    [routerLinkActiveOptions]="{exact: true}"
-    [active]="myTagsLink.isActive">
-    with my tags
-  </a>
-
-  <a mat-tab-link
-    routerLink="/people/with-tags"
-    routerLinkActive #tagsLink="routerLinkActive"
-    [routerLinkActiveOptions]="{exact: true}"
-    [active]="tagsLink.isActive">
-    with tags
-  </a>
-
-  <a mat-tab-link
-    routerLink="/people/new"
-    routerLinkActive #newLink="routerLinkActive"
-    [routerLinkActiveOptions]="{exact: true}"
-    [active]="newLink.isActive">
-    new
-  </a>
-
-  <a mat-tab-link
-    routerLink="/people/random"
-    routerLinkActive #randomLink="routerLinkActive"
-    [routerLinkActiveOptions]="{exact: true}"
-    [active]="randomLink.isActive">
-    random
-  </a>
-</nav>
+<app-tab-nav [navRoutes]="[
+    { title: 'with my tags', link: '/people' },
+    { title: 'with tags', link: '/people/with-tags' },
+    { title: 'new', link: '/people/new' },
+    { title: 'random', link: '/people/random' }
+  ]"></app-tab-nav>
 
 <router-outlet></router-outlet>
