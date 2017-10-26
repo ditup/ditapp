@@ -25,12 +25,12 @@ export class AvatarComponent implements OnChanges {
   }
 
   async reload() {
-    await this.loadAvatar();
+    await this.loadAvatar(false);
   }
 
-  private async loadAvatar() {
+  private async loadAvatar(cache = true) {
     delete this.avatarUrl;
-    const avatarUrl = await this.model.readAvatar(this.username, this.size);
+    const avatarUrl = await this.model.readAvatar(this.username, this.size, cache);
     this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(avatarUrl);
   }
 }

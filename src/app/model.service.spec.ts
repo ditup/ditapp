@@ -732,7 +732,7 @@ describe('ModelService', () => {
     }));
   });
 
-  describe('readAvatar(username, size=128)', () => {
+  describe('readAvatar(username, size=128, cache=true)', () => {
 
     it('should read the default svg avatar of user', async(async () => {
 
@@ -792,6 +792,40 @@ describe('ModelService', () => {
 
       const avatar = await readAvatarPromise;
       expect(avatar).toMatch(/^data:image\/jpeg;base64/);
+    }));
+
+    it('cache the avatars', async(async () => {
+      const username = 'user1';
+
+      // execute the function
+      service.readAvatar(username);
+
+      // mock the backend
+      httpMock.expectOne(`${baseUrl}/users/${username}/avatar?filter[size]=128`);
+
+      // execute the function again
+      service.readAvatar(username);
+
+      // and backend shouldn't be called
+      httpMock.expectNone(`${baseUrl}/users/${username}/avatar?filter[size]=128`);
+
+    }));
+
+    it('don\'t cache the avatars when disabled', async(async () => {
+      const username = 'user1';
+
+      // execute the function
+      service.readAvatar(username, 64, false);
+
+      // mock the backend
+      httpMock.expectOne(`${baseUrl}/users/${username}/avatar?filter[size]=64`);
+
+      // execute the function again
+      service.readAvatar(username, 64, false);
+
+      // and backend should be called again
+      httpMock.expectOne(`${baseUrl}/users/${username}/avatar?filter[size]=64`);
+
     }));
   });
 
