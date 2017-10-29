@@ -20,6 +20,10 @@ export class ModelService {
 
   private baseUrl = api.baseUrl;
 
+  private cache: any = {
+    avatar: { }
+  };
+
   private generateAuthHeader = this.generateBasicAuthHeader;
 
   private contentTypeHeader: [string, string] = ['Content-Type', 'application/vnd.api+json'];
@@ -317,7 +321,30 @@ export class ModelService {
     });
   }
 
-  async readAvatar(username: string, size = 128): Promise<string> {
+  async readAvatar(username: string, size = 128, cache = true): Promise<string> {
+
+    if (cache === true) {
+      // if cache === true and chached, return cached promise
+      if (_.has(this.cache, `${username}.${size}`)) {
+        return await this.cache[username][size];
+      }
+
+      // if cache === true and not cached, request and save
+      const avatarRequestPromise = this.sendAvatarRequest(username, size);
+
+      this.cache[username] = this.cache[username] || { };
+      this.cache[username][size] = avatarRequestPromise;
+
+      return await avatarRequestPromise;
+    }
+
+    // if cache === false, delete the cache and send a request
+    delete this.cache[username];
+
+    return await this.sendAvatarRequest(username, size);
+  }
+
+  private async sendAvatarRequest(username: string, size: number): Promise<string> {
     const headers = this.loggedHeaders;
 
     const response: any = await this.http
