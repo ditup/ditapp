@@ -12,6 +12,7 @@ import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { HeaderControlService } from '../header-control.service';
+import { safePasswordValidator } from '../shared/custom-validators';
 
 @Component({
   selector: 'app-signup',
@@ -38,7 +39,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       maxlength: 'Username cannot be more than 32 characters long.',
       pattern: 'Username must consist of a-z0-9 optionally separated by .,-,_',
       uniqueUsername: 'Username is already taken.'
-
     },
     email: {
       required: 'Required.',
@@ -47,8 +47,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     },
     password: {
       required: 'Required.',
-      minlength: 'Password must be at least 8 characters long',
-      maxlength: 'That\'s too long.'
+      minlength: 'Password must be at least 8 characters long.',
+      maxlength: 'That\'s too long.',
+      weak: 'Too easy to guess.'
     }
   };
 
@@ -97,7 +98,7 @@ export class SignupComponent implements OnInit, OnDestroy {
    * ideally this should be moved to another file
    *
    */
-  uniqueUsernameValidator(control: AbstractControl): Promise<{[key: string]: any}> {
+  private uniqueUsernameValidator(control: AbstractControl): Promise<{[key: string]: any}> {
     clearTimeout(this.uniqueUsernameTimeout);
     return new Promise((resolve) => {
       this.uniqueUsernameTimeout = setTimeout(() => {
@@ -134,12 +135,13 @@ export class SignupComponent implements OnInit, OnDestroy {
       email: ['', [
         Validators.required,
         Validators.maxLength(2048),
-        CustomValidators.email,
+        CustomValidators.email
       ]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
-        Validators.maxLength(1024)
+        Validators.maxLength(1024),
+        safePasswordValidator
       ]]
     });
 

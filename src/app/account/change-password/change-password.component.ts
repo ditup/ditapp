@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModelService } from '../../model.service';
 import { NotificationsService } from '../../notifications/notifications.service';
+import { safePasswordValidator } from '../../shared/custom-validators';
 
 @Component({
   selector: 'app-change-password',
@@ -33,7 +34,8 @@ export class ChangePasswordComponent implements OnInit {
       newPassword: ['', [
         Validators.required,
         Validators.minLength(8),
-        Validators.maxLength(512)
+        Validators.maxLength(512),
+        safePasswordValidator
       ]]
     });
   }

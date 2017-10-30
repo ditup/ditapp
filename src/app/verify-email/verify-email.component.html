@@ -6,6 +6,8 @@
 <section *ngIf="!verificationSuccess && !isCodeProvided" class="verification-container">
   <h1>Verify your email</h1>
 
+  <div class="info-about-email">We sent you an email. Look in!</div>
+
   <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmailForm">
     <fieldset [disabled]="isFormDisabled">
 

@@ -10,14 +10,14 @@
     <fieldset [disabled]="isFormDisabled">
 
       <label for="username">Username</label>
-      <input type="text" placeholder="your-unique.user_name"
+      <input type="text" placeholder="my-username"
         formControlName="username" required>
       <ul>
         <li *ngFor="let error of formErrors.username">{{error}}</li>
       </ul>
 
       <label for="email">Email</label>
-      <input type="email" placeholder="your.email@example.com"
+      <input type="email" placeholder="my.email@example.com"
         formControlName="email" required>
       <ul>
         <li *ngFor="let error of formErrors.email">{{error}}</li>
