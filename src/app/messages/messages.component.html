@@ -1,23 +1,22 @@
-<h1>My Conversations</h1>
-
 <ul>
-  <li *ngFor="let msg of messages" class="thread"
+  <li *ngFor="let msg of messages"
     [ngClass]="(msg.read === true || msg.from.username === me.username) ? 'read' : 'unread'">
-    <div class="thread-with-user">
-      <a routerLink="/user/{{msg.with(me).username}}">
-        <app-avatar [username]="msg.with(me).username"></app-avatar><span class="thread-user-name">{{msg.with(me).username}}</span>
-      </a>
-    </div>
-    <div class="thread-message">
-      <a routerLink="/messages/{{msg.with(me).username}}">
-        <app-editor-output [value]="msg.body"></app-editor-output>
-      </a>
-    </div>
-    <div class="thread-message-from">
-      <mat-icon *ngIf="msg.from.username === me.username">reply</mat-icon>
-    </div>
-    <div class="thread-message-created">
-      {{msg.created | amTimeAgo}}
-    </div>
+    <a routerLink="/messages/{{msg.with(me).username}}" class="thread">
+      <div class="thread-with-user">
+        <!--a routerLink="/user/{{msg.with(me).username}}"-->
+          <app-avatar [username]="msg.with(me).username"></app-avatar><span class="thread-user-name">{{msg.with(me).username}}</span>
+        <!--/a-->
+      </div>
+      <div class="thread-message">
+        <!--a routerLink="/messages/{{msg.with(me).username}}"-->
+          <app-editor-output [value]="msg.body"></app-editor-output>
+      </div>
+      <div class="thread-message-from">
+        <mat-icon *ngIf="msg.from.username === me.username">reply</mat-icon>
+      </div>
+      <div class="thread-message-created">
+        {{msg.created | amTimeAgo}}
+      </div>
+    </a>
   </li>
 </ul>

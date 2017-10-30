@@ -3,7 +3,7 @@
     <fieldset [disabled]="isFormDisabled">
 
       <div>
-        <textarea placeholder="Message"
+        <textarea placeholder="Message for {{receiver.username}}"
           appEditor [form]="messageForm" #editor
           formControlName="body"></textarea>
       </div>

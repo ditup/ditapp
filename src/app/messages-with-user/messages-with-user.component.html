@@ -10,6 +10,7 @@
         ? 'unread'
         : 'read'">
       <app-avatar [title]="msg.from.username" class="message-from" [username]="msg.from.username"></app-avatar>
+      <div class="message-sender">{{ msg.from.username }}</div>
       <div class="message-created">{{ msg.created | amTimeAgo }}</div>
       <div class="message-body">
         <app-editor-output [value]="msg.body"></app-editor-output>

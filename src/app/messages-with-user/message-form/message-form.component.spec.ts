@@ -33,6 +33,9 @@ describe('MessageFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MessageFormComponent);
     component = fixture.componentInstance;
+
+    // set the receiver (component input)
+    component.receiver = { username: 'asdf' };
     fixture.detectChanges();
   });
 

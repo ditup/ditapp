@@ -16,6 +16,7 @@
     // text-align: right;
   }
 
+  .message-sender,
   .message-created {
     display: inline-block;
     font-size: smaller;
@@ -44,9 +45,17 @@ app-avatar {
 }
 
 /* margin around messages */
-.main-container {
-  max-width: 768px;
-  margin: 0 auto;
+@media (min-width: 783px) {
+  .main-container {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 782px) {
+  .main-container {
+    margin: 0 14px;
+  }
 }
 
 .message-list {

@@ -1,20 +1,14 @@
 @import '../shared/styles/colors';
 
 $inside: 40px;
-$border: 1px;
-$padding: 5px;
-
-ul {
-  border-top: 2px solid $darker;
-}
+$padding: 10px;
 
 .thread {
   display: flex;
   display: -webkit-flex;
   position: relative;
-  height: $inside + 2 * $padding + $border;
-
-  border-bottom: $border solid $accent;
+  height: $inside + 2 * $padding;
+  padding: 0 $padding;
 
   &.unread {
     font-weight: bold;
@@ -28,9 +22,6 @@ ul {
 }
 
 a {
-  display: block;
-  height: $inside + 2 * $padding;
-
   &:hover {
     background-color: mix($accent, white, 20%);
   }

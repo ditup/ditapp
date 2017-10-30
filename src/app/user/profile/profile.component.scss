@@ -6,6 +6,8 @@
 
 .user-description {
   position: relative;
+  min-width: 0;
+  word-wrap: break-word;
 }
 
 app-user-tag-list {
