@@ -1,3 +1,5 @@
+<section class="cue">Tags represent what you care about.<br>Add. Drag to change relevance. Click to share why you care. Remove.</section>
+
 <!-- a form for adding a tag -->
 <app-tag-autocomplete
   (action)="addTag($event)"
@@ -8,18 +10,18 @@
   <!-- a container for newly added tags -->
   <!-- it is possible to drag them and drop to the relevance containers -->
   <div class="tag-relevance-container tag-relevance-container-initial">
-    <mat-chip-list>
-      <mat-chip *ngFor="let userTag of tagLists[0]"
-        ngClass="user-tag"
-        [disabled]="userTag.disabled"
+    <ul>
+      <li *ngFor="let userTag of tagLists[0]"
+        [ngClass]="'user-tag' + ((userTag.disabled) ? ' disabled' : '')"
         (click)="openTagStoryDialog(userTag)"
-        dnd-draggable [dragEnabled]="true" [dragData]="{ from: 0, userTag: userTag }">
+        dnd-draggable [dragEnabled]="!userTag.disabled" [dragData]="{ from: 0, userTag: userTag }">
         {{userTag.tag.tagname}}
+        <span class="story-indicator" *ngIf="userTag.story">&#9679;</span>
         <button (click)="openRemoveTagDialog(userTag); $event.stopPropagation()">
           <mat-icon alt="remove">close</mat-icon>
         </button>
-      </mat-chip>
-    </mat-chip-list>
+      </li>
+    </ul>
   </div>
 
   <!-- containers for userTags by different relevance (1-5) -->
@@ -31,17 +33,17 @@
     (onDragEnter)="preventDefault($event)"
     (onDragOver)="preventDefault($event)"
     (onDragLeave)="preventDefault($event)">
-    <mat-chip-list>
-      <mat-chip *ngFor="let userTag of tagLists[relevance]"
-        [disabled]="userTag.disabled"
-        [ngClass]="['tag-relevance-' + relevance, 'user-tag']"
+    <ul>
+      <li *ngFor="let userTag of tagLists[relevance]"
+        [ngClass]="'user-tag tag-relevance-' + relevance + ((userTag.disabled) ? ' disabled' : '')"
         (click)="openTagStoryDialog(userTag)"
-        dnd-draggable [dragEnabled]="true" [dragData]="{ from: relevance, userTag: userTag }">
+        dnd-draggable [dragEnabled]="!userTag.disabled" [dragData]="{ from: relevance, userTag: userTag }">
         {{userTag.tag.tagname}}
+        <span class="story-indicator" *ngIf="userTag.story">&#9679;</span>
         <button (click)="openRemoveTagDialog(userTag); $event.stopPropagation()">
           <mat-icon alt="remove">close</mat-icon>
         </button>
-      </mat-chip>
-    </mat-chip-list>
+      </li>
+    </ul>
   </div>
 </section>

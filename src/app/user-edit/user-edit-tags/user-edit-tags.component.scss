@@ -1,13 +1,18 @@
 @import '../../shared/styles/colors';
 @import '../../shared/styles/tag-relevance';
 
-$tag-remove-size: 2em;
+$tag-remove-size: 24px;
 
-mat-chip {
+.user-tag {
+  padding: 0.5em;
+  border-radius: 1em;
+  margin: 0.2em;
+
   cursor: grab;
   vertical-align: middle;
+  display: inline-block;
 
-  &[disabled=true] {
+  &.disabled {
     color: gray;
     background-color: #eee;
   }
@@ -18,11 +23,20 @@ mat-chip {
     border-radius: $tag-remove-size/2;
 
     padding: 0;
+    margin: -4px;
     vertical-align: middle;
     text-align: center;
 
     cursor: pointer;
+
+    color: inherit;
+    background-color: white;
+    line-height: 0;
   }
+}
+
+.story-indicator {
+  color: $accent;
 }
 
 .tag-relevance-container {
@@ -41,4 +55,10 @@ mat-chip {
   .tag-relevance-container-#{$i} {
     border-left: 1em solid nth($tag-colors, $i);
   }
+}
+
+.cue {
+  font-size: smaller;
+  color: #444;
+  margin-bottom: 1em;
 }
