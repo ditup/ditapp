@@ -1,0 +1,39 @@
+@import '../../shared/styles/colors';
+
+$option-width: 150px;
+$icon-size: 48px;
+
+.explore-options {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  a {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    height: $option-width;
+    width: $option-width;
+    background-color: $darker;
+    color: white;
+    text-align: center;
+    margin: 1em;
+
+    .title {
+      text-transform: uppercase;
+    }
+
+    &.coming {
+      background-color: gray;
+    }
+
+    mat-icon {
+      margin: 0 auto;
+      display: block;
+      font-size: $icon-size;
+      width: $icon-size;
+      height: $icon-size;
+    }
+  }
+}

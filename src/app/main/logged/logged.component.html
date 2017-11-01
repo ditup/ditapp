@@ -1,2 +1,10 @@
-<h1>This is your home page.</h1>
-We don't know what will be here.
+<h1>I'm up to...</h1>
+<nav ngClass="explore-options">
+  <a *ngFor="let option of exploreOptions"
+    [routerLink]="option.link"
+    [ngClass]="option.todo ? ['coming'] : []">
+    <i *ngIf="option.todo">coming</i>
+    <mat-icon>{{option.icon}}</mat-icon>
+    <div ngClass="title">{{option.title}}</div>
+  </a>
+</nav>
