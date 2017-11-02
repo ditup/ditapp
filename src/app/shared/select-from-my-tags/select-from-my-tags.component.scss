@@ -1,0 +1,23 @@
+@import '../styles/colors';
+
+li {
+  display: inline-block;
+}
+
+li {
+  padding: 0.5em;
+  border-radius: 1em;
+  margin: 0.2em;
+  cursor: pointer;
+  background-color: #ccc;
+  color: black;
+
+  &.selectable {
+    background-color: $darker;
+    color: white;
+
+    &.selected {
+      background-color: $accent;
+    }
+  }
+}

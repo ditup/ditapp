@@ -552,46 +552,6 @@ describe('ModelService', () => {
 
   });
 
-  describe('isTagnameAvailable', () => {
-    it('[tagname exists] should reply false', () => {
-
-      const tagname = 'tag';
-
-      // execute the function
-      service.isTagnameAvailable(tagname).subscribe((data) => {
-        expect(data).toEqual(false);
-      });
-
-      // mock the backend
-      const req = httpMock.expectOne(`${baseUrl}/tags/${tagname}`);
-
-      expect(req.request.method).toEqual('HEAD');
-      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
-      expect(req.request.headers.has('authorization')).toEqual(true);
-
-      req.flush('');
-    });
-
-    it('[tagname doesn\'t exist] should reply true', () => {
-
-      const tagname = 'tag';
-
-      // execute the function
-      service.isTagnameAvailable(tagname).subscribe((data) => {
-        expect(data).toEqual(true);
-      });
-
-      // mock the backend
-      const req = httpMock.expectOne(`${baseUrl}/tags/${tagname}`);
-
-      expect(req.request.method).toEqual('HEAD');
-      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
-      expect(req.request.headers.has('authorization')).toEqual(true);
-
-      req.error('', { status: 404, statusText: 'Not Found' });
-    });
-  });
-
   describe('tagExists', () => {
     const tagname = 'tag';
     let req;

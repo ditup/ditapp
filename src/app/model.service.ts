@@ -7,6 +7,7 @@ import { api } from './config';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
 
 import * as _ from 'lodash';
 
@@ -80,7 +81,7 @@ export class ModelService {
         console.log('error', err.status, err);
         if (err.status === 404) {
           console.log(404);
-          return new Observable(observer => observer.next(true));
+          return Observable.of(true);
         }
       });
   }
@@ -192,28 +193,6 @@ export class ModelService {
     return this.deserializeTag(response.data);
   }
 
-  /**
-   * @TODO this function is hugely imperfect. we don't know how to work with Observables catch etc
-   *
-   *
-   */
-  isTagnameAvailable(tagname: string): Observable<boolean> {
-    const headers = this.loggedHeaders;
-
-    return this.http
-      .head(`${this.baseUrl}/tags/${tagname}`, { headers, observe: 'response', responseType: 'text' })
-      .map((resp: HttpResponse<any>) => {
-        if (resp.status === 200) { return false; }
-      })
-      .catch((err): Observable<boolean> => {
-        if (err.status === 404) {
-          return new Observable(observer => observer.next(true));
-        }
-
-        throw err;
-      });
-  }
-
   async addTagToUser({ username, tagname, relevance, story }:
                { username: string, tagname: string, relevance?: number, story?: string }): Promise<UserTag> {
 
@@ -248,6 +227,11 @@ export class ModelService {
   }
 
   readTagsLike(value: string): Observable<Tag[]> {
+
+    // don't send empty request
+    if (value === '') {
+      return Observable.of([]);
+    }
 
     const headers = this.loggedHeaders;
 
@@ -381,9 +365,13 @@ export class ModelService {
 
     try {
       const response: HttpResponse<any> = await this.http
-        .head(`${this.baseUrl}/tags/${tagname}`, { headers, observe: 'response' }).toPromise();
+        .head(`${this.baseUrl}/tags/${tagname}`, { headers, observe: 'response', responseType: 'text' }).toPromise();
 
-      if (response.status === 200) { return true; }
+      if (response.status === 200) {
+        return true;
+      } else {
+        throw new Error(`unexpected response status: ${response.status}`);
+      }
     } catch (e) {
       if (e.status === 404 || e.status === 400) { return false; }
       throw e;
@@ -406,11 +394,13 @@ export class ModelService {
   }
 
   async findUsersByTags(tags: Tag[]): Promise<User[]> {
+    if (tags.length === 0) {
+      return [];
+    }
+
     const headers = this.loggedHeaders;
 
     const tagnames: string = tags.map(tag => tag.tagname).join(',');
-
-    console.log(`${this.baseUrl}/users?filter[tag]=${tagnames}`);
 
     const response: any = await this.http
       .get(`${this.baseUrl}/users?filter[tag]=${tagnames}`, { headers })
@@ -473,6 +463,10 @@ export class ModelService {
    * @returns Tag[] - found tags
    */
   public async findTagsByTags(tagsIn: Tag[]): Promise<Tag[]> {
+    if (tagsIn.length === 0) {
+      return [];
+    }
+
     const headers = this.loggedHeaders;
 
     const tagQueryString = tagsIn.map((tag: Tag) => tag.tagname).join(',');
@@ -482,7 +476,6 @@ export class ModelService {
       .toPromise();
 
     const { data } = response;
-    console.log(typeof(response), response.status);
 
     const tagsOut: Tag[] = data.map((tag) => this.deserializeTag(tag));
     return tagsOut;

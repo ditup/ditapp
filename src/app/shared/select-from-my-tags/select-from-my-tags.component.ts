@@ -1,16 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
-import * as _ from 'lodash';
-
-import { UserTag, Tag } from '../types';
-
 import { MatDialogRef } from '@angular/material';
 
+import { UserTag, Tag } from '../types';
 
 class MyTag {
   constructor(public tag: Tag,
               public selected: boolean,
-              public originalSelection: boolean) {}
+              public selectable: boolean) { }
 }
 
 @Component({
@@ -39,17 +35,18 @@ export class SelectFromMyTagsComponent implements OnInit {
   constructor() { }
 
   public generateMyTags() {
-    this.myTags = _.map(this.userTags, (userTag: UserTag) => {
-      const found = _.find(this.originalSelection, (selection) => {
+    this.myTags = this.userTags.map((userTag: UserTag) => {
+
+      const found = this.originalSelection.findIndex((selection) => {
         return userTag.tag.tagname === selection.tagname;
       });
 
-      const originalSelection: boolean = (_.isObject(found)) ? true : false;
+      const selectable: boolean = (found === -1) ? true : false;
 
       return {
         tag: userTag.tag,
-        selected: originalSelection,
-        originalSelection
+        selected: false,
+        selectable
       };
     });
   }
@@ -71,15 +68,16 @@ export class SelectFromMyTagsComponent implements OnInit {
   }
 
   private getSelection(getSelected: boolean) {
-    return _.map(
-      _.filter(this.myTags, myTag => {
-        return myTag.selected === getSelected && myTag.originalSelection === false;
-      }), myTag => myTag.tag);
+    return this.myTags
+      .filter(myTag => myTag.selected === getSelected && myTag.selectable === true)
+      .map(myTag => myTag.tag);
   }
 
   public toggleSelection(tag: MyTag) {
     console.log('toggle', tag);
-    tag.selected = !tag.selected;
+    if (tag.selectable) {
+      tag.selected = !tag.selected;
+    }
   }
 
 }

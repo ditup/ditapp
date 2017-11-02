@@ -2,8 +2,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { MatDialog } from '@angular/material';
 
-import * as _ from 'lodash';
-
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
 import { NotificationsService } from '../../notifications/notifications.service';
@@ -45,7 +43,7 @@ export class SelectTagsComponent implements OnInit {
 
   private addTagsToList(tags: Tag[]) {
 
-    const tagnames = _.map(tags, tag => tag.tagname);
+    const tagnames = tags.map(tag => tag.tagname);
 
     if (tagnames.length === 0) {
       return;
@@ -53,7 +51,7 @@ export class SelectTagsComponent implements OnInit {
 
     const alreadyAdded: string[] = [];
     // add tags to list
-    _.each(tagnames, (tagname: string) => {
+    tagnames.forEach((tagname: string) => {
       try {
         this.tagList.add(tagname);
       } catch (e) {
@@ -112,42 +110,4 @@ export class SelectTagsComponent implements OnInit {
   public complainNonexistentTag ({ tagname }: Tag) {
     this.notify.error(`Tag ${tagname} doesn't exist.`);
   }
-
-/*
-  @Input()
-  public inputTags: Tag[];
-
-  private myTagsDialog: MatDialogRef<SelectFromMyTagsComponent>;
-
-  // showing a progress bar when users loading is in progress
-  public loadingUsers = false;
-
-  constructor(private snackBar: MdSnackBar,
-              private auth: AuthService,
-              private model: ModelService,
-              private dialog: MatDialog) { }
-
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('changes', changes);
-    // are the changes in input tags?
-    if (changes['inputTags']) {
-      // compare inputTags and tagList. If they differ, change tagList and search users.
-      const inputTagnames: string[] = _.map(this.inputTags, (tag: Tag): string => tag.tagname);
-      const currentTagnames: string[] = this.tagList.tagnames;
-
-      const areDifferent = _.xor(inputTagnames, currentTagnames).length > 0;
-
-      if (areDifferent) {
-        // change tagList
-        this.tagList.tags = this.inputTags;
-        this.updateUserList();
-      }
-    }
-    //
-  }
-
-
-
-*/
 }

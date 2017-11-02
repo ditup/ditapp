@@ -1,0 +1,31 @@
+@import '../styles/colors';
+
+$tag-remove-size: 24px;
+
+.tag-selected {
+  padding: 0.5em;
+  border-radius: 1em;
+  margin: 0.2em;
+
+  border: 1px solid gray;
+
+  vertical-align: middle;
+  display: inline-block;
+
+  button {
+    width: $tag-remove-size;
+    height: $tag-remove-size;
+    border-radius: $tag-remove-size/2;
+
+    padding: 0;
+    margin: -4px;
+    vertical-align: middle;
+    text-align: center;
+
+    cursor: pointer;
+
+    color: white;
+    background-color: $darker;
+    line-height: 0;
+  }
+}

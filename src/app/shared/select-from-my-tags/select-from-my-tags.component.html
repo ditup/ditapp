@@ -1,12 +1,9 @@
-<div *ngIf="loading"><mat-spinner></mat-spinner></div>
-
 <div *ngIf="!loading">
-  <mat-chip-list [selectable]="false">
-    <mat-chip *ngFor="let myTag of myTags"
-      [color]="(myTag.selected) ? 'accent' : ''"
-      [selected]="!myTag.originalSelection"
-      (click)="toggleSelection(myTag)">{{myTag.tag.tagname}}</mat-chip>
-  </mat-chip-list>
+  <ul>
+    <li *ngFor="let myTag of myTags"
+      [ngClass]="{ selected: myTag.selected, selectable: myTag.selectable }"
+      (click)="toggleSelection(myTag)">{{myTag.tag.tagname}}</li>
+  </ul>
   <button (click)="close(selectedTags)">OK</button>
   <button (click)="close([])">Cancel</button>
 </div>

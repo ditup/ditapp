@@ -10,13 +10,12 @@
     (click)="clearSelection()">clear</button>
 </div>
 
-<mat-chip-list>
-  <mat-chip *ngFor="let tag of tagList.tags" class="tag-selected">
+<ul>
+  <li *ngFor="let tag of tagList.tags" class="tag-selected">
     {{tag.tagname}}
-    <button mat-icon-button
-      class="tag-selected-remove"
+    <button class="tag-selected-remove"
       (click)="removeTagFromList(tag)">
       <mat-icon alt="remove">close</mat-icon>
     </button>
-  </mat-chip>
-</mat-chip-list>
+  </li>
+</ul>
