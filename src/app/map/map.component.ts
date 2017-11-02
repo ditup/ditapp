@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -21,6 +22,8 @@ import { User } from '../shared/types';
 export class MapComponent implements OnInit, OnDestroy {
 
   public mapHeight: number = window.innerHeight;
+  public user: User;
+  public hasLocation: boolean;
 
   @ViewChild('mapContainer')
   mapContainer: ElementRef;
@@ -36,14 +39,34 @@ export class MapComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(private model: ModelService,
+              private route: ActivatedRoute,
               private dialog: MatDialog) {}
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.route.data.subscribe(async ({ user }) => {
+      this.user = user;
+      this.hasLocation = Array.isArray(this.user.location) && this.user.location.length === 2;
+
+      // read a stored map position
+      const { center = null, zoom } = this.getStoredView() || { zoom: 4 };
+
+      // move map to stored position, or to user's location or to default location
+      const [lat, lon]: [number, number] = (center)
+        ? center
+        : (this.hasLocation)
+          ? this.user.location
+          : [50, 0];
+
+      await this.initMap(lat, lon, zoom);
+    });
+  }
+
+  private async initMap(lat: number = 50, lon: number = 0, zoom: number = 4) {
     this.fitMapToPage();
 
     this.map = new Map(this.mapContainer.nativeElement, {
-      center: new LatLng(50, 0),
-      zoom: 6,
+      center: new LatLng(lat, lon),
+      zoom,
       layers: [
         new TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
@@ -54,12 +77,29 @@ export class MapComponent implements OnInit, OnDestroy {
       attributionControl: false
     });
 
-    this.findAndUpdateUsers();
-
     this.map.on('moveend', async () => {
       this.moveMapInRange();
-      this.findAndUpdateUsers();
+      this.storeCurrentView();
+      await this.findAndUpdateUsers();
     });
+
+    await this.findAndUpdateUsers();
+  }
+
+  private storeCurrentView() {
+    const zoom = this.map.getZoom();
+    const { lat, lng } = this.map.getCenter();
+    const center = [lat, lng];
+
+    localStorage.setItem('map', JSON.stringify({ center, zoom }));
+  }
+
+  private getStoredView(): any {
+    return JSON.parse(localStorage.getItem('map') || null);
+  }
+
+  gotoMyLocation() {
+    this.map.setView(this.user.location, this.map.getZoom(), { animate: true });
   }
 
   ngOnDestroy() {
@@ -72,7 +112,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  private moveMapInRange () {
+  private moveMapInRange() {
     let center = this.map.getCenter();
     while (!inRange(center.lng, -180, 180)) {
       let moveBy;

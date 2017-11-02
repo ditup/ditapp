@@ -11,23 +11,20 @@ export class LoggedComponent implements OnInit {
     {
       link: '/profile/edit',
       icon: 'person',
-      title: 'about me'
-    },
-    {
-      link: '/profile/edit/tags',
-      icon: 'favorite',
-      title: 'i care about...'
+      title: 'tell about me'
     },
     {
       link: '/people',
       icon: 'people',
-      title: 'people alike'
+      title: 'find people alike'
     },
     {
       link: '/map',
       icon: 'person_pin_circle',
-      title: 'people around'
-    },
+      title: 'find people around'
+    }
+  ];
+  public todoOptions: any[] = [
     {
       todo: true,
       link: '/ideas',

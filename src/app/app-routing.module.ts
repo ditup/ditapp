@@ -252,6 +252,9 @@ const routes: Routes = [
   {
     path: 'map',
     component: MapComponent,
+    resolve: {
+      user: LoggedUserResolver
+    },
     canActivate: [AuthGuard]
   },
   {

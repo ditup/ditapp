@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.notify.info('You were authenticated.');
 
       // redirect to the url provided in ?redirect=url or to default redirect
-      const redirectUrl = this.route.snapshot.queryParams['redirect'] || `/user/${this.auth.username}`;
+      const redirectUrl = this.route.snapshot.queryParams['redirect'] || '/';
 
       await this.router.navigate([redirectUrl]);
       this.loginForm.reset();

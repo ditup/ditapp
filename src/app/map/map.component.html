@@ -2,3 +2,12 @@
   id="map-container"
   [style.height.px]="mapHeight">
 </div>
+
+<div *ngIf="hasLocation" ngClass="location-buttons">
+  <a routerLink="/profile/edit/location" ngClass="link-button">Change my location</a>
+  <button (click)="gotoMyLocation()">Go to my location</button>
+</div>
+
+<div *ngIf="!hasLocation" ngClass="location-buttons">
+  <a routerLink="/profile/edit/location" ngClass="link-button">Add my location</a>
+</div>

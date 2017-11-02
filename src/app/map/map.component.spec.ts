@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 // import { By } from '@angular/platform-browser';
 
 import { MapComponent } from './map.component';
@@ -16,6 +17,10 @@ class ModelStubService {
   }
 }
 
+class ActivatedRouteStub {
+  data = Observable.of({ user: {} });
+}
+
 describe('MapComponent', () => {
   let component: MapComponent;
   let fixture: ComponentFixture<MapComponent>;
@@ -27,6 +32,7 @@ describe('MapComponent', () => {
         MaterialModule
       ],
       providers: [
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: ModelService, useClass: ModelStubService }
       ]
     })

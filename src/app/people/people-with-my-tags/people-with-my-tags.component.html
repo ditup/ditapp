@@ -1,1 +1,8 @@
+<!-- when users list is empty, suggest adding some tags -->
+<div *ngIf="users.length === 0">
+  Nobody found.
+  <a class="link-button"
+    routerLink="/profile/edit/tags">Tell what i care about</a>
+</div>
+
 <app-user-list-with-tags [users]="users"><app-user-list-with-tags>
