@@ -206,7 +206,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       await this.model.createUser(user);
 
       // redirect to email verification form
-      await this.router.navigate(['/user', user.username, 'verify-email']);
+      await this.router.navigate(['/verify-email']);
     } catch (e) {
       this.notify.error(e.message);
     } finally {

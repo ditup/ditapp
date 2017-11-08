@@ -41,23 +41,23 @@ describe('PeopleComponent', () => {
     expect(title.nativeElement.innerHTML).toEqual('People');
   });
 
-  it('should have links to self, users related to tags, new, random', () => {
+  it('should have links to self, users related to tags, new, TODO: random', () => {
     const nav = fixture.debugElement.query(By.css('app-tab-nav'));
 
     const tabs: any = nav.componentInstance.navRoutes;
-    expect(tabs.length).toEqual(4);
+    expect(tabs.length).toEqual(3);
 
     // test link urls
     const urls = map(tabs, (tab: any) => tab.link);
-    expect(urls).toEqual(['/people', '/people/with-tags', '/people/new', '/people/random']);
+    expect(urls).toEqual(['/people', '/people/with-tags', '/people/new'/*, '/people/random'*/]);
 
     // test link labels
     const labels = map(tabs, (tab: any) => tab.title);
     expect(labels).toEqual([
       'with my tags',
       'with tags',
-      'new',
-      'random'
+      'new'/*,
+      'random'*/
     ]);
   });
 

@@ -86,7 +86,7 @@ export class ModelService {
       });
   }
 
-  async verifyEmail(username: string, code: string): Promise<string> {
+  async verifyEmail(username: string, code: string): Promise<{ email: string, token: string }> {
 
     const body = {
       data: {
@@ -98,14 +98,16 @@ export class ModelService {
       }
     };
 
-    const response = await this.http
-      .patch(`${this.baseUrl}/account`, body, { headers: this.notLoggedHeaders })
-      .toPromise();
+    try {
+      const response: any = await this.http
+        .patch(`${this.baseUrl}/account`, body, { headers: this.notLoggedHeaders })
+        .toPromise();
 
-    console.log('responded!', response);
-
-    // TODO send the real email
-    return 'some-email';
+      const { email, token } = response.meta;
+      return { email, token };
+    } catch (e) {
+      throw { status: e.status, message: 'todo error' };
+    }
   }
 
   async getJwtToken(username: string, password: string): Promise<string> {

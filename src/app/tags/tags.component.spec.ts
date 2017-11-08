@@ -46,18 +46,18 @@ describe('TagsComponent', () => {
 
     const tabs = tabDebug.componentInstance.navRoutes;
 
-    expect(tabs.length).toEqual(4);
+    expect(tabs.length).toEqual(3);
 
     // test link urls
     const urls = map(tabs, (tab: any) => tab.link);
-    expect(urls).toEqual(['/tags', '/tags/related-to-tags', '/tags/new', '/tags/random']);
+    expect(urls).toEqual(['/tags', '/tags/related-to-tags', /*'/tags/new', */'/tags/random']);
 
     // test link labels
     const labels = map(tabs, (tab: any) => tab.title);
     expect(labels).toEqual([
       'related to my tags',
       'related to tags',
-      'new',
+      // 'new',
       'random'
     ]);
   });

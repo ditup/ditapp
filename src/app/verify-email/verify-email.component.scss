@@ -1,13 +1,7 @@
-@import '../shared/styles/fonts';
-@import '../shared/styles/colors';
-
 .verification-container {
-  width: 300px;
-  margin: 0 auto;
   display: block;
 
   h1 {
-    width: 100%;
     text-align: center;
     margin-bottom: 0;
   }
@@ -17,17 +11,6 @@
     margin: 1em 0;
     color: #222
   }
-}
-
-form {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-input,
-button[type=submit] {
-  width: 100%;
-  display: block;
 }
 
 .home-mushroom-link {

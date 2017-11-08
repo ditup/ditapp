@@ -1,33 +1,9 @@
-<!-- hide the home mushroom link when code is provided and submitting is in process -->
-<nav class="home-mushroom-link" *ngIf="!(isCodeProvided && !verificationSuccess)">
+<nav class="home-mushroom-link">
   <a routerLink="/"><img src="/static/img/fungi/helvella_n.png" alt="Helvella mushroom by Carl Linnae"></a>
 </nav>
 
-<section *ngIf="!verificationSuccess && !isCodeProvided" class="verification-container">
+<section class="verification-container">
   <h1>Verify your email</h1>
 
   <div class="info-about-email">We sent you an email. Look in!</div>
-
-  <form (ngSubmit)="onSubmit()" [formGroup]="verifyEmailForm">
-    <fieldset [disabled]="isFormDisabled">
-
-      <input type="text" placeholder="Verification Code"
-        formControlName="code" required>
-
-      <button type="submit" class="btn btn-default"
-        [disabled]="!verifyEmailForm.valid">Verify Email</button>
-      <mat-spinner *ngIf="isSubmitting"></mat-spinner>
-    </fieldset>
-  </form>
-</section>
-
-<section *ngIf="verificationSuccess" class="verification-container">
-  <h1>What now?</h1>
-
-  <nav>
-    <ul>
-      <li><a routerLink="/explore">explore</a></li>
-      <li><a routerLink="/profile/edit">edit my profile</a></li>
-    </ul>
-  </nav>
 </section>

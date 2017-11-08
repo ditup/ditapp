@@ -66,9 +66,12 @@ describe('ModelService', () => {
         }
       });
 
-      req.flush({ });
+      req.flush({ meta: {
+        email: 'email@example.com',
+        token: 'aaaa.bbbb.cccc'
+      } });
       const response = await verifyEmailPromise;
-      expect(response).toEqual('some-email');
+      expect(response).toEqual({ email: 'email@example.com', token: 'aaaa.bbbb.cccc' });
     }));
 
   });

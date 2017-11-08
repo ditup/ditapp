@@ -16,6 +16,7 @@ import { UserEditTagsComponent } from './user-edit/user-edit-tags/user-edit-tags
 import { UserEditLocationComponent } from './user-edit/user-edit-location/user-edit-location.component';
 
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { VerifyEmailCodeComponent } from './verify-email-code/verify-email-code.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ResetPasswordUpdateComponent } from './reset-password-update/reset-password-update.component';
@@ -134,12 +135,12 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'user/:username/verify-email',
+    path: 'verify-email',
     component: VerifyEmailComponent
   },
   {
-    path: 'user/:username/verify-email/:code',
-    component: VerifyEmailComponent
+    path: 'verify-email/:username/:code',
+    component: VerifyEmailCodeComponent
   },
   {
     path: 'tag/:tagname',
