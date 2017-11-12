@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ContactRequestProcessComponent } from './contact-request-process.component';
 
@@ -8,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import { RouterStub } from '../../../testing/router-stubs';
+import { EditorOutputComponent } from '../../shared/editor-output/editor-output.component';
 
 import { ModelService } from '../../model.service';
 import { NotificationsService } from '../../notifications/notifications.service';
@@ -49,10 +50,13 @@ describe('ContactRequestProcessComponent', () => {
         ContactRequestProcessComponent,
         ContactFormStubComponent,
         ContactDeleteButtonStubComponent,
-        ContactOverviewStubComponent
+        ContactOverviewStubComponent,
+        EditorOutputComponent
+      ],
+      imports: [
+        RouterTestingModule
       ],
       providers: [
-        { provide: Router, useClass: RouterStub },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: ModelService, useClass: ModelStubService },
         NotificationsService
@@ -73,7 +77,6 @@ describe('ContactRequestProcessComponent', () => {
 
   it('[on accept success] should navigate to my contacts', async(async () => {
     const router = fixture.debugElement.injector.get(Router);
-
     const routerSpy = spyOn(router, 'navigate');
 
     await component.confirmContact({ trust: 3, reference: 'reference' });
@@ -85,6 +88,8 @@ describe('ContactRequestProcessComponent', () => {
 
   it('[on accept success] should notify about the success', async(async () => {
     const notify = fixture.debugElement.injector.get(NotificationsService);
+    const router = fixture.debugElement.injector.get(Router);
+    spyOn(router, 'navigate');
 
     const notifySpy = spyOn(notify, 'info');
     await fixture.whenStable();

@@ -122,6 +122,24 @@ export class ModelService {
     return token;
   }
 
+  async authExpiration(): Promise<number> {
+
+    try {
+      const response: any = await this.http
+        .get(`${this.baseUrl}/auth/exp`, { headers: this.loggedHeaders })
+        .toPromise();
+
+      return response.meta.exp as number;
+    } catch (e) {
+      console.error(e);
+      if (e.status === 403) {
+        return -1;
+      }
+
+      throw e;
+    }
+  }
+
   async readUser(username: string): Promise<User> { // @TODO better return type
 
     const response: any = await this.http
@@ -299,7 +317,11 @@ export class ModelService {
       this.cache[username] = this.cache[username] || { };
       this.cache[username][size] = avatarRequestPromise;
 
-      return await avatarRequestPromise;
+      try {
+        return await avatarRequestPromise;
+      } catch (e) {
+        delete this.cache[username][size];
+      }
     }
 
     // if cache === false, delete the cache and send a request
@@ -309,7 +331,8 @@ export class ModelService {
   }
 
   private async sendAvatarRequest(username: string, size: number): Promise<string> {
-    const headers = this.loggedHeaders;
+    const headers = this.loggedHeaders
+      .set('Accept', 'image/jpeg, image/svg+xml');
 
     const response: any = await this.http
       .get(`${this.baseUrl}/users/${username}/avatar?filter[size]=${size}`, { headers, responseType: 'blob', observe: 'response' })

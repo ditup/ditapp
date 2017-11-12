@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { BaseComponent } from './base/base.component';
+
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
@@ -53,6 +55,7 @@ import { ManageContactComponent } from './contact/manage-contact/manage-contact.
 // importing guards and their dependencies
 import { AuthGuard } from './auth-guard.service';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
+import { AuthExpGuard } from './base/auth-exp-guard.service';
 
 // resolvers
 import { UserResolver, LoggedUserResolver } from './user/user-resolver.service';
@@ -76,10 +79,6 @@ const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
   },
   {
     path: 'contact-with/:username',
@@ -280,10 +279,28 @@ const routes: Routes = [
   }
 ];
 
+/**
+ * The routeWrapper is present to be able to resolve time till authentication expiration for every path.
+ */
+const routeWrapper: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    canActivate: [AuthExpGuard],
+    path: '',
+    component: BaseComponent,
+    children: routes
+  }
+];
+
+
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+  imports: [ RouterModule.forRoot(routeWrapper) ],
   exports: [ RouterModule ],
   providers: [
+    AuthExpGuard,
     AuthGuard,
     CanDeactivateGuard,
     UserResolver,

@@ -76,6 +76,11 @@ import { TagRelatedTagsComponent } from './tag/tag-related-tags/tag-related-tags
 import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-people.component';
 import { ChangePasswordComponent } from './account/change-password/change-password.component';
 
+// services
+import { AuthService } from './auth.service';
+import { DialogService } from './dialog.service';
+import { HeaderControlService } from './header-control.service';
+import { ModelService } from './model.service';
 import { NotificationsService } from './notifications/notifications.service';
 import { ProgressService } from './progress/progress.service';
 
@@ -89,6 +94,7 @@ import { EditorComponent } from './shared/editor/editor.component';
 import { EditorOutputComponent } from './shared/editor-output/editor-output.component';
 import { TabNavComponent } from './shared/tab-nav/tab-nav.component';
 import { VerifyEmailCodeComponent } from './verify-email-code/verify-email-code.component';
+import { BaseComponent } from './base/base.component';
 
 @NgModule({
   declarations: [
@@ -160,7 +166,8 @@ import { VerifyEmailCodeComponent } from './verify-email-code/verify-email-code.
     EditorComponent,
     EditorOutputComponent,
     TabNavComponent,
-    VerifyEmailCodeComponent
+    VerifyEmailCodeComponent,
+    BaseComponent
   ],
   imports: [
     BrowserModule,
@@ -175,6 +182,10 @@ import { VerifyEmailCodeComponent } from './verify-email-code/verify-email-code.
     FancyImageUploaderModule
   ],
   providers: [
+    AuthService,
+    DialogService,
+    HeaderControlService,
+    ModelService,
     NotificationsService,
     ProgressService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpProgressInterceptor, multi: true },

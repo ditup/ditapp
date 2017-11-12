@@ -417,6 +417,46 @@ describe('ModelService', () => {
 
   });
 
+  describe('authExpiration', () => {
+    it('authentication is valid', async(async () => {
+      const authExpirationPromise = service.authExpiration();
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/auth/exp`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush({
+        meta: {
+          exp: 5000
+        }
+      });
+
+      const expiration = await authExpirationPromise;
+      expect(expiration).toEqual(5000);
+    }));
+
+    it('token is expired', async(async () => {
+      const authExpirationPromise = service.authExpiration();
+
+      // mock the backend
+      const req = httpMock.expectOne(`${baseUrl}/auth/exp`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.error({
+        errors: [{ status: '403', title: 'Not Authorized', detail: 'expired' }]
+      }, { status: 403, statusText: 'Not Authorized' });
+
+      const expiration = await authExpirationPromise;
+      expect(expiration).toEqual(-1);
+    }));
+  });
+
   describe('readUser', () => {
     it('should make a correct request', async(async () => {
 

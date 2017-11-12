@@ -55,18 +55,18 @@ h3 {
 }
 
 /* make a margin around all the content */
-router-outlet + :not(app-map) {
+app-base > router-outlet + :not(app-map) {
   display: block;
 }
 
 @media (min-width: 783px) {
-  router-outlet + :not(app-map) {
+  app-base > router-outlet + :not(app-map) {
     max-width: 768px;
     margin: 14px auto;
   }
 }
 @media (max-width: 782px) {
-  router-outlet + :not(app-map) {
+  app-base > router-outlet + :not(app-map) {
     margin: 14px;
   }
 }
