@@ -22,8 +22,12 @@ class TagAutocompleteStubComponent {
 }
 
 class ModelStubService {
-  async updateUserTag(_username: string, _tagname: string, _data: { story?: string, relevance?: number}): Promise<any> {
-    return;
+  async updateUserTag(username: string, tagname: string, _data: { story?: string, relevance?: number}): Promise<any> {
+    return {
+      user: { username },
+      tag: { tagname },
+      story: 'returned story'
+    };
   }
 
   async addTagToUser({ username, tagname, relevance, story }): Promise<UserTag> {
@@ -101,6 +105,17 @@ describe('UserEditTagsComponent', () => {
     expect(userTags[0].nativeElement.textContent).toMatch(/tag0/);
   });
 
+  it('should update user story with value returned from the request', fakeAsync(() => {
+    const userTag = component.tags.find((uTag: UserTag) => uTag.tag.tagname === 'tag0');
+
+    expect(userTag.story).toEqual('');
+
+    component.updateTagStory({ tagname: 'tag0', story: 'story' });
+    tick();
+
+    expect(userTag.story).toEqual('returned story');
+  }));
+
   it('should notify when user story is updated', fakeAsync(() => {
     component.updateTagStory({ tagname: 'tag0', story: 'story' });
 
@@ -130,7 +145,6 @@ describe('UserEditTagsComponent', () => {
   }));
 
   it('should notify error when updating tag relevance fails', fakeAsync(() => {
-
 
     // rejecting response
     const err = new Error('');

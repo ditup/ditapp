@@ -80,16 +80,15 @@ export class UserEditTagsComponent implements OnInit {
   // at the end we close the dialog.
   async updateTagStory({ tagname, story }: { tagname: string, story: string }): Promise<void> {
     // update user-tag in database (send XHR to REST API)
-    await this.model.updateUserTag(this.user.username, tagname, { story });
+    const { story: updatedStory } = await this.model.updateUserTag(this.user.username, tagname, { story });
     // we succeeded.
 
     // update the story in the tag object of this component
     // find the tag by tagname and update its story
-    const tag = _.find(this.tags, (userTag: UserTag) => {
-      return userTag.tag.tagname === tagname;
-    });
+    const tag = this.tags.find((userTag: UserTag) => userTag.tag.tagname === tagname);
 
-    tag.story = story;
+    // update with the story returned from server after update
+    tag.story = updatedStory;
 
     // close the dialog
     if (this.tagStoryDialogRef) {

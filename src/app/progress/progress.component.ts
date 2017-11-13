@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { ProgressService } from './progress.service';
 
@@ -7,21 +7,14 @@ import { ProgressService } from './progress.service';
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss']
 })
-export class ProgressComponent implements OnInit, AfterViewInit {
+export class ProgressComponent implements OnInit {
 
   // array of ongoing progresses
   progressBars: { id: number, progress: number }[] = [];
 
   constructor(private progressControl: ProgressService) { }
 
-  ngOnInit() { }
-
-  // is anything in progress?
-  get showProgressBar(): boolean {
-    return this.progressBars.length > 0;
-  }
-
-  ngAfterViewInit() {
+  ngOnInit() {
     // subscribe to progress changes
     this.progressControl.progressChanged$.subscribe(({ id, progress }) => {
       if (progress >= 0) {
@@ -30,6 +23,11 @@ export class ProgressComponent implements OnInit, AfterViewInit {
         this.deleteProgress(id);
       }
     });
+  }
+
+  // is anything in progress?
+  get showProgressBar(): boolean {
+    return this.progressBars.length > 0;
   }
 
   // updates a progress bar with given id, or creates it

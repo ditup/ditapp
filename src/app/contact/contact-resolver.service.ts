@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 import { Contact } from '../shared/types';
 
 @Injectable()
-export class ContactResolver implements Resolve<{ fromMe: Contact, toMe: Contact }> {
+export class ContactResolver implements Resolve<{ fromMe: Contact, toMe: Contact }|null|'self'> {
 
   constructor(private model: ModelService,
               private auth: AuthService) { }
