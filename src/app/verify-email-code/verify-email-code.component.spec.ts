@@ -119,11 +119,11 @@ describe('VerifyEmailCodeComponent', () => {
       fixture.detectChanges();
     });
 
-    it('log in'/*, async(async () => {
+    it('log in', async(async () => {
       await fixture.whenStable();
-      expect(authLoginSpy.calls.count()).toEqual(1)
-      // expect(authLoginSpy.calls.argsFor(0)[0]).toEqual('aaaa.bbbb.cccc');
-    })*/);
+      expect(authLoginSpy.calls.count()).toEqual(1);
+      expect(authLoginSpy.calls.argsFor(0)[0]).toEqual('aaaa.bbbb.cccc');
+    }));
 
     it('redirect to /', async(async () => {
       await fixture.whenStable();

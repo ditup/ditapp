@@ -64,12 +64,12 @@ export class VerifyEmailCodeComponent implements OnInit, OnDestroy {
 
     try {
       // perform the verification
-      const { email /*, token*/ } = await this.model.verifyEmail(username, code);
+      const { email, token } = await this.model.verifyEmail(username, code);
       // on success
       // inform
       this.notify.info(`your email ${email} was successfully verified`);
       // TODO login, when we get jwt token
-      // this.auth.login(token);
+      this.auth.login(token);
       // redirect to /home
       await this.router.navigate(['/']);
     } catch (e) {
