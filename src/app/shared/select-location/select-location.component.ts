@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, ViewChild, ElementRef, EventEmitter }
 
 import { inRange } from 'lodash';
 
-import * as L from 'leaflet';
+import { LatLng, Map, TileLayer } from 'leaflet';
+import 'leaflet';
 
 @Component({
   selector: 'app-select-location',
@@ -14,10 +15,10 @@ export class SelectLocationComponent implements OnInit {
   @ViewChild('locationContainer')
   locationContainer: ElementRef;
 
-  private map: L.Map;
+  private map: Map;
 
   @Input()
-  public location: [number, number];
+  public location: [number, number] = [0, 0];
 
   @Input() disabled = false;
 
@@ -27,22 +28,19 @@ export class SelectLocationComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.map = L.map(this.locationContainer.nativeElement, {
-      center: L.latLng.apply(null, this.location || [0, 0]),
+    this.map = new Map(this.locationContainer.nativeElement, {
+      center: new LatLng(this.location[0] || 0, this.location[1] || 0),
       zoom: 6,
       scrollWheelZoom: 'center', // zoom to the center point
       layers: [
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        new TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
           attribution: 'Open Street Map',
           noWrap: true
         })
       ],
-      attributionControl: false,
-      // maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180))
+      attributionControl: false
     });
-
-    this.map.invalidateSize(false);
 
     // if the center of the map gets outside of the world, move it back
     this.map.on('moveend', () => {
