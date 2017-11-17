@@ -6,13 +6,30 @@
   text-overflow: ellipsis;
   margin-bottom: 0.74em;
   position: relative;
+  white-space: nowrap; // keep avatar and profile next to each other
 }
 
-app-avatar {
+.user-profile {
+  white-space: normal; // cancel the nowrap from .user-info
+}
+
+.user-avatar {
   width: 128px;
   height: 128px;
   margin-right: 0.74em;
-  float: left;
+}
+
+// .user-profile is a wrapper for name, username, description
+.user-profile,
+.user-avatar {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.user-name,
+.user-username,
+.user-description {
+  display: block;
 }
 
 .user-name {

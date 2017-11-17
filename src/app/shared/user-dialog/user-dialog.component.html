@@ -1,9 +1,11 @@
 <mat-dialog-content>
   <section class="user-info">
-    <app-avatar [username]="user.username" [size]="128"></app-avatar>
-    <section class="user-name">{{user.givenName}} {{user.familyName}}</section>
-    <section class="user-username">{{user.username}}</section>
-    <section class="user-description"><app-editor-output [value]="user.description"></app-editor-output></section>
+    <app-avatar class="user-avatar" [username]="user.username" [size]="128"></app-avatar>
+    <section class="user-profile">
+      <section class="user-name">{{user.givenName}} {{user.familyName}}</section>
+      <section class="user-username">{{user.username}}</section>
+      <section class="user-description"><app-editor-output [value]="user.description"></app-editor-output></section>
+    </section>
   </section>
   <app-user-tag-list [userTags]="userTags" *ngIf="userTags"></app-user-tag-list>
   <div *ngIf="!userTags">loading tags...</div>
