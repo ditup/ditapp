@@ -37,7 +37,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       required: 'Required.',
       minlength: 'Username must be at least 2 characters long.',
       maxlength: 'Username cannot be more than 32 characters long.',
-      pattern: 'Username must consist of a-z0-9 optionally separated by .,-,_',
+      pattern: 'Username must consist of a-z0-9 optionally separated by \'-\'',
       uniqueUsername: 'Username is already taken.'
     },
     email: {
@@ -47,7 +47,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     },
     password: {
       required: 'Required.',
-      minlength: 'Password must be at least 8 characters long.',
+      minlength: 'Password must be at least 10 characters long.',
       maxlength: 'That\'s too long.',
       weak: 'Too easy to guess.'
     }
@@ -128,7 +128,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(32),
-        Validators.pattern(/^[a-z0-9]+([_\-\.][a-z0-9]+)*$/)
+        Validators.pattern(/^[a-z0-9]+(-[a-z0-9]+)*$/)
       ], [
         this.uniqueUsernameValidator.bind(this)
       ]],
@@ -139,8 +139,8 @@ export class SignupComponent implements OnInit, OnDestroy {
       ]],
       password: ['', [
         Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(1024),
+        Validators.minLength(10),
+        Validators.maxLength(512),
         safePasswordValidator
       ]]
     });
