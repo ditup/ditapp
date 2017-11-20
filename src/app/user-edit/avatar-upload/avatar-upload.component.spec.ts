@@ -74,6 +74,9 @@ describe('AvatarUploadComponent', () => {
       httpMethod: 'PATCH',
       authTokenPrefix: 'Bearer',
       authToken: TOKEN,
+      customHeaders: {
+        Accept: 'application/vnd.api+json'
+      },
       fieldName: 'avatar',
       autoUpload: true,
       maxImageSize: 2,
@@ -83,7 +86,7 @@ describe('AvatarUploadComponent', () => {
   });
 
   it('successful upload should be notified', () => {
-    uploadComponent.onUpload.emit();
+    uploadComponent.onUpload.emit({ status: 204 });
     fixture.detectChanges();
 
     expect(notifyInfoSpy.calls.count()).toEqual(1);
@@ -91,10 +94,10 @@ describe('AvatarUploadComponent', () => {
   });
 
   it('upload error should be notified', () => {
-    uploadComponent.onError.emit('error');
+    uploadComponent.onUpload.emit({ status: 400 });
     fixture.detectChanges();
 
     expect(notifyErrorSpy.calls.count()).toEqual(1);
-    expect(notifyErrorSpy.calls.first().args[0]).toEqual('error');
+    expect(notifyErrorSpy.calls.first().args[0]).toEqual('Upload failed with status 400');
   });
 });

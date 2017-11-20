@@ -17,14 +17,17 @@ export class AvatarUploadComponent implements OnInit {
   // options for ng2-fancy-image-uploader
   get uploaderOptions(): FancyImageUploaderOptions {
     return{
-      uploadUrl: `${api.baseUrl}/users/${this.auth.username}/avatar`,
-      httpMethod: 'PATCH',
-      authTokenPrefix: 'Bearer',
+      allowedImageTypes: ['image/png', 'image/jpeg'],
       authToken: this.auth.token,
-      fieldName: 'avatar',
+      authTokenPrefix: 'Bearer',
       autoUpload: true,
+      customHeaders: {
+        Accept: 'application/vnd.api+json'
+      },
+      fieldName: 'avatar',
+      httpMethod: 'PATCH',
       maxImageSize: 2,
-      allowedImageTypes: ['image/png', 'image/jpeg']
+      uploadUrl: `${api.baseUrl}/users/${this.auth.username}/avatar`
     };
   }
 
@@ -36,9 +39,14 @@ export class AvatarUploadComponent implements OnInit {
   }
 
   // success event of ng2-fancy-image-uploader
-  onUpload(_file: UploadedFile) {
-    this.notify.info('Your profile picture was changed.');
-    this.headerControl.updateAvatar();
+  onUpload(file: UploadedFile) {
+    if (file.status === 204) {
+      this.notify.info('Your profile picture was changed.');
+      this.headerControl.updateAvatar();
+      return;
+    }
+
+    this.notify.error(`Upload failed with status ${file.status}`);
   }
 
   // error event of ng2-fancy-image-uploader

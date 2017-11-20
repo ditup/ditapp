@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
 
@@ -19,9 +19,9 @@ import { User } from '../shared/types';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, OnDestroy {
+export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public mapHeight: number = window.innerHeight;
+  public mapHeight: number; // = window.innerHeight - 64;
   public user: User;
   public hasLocation: boolean;
 
@@ -39,30 +39,40 @@ export class MapComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(private model: ModelService,
+              private ref: ChangeDetectorRef,
               private route: ActivatedRoute,
               private dialog: MatDialog) {}
 
-  ngOnInit() {
-    this.route.data.subscribe(async ({ user }) => {
-      this.user = user;
-      this.hasLocation = Array.isArray(this.user.location) && this.user.location.length === 2;
+  ngOnInit() { }
 
-      // read a stored map position
-      const { center = null, zoom } = this.getStoredView() || { zoom: 4 };
+  ngAfterViewInit() {
+    this.route.data.subscribe(({ user }) => {
+      // timeout helps wait until the whole view is initialized. To get the correct map container's height
+      // it also helps avoid ExpressionChangedAfterItHasBeenChecked error
+      setTimeout(async () => {
+        this.user = user;
+        this.hasLocation = Array.isArray(this.user.location) && this.user.location.length === 2;
 
-      // move map to stored position, or to user's location or to default location
-      const [lat, lon]: [number, number] = (center)
-        ? center
-        : (this.hasLocation)
-          ? this.user.location
-          : [50, 0];
+        // read a stored map position
+        const { center = null, zoom } = this.getStoredView() || { zoom: 4 };
 
-      await this.initMap(lat, lon, zoom);
+        // move map to stored position, or to user's location or to default location
+        const [lat, lon]: [number, number] = (center)
+          ? center
+          : (this.hasLocation)
+            ? this.user.location
+            : [50, 0];
+
+        await this.initMap(lat, lon, zoom);
+      }, 0);
     });
   }
 
   private async initMap(lat: number = 50, lon: number = 0, zoom: number = 4) {
     this.fitMapToPage();
+
+    // update the map container native element's height
+    this.ref.detectChanges();
 
     this.map = new Map(this.mapContainer.nativeElement, {
       center: new LatLng(lat, lon),
