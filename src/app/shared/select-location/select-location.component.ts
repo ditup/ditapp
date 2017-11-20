@@ -18,7 +18,7 @@ export class SelectLocationComponent implements OnInit {
   private map: Map;
 
   @Input()
-  public location: [number, number] = [0, 0];
+  public location: [number, number];
 
   @Input() disabled = false;
 
@@ -28,9 +28,11 @@ export class SelectLocationComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    const location = (this.location) ? this.location : [0, 0];
+
     this.map = new Map(this.locationContainer.nativeElement, {
-      center: new LatLng(this.location[0] || 0, this.location[1] || 0),
-      zoom: 6,
+      center: new LatLng(location[0], location[1]),
+      zoom: 8,
       scrollWheelZoom: 'center', // zoom to the center point
       layers: [
         new TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
