@@ -576,7 +576,7 @@ export class ModelService {
       return this.deserializeMessage(data, included);
   }
 
-  public async updateMessageToRead(message: Message) {
+  public async updateMessageToRead(message: Message): Promise<Message[]> {
 
     const headers = this.loggedHeaders;
 
@@ -590,13 +590,19 @@ export class ModelService {
       }
     };
 
+    // updates to read the provided and all older messages
+    // which are received and unread
     const response: any = await this.http
       .patch(`${this.baseUrl}/messages/${message.id}`, requestBody, { headers })
       .toPromise();
 
-      const { data, included } = response;
+    const { data, included } = response;
 
-      return this.deserializeMessage(data, included);
+    const messages: Message[] = data.map((msgData: any) => {
+      return this.deserializeMessage(msgData, included);
+    });
+
+    return messages;
   }
 
   public countUnreadMessages(): Observable<number> {

@@ -1156,6 +1156,12 @@ describe('ModelService', () => {
 
   describe('updateMessageToRead(Message)', () => {
 
+    /**
+     * the API request updates to read the given message
+     * (if it is received and unread)
+     * and all received unread messages that are older than the given message.
+     */
+
     it('should mark a message as read', async(async () => {
 
       // usernames
@@ -1174,7 +1180,8 @@ describe('ModelService', () => {
       expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
       expect(req.request.headers.has('authorization')).toEqual(true);
 
-      req.flush({ data: {
+      // api responds with array of updated messages
+      req.flush({ data: [{
         type: 'messages',
         id: '1',
         attributes: {
@@ -1186,27 +1193,28 @@ describe('ModelService', () => {
           from: {
             data: {
               type: 'users',
-              id: me
+              id: other
             }
           },
           to: {
             data: {
               type: 'users',
-              id: other
+              id: me
             }
           }
         }
-      } });
+      }] });
 
-      const message = await updateMessageToReadPromise;
-      expect(message).toEqual(new Message({
+      const updatedMessages = await updateMessageToReadPromise;
+
+      expect(updatedMessages).toEqual([new Message({
         body: 'msg body',
         created: 123456,
         read: true,
-        from: { username: me },
-        to: { username: other },
+        from: { username: other },
+        to: { username: me },
         id: '1'
-      }));
+      })]);
     }));
   });
 
