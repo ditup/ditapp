@@ -125,3 +125,13 @@ form li {
   text-align: left;
   color: gray;
 }
+
+/* set colors for disabled buttons */
+button[type=submit],
+input[type=submit],
+input[type=button] {
+  &:disabled {
+    color: gray;
+    background-color: lightgray;
+  }
+}

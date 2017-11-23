@@ -14,11 +14,17 @@
 
 form {
   text-align: center;
-  margin-bottom: 50px;
 }
 
-.reset-password-link {
-  text-align: center;
+.related-navigation {
+  margin: 1em 0;
+
+  a {
+    display: block;
+    text-align: center;
+    margin: 0.5em 0;
+    color: $darker;
+  }
 }
 
 .home-mushroom-link {
