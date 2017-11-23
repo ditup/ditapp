@@ -3,16 +3,16 @@
 $inside: 40px;
 $padding: 10px;
 
+.unread {
+  font-weight: bold;
+}
+
 .thread {
   display: flex;
   display: -webkit-flex;
   position: relative;
   height: $inside + 2 * $padding;
   padding: 0 $padding;
-
-  &.unread {
-    font-weight: bold;
-  }
 
   &>div {
     display: inline-block;
