@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { ModelService } from '../model.service';
+import { FooterControlService } from '../footer/footer-control.service';
 import { EditorOutputComponent } from '../shared/editor-output/editor-output.component';
 
 import { Message, User } from '../shared/types';
@@ -114,6 +115,7 @@ describe('MessagesWithUserComponent', () => {
         MomentModule
       ],
       providers: [
+        FooterControlService,
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: ModelService, useClass: ModelStubService }
       ],

@@ -1,18 +1,17 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { ModelService } from '../model.service';
-
-import { Message, User } from '../shared/types';
-
 import { find } from 'lodash';
+
+import { FooterControlService } from '../footer/footer-control.service';
+import { ModelService } from '../model.service';
+import { Message, User } from '../shared/types';
 
 @Component({
   selector: 'app-messages-with-user',
   templateUrl: './messages-with-user.component.html',
   styleUrls: ['./messages-with-user.component.scss']
 })
-export class MessagesWithUserComponent implements OnInit, AfterViewInit {
+export class MessagesWithUserComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('messagesList')
   private messagesList: ElementRef;
@@ -23,7 +22,8 @@ export class MessagesWithUserComponent implements OnInit, AfterViewInit {
 
   public otherUser: User;
 
-  constructor(private route: ActivatedRoute,
+  constructor(private footerControl: FooterControlService,
+              private route: ActivatedRoute,
               private model: ModelService) { }
 
   ngOnInit() {
@@ -56,10 +56,18 @@ export class MessagesWithUserComponent implements OnInit, AfterViewInit {
         throw e;
       }
     });
+
+    // hide the footer
+    this.footerControl.display(false);
   }
 
   ngAfterViewInit() {
     this.scrollMessagesToBottom();
+  }
+
+  ngOnDestroy() {
+    // show the footer again
+    this.footerControl.display(true);
   }
 
   public onNewMessage(message: Message) {

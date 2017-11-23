@@ -1,9 +1,10 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
-
-import { Subscription } from 'rxjs/Subscription';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
+
+import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
+import { FooterControlService } from '../footer/footer-control.service';
 
 import { Map, LatLng, TileLayer, Marker } from 'leaflet';
 import * as L from 'leaflet';
@@ -38,12 +39,16 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   });
   private subscription: Subscription;
 
-  constructor(private model: ModelService,
+  constructor(private footerControl: FooterControlService,
+              private model: ModelService,
               private ref: ChangeDetectorRef,
               private route: ActivatedRoute,
               private dialog: MatDialog) {}
 
-  ngOnInit() { }
+  ngOnInit() {
+    // hide footer
+    this.footerControl.display(false);
+  }
 
   ngAfterViewInit() {
     this.route.data.subscribe(({ user }) => {
@@ -120,6 +125,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+
+    // display footer back
+    this.footerControl.display(true);
   }
 
   private moveMapInRange() {

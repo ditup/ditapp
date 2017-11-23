@@ -1,15 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-// import { By } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import { LatLng } from 'leaflet';
 
 import { MapComponent } from './map.component';
-
 import { MaterialModule } from '../material.module';
-import { Observable } from 'rxjs/Observable';
-
+import { FooterControlService } from '../footer/footer-control.service';
 import { ModelService } from '../model.service';
 import { User } from '../shared/types';
-import { LatLng } from 'leaflet';
 
 class ModelStubService {
   findUsersWithinRectangle(_sw: LatLng, _ne: LatLng): Observable<User[]> {
@@ -32,6 +30,7 @@ describe('MapComponent', () => {
         MaterialModule
       ],
       providers: [
+        FooterControlService,
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: ModelService, useClass: ModelStubService }
       ]

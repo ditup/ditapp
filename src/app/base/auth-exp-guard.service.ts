@@ -5,6 +5,7 @@ import {
   RouterStateSnapshot,
   PRIMARY_OUTLET
 } from '@angular/router';
+import * as _ from 'lodash';
 
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
@@ -57,7 +58,7 @@ export class AuthExpGuard implements CanActivate {
    */
   private getUrlPath(url: string): string[] {
     const tree = this.router.parseUrl(url);
-    const segments = tree.root.children[PRIMARY_OUTLET].segments;
+    const segments = _.get(tree, `root.children[${PRIMARY_OUTLET}].segments`, []);
     return segments.map(segment => segment.path);
   }
 }

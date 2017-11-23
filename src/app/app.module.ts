@@ -79,6 +79,7 @@ import { ChangePasswordComponent } from './account/change-password/change-passwo
 // services
 import { AuthService } from './auth.service';
 import { DialogService } from './dialog.service';
+import { FooterControlService } from './footer/footer-control.service';
 import { HeaderControlService } from './header-control.service';
 import { ModelService } from './model.service';
 import { NotificationsService } from './notifications/notifications.service';
@@ -95,6 +96,7 @@ import { EditorOutputComponent } from './shared/editor-output/editor-output.comp
 import { TabNavComponent } from './shared/tab-nav/tab-nav.component';
 import { VerifyEmailCodeComponent } from './verify-email-code/verify-email-code.component';
 import { BaseComponent } from './base/base.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -167,7 +169,8 @@ import { BaseComponent } from './base/base.component';
     EditorOutputComponent,
     TabNavComponent,
     VerifyEmailCodeComponent,
-    BaseComponent
+    BaseComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -184,6 +187,7 @@ import { BaseComponent } from './base/base.component';
   providers: [
     AuthService,
     DialogService,
+    FooterControlService,
     HeaderControlService,
     ModelService,
     NotificationsService,

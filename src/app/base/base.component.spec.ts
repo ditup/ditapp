@@ -7,6 +7,9 @@ import { BaseComponent } from './base.component';
 @Component({ selector: 'app-header', template: '' })
 class HeaderStubComponent { }
 
+@Component({ selector: 'app-footer', template: '' })
+class FooterStubComponent { }
+
 describe('BaseComponent', () => {
   let component: BaseComponent;
   let fixture: ComponentFixture<BaseComponent>;
@@ -15,6 +18,7 @@ describe('BaseComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         BaseComponent,
+        FooterStubComponent,
         HeaderStubComponent
       ],
       imports: [
