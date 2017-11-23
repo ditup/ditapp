@@ -81,6 +81,10 @@ const routes: Routes = [
     component: SignupComponent
   },
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: 'contact-with/:username',
     component: ManageContactComponent,
     canActivate: [AuthGuard],
@@ -283,10 +287,6 @@ const routes: Routes = [
  * The routeWrapper is present to be able to resolve time till authentication expiration for every path.
  */
 const routeWrapper: Routes = [
-  {
-    path: 'login',
-    component: LoginComponent
-  },
   {
     canActivate: [AuthExpGuard],
     path: '',

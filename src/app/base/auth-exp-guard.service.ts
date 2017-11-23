@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
-  CanActivate, Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+  PRIMARY_OUTLET
 } from '@angular/router';
 
 import { ModelService } from '../model.service';
@@ -21,12 +22,18 @@ export class AuthExpGuard implements CanActivate {
               private model: ModelService,
               private router: Router) { }
 
-  async canActivate(_route: ActivatedRouteSnapshot,
-              state: RouterStateSnapshot): Promise<boolean> {
+  async canActivate(_route, state: RouterStateSnapshot): Promise<boolean> {
+
+    // exceptions from the process - they will always be allowed
+    // i.e. we don't want to redirect to login or signup after login
+    const path = this.getUrlPath(state.url).join('--');
+    const exceptions = ['login', 'signup'];
+    const isException = exceptions.includes(path);
 
     // if i'm logged in and there is too short time till authentication expiration
     // log out and redirect to login page
-    if (this.auth.logged) {
+
+    if (this.auth.logged && !isException) {
       const expiresIn = await this.model.authExpiration();
 
       if (expiresIn < loginBeforeAuthExp) {
@@ -41,5 +48,16 @@ export class AuthExpGuard implements CanActivate {
     }
 
     return true;
+  }
+
+  /**
+   * // helping function for parsing url string
+   * @param {string} url - url string i.e. /aa/bb/cc?query=asdf
+   * @returns string[] - array of url segments, i.e. ['aa', 'bb', 'cc']
+   */
+  private getUrlPath(url: string): string[] {
+    const tree = this.router.parseUrl(url);
+    const segments = tree.root.children[PRIMARY_OUTLET].segments;
+    return segments.map(segment => segment.path);
   }
 }
