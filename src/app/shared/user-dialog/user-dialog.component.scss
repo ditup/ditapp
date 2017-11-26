@@ -1,29 +1,21 @@
-// TODO overflow hidden, text-overflow ellipsis doesn't work as expected for .user-description
 .user-info {
-  display: block;
-  height: 128px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
   margin-bottom: 0.74em;
   position: relative;
-  white-space: nowrap; // keep avatar and profile next to each other
-}
-
-.user-profile {
-  white-space: normal; // cancel the nowrap from .user-info
 }
 
 .user-avatar {
+  flex: none;
   width: 128px;
   height: 128px;
   margin-right: 0.74em;
 }
 
-// .user-profile is a wrapper for name, username, description
-.user-profile,
-.user-avatar {
-  display: inline-block;
-  vertical-align: top;
+.user-profile {
+  flex-grow: 1;
+  height: 128px;
+  overflow-y: auto;
+  word-wrap: break-word;
 }
 
 .user-name,

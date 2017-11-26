@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
-
+import * as zxcvbn from 'zxcvbn';
 import { CustomValidators } from 'ng2-validation';
 
 import { ModelService } from '../model.service';
@@ -194,10 +194,18 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   async onSubmit() {
-
     // on submit, we want to send http request POST /users to the server
     // on success (201 response) we want to redirect to a page which is awaiting the email verification code
     const user: { username: string, email: string, password: string } = this.signupForm.value;
+
+    // before submit check that password doesn't include username
+    // and verify the strength of the password.
+    const { score: finalScore }: { score: number } = zxcvbn(user.password, [user.username]);
+
+    if (finalScore < 3) {
+      this.notify.error('Your password is too weak. Is it similar to your username?');
+      return;
+    }
 
     this.isFormDisabled = true;
 
