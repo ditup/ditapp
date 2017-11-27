@@ -5,6 +5,11 @@
 <section class="user-loc-desc-wrapper">
   <section class="user-description">
     <app-editor-output [value]="user.description"></app-editor-output>
+    <!-- no user description -->
+    <div class="no-content-info" *ngIf="user.description === '' ">
+      <span>{{user.username}} hasn't added any description yet.</span>
+    </div>
+    <!-- no user description -->
   </section>
 
   <app-location class="user-location" *ngIf="user.location" [location]="user.location"></app-location>

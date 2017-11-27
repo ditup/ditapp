@@ -18,6 +18,12 @@
     </li>
   </ul>
 
+  <!-- empty conversation -->
+  <div class="no-content-info" *ngIf="messages.length === 0">
+    <span>No conversation with {{otherUser.username}} yet.</span>
+  </div>
+  <!-- empty conversation -->
+
   <app-message-form [receiver]="otherUser" (onMessageSent)="onNewMessage($event)">
   </app-message-form>
 

@@ -135,3 +135,9 @@ input[type=button] {
     background-color: lightgray;
   }
 }
+
+/* no data yet information */
+.no-content-info {
+  color: $text-lighter;
+  font-style: italic;
+}
