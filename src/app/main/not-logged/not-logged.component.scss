@@ -118,3 +118,60 @@ a {
     background-color: $dark-color;
   }
 }
+
+.nav-back {
+  font-size: smaller;
+  color: gray;
+  text-align: right;
+  float: right;
+}
+
+
+// display screenshots and description next to each other
+// every second section has reverse order, to show image on the left
+// there is a space of 1em between image and description
+@media (min-width: 513px) {
+  .works-section {
+    display: flex;
+    justify-content: space-between;
+
+    > div {
+      flex: 1;
+
+      > p:nth-of-type(1) {
+        padding-top: 0;
+      }
+    }
+
+    &:nth-of-type(even) {
+      flex-direction: row-reverse;
+
+      p {
+        padding-left: 1em;
+      }
+    }
+
+    &:nth-of-type(odd) {
+      p {
+        padding-right: 1em;
+      }
+    }
+  }
+}
+
+// screenshots and description for mobile display
+@media (max-width: 512px) {
+  .works-section {
+    display: block;
+  }
+}
+
+.works-section {
+  text-align: justify;
+}
+
+.screenshot {
+  width: 100%;
+  border: 2px solid $light-color;
+}
+// end of displaying screenshots and info
