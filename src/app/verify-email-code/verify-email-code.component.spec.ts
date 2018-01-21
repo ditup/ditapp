@@ -24,7 +24,13 @@ class AuthStubService {
 
 class ModelStubService {
   async verifyEmail(_username: string, _code: string) {
-    return { email: 'email@example.com', token: 'aaaa.bbbb.cccc' };
+    return { email: 'email@example.com', token: 'aaaa.bbbb.cccc', isNewUser: false };
+  }
+}
+
+class ModelStubService2 {
+  async verifyEmail(_username: string, _code: string) {
+    return { email: 'email@example.com', token: 'aaaa.bbbb.cccc', isNewUser: true };
   }
 }
 
@@ -138,6 +144,43 @@ describe('VerifyEmailCodeComponent', () => {
       expect(notifyInfoSpy.calls.count()).toEqual(1);
       expect(notifyInfoSpy.calls.argsFor(0)[0]).toEqual('your email email@example.com was successfully verified');
     }));
+  });
+
+  describe('successful verification of new user', () => {
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [ VerifyEmailCodeComponent ],
+        providers: [
+          { provide: AuthService, useClass: AuthStubService },
+          { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+          HeaderControlService,
+          { provide: ModelService, useClass: ModelStubService2 },
+          NotificationsService,
+          { provide: Router, useClass: RouterStub }
+        ]
+      })
+      .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(VerifyEmailCodeComponent);
+      component = fixture.componentInstance;
+
+      const notify = fixture.debugElement.injector.get(NotificationsService);
+      notifyInfoSpy = spyOn(notify, 'info');
+      const router = fixture.debugElement.injector.get(Router);
+      navigateSpy = spyOn(router, 'navigate');
+
+      fixture.detectChanges();
+    });
+
+    it('redirect to /welcome', async(async () => {
+      await fixture.whenStable();
+
+      expect(navigateSpy.calls.count()).toEqual(1);
+      expect(navigateSpy.calls.argsFor(0)[0]).toEqual(['/welcome']);
+    }));
+
   });
 
   describe('failed verification', () => {

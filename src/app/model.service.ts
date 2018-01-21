@@ -86,7 +86,7 @@ export class ModelService {
       });
   }
 
-  async verifyEmail(username: string, code: string): Promise<{ email: string, token: string }> {
+  async verifyEmail(username: string, code: string): Promise<{ email: string, token: string, isNewUser: boolean }> {
 
     const body = {
       data: {
@@ -103,8 +103,8 @@ export class ModelService {
         .patch(`${this.baseUrl}/account`, body, { headers: this.notLoggedHeaders })
         .toPromise();
 
-      const { email, token } = response.meta;
-      return { email, token };
+      const { email, token, isNewUser } = response.meta;
+      return { email, token, isNewUser };
     } catch (e) {
       throw { status: e.status, message: 'todo error' };
     }
