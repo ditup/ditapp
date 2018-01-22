@@ -19,7 +19,7 @@ export class ContactFormComponent implements OnInit {
 
   @Input() isFormDisabled = false;
 
-
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onSubmit = new EventEmitter<{ message?: string, trust?: number, reference?: string }>();
 
   @Input()

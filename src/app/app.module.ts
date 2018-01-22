@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DndModule } from 'ng2-dnd';
@@ -177,7 +176,6 @@ import { FooterComponent } from './footer/footer.component';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpModule,
     MaterialModule, // angular material material.angular.io
     AppRoutingModule,
     DndModule.forRoot(), // drag and drop: ng2-dnd

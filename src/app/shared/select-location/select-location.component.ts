@@ -22,8 +22,8 @@ export class SelectLocationComponent implements OnInit {
 
   @Input() disabled = false;
 
-  @Output()
-  public onSubmit = new EventEmitter<[number, number]>();
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() public onSubmit = new EventEmitter<[number, number]>();
 
   constructor() { }
 

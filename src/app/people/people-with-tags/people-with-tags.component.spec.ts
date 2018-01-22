@@ -9,6 +9,7 @@ import { ModelService } from '../../model.service';
 
 @Component({ selector: 'app-select-tags', template: '' })
 class SelectTagsStubComponent {
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onSelected = new EventEmitter<Tag[]>();
 }
 

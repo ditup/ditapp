@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 
@@ -8,7 +8,7 @@ import { ManageContactComponent } from './manage-contact.component';
 import { FofComponent } from '../../fof/fof.component';
 
 class ActivatedRouteStub {
-  data = Observable.of({ contact: null, user: { username: 'other-user' } });
+  data = Observable.of({ contact: null, user: { username: 'other-user' } } as Data);
 }
 
 @Component({ selector: 'app-contact-request-send', template: '' })

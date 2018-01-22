@@ -15,6 +15,7 @@ import { UserEditLocationComponent } from './user-edit-location.component';
 class SelectLocationStubComponent {
   @Input() location;
   @Input() disabled;
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onSubmit = new EventEmitter<[number, number]>();
 }
 

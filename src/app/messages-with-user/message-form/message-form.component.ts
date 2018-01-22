@@ -12,11 +12,10 @@ import { User, Message } from '../../shared/types';
 })
 export class MessageFormComponent implements OnInit {
 
-  @Output()
-  public onMessageSent: EventEmitter<Message> = new EventEmitter();
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() public onMessageSent: EventEmitter<Message> = new EventEmitter();
 
-  @Input()
-  receiver: User;
+  @Input() receiver: User;
 
   @ViewChild('editor') editor: any;
 

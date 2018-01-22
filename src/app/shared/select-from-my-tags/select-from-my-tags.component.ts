@@ -25,8 +25,8 @@ export class SelectFromMyTagsComponent implements OnInit {
   @Input()
   public loading = false;
 
-  @Output()
-  public onSubmit = new EventEmitter<Tag[]>();
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() public onSubmit = new EventEmitter<Tag[]>();
 
   public ref: MatDialogRef<SelectFromMyTagsComponent>;
 

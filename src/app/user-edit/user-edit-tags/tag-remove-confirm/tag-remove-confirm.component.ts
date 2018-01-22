@@ -10,6 +10,8 @@ import { UserTag } from '../../../shared/types';
 export class TagRemoveConfirmComponent implements OnInit {
 
   @Input() userTag: UserTag;
+
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onConfirm = new EventEmitter<UserTag>();
 
   constructor() { }

@@ -19,8 +19,8 @@ export class SelectTagsComponent implements OnInit {
 
   public tagList = new TagList();
 
-  @Output()
-  public onSelected = new EventEmitter<Tag[]>();
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() public onSelected = new EventEmitter<Tag[]>();
 
   constructor(private auth: AuthService,
               private model: ModelService,

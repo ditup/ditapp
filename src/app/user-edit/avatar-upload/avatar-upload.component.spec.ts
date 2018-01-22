@@ -24,7 +24,9 @@ class AuthStubService {
 @Component({ selector: 'fancy-image-uploader', template: '' })
 class FancyImageUploaderStubComponent {
   @Input() options;
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onUpload = new EventEmitter<any>();
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onError = new EventEmitter<any>();
 }
 
