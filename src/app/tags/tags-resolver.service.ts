@@ -14,6 +14,16 @@ export class TagsRelatedToMyTagsResolver implements Resolve<Tag[]> {
 }
 
 @Injectable()
+export class PopularTagsResolver implements Resolve<Tag[]> {
+
+  constructor(private model: ModelService) { }
+
+  async resolve(): Promise<Tag[]> {
+    return await this.model.findPopularTags();
+  }
+}
+
+@Injectable()
 export class RandomTagsResolver implements Resolve<Tag[]> {
 
   constructor(private model: ModelService) { }

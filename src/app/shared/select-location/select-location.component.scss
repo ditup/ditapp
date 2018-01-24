@@ -18,3 +18,10 @@
   background-repeat: no-repeat;
   z-index: 1000;
 }
+
+.save-button {
+  position: absolute;
+  z-index: 999; // above map but below header menu
+  top: 16px;
+  right: 16px;
+}

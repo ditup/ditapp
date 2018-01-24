@@ -519,6 +519,19 @@ export class ModelService {
     return tags;
   }
 
+  public async findPopularTags(limit = 10): Promise<Tag[]> {
+    const headers = this.loggedHeaders;
+
+    const response: any = await this.http
+      .get(`${this.baseUrl}/tags?sort=-popularCount&page[offset]=0&page[limit]=${limit}`, { headers })
+      .toPromise();
+
+    const { data } = response;
+
+    const tags: Tag[] = data.map(tag => this.deserializeTag(tag));
+    return tags;
+  }
+
   public async readMessagesWith(username: string): Promise<Message[]> {
     const headers = this.loggedHeaders;
 
@@ -1070,7 +1083,13 @@ export class ModelService {
   }
 
   private deserializeTag(tagData: any): Tag {
-    return { tagname: tagData.id };
+    const tag: Tag = { tagname: tagData.id };
+
+    if (tagData.attributes && tagData.attributes.hasOwnProperty('popularCount')) {
+      tag.popularCount = tagData.attributes.popularCount;
+    }
+
+    return tag;
   }
 
   private deserializeUserTag(rawUserTag: any, included: any[]): UserTag {

@@ -11,6 +11,8 @@ export class TagListComponent implements OnInit {
 
   @Input() tags: Tag[] = [];
 
+  @Input() linksDisabled = false;
+
   constructor() { }
 
   ngOnInit() {

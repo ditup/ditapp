@@ -1,6 +1,10 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { TagsRelatedToMyTagsResolver, RandomTagsResolver, TagsRelatedToTagResolver } from './tags-resolver.service';
+import {
+  PopularTagsResolver,
+  TagsRelatedToMyTagsResolver,
+  RandomTagsResolver,
+  TagsRelatedToTagResolver } from './tags-resolver.service';
 
 import { ModelService } from '../model.service';
 
@@ -19,6 +23,14 @@ class ModelStubService {
   public async findRandomTags(): Promise<Tag[]> {
     return [
       { tagname: 'tag0' }
+    ];
+  }
+
+  public async findPopularTags(): Promise<Tag[]> {
+    return [
+      { tagname: 'tag1', popularCount: 21 },
+      { tagname: 'tag0', popularCount: 12 },
+      { tagname: 'tag2', popularCount: 2 }
     ];
   }
 
@@ -83,6 +95,28 @@ describe('RandomTagsResolver', () => {
     const tags = await service.resolve();
 
     expect(tags.length).toEqual(1);
+  }));
+});
+
+describe('PopularTagsResolver', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        PopularTagsResolver,
+        { provide: ModelService, useClass: ModelStubService }
+      ],
+    });
+  });
+
+  it('should be created', inject([PopularTagsResolver], (service: PopularTagsResolver) => {
+    expect(service).toBeTruthy();
+  }));
+
+  it('should resolve with some tags', inject([PopularTagsResolver], async (service: PopularTagsResolver) => {
+    expect(service).toBeTruthy();
+    const tags = await service.resolve();
+
+    expect(tags.length).toEqual(3);
   }));
 });
 

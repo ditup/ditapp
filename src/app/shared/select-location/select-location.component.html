@@ -1,6 +1,7 @@
-<button [disabled]="disabled"
-  (click)="updateLocation()">Update My Location</button>
 <div class="edit-location-container">
+  <button [disabled]="disabled"
+    class="save-button"
+  (click)="updateLocation()">Update My Location</button>
   <div #locationContainer class="edit-location-map"></div>
   <div class="edit-location-overlay"></div>
 </div>

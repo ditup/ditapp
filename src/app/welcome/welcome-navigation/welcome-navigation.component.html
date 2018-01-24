@@ -1,5 +1,9 @@
 <nav>
-  <a *ngIf="step > 1" class="link-button back-link" [routerLink]="'/welcome/'+(step-1)">Back</a>
-  <a class="link-button next-link" [ngClass]="(disabled) ? 'disabled' : ''" [routerLink]="'/welcome/'+nextStep">{{(step === steps) ? 'Finish' : 'Next'}}</a>
-  <a class="skip-link" [routerLink]="'/welcome/'+nextStep">skip</a>
+  <div>
+    <a *ngIf="step > 1" class="link-button back-link" [routerLink]="'/welcome/'+(step-1)">Back</a>
+    <a class="link-button next-link" [ngClass]="(disabled) ? 'disabled' : ''" [routerLink]="'/welcome/'+nextStep">{{(step === steps) ? 'Finish' : 'Next'}}</a>
+  </div>
+  <div>
+    <a class="skip-link" [routerLink]="'/welcome/'+nextStep">skip</a>
+  </div>
 </nav>

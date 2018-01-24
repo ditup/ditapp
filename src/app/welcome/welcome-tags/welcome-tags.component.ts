@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { Tag } from '../../shared/types';
 
@@ -9,16 +10,15 @@ import { Tag } from '../../shared/types';
 })
 export class WelcomeTagsComponent implements OnInit {
 
-  public popularTags: Tag[] = [
-   { tagname: 'popular-tag-0' },
-   { tagname: 'popular-tag-1' },
-   { tagname: 'popular-tag-2' },
-   { tagname: 'popular-tag-3' }
-  ];
+  public popularTags: Tag[];
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.data
+      .subscribe(({ popularTags }: { popularTags: Tag[] }) => {
+        this.popularTags = popularTags;
+      });
   }
 
 }

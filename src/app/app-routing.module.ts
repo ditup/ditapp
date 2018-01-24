@@ -83,7 +83,12 @@ import { TagResolver } from './tag/tag-resolver.service';
 import { ContactResolver } from './contact/contact-resolver.service';
 import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
-import { TagsRelatedToMyTagsResolver, RandomTagsResolver, TagsRelatedToTagResolver } from './tags/tags-resolver.service';
+import {
+  PopularTagsResolver,
+  TagsRelatedToMyTagsResolver,
+  RandomTagsResolver,
+  TagsRelatedToTagResolver
+} from './tags/tags-resolver.service';
 import { PeopleWithMyTagsResolver, NewPeopleResolver, PeopleWithTagResolver } from './people/people-resolver.service';
 
 // services
@@ -377,7 +382,8 @@ const routes: Routes = [
         path: '1',
         component: WelcomeTagsComponent,
         resolve: {
-          userTags: LoggedUserTagsResolver
+          userTags: LoggedUserTagsResolver,
+          popularTags: PopularTagsResolver
         }
       },
       {
@@ -430,6 +436,7 @@ const routeWrapper: Routes = [
     TagsRelatedToMyTagsResolver,
     TagsRelatedToTagResolver,
     RandomTagsResolver,
+    PopularTagsResolver,
     PeopleWithMyTagsResolver,
     PeopleWithTagResolver,
     NewPeopleResolver,

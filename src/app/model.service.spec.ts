@@ -157,6 +157,30 @@ describe('ModelService', () => {
     }));
   });
 
+  describe('findPopularTags(limit = 10)', () => {
+    it('should success', async(async () => {
+      const findPopularTagsPromise = service.findPopularTags(4);
+
+      const req = httpMock.expectOne(`${baseUrl}/tags?sort=-popularCount&page[offset]=0&page[limit]=4`);
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush({
+        data: [
+          { type: 'tags', id: 'tag3', attributes: { popularCount: 25 } },
+          { type: 'tags', id: 'tag4', attributes: { popularCount: 12 } },
+          { type: 'tags', id: 'tag6', attributes: { popularCount: 11 } },
+          { type: 'tags', id: 'tag0', attributes: { popularCount: 7 } }
+        ]
+      });
+
+      const response = await findPopularTagsPromise;
+      expect(response.length).toEqual(4);
+    }));
+  });
+
   describe('findNewUsers()', () => {
 
     it('should success', async(async () => {

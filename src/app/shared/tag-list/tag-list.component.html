@@ -1,4 +1,12 @@
-<ul>
+<ul *ngIf="!linksDisabled">
   <li *ngFor="let tag of tags"
-    [routerLink]="'/tag/' + tag.tagname">{{tag.tagname}}</li>
+    [routerLink]="'/tag/' + tag.tagname">{{tag.tagname}}
+    <span class="tag-popularity" *ngIf="tag.popularCount">{{tag.popularCount}}&times;</span>
+  </li>
+</ul>
+
+<ul *ngIf="linksDisabled">
+  <li *ngFor="let tag of tags" class="link-disabled">{{tag.tagname}}
+    <span class="tag-popularity" *ngIf="tag.popularCount">{{tag.popularCount}}&times;</span>
+  </li>
 </ul>

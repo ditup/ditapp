@@ -1,12 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 import { WelcomeTagsComponent } from './welcome-tags.component';
 import { WelcomeNavigationStubComponent } from '../../../testing/welcome-navigation-stub';
 
+class ActivatedRouteStub {
+  data = Observable.of({ popularTags: [] });
+}
+
 @Component({ selector: 'app-tag-list', template: '' })
 class TagListStubComponent {
   @Input() tags = [];
+  @Input() linksDisabled: boolean;
 }
 
 @Component({ selector: 'app-user-edit-tags', template: '' })
@@ -23,6 +30,9 @@ describe('WelcomeTagsComponent', () => {
         UserEditTagsStubComponent,
         WelcomeNavigationStubComponent,
         WelcomeTagsComponent
+      ],
+      providers: [
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub }
       ]
     })
     .compileComponents();

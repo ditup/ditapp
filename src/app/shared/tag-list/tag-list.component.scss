@@ -12,4 +12,12 @@ li {
   cursor: pointer;
   background-color: $accent;
   color: white;
+
+  &.link-disabled {
+    cursor: auto;
+  }
+}
+
+.tag-popularity {
+  font-size: small;
 }
