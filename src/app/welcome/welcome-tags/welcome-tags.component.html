@@ -1,0 +1,14 @@
+<h1>What do you care about?</h1>
+
+<section>
+  <p>Choose your tags. They represent what you care about. Tags will help you connect with similar-minded people.</p>
+</section>
+
+<section>
+  <p>Here are a few popular tags to inspire you:</p>
+  <app-tag-list [tags]="popularTags"></app-tag-list>
+</section>
+
+<app-user-edit-tags></app-user-edit-tags>
+
+<app-welcome-navigation [step]="1" [steps]="3" [disabled]="isNavigationDisabled"></app-welcome-navigation>

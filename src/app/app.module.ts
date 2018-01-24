@@ -110,6 +110,13 @@ import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comments/comment/comment.component';
 import { CommentFormComponent } from './comments/comment-form/comment-form.component';
 import { TagRelatedIdeasComponent } from './tag/tag-related-ideas/tag-related-ideas.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { WelcomeStartComponent } from './welcome/welcome-start/welcome-start.component';
+import { WelcomeTagsComponent } from './welcome/welcome-tags/welcome-tags.component';
+import { WelcomeInfoComponent } from './welcome/welcome-info/welcome-info.component';
+import { WelcomeLocationComponent } from './welcome/welcome-location/welcome-location.component';
+import { WelcomeFinishComponent } from './welcome/welcome-finish/welcome-finish.component';
+import { WelcomeNavigationComponent } from './welcome/welcome-navigation/welcome-navigation.component';
 
 @NgModule({
   declarations: [
@@ -197,7 +204,14 @@ import { TagRelatedIdeasComponent } from './tag/tag-related-ideas/tag-related-id
     CommentsComponent,
     CommentComponent,
     CommentFormComponent,
-    TagRelatedIdeasComponent
+    TagRelatedIdeasComponent,
+    WelcomeComponent,
+    WelcomeStartComponent,
+    WelcomeTagsComponent,
+    WelcomeInfoComponent,
+    WelcomeLocationComponent,
+    WelcomeFinishComponent,
+    WelcomeNavigationComponent
   ],
   imports: [
     BrowserModule,
