@@ -26,7 +26,7 @@ export class User {
 
 export class Tag {
   constructor(public tagname: string,
-              public popularCount?: number,
+              public popularityByUses?: number,
               public created?: number) {
 
     // TODO fix the creator

@@ -161,7 +161,7 @@ describe('ModelService', () => {
     it('should success', async(async () => {
       const findPopularTagsPromise = service.findPopularTags(4);
 
-      const req = httpMock.expectOne(`${baseUrl}/tags?sort=-popularCount&page[offset]=0&page[limit]=4`);
+      const req = httpMock.expectOne(`${baseUrl}/tags?sort=-popularityByUses&page[offset]=0&page[limit]=4`);
 
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('content-type')).toEqual('application/vnd.api+json');
@@ -169,10 +169,10 @@ describe('ModelService', () => {
 
       req.flush({
         data: [
-          { type: 'tags', id: 'tag3', attributes: { popularCount: 25 } },
-          { type: 'tags', id: 'tag4', attributes: { popularCount: 12 } },
-          { type: 'tags', id: 'tag6', attributes: { popularCount: 11 } },
-          { type: 'tags', id: 'tag0', attributes: { popularCount: 7 } }
+          { type: 'tags', id: 'tag3', attributes: { popularityByUses: 25 } },
+          { type: 'tags', id: 'tag4', attributes: { popularityByUses: 12 } },
+          { type: 'tags', id: 'tag6', attributes: { popularityByUses: 11 } },
+          { type: 'tags', id: 'tag0', attributes: { popularityByUses: 7 } }
         ]
       });
 

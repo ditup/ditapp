@@ -523,7 +523,7 @@ export class ModelService {
     const headers = this.loggedHeaders;
 
     const response: any = await this.http
-      .get(`${this.baseUrl}/tags?sort=-popularCount&page[offset]=0&page[limit]=${limit}`, { headers })
+      .get(`${this.baseUrl}/tags?sort=-popularityByUses&page[offset]=0&page[limit]=${limit}`, { headers })
       .toPromise();
 
     const { data } = response;
@@ -1085,8 +1085,8 @@ export class ModelService {
   private deserializeTag(tagData: any): Tag {
     const tag: Tag = { tagname: tagData.id };
 
-    if (tagData.attributes && tagData.attributes.hasOwnProperty('popularCount')) {
-      tag.popularCount = tagData.attributes.popularCount;
+    if (tagData.attributes && tagData.attributes.hasOwnProperty('popularityByUses')) {
+      tag.popularityByUses = tagData.attributes.popularityByUses;
     }
 
     return tag;

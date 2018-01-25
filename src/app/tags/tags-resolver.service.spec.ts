@@ -28,9 +28,9 @@ class ModelStubService {
 
   public async findPopularTags(): Promise<Tag[]> {
     return [
-      { tagname: 'tag1', popularCount: 21 },
-      { tagname: 'tag0', popularCount: 12 },
-      { tagname: 'tag2', popularCount: 2 }
+      { tagname: 'tag1', popularityByUses: 21 },
+      { tagname: 'tag0', popularityByUses: 12 },
+      { tagname: 'tag2', popularityByUses: 2 }
     ];
   }
 
