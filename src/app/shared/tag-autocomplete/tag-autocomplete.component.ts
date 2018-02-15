@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/map';
 
 import { Tag } from '../types';
 import { ModelService } from '../../model.service';
@@ -20,6 +22,7 @@ export class TagAutocompleteComponent implements OnInit {
 
   public tagForm: FormGroup;
   public suggestedTags: Observable<Tag[]>;
+  public formattedTagInput = '';
 
   @Output()
   public action: EventEmitter<Tag> = new EventEmitter();
@@ -36,10 +39,17 @@ export class TagAutocompleteComponent implements OnInit {
 
     // search tags when input value changes
     this.tagForm.controls['tagname'].valueChanges
+      .map(val => this.formatTagInput(val))
+      .distinctUntilChanged()
       .debounceTime(400)
       .startWith(null)
       .subscribe(val => {
         this.suggestedTags = this.model.readTagsLike(val);
+      });
+
+    this.tagForm.controls['tagname'].valueChanges
+      .subscribe(val => {
+        this.formattedTagInput = this.formatTagInput(val);
       });
   }
 
@@ -52,6 +62,12 @@ export class TagAutocompleteComponent implements OnInit {
         Validators.pattern(/^[a-z0-9]+(\-[a-z0-9]+)*$/)
       ]]
     });
+  }
+
+  private formatTagInput(input: string): string {
+    if (input === null) return '';
+
+    return input.split(/[^a-zA-Z0-9]+/).filter(val => val.length > 0).map(str => str.toLowerCase()).join('-');
   }
 
   public async onSubmit(): Promise<void> {
@@ -73,6 +89,5 @@ export class TagAutocompleteComponent implements OnInit {
     this.action.emit({ tagname });
     this.tagForm.reset();
   }
-
 
 }

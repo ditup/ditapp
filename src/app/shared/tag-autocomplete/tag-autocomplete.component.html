@@ -4,7 +4,11 @@
     formControlName="tagname">
 
   <!-- autocomplete of tags -->
-  <mat-autocomplete #auto (optionSelected)="submitFromAutosuggestion($event.option.value)">
+  <mat-autocomplete #auto
+    (optionSelected)="submitFromAutosuggestion($event.option.value)">
+    <mat-option *ngIf="formattedTagInput.length > 0" [value]="formattedTagInput">
+      <i>{{ formattedTagInput }}</i>
+    </mat-option>
     <mat-option *ngFor="let tag of suggestedTags | async" [value]="tag.tagname">
       {{ tag.tagname }}
     </mat-option>
