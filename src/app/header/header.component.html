@@ -7,19 +7,19 @@
   </a>
 
   <mat-menu #newMenu [overlapTrigger]="false">
-    <a mat-menu-item *ngIf="logged" disabled routerLink="/challenges/new">
+    <a mat-menu-item *ngIf="logged" disabled>
       <mat-icon alt="challenge">extension</mat-icon>
       Challenge
     </a>
-    <a mat-menu-item *ngIf="logged" disabled routerLink="/ideas/new">
+    <a mat-menu-item *ngIf="logged" routerLink="/ideas/create">
       <mat-icon alt="idea">lightbulb_outline</mat-icon>
       Idea
     </a>
-    <a mat-menu-item *ngIf="logged" disabled routerLink="/projects/new">
+    <a mat-menu-item *ngIf="logged" disabled>
       <mat-icon alt="project">build</mat-icon>
       Project
     </a>
-    <a mat-menu-item *ngIf="logged" disabled routerLink="/discussions/new">
+    <a mat-menu-item *ngIf="logged" disabled>
       <mat-icon alt="discussion">forum</mat-icon>
       Discussion
     </a>
@@ -38,19 +38,19 @@
       <mat-icon alt="tag">label</mat-icon>
       Tags
     </a>
-    <a mat-menu-item disabled routerLink="/challenges">
+    <a mat-menu-item disabled>
       <mat-icon alt="challenge">extension</mat-icon>
       Challenges
     </a>
-    <a mat-menu-item disabled routerLink="/ideas">
+    <a mat-menu-item routerLink="/ideas">
       <mat-icon alt="idea">lightbulb_outline</mat-icon>
       Ideas
     </a>
-    <a mat-menu-item disabled routerLink="/projects">
+    <a mat-menu-item disabled>
       <mat-icon alt="project">build</mat-icon>
       Projects
     </a>
-    <a mat-menu-item disabled routerLink="/discussions">
+    <a mat-menu-item disabled>
       <mat-icon alt="discussion">forum</mat-icon>
       Discussions
     </a>

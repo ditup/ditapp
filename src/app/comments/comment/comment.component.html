@@ -1,0 +1,75 @@
+<!-- display comment -->
+<div *ngIf="!isEditing" class="comment-wrapper">
+
+  <!-- content of the comment -->
+  <section class="comment-content">
+    <app-editor-output [value]="comment.content"></app-editor-output>
+  </section>
+
+  <section class="comment-info">
+
+    <!-- comment creator and creationtime -->
+    <app-user-small [user]="comment.creator"></app-user-small>
+    <span>{{comment.created | amTimeAgo}}</span>
+
+    <!-- action buttons -->
+
+    <!-- reply -->
+    <button [disabled]="areButtonsDisabled"
+      *ngIf="!isReaction"
+      (click)="displayReactionForm(true)">reply</button>
+
+    <!-- edit (only when logged user is creator) -->
+    <button [disabled]="areButtonsDisabled"
+      (click)="editComment(true)"
+      *ngIf="isCreatorMe">edit</button>
+
+    <!-- delete (only when logged user is creator) -->
+    <!-- when clicked, ask for confirmation -->
+    <button [disabled]="areButtonsDisabled"
+      *ngIf="isCreatorMe" (click)="askReallyDelete(true)">delete</button>
+
+    <!-- delete confirmation -->
+    <span *ngIf="isDeleteDisplayed">
+      Really delete?
+      <!-- yes -->
+      <button [disabled]="areButtonsDisabled"
+        (click)="deleteComment()">yes</button>
+      <!-- no -->
+      <button [disabled]="areButtonsDisabled"
+        (click)="askReallyDelete(false)">no</button>
+    </span>
+
+    <!-- end of action buttons -->
+  </section>
+
+  <!-- replying form -->
+  <section *ngIf="isReplying">
+    <app-comment-form
+      [isNew]="false"
+      (cancel)="displayReactionForm(false)"
+      (submitComment)="createReaction($event)"
+      submitButtonText="Reply"></app-comment-form>
+  </section>
+
+  <!-- replies -->
+  <section *ngIf="!isReaction">
+    <ul>
+      <li *ngFor="let reaction of comment.reactions">
+        <app-comment (remove)="removeReaction(reaction)" [isReaction]="true" [comment]="reaction"></app-comment>
+      </li>
+    </ul>
+  </section>
+
+</div>
+
+<!-- edit comment -->
+<div *ngIf="isEditing" class="comment-wrapper">
+  <app-comment-form
+    [disabled]="isFormDisabled"
+    [comment]="comment"
+    [isNew]="false"
+    (cancel)="editComment(false)"
+    (submitComment)="updateComment($event)"
+    submitButtonText="Save"></app-comment-form>
+</div>

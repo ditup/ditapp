@@ -1,0 +1,5 @@
+<h3>Comments</h3>
+<ul *ngFor="let comment of comments">
+  <li><app-comment [comment]="comment" (remove)="removeComment(comment)"></app-comment></li>
+</ul>
+<app-comment-form (submitComment)="submitComment($event)"></app-comment-form>

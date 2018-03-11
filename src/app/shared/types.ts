@@ -33,6 +33,14 @@ export class Tag {
   }
 }
 
+export class Idea {
+  constructor(public id: string,
+              public title: string,
+              public detail: string,
+              public creator?: User,
+              public tags?: Tag[]) { }
+}
+
 export class Contact {
   public from: User;
   public to: User;
@@ -102,6 +110,10 @@ export class TagList {
     return _.map(this.tags, tag => tag.tagname);
   }
 
+  public find(tagname: string) {
+    return this.tags.find(tag => tag.tagname === tagname);
+  }
+
   public add(tagname: string) {
     // is the tag already added to the list?
     const tagIndex: number = _.findIndex(this.tags, (_tag) => {
@@ -160,4 +172,12 @@ export class Message {
 
 export class Notification {
   constructor (public msg: string, public type?: string, public id?: string|number, public ttl?: number) {}
+}
+
+export class Comment {
+  constructor (public id: string,
+               public creator: User,
+               public created: number,
+               public content: string,
+               public reactions?: Comment[]) { }
 }

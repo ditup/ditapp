@@ -1,0 +1,34 @@
+<app-fof *ngIf="!canEdit" message="Sorry, you don't have rights to edit this idea."></app-fof>
+
+<div *ngIf="canEdit">
+
+  <div *ngIf="!editOnlyTags">
+    <h1>Update <a [routerLink]="'/idea/'+idea.id">idea</a></h1>
+    <label>Tags</label>
+    <app-idea-tag-editor [idea]="idea" [tags]="ideaTags"></app-idea-tag-editor>
+
+    <app-idea-form
+      submitButtonText="Save changes"
+      [idea]="idea"
+      [disabled]="isFormDisabled"
+      (submitIdea)="onSubmitIdea($event)"></app-idea-form>
+  </div>
+
+  <div *ngIf="editOnlyTags">
+    <h1>Add some tags to idea</h1>
+    <section>
+      Tags will help other people to find this idea. Try to choose at least 3 of them.
+    </section>
+    <app-idea-tag-editor [idea]="idea" [tags]="ideaTags"></app-idea-tag-editor>
+
+    <nav *ngIf="ideaTags.length>2">
+      <a class="link-button" [routerLink]="'/idea/'+idea.id">Finish</a>
+    </nav>
+
+    <hr>
+
+    <h3 class="idea-title">{{idea.title}}</h3>
+    <section class="idea-detail"><app-editor-output [value]="idea.detail"></app-editor-output></section>
+  </div>
+
+</div>

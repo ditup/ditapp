@@ -4,8 +4,9 @@
   <h1><mat-icon alt="tag">label</mat-icon> <span class="tagname-title">{{tag.tagname}}</span></h1>
 
   <app-tab-nav [navRoutes]="[
-      { title: 'tags', link: '/tag/' + tag.tagname },
-      { title: 'people', link: '/tag/' + tag.tagname + '/people' }
+      { title: 'people', link: '/tag/' + tag.tagname },
+      { title: 'related tags', link: '/tag/' + tag.tagname + '/tags' },
+      { title: 'ideas', link: '/tag/' + tag.tagname + '/ideas' }
     ]"></app-tab-nav>
 
   <router-outlet></router-outlet>

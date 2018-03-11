@@ -1,0 +1,7 @@
+<ul>
+  <li *ngFor="let idea of ideas">
+    <a [routerLink]="'/idea/'+idea.id"><mat-icon>lightbulb_outline</mat-icon>{{idea.title}}</a>
+  </li>
+</ul>
+
+<i *ngIf="ideas.length === 0">no ideas found</i>

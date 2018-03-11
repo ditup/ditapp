@@ -1,0 +1,18 @@
+<div class="controls-container">
+  <app-tag-autocomplete
+    placeholder="add tags"
+    (action)="onAddTag($event)"
+    (action404)="onAddNonexistentTag($event)"></app-tag-autocomplete>
+</div>
+
+<ul>
+  <li *ngFor="let tag of tags"
+    [ngClass]="'editable-tag' + ((tag.disabled) ? ' disabled' : '')">
+    {{tag.tagname}}
+    <button class="tag-remove"
+      [disabled]="tag.disabled"
+      (click)="onRemoveTag(tag)">
+      <mat-icon alt="remove">close</mat-icon>
+    </button>
+  </li>
+</ul>

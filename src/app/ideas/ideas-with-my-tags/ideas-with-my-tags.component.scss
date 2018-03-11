@@ -1,0 +1,15 @@
+@import '../../shared/styles/colors';
+
+li {
+  margin-bottom: 0.5em;
+}
+
+a {
+  display: inline-block;
+  color: $darker;
+
+  &:hover {
+    background-color: $darker;
+    color: white;
+  }
+}

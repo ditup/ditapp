@@ -28,7 +28,7 @@ export class TagsRelatedToTagResolver implements Resolve<Tag[]> {
   constructor(private model: ModelService) { }
 
   async resolve(route: ActivatedRouteSnapshot): Promise<Tag[]> {
-    const tagname: string = route.params['tagname'];
+    const tagname: string = route.parent.params['tagname'];
     return await this.model.findTagsByTags([{ tagname }]);
   }
 }

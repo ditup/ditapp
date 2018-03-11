@@ -1,0 +1,22 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="ideaForm">
+  <fieldset [disabled]="disabled">
+
+    <label for="title">Title</label>
+    <input type="text" formControlName="title">
+    <!--ul>
+      <li *ngFor="let error of formErrors.title">{{error}}</li>
+    </ul-->
+
+    <label for="detail">Detail</label>
+    <textarea placeholder="What is this idea about?"
+      appEditor [form]="ideaForm" [value]="idea.detail"
+      formControlName="detail"></textarea>
+    <!--ul>
+      <li *ngFor="let error of formErrors.detail">{{error}}</li>
+    </ul-->
+
+    <button type="submit"
+      [disabled]="!ideaForm.valid">{{submitButtonText}}</button>
+
+  </fieldset>
+</form>

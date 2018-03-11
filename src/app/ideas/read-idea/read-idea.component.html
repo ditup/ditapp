@@ -1,0 +1,20 @@
+<!--app-vote></app-vote-->
+
+<nav class="idea-navigation">
+  <a class="link-button" *ngIf="canEdit" [routerLink]="'/idea/'+idea.id+'/edit'">Edit idea</a>
+</nav>
+
+<h2 class="idea-title"><mat-icon>lightbulb_outline</mat-icon> {{idea.title}}</h2>
+<section class="idea-tags">
+  <app-tag-list [tags]="ideaTags"></app-tag-list>
+</section>
+<section class="idea-detail">
+  <app-editor-output [value]="idea.detail"></app-editor-output>
+</section>
+<section class="idea-creator">
+  <app-user-small [user]="idea.creator"></app-user-small>
+</section>
+
+<section class="idea-comments">
+  <app-comments [comments]="comments" [primary]="idea"></app-comments>
+</section>

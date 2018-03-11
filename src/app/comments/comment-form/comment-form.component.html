@@ -1,0 +1,15 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="commentForm">
+  <fieldset [disabled]="disabled">
+
+    <label *ngIf="isNew" for="content">New comment</label>
+    <textarea placeholder="Write your comment."
+      appEditor [form]="commentForm" #editor [value]="comment?.content"
+      formControlName="content"></textarea>
+
+    <button type="submit"
+      [disabled]="!commentForm.valid">{{submitButtonText}}</button>
+
+    <button *ngIf="!isNew" (click)="onClickCancel()">Cancel</button>
+
+  </fieldset>
+</form>

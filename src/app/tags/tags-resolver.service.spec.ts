@@ -102,7 +102,9 @@ describe('TagsRelatedToTagResolver', () => {
 
   it('should resolve with some tags', inject([TagsRelatedToTagResolver], async (service: TagsRelatedToTagResolver) => {
     const routeSnapshotStub: any = {
-      params: { tagname: 'tag1' }
+      parent: {
+        params: { tagname: 'tag1' }
+      }
     };
     const tags = await service.resolve(routeSnapshotStub);
 

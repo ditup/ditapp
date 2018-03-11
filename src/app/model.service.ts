@@ -11,7 +11,7 @@ import 'rxjs/add/observable/of';
 
 import * as _ from 'lodash';
 
-import { Tag, User, UserTag, Message, Contact } from './shared/types';
+import { Comment, Idea, Tag, User, UserTag, Message, Contact } from './shared/types';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -753,6 +753,250 @@ export class ModelService {
     const { data, included } = response;
 
     return this.deserializeContact(data, included);
+  }
+
+  /**
+   * Create idea
+   */
+  public async createIdea({ title, detail }: Idea): Promise<Idea> {
+    const requestBody = {
+      data: {
+        type: 'ideas',
+        attributes: {
+          title,
+          detail
+        }
+      }
+    };
+
+    const response: any = await this.http
+      .post(`${this.baseUrl}/ideas`, requestBody, { headers: this.loggedHeaders }).toPromise();
+
+    return this.deserializeIdea(response.data);
+  }
+
+  /**
+   * Read idea by id
+   */
+  public async readIdea(id: string): Promise<Idea> {
+    const response: any = await this.http
+      .get(`${this.baseUrl}/ideas/${id}`, { headers: this.loggedHeaders }).toPromise();
+
+    return this.deserializeIdea(response.data, response.included);
+  }
+
+  /**
+   * Update idea
+   */
+  public async updateIdea({ id, title, detail }: Idea): Promise<Idea> {
+    const requestBody = {
+      data: {
+        type: 'ideas',
+        id,
+        attributes: {
+          title,
+          detail
+        }
+      }
+    };
+
+    const response: any = await this.http
+      .patch(`${this.baseUrl}/ideas/${id}`, requestBody, { headers: this.loggedHeaders }).toPromise();
+
+    return this.deserializeIdea(response.data);
+  }
+
+  /**
+   * Read tags of idea
+   */
+  public async readIdeaTags(id: string): Promise<Tag[]> {
+    const response: any = await this.http
+      .get(`${this.baseUrl}/ideas/${id}/tags`, { headers: this.loggedHeaders }).toPromise();
+
+    return response.data.map(ideaTag => this.deserializeIdeaTag(ideaTag));
+  }
+
+  /**
+   * Add tag to idea
+   */
+  public async addIdeaTag(ideaId: string, tagname: string) {
+    const requestBody = {
+      data: {
+        type: 'idea-tags',
+        relationships: {
+          tag: { data: { type: 'tags', id: tagname } }
+        }
+      }
+    };
+
+    const response: any = await this.http
+      .post(`${this.baseUrl}/ideas/${ideaId}/tags`, requestBody, { headers: this.loggedHeaders }).toPromise();
+
+    return this.deserializeIdeaTag(response.data);
+  }
+
+  /**
+   * Remove tag from idea
+   */
+  public async removeIdeaTag(ideaId: string, tagname: string) {
+    await this.http
+      .delete(`${this.baseUrl}/ideas/${ideaId}/tags/${tagname}`, { headers: this.loggedHeaders }).toPromise();
+  }
+
+  /**
+   * Read list of ideas sorted by relevance to the logged user
+   * Relevance: idea has tags in common with the user
+   */
+  public async findIdeasWithMyTags(): Promise<Idea[]> {
+    const response: any = await this.http
+      .get(`${this.baseUrl}/ideas?filter[withMyTags]`, { headers: this.loggedHeaders }).toPromise();
+
+    const { data, included } = response;
+
+    return data.map(idea => this.deserializeIdea(idea, included));
+  }
+
+  /**
+   * Read list of ideas with given tags
+   */
+  public async findIdeasWithTags(tags: Tag[]): Promise<Idea[]> {
+
+    const tagnames = tags.map(tag => tag.tagname).join(',');
+
+    const response: any = await this.http
+      .get(`${this.baseUrl}/ideas?filter[withTags]=${tagnames}`, { headers: this.loggedHeaders }).toPromise();
+
+    const { data, included } = response;
+
+    return data.map(idea => this.deserializeIdea(idea, included));
+  }
+
+  /**
+   * Read list of ideas sorted from newest to oldest
+   */
+  public async findNewIdeas(): Promise<Idea[]> {
+    const response: any = await this.http
+      .get(`${this.baseUrl}/ideas?sort=-created`, { headers: this.loggedHeaders }).toPromise();
+
+    const { data, included } = response;
+
+    return data.map(idea => this.deserializeIdea(idea, included));
+  }
+
+  /**
+   * Read comments of a primary dit (i.e. idea)
+   */
+  public async readCommentsOf({ type, id }: { type: string, id: string }): Promise<Comment[]> {
+    const response: any = await this.http
+      .get(`${this.baseUrl}/${type}/${id}/comments`, { headers: this.loggedHeaders }).toPromise();
+
+    return response.data.map(comment => this.deserializeComment(comment, response.included));
+  }
+
+  /**
+   * Create comment for primary dit (i.e. idea)
+   */
+  public async addCommentTo({ type, id }: { type: string, id: string }, { content }: Comment, comments = 'comments'): Promise<Comment> {
+
+    const requestBody = {
+      data: {
+        type: comments,
+        attributes: { content }
+      }
+    };
+
+    const response: any = await this.http
+      .post(`${this.baseUrl}/${type}/${id}/${comments}`, requestBody, { headers: this.loggedHeaders }).toPromise();
+
+    return this.deserializeComment(response.data);
+  }
+
+  /**
+   * Delete comment by id
+   */
+  public async deleteComment(id: string, comments = 'comments'): Promise<void> {
+    await this.http
+      .delete(`${this.baseUrl}/${comments}/${id}`, { headers: this.loggedHeaders }).toPromise();
+  }
+
+  /**
+   * Update comment
+   */
+  public async updateComment({ id, content }: Comment, comments = 'comments'): Promise<Comment> {
+
+    const requestBody = {
+      data: {
+        type: comments,
+        id,
+        attributes: { content }
+      }
+    };
+
+    const response: any = await this.http
+      .patch(`${this.baseUrl}/${comments}/${id}`, requestBody, { headers: this.loggedHeaders }).toPromise();
+
+    return this.deserializeComment(response.data);
+  }
+
+  private deserializeIdeaTag(ideaTagData: any): Tag {
+    return this.deserializeTag(ideaTagData.relationships.tag.data);
+  }
+
+  private deserializeCommentSimple(commentData: any): Comment {
+    return {
+      id: commentData.id,
+      content: commentData.attributes.content,
+      created: commentData.attributes.created,
+      creator: { username: commentData.relationships.creator.data.id }
+    };
+  }
+
+  private deserializeComment(commentData: any, included?: any[]): Comment {
+
+    const comment = this.deserializeCommentSimple(commentData);
+
+    // format the reactions
+    if (included && _.has(commentData, 'relationships.reactions')) {
+      const reactions = commentData.relationships.reactions.data
+        .map(({ id }: { id: string }) => {
+          const includedReaction = included.find(incl => incl.type === 'reactions' && incl.id === id);
+
+          return this.deserializeCommentSimple(includedReaction);
+        });
+
+      comment.reactions = reactions;
+    }
+
+    return comment;
+  }
+
+  private deserializeIdea(ideaData: any, included?: any[]): Idea {
+
+    const { id, attributes: { title, detail }, relationships } = ideaData;
+
+    const idea: Idea = { id, title, detail };
+
+    // add creator
+    if (relationships && relationships.creator && included) {
+      const creatorUsername = relationships.creator.data.id;
+      const rawCreator = included.find(({ type, id: includedId }) => type === 'users' && includedId === creatorUsername);
+      const creator: User = this.deserializeUser(rawCreator);
+      idea.creator = creator;
+    }
+
+    // add idea's tags
+    if (relationships && relationships.ideaTags && included) {
+      // get array of ideaTags
+      const ideaTags = relationships.ideaTags.data.map(ideaTag => {
+        const ideaTagId = ideaTag.id;
+        // find each ideaTag in included
+        return included.find(({ type, id: ideaTagIdIncluded }) => type === 'idea-tags' && ideaTagIdIncluded === ideaTagId);
+      });
+
+      idea.tags = ideaTags.map(ideaTag => this.deserializeIdeaTag(ideaTag));
+    }
+
+    return idea;
   }
 
   private deserializeMessage(msgData: any, included: any = []): Message {

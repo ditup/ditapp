@@ -1,0 +1,39 @@
+@import '../styles/colors';
+
+$tag-remove-size: 24px;
+
+ul,
+li {
+  display: inline-block;
+}
+
+.editable-tag {
+  padding: 0.5em;
+  border-radius: 1em;
+  margin: 0.2em;
+  vertical-align: middle;
+  background-color: $darker;
+  color: white;
+
+  &.disabled {
+    color: gray;
+    background-color: #eee;
+  }
+
+  button {
+    width: $tag-remove-size;
+    height: $tag-remove-size;
+    border-radius: $tag-remove-size/2;
+
+    padding: 0;
+    margin: -4px;
+    vertical-align: middle;
+    text-align: center;
+
+    cursor: pointer;
+
+    color: black;
+    background-color: white;
+    line-height: 0;
+  }
+}

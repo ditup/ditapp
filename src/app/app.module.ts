@@ -96,6 +96,20 @@ import { TabNavComponent } from './shared/tab-nav/tab-nav.component';
 import { VerifyEmailCodeComponent } from './verify-email-code/verify-email-code.component';
 import { BaseComponent } from './base/base.component';
 import { FooterComponent } from './footer/footer.component';
+import { IdeaFormComponent } from './ideas/idea-form/idea-form.component';
+import { CreateIdeaComponent } from './ideas/create-idea/create-idea.component';
+import { ReadIdeaComponent } from './ideas/read-idea/read-idea.component';
+import { UpdateIdeaComponent } from './ideas/update-idea/update-idea.component';
+import { VoteComponent } from './shared/vote/vote.component';
+import { EditTagsComponent } from './shared/edit-tags/edit-tags.component';
+import { IdeasComponent } from './ideas/ideas/ideas.component';
+import { IdeasWithMyTagsComponent } from './ideas/ideas-with-my-tags/ideas-with-my-tags.component';
+import { IdeaTagEditorComponent } from './ideas/idea-tag-editor/idea-tag-editor.component';
+import { NewIdeasComponent } from './ideas/new-ideas/new-ideas.component';
+import { CommentsComponent } from './comments/comments.component';
+import { CommentComponent } from './comments/comment/comment.component';
+import { CommentFormComponent } from './comments/comment-form/comment-form.component';
+import { TagRelatedIdeasComponent } from './tag/tag-related-ideas/tag-related-ideas.component';
 
 @NgModule({
   declarations: [
@@ -169,7 +183,21 @@ import { FooterComponent } from './footer/footer.component';
     TabNavComponent,
     VerifyEmailCodeComponent,
     BaseComponent,
-    FooterComponent
+    FooterComponent,
+    IdeaFormComponent,
+    CreateIdeaComponent,
+    ReadIdeaComponent,
+    UpdateIdeaComponent,
+    VoteComponent,
+    EditTagsComponent,
+    IdeasComponent,
+    IdeasWithMyTagsComponent,
+    IdeaTagEditorComponent,
+    NewIdeasComponent,
+    CommentsComponent,
+    CommentComponent,
+    CommentFormComponent,
+    TagRelatedIdeasComponent
   ],
   imports: [
     BrowserModule,

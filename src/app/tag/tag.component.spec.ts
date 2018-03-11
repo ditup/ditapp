@@ -60,22 +60,23 @@ describe('TagComponent', () => {
     expect(foundTagname).toEqual(tag.tagname);
   });
 
-  it('should show tabs with related tags, related users, ...', () => {
+  it('should show tabs with related tags, related users, related ideas', () => {
     const { tagname } = tag;
     const tabsDebugElement = fixture.debugElement.query(By.css('app-tab-nav'));
     const tabs = tabsDebugElement.componentInstance.navRoutes;
 
-    expect(tabs.length).toEqual(2);
+    expect(tabs.length).toEqual(3);
 
     // test link urls
     const urls = tabs.map((tab: any) => tab.link);
-    expect(urls).toEqual([`/tag/${tagname}`, `/tag/${tagname}/people`]);
+    expect(urls).toEqual([`/tag/${tagname}`, `/tag/${tagname}/tags`, `/tag/${tagname}/ideas`]);
 
     // test link labels
     const labels = tabs.map((tab: any) => tab.title);
     expect(labels).toEqual([
-      'tags',
-      'people'
+      'people',
+      'related tags',
+      'ideas'
     ]);
   });
 

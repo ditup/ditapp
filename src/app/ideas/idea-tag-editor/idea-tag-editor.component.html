@@ -1,0 +1,5 @@
+<app-edit-tags
+  [tags]="ideaTags.tags"
+  (addTag)="addTag($event)"
+  (addNonexistentTag)="createAddTag($event)"
+  (removeTag)="removeTag($event)"></app-edit-tags>

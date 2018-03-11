@@ -30,6 +30,7 @@ import { ProfileComponent } from './user/profile/profile.component';
 import { TagComponent } from './tag/tag.component';
 import { TagRelatedTagsComponent } from './tag/tag-related-tags/tag-related-tags.component';
 import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-people.component';
+import { TagRelatedIdeasComponent } from './tag/tag-related-ideas/tag-related-ideas.component';
 
 // people
 import { PeopleComponent } from './people/people.component';
@@ -38,6 +39,16 @@ import { PeopleWithTagsComponent } from './people/people-with-tags/people-with-t
 import { PeopleNewComponent } from './people/people-new/people-new.component';
 import { PeopleRandomComponent } from './people/people-random/people-random.component';
 
+// ideas
+import { CreateIdeaComponent } from './ideas/create-idea/create-idea.component';
+import { ReadIdeaComponent } from './ideas/read-idea/read-idea.component';
+import { UpdateIdeaComponent } from './ideas/update-idea/update-idea.component';
+import { IdeasComponent } from './ideas/ideas/ideas.component';
+import { IdeasWithMyTagsComponent } from './ideas/ideas-with-my-tags/ideas-with-my-tags.component';
+import { NewIdeasComponent } from './ideas/new-ideas/new-ideas.component';
+import {
+  IdeaResolver, IdeaCommentsResolver, IdeaTagsResolver, IdeasWithMyTagsResolver, NewIdeasResolver, IdeasWithTagResolver
+} from './ideas/ideas-resolver.service';
 
 // tags
 import { TagsComponent } from './tags/tags.component';
@@ -154,16 +165,23 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        component: TagRelatedPeopleComponent,
+        resolve: {
+          users: PeopleWithTagResolver
+        }
+      },
+      {
+        path: 'tags',
         component: TagRelatedTagsComponent,
         resolve: {
           tags: TagsRelatedToTagResolver
         }
       },
       {
-        path: 'people',
-        component: TagRelatedPeopleComponent,
+        path: 'ideas',
+        component: TagRelatedIdeasComponent,
         resolve: {
-          users: PeopleWithTagResolver
+          ideas: IdeasWithTagResolver
         }
       }
     ]
@@ -234,6 +252,64 @@ const routes: Routes = [
         */
       },
     ]
+  },
+  {
+    path: 'ideas',
+    component: IdeasComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        component: IdeasWithMyTagsComponent,
+        resolve: {
+          ideas: IdeasWithMyTagsResolver
+        }
+      },
+      {
+        path: 'new',
+        component: NewIdeasComponent,
+        resolve: {
+          ideas: NewIdeasResolver
+        }
+      }
+    ]
+  },
+  {
+    path: 'ideas/create',
+    component: CreateIdeaComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'idea/:id/edit',
+    component: UpdateIdeaComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      idea: IdeaResolver,
+      ideaTags: IdeaTagsResolver
+    }
+  },
+  {
+    path: 'idea/:id/edit-tags',
+    component: UpdateIdeaComponent,
+    data: {
+      editOnlyTags: true
+    },
+    canActivate: [AuthGuard],
+    resolve: {
+      idea: IdeaResolver,
+      ideaTags: IdeaTagsResolver
+    }
+  },
+  {
+    path: 'idea/:id',
+    component: ReadIdeaComponent,
+    // @TODO maybe not auth guard. maybe ideas should be visible to visitors, too
+    canActivate: [AuthGuard],
+    resolve: {
+      idea: IdeaResolver,
+      ideaTags: IdeaTagsResolver,
+      comments: IdeaCommentsResolver
+    }
   },
   {
     path: 'messages',
@@ -316,6 +392,12 @@ const routeWrapper: Routes = [
     PeopleWithMyTagsResolver,
     PeopleWithTagResolver,
     NewPeopleResolver,
+    IdeaResolver,
+    IdeaTagsResolver,
+    IdeaCommentsResolver,
+    IdeasWithMyTagsResolver,
+    IdeasWithTagResolver,
+    NewIdeasResolver,
     AuthService,
     ModelService
   ]
