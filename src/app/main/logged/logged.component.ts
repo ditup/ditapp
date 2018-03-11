@@ -27,15 +27,14 @@ export class LoggedComponent implements OnInit {
   public todoOptions: any[] = [
     {
       todo: true,
-      link: '/ideas',
-      icon: 'lightbulb_outline',
-      title: 'ideas'
-    },
-    {
-      todo: true,
       link: '/challenges',
       icon: 'extension',
       title: 'challenges'
+    },
+    {
+      link: '/ideas',
+      icon: 'lightbulb_outline',
+      title: 'ideas'
     },
     {
       todo: true,
