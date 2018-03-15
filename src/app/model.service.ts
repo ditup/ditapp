@@ -908,7 +908,10 @@ export class ModelService {
     const response: any = await this.http
       .post(`${this.baseUrl}/${type}/${id}/${comments}`, requestBody, { headers: this.loggedHeaders }).toPromise();
 
-    return this.deserializeComment(response.data);
+    const newComment = this.deserializeComment(response.data);
+    // quick fix of backend which doesn't include meta votes info
+    newComment.votes = newComment.votes || { up: 0, down: 0, me: 0 };
+    return newComment;
   }
 
   /**

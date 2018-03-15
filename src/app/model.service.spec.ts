@@ -1975,6 +1975,11 @@ describe('ModelService', () => {
           relationships: {
             creator: { data: { type: 'users', id: 'user1' } },
             primary: { data: { type: 'ideas', id: '00001' } }
+          },
+          meta: {
+            votesUp: 0,
+            votesDown: 0,
+            myVote: 0
           }
         },
         included: [
@@ -1988,7 +1993,8 @@ describe('ModelService', () => {
         id: '112233',
         content: 'comment content',
         created: 1234,
-        creator: { username: 'user1' }
+        creator: { username: 'user1' },
+        votes: { up: 0, down: 0, me: 0 }
       });
     }));
   });
