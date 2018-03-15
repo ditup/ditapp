@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MomentModule } from 'angular2-moment';
 
 import { CommentComponent } from './comment.component';
+import { VoteStubComponent } from 'app/shared/vote/vote.component';
 import { CommentFormStubComponent } from '../comment-form/comment-form.component';
 import { EditorOutputComponent } from 'app/shared/editor-output/editor-output.component';
 import { UserSmallStubComponent } from 'app/shared/user-small/user-small.component';
@@ -21,7 +22,8 @@ describe('CommentComponent', () => {
         CommentComponent,
         CommentFormStubComponent,
         EditorOutputComponent,
-        UserSmallStubComponent
+        UserSmallStubComponent,
+        VoteStubComponent
       ],
       imports: [
         MomentModule

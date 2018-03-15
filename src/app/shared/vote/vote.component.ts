@@ -28,3 +28,8 @@ export class VoteComponent implements OnInit {
     this.vote.emit(-1);
   }
 }
+
+@Component({ selector: 'app-vote', template: '' })
+export class VoteStubComponent {
+  @Input() votes;
+}

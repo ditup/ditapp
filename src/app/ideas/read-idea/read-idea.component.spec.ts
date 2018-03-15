@@ -11,11 +11,7 @@ import { AuthService } from 'app/auth.service';
 import { ModelService } from 'app/model.service';
 import { UserSmallStubComponent } from 'app/shared/user-small/user-small.component';
 import { CommentsStubComponent } from 'app/comments/comments.component';
-
-@Component({ selector: 'app-vote', template: '' })
-class VoteStubComponent {
-  @Input() votes;
-}
+import { VoteStubComponent } from 'app/shared/vote/vote.component';
 
 @Component({ selector: 'app-tag-list', template: '' })
 class TagListStubComponent {

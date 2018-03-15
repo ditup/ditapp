@@ -991,6 +991,13 @@ export class ModelService {
       comment.reactions = reactions;
     }
 
+    const { meta } = commentData;
+
+    // add votes
+    if (meta && meta.hasOwnProperty('votesUp')) {
+      comment.votes = this.deserializeVotes(meta);
+    }
+
     return comment;
   }
 

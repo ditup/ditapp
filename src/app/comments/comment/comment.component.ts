@@ -105,6 +105,25 @@ export class CommentComponent implements OnInit {
     _.pullAllBy(this.comment.reactions, [reaction], 'id');
   }
 
+  async onVote(vote: number) {
+    // when vote doesn't exist, we add it
+    // when vote exists, we remove it
+    // and we update the comment.votes object
+    if (this.comment.votes.me === 0) {
+      // we add the vote
+      await this.model.vote({ to: { type: 'comments', id: this.comment.id }, value: vote });
+
+      if (vote === 1) { this.comment.votes.up += 1; }
+      if (vote === -1) { this.comment.votes.down += 1; }
+      this.comment.votes.me = vote;
+    } else {
+      // we remove the vote
+      await this.model.vote({ to: { type: 'comments', id: this.comment.id }, value: 0 });
+      if (this.comment.votes.me === 1) { this.comment.votes.up -= 1; }
+      if (this.comment.votes.me === -1) { this.comment.votes.down -= 1; }
+      this.comment.votes.me = 0;
+    }
+  }
 }
 
 /**

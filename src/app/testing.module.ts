@@ -8,13 +8,15 @@ import { CommentStubComponent } from './comments/comment/comment.component';
 import { CommentsStubComponent } from './comments/comments.component';
 import { CommentFormStubComponent } from './comments/comment-form/comment-form.component';
 import { UserSmallStubComponent } from './shared/user-small/user-small.component';
+import { VoteStubComponent } from './shared/vote/vote.component';
 
 @NgModule({
   declarations: [
     CommentStubComponent,
     CommentsStubComponent,
     CommentFormStubComponent,
-    UserSmallStubComponent
+    UserSmallStubComponent,
+    VoteStubComponent
   ]
 })
 export class TestingModule { }

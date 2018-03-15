@@ -2016,6 +2016,11 @@ describe('ModelService', () => {
             relationships: {
               creator: { data: { type: 'users', id: 'user1' } },
               primary: { data: { type: 'ideas', id: '111' } }
+            },
+            meta: {
+              votesUp: 5,
+              votesDown: 4,
+              myVote: -1
             }
           }
         ],
@@ -2030,7 +2035,8 @@ describe('ModelService', () => {
         id: '112233',
         content: 'comment content',
         created: 1234,
-        creator: { username: 'user1' }
+        creator: { username: 'user1' },
+        votes: { up: 5, down: 4, me: -1 }
       }]);
     }));
   });

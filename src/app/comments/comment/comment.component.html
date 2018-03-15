@@ -1,66 +1,75 @@
 <!-- display comment -->
 <div *ngIf="!isEditing" class="comment-wrapper">
 
-  <!-- content of the comment -->
-  <section class="comment-content">
-    <app-editor-output [value]="comment.content"></app-editor-output>
-  </section>
+  <div *ngIf="!isReaction" class="vote-wrapper">
+    <app-vote
+      [votes]="comment.votes"
+      (vote)="onVote($event)"
+    >
+    </app-vote>
+  </div>
 
-  <section class="comment-info">
+  <div class="body-wrapper">
+    <!-- content of the comment -->
+    <section class="comment-content">
+      <app-editor-output [value]="comment.content"></app-editor-output>
+    </section>
 
-    <!-- comment creator and creationtime -->
-    <app-user-small [user]="comment.creator"></app-user-small>
-    <span>{{comment.created | amTimeAgo}}</span>
+    <section class="comment-info">
 
-    <!-- action buttons -->
+      <!-- comment creator and creationtime -->
+      <app-user-small [user]="comment.creator"></app-user-small>
+      <span>{{comment.created | amTimeAgo}}</span>
 
-    <!-- reply -->
-    <button [disabled]="areButtonsDisabled"
-      *ngIf="!isReaction"
-      (click)="displayReactionForm(true)">reply</button>
+      <!-- action buttons -->
 
-    <!-- edit (only when logged user is creator) -->
-    <button [disabled]="areButtonsDisabled"
-      (click)="editComment(true)"
-      *ngIf="isCreatorMe">edit</button>
-
-    <!-- delete (only when logged user is creator) -->
-    <!-- when clicked, ask for confirmation -->
-    <button [disabled]="areButtonsDisabled"
-      *ngIf="isCreatorMe" (click)="askReallyDelete(true)">delete</button>
-
-    <!-- delete confirmation -->
-    <span *ngIf="isDeleteDisplayed">
-      Really delete?
-      <!-- yes -->
+      <!-- reply -->
       <button [disabled]="areButtonsDisabled"
-        (click)="deleteComment()">yes</button>
-      <!-- no -->
+        *ngIf="!isReaction"
+        (click)="displayReactionForm(true)">reply</button>
+
+      <!-- edit (only when logged user is creator) -->
       <button [disabled]="areButtonsDisabled"
-        (click)="askReallyDelete(false)">no</button>
-    </span>
+        (click)="editComment(true)"
+        *ngIf="isCreatorMe">edit</button>
 
-    <!-- end of action buttons -->
-  </section>
+      <!-- delete (only when logged user is creator) -->
+      <!-- when clicked, ask for confirmation -->
+      <button [disabled]="areButtonsDisabled"
+        *ngIf="isCreatorMe" (click)="askReallyDelete(true)">delete</button>
 
-  <!-- replying form -->
-  <section *ngIf="isReplying">
-    <app-comment-form
-      [isNew]="false"
-      (cancel)="displayReactionForm(false)"
-      (submitComment)="createReaction($event)"
-      submitButtonText="Reply"></app-comment-form>
-  </section>
+      <!-- delete confirmation -->
+      <span *ngIf="isDeleteDisplayed">
+        Really delete?
+        <!-- yes -->
+        <button [disabled]="areButtonsDisabled"
+          (click)="deleteComment()">yes</button>
+        <!-- no -->
+        <button [disabled]="areButtonsDisabled"
+          (click)="askReallyDelete(false)">no</button>
+      </span>
 
-  <!-- replies -->
-  <section *ngIf="!isReaction">
-    <ul>
-      <li *ngFor="let reaction of comment.reactions">
-        <app-comment (remove)="removeReaction(reaction)" [isReaction]="true" [comment]="reaction"></app-comment>
-      </li>
-    </ul>
-  </section>
+      <!-- end of action buttons -->
+    </section>
 
+    <!-- replying form -->
+    <section *ngIf="isReplying">
+      <app-comment-form
+        [isNew]="false"
+        (cancel)="displayReactionForm(false)"
+        (submitComment)="createReaction($event)"
+        submitButtonText="Reply"></app-comment-form>
+    </section>
+
+    <!-- replies -->
+    <section *ngIf="!isReaction">
+      <ul>
+        <li *ngFor="let reaction of comment.reactions">
+          <app-comment (remove)="removeReaction(reaction)" [isReaction]="true" [comment]="reaction"></app-comment>
+        </li>
+      </ul>
+    </section>
+  </div>
 </div>
 
 <!-- edit comment -->

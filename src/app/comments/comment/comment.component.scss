@@ -2,6 +2,7 @@
   margin: 0.5em 0;
   padding: 1em;
   border: 1px solid gray;
+  display: flex;
 }
 
 .comment-content {
@@ -11,4 +12,12 @@
 .comment-info {
   font-size: smaller;
   color: gray;
+}
+
+.vote-wrapper {
+  margin-right: 1em;
+}
+
+.body-wrapper {
+  flex: 1;
 }

@@ -186,5 +186,6 @@ export class Comment {
                public creator: User,
                public created: number,
                public content: string,
-               public reactions?: Comment[]) { }
+               public reactions?: Comment[],
+               public votes?: Votes) { }
 }
