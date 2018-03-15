@@ -1659,6 +1659,11 @@ describe('ModelService', () => {
                 type: 'users', id: 'test-user'
               }
             }
+          },
+          meta: {
+            votesUp: 5,
+            votesDown: 3,
+            myVote: 0
           }
         },
         included: [
@@ -1680,7 +1685,8 @@ describe('ModelService', () => {
         detail: 'test detail',
         creator: {
           username: 'test-user'
-        }
+        },
+        votes: { up: 5, down: 3, me: 0 }
       });
     }));
   });
@@ -2136,6 +2142,47 @@ describe('ModelService', () => {
         detail: 'idea detail',
         creator: { username: 'user1' }
       }]);
+    }));
+  });
+
+  describe('vote({ to: { type, id }, value })', () => {
+    it('when value is +1 or -1 add the vote', async(async () => {
+      const votePromise = service.vote({ to: { type: 'ideas', id: '123456'}, value: -1 });
+      const req = httpMock.expectOne(`${baseUrl}/ideas/123456/votes`);
+      expect(req.request.method).toEqual('POST');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+      expect(req.request.body).toEqual({
+        data: {
+          type: 'votes',
+          attributes: {
+            value: -1
+          }
+        }
+      });
+
+      req.flush({
+        data: {
+          type: 'votes',
+          id: '112233',
+          attributes: {
+            value: -1,
+            created: 1234567890
+          }
+        }
+      });
+
+      await votePromise;
+    }));
+
+    it('when value is 0 remove the vote', async(async () => {
+      const votePromise = service.vote({ to: { type: 'ideas', id: '123456'}, value: 0 });
+      const req = httpMock.expectOne(`${baseUrl}/ideas/123456/votes/vote`);
+      expect(req.request.method).toEqual('DELETE');
+      expect(req.request.headers.has('authorization')).toEqual(true);
+
+      req.flush(null);
+
+      await votePromise;
     }));
   });
 

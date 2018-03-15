@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { AuthService } from '../../auth.service';
-import { Comment, Idea, Tag } from '../../shared/types';
+import { AuthService } from 'app/auth.service';
+import { ModelService } from 'app/model.service';
+import { Comment, Idea, Tag } from 'app/shared/types';
 
 @Component({
   selector: 'app-read-idea',
@@ -18,6 +19,7 @@ export class ReadIdeaComponent implements OnInit {
 
 
   constructor(private auth: AuthService,
+              private model: ModelService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -31,4 +33,23 @@ export class ReadIdeaComponent implements OnInit {
     });
   }
 
+  async onVote(vote: number) {
+    // when vote doesn't exist, we add it
+    // when vote exists, we remove it
+    // and we update the idea.votes object
+    if (this.idea.votes.me === 0) {
+      // we add the vote
+      await this.model.vote({ to: { type: 'ideas', id: this.idea.id }, value: vote });
+
+      if (vote === 1) { this.idea.votes.up += 1; }
+      if (vote === -1) { this.idea.votes.down += 1; }
+      this.idea.votes.me = vote;
+    } else {
+      // we remove the vote
+      await this.model.vote({ to: { type: 'ideas', id: this.idea.id }, value: 0 });
+      if (this.idea.votes.me === 1) { this.idea.votes.up -= 1; }
+      if (this.idea.votes.me === -1) { this.idea.votes.down -= 1; }
+      this.idea.votes.me = 0;
+    }
+  }
 }

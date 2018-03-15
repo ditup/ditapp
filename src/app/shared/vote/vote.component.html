@@ -1,6 +1,14 @@
 <section class="votes-container">
-  <button class="vote-up"><mat-icon>keyboard_arrow_up</mat-icon></button>
-  <div class="votes-count">123</div>
-  <button class="vote-down"><mat-icon>keyboard_arrow_down</mat-icon></button>
+  <button class="vote-button vote-up"
+    [ngClass]="(votes.me === 1) ? 'button-voted' : ''"
+    (click)="onClickUp()"
+  >
+    <mat-icon>keyboard_arrow_up</mat-icon>
+  </button>
+  <div class="vote-sum">{{voteSum}}</div>
+  <button class="vote-button vote-down"
+    [ngClass]="(votes.me === -1) ? 'button-voted' : ''"
+    (click)="onClickDown()"
+  ><mat-icon>keyboard_arrow_down</mat-icon></button>
 </section>
 

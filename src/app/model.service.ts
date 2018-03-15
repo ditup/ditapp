@@ -11,7 +11,7 @@ import 'rxjs/add/observable/of';
 
 import * as _ from 'lodash';
 
-import { Comment, Idea, Tag, User, UserTag, Message, Contact } from './shared/types';
+import { Comment, Idea, Tag, User, UserTag, Message, Contact, Votes } from './shared/types';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -938,6 +938,30 @@ export class ModelService {
     return this.deserializeComment(response.data);
   }
 
+  /**
+   * Vote
+   * When we provide 0, the current vote will be deleted.
+   * Otherwise a new vote will be created.
+   */
+  public async vote({ to: { type, id }, value }: { to: { type: string, id: string }, value: number }): Promise<void> {
+
+    if (value === 0) {
+      await this.http
+        .delete(`${this.baseUrl}/${type}/${id}/votes/vote`, { headers: this.loggedHeaders }).toPromise();
+
+    } else {
+      const requestBody = {
+        data: {
+          type: 'votes',
+          attributes: { value }
+        }
+      };
+
+      await this.http
+        .post(`${this.baseUrl}/${type}/${id}/votes`, requestBody, { headers: this.loggedHeaders }).toPromise();
+    }
+  }
+
   private deserializeIdeaTag(ideaTagData: any): Tag {
     return this.deserializeTag(ideaTagData.relationships.tag.data);
   }
@@ -972,9 +996,14 @@ export class ModelService {
 
   private deserializeIdea(ideaData: any, included?: any[]): Idea {
 
-    const { id, attributes: { title, detail }, relationships } = ideaData;
+    const { id, attributes: { title, detail }, meta, relationships } = ideaData;
 
     const idea: Idea = { id, title, detail };
+
+    // add votes
+    if (meta && meta.hasOwnProperty('votesUp')) {
+      idea.votes = this.deserializeVotes(meta);
+    }
 
     // add creator
     if (relationships && relationships.creator && included) {
@@ -1089,5 +1118,13 @@ export class ModelService {
     const { story, relevance } = rawUserTag.attributes;
 
     return { user, tag, story, relevance } as UserTag;
+  }
+
+  private deserializeVotes(rawVotes: any): Votes {
+    return {
+      up: rawVotes.votesUp,
+      down: rawVotes.votesDown,
+      me: rawVotes.myVote
+    };
   }
 }

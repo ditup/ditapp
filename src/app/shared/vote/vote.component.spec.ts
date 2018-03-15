@@ -20,6 +20,11 @@ describe('VoteComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VoteComponent);
     component = fixture.componentInstance;
+    component.votes = {
+      up: 1,
+      down: 1,
+      me: 0
+    };
     fixture.detectChanges();
   });
 

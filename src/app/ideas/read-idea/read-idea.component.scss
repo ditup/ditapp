@@ -1,3 +1,22 @@
+@import "../../shared/styles/colors";
+
 .idea-navigation {
   float: right;
+}
+
+.idea-wrapper {
+  display: flex;
+}
+
+.side-container {
+  text-align: center;
+  margin-right: 0.7em;
+  margin-top: 33px;
+}
+
+.type-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: $darker;
 }

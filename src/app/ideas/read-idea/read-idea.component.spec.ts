@@ -8,11 +8,14 @@ import { ReadIdeaComponent } from './read-idea.component';
 import { EditorOutputComponent } from 'app/shared/editor-output/editor-output.component';
 import { MaterialModule } from 'app/material.module';
 import { AuthService } from 'app/auth.service';
+import { ModelService } from 'app/model.service';
 import { UserSmallStubComponent } from 'app/shared/user-small/user-small.component';
 import { CommentsStubComponent } from 'app/comments/comments.component';
 
 @Component({ selector: 'app-vote', template: '' })
-class VoteStubComponent { }
+class VoteStubComponent {
+  @Input() votes;
+}
 
 @Component({ selector: 'app-tag-list', template: '' })
 class TagListStubComponent {
@@ -22,6 +25,8 @@ class TagListStubComponent {
 class AuthStubService {
   username = 'user';
 }
+
+class ModelStubService { }
 
 class ActivatedRouteStub {
   data = Observable.of({
@@ -50,7 +55,8 @@ describe('ReadIdeaComponent', () => {
       ],
       providers: [
         { provide: AuthService, useClass: AuthStubService },
-        { provide: ActivatedRoute, useClass: ActivatedRouteStub }
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: ModelService, useClass: ModelStubService }
       ]
     })
     .compileComponents();

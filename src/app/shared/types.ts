@@ -38,7 +38,14 @@ export class Idea {
               public title: string,
               public detail: string,
               public creator?: User,
-              public tags?: Tag[]) { }
+              public tags?: Tag[],
+              public votes?: Votes) { }
+}
+
+export class Votes {
+  constructor(public up: number,
+              public down: number,
+              public me: number) { }
 }
 
 export class Contact {
