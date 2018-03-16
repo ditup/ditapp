@@ -64,6 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
      * Reloading avatar image
      */
     this.updateAvatarSubscription = this.headerControl.updateAvatar$.subscribe(() => {
+      if (!this.display) { return; }
       this.avatar.reload();
     });
   }
