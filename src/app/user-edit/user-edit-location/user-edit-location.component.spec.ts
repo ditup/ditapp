@@ -5,9 +5,9 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { ModelService } from '../../model.service';
-import { NotificationsService } from '../../notifications/notifications.service';
-import { User } from '../../shared/types';
+import { ModelService } from 'app/model.service';
+import { NotificationsService } from 'app/notifications/notifications.service';
+import { User } from 'app/shared/types';
 
 import { UserEditLocationComponent } from './user-edit-location.component';
 
@@ -16,7 +16,7 @@ class SelectLocationStubComponent {
   @Input() location;
   @Input() disabled;
   // tslint:disable-next-line:no-output-on-prefix
-  @Output() onSubmit = new EventEmitter<[number, number]>();
+  @Output() submit = new EventEmitter<[number, number]>();
 }
 
 class ActivatedRouteStub {
@@ -70,13 +70,27 @@ describe('UserEditLocationComponent', () => {
 
     // emit the location-update event
     const selectLocation = fixture.debugElement.query(By.css('app-select-location'));
-    selectLocation.componentInstance.onSubmit.emit([7, 9]);
+    selectLocation.componentInstance.submit.emit([7, 9]);
 
     // wait for model.updateUser to resolve
     tick();
 
     expect(spyNotificationsInfo.calls.count()).toEqual(1);
 
-    expect(spyNotificationsInfo.calls.first().args[0]).toEqual('Your location was updated.');
+    expect(spyNotificationsInfo.calls.first().args[0]).toEqual('Your location was saved.');
+  }));
+
+  it('should notify about success after a successful removal', fakeAsync(() => {
+
+    // emit the location-update event
+    const selectLocation = fixture.debugElement.query(By.css('app-select-location'));
+    selectLocation.componentInstance.submit.emit(null);
+
+    // wait for model.updateUser to resolve
+    tick();
+
+    expect(spyNotificationsInfo.calls.count()).toEqual(1);
+
+    expect(spyNotificationsInfo.calls.first().args[0]).toEqual('Your location was removed.');
   }));
 });

@@ -25,7 +25,10 @@ export class UserEditLocationComponent implements OnInit {
     });
   }
 
-  async updateLocation(location: [number, number]) {
+  /**
+   * Save or remove the location.
+   */
+  async updateLocation(location: [number, number]|null) {
     this.isSelectLocationDisabled = true;
 
     const updatedUser = await this.model.updateUser(this.user.username, { location });
@@ -34,7 +37,8 @@ export class UserEditLocationComponent implements OnInit {
 
     this.isSelectLocationDisabled = false;
 
-    this.notify.info('Your location was updated.');
+    // notify about success
+    const savedOrRemoved = (location) ? 'saved' : 'removed';
+    this.notify.info(`Your location was ${savedOrRemoved}.`);
   }
-
 }

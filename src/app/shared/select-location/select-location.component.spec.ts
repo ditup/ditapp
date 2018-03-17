@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectLocationComponent } from './select-location.component';
+import { NotificationsService } from 'app/notifications/notifications.service';
 
 describe('SelectLocationComponent', () => {
   let component: SelectLocationComponent;
@@ -8,7 +9,10 @@ describe('SelectLocationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectLocationComponent ]
+      declarations: [ SelectLocationComponent ],
+      providers: [
+        NotificationsService
+      ]
     })
     .compileComponents();
   }));

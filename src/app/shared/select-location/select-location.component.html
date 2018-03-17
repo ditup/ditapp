@@ -1,5 +1,11 @@
 <button [disabled]="disabled"
-  (click)="updateLocation()">Update My Location</button>
+  (click)="updateLocation()">Save Location</button>
+<button
+  *ngIf="location"
+  [disabled]="disabled"
+  (click)="removeLocation()"
+>Remove</button>
+<span class="no-location-info" *ngIf="!location">no location saved</span>
 <div class="edit-location-container">
   <div #locationContainer class="edit-location-map"></div>
   <div class="edit-location-overlay"></div>
