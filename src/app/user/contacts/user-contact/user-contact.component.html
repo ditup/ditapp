@@ -1,12 +1,39 @@
 <div class="user-contact-wrapper">
   <a routerLink="/user/{{contact.from.username}}">
     <app-avatar class="user-contact-avatar" [username]="contact.from.username"></app-avatar>
-    <div *ngIf="contact.from.givenName + contact.from.familyName" class="contact-name">{{contact.from.givenName}} {{contact.from.familyName}}</div>
-    <div class="contact-username-trust">
-      <span class="contact-username">{{contact.from.username}}</span>
-      <span *ngIf="contact.trust" class="contact-trust"[ngClass]="'contact-trust-' + contact.trust">&#9679;</span>
-    </div>
   </a>
+  <div *ngIf="contact.from.givenName + contact.from.familyName" class="contact-name">
+    <a routerLink="/user/{{contact.from.username}}">
+      {{contact.from.givenName}} {{contact.from.familyName}}
+    </a>
+  </div>
+  <div class="contact-username-trust">
+    <a routerLink="/user/{{contact.from.username}}">
+      <span class="contact-username">{{contact.from.username}}</span>
+    </a>
+    <span
+      *ngIf="contact.trust"
+      class="contact-trust"
+      [title]="trustLevelDescription"
+      [ngClass]="'contact-trust-' + contact.trust"
+    >&#9679;</span>
+    <span
+      *ngIf="contact.reference"
+      class="contact-reference-toggle"
+    >
+      <mat-icon (click)="toggleReferenceVisibility()">subject</mat-icon>
+    </span>
+  </div>
+  <div
+    class="contact-reference"
+    *ngIf="referenceVisibility">
+    <div class="reference-label">
+      reference:
+    </div>
+    <app-editor-output
+      [value]="contact.reference">
+    </app-editor-output>
+  </div>
 
   <div class="contact-actions" *ngIf="!contact.isConfirmed">
     <div><i>pending</i></div>

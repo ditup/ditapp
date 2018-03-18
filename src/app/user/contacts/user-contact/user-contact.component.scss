@@ -7,6 +7,8 @@ $trust-diameter: 1em;
 $trust-color-1: green;
 $trust-color-2: yellow;
 
+$content-padding: ($contact-width - $avatar-size)/2;
+
 .user-contact-wrapper {
   width: $contact-width;
   border: 3px solid $darker;
@@ -18,12 +20,13 @@ $trust-color-2: yellow;
   width: $avatar-size;
   height: $avatar-size;
   display: block;
-  margin: ($contact-width - $avatar-size)/2 auto;
+  margin: $content-padding auto;
 }
 
 .contact-username-trust {
   text-align: center;
   display: block;
+  padding-bottom: $content-padding;
 }
 
 .contact-trust-1 {
@@ -42,10 +45,36 @@ $trust-color-2: yellow;
   color: $trust-color-1;
 }
 
+.contact-trust {
+  cursor: default;
+}
+
 .contact-username {
   color: gray;
 }
 
 .contact-actions {
   text-align: center;
+}
+
+.contact-reference-toggle {
+  cursor: pointer;
+
+  mat-icon {
+    height: 1em;
+    width: 1em;
+    font-size: 1em;
+    vertical-align: middle;
+  }
+}
+
+.contact-reference {
+  font-size: small;
+  text-align: justify;
+  padding: 0 $content-padding $content-padding;
+
+  .reference-label {
+    color: grey;
+    font-style: italic;
+  }
 }

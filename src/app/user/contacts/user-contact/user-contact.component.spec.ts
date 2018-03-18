@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { Input, Component } from '@angular/core';
 
 import { UserContactComponent } from './user-contact.component';
-
-import { Contact } from '../../../shared/types';
-import { RouterLinkStubDirective } from '../../../../testing/router-stubs';
+import { Contact } from 'app/shared/types';
+import { EditorOutputComponent } from 'app/shared/editor-output/editor-output.component';
+import { MaterialModule } from 'app/material.module';
 
 @Component({ selector: 'app-avatar', template: '' })
 class AvatarStubComponent {
@@ -19,10 +19,14 @@ describe('UserContactComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        UserContactComponent,
-        RouterLinkStubDirective,
-        AvatarStubComponent
+        AvatarStubComponent,
+        EditorOutputComponent,
+        UserContactComponent
       ],
+      imports: [
+        MaterialModule,
+        RouterTestingModule
+      ]
     })
     .compileComponents();
   }));

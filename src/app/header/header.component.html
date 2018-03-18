@@ -78,6 +78,7 @@
   <mat-menu #userMenu xPosition="before" [overlapTrigger]="false">
     <a mat-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
     <a mat-menu-item *ngIf="logged" routerLink="/profile/edit">Edit Profile</a>
+    <a mat-menu-item *ngIf="logged" routerLink="/user/{{username}}/contacts">Contacts</a>
     <a mat-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
     <a mat-menu-item routerLink="/account">Account</a>
     <a mat-menu-item routerLink="/" (click)="logout()">Logout</a>
