@@ -3,10 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { VerifyEmailCodeComponent } from './verify-email-code.component';
 
-import { AuthService } from '../auth.service';
-import { HeaderControlService } from '../header-control.service';
-import { ModelService } from '../model.service';
-import { NotificationsService } from '../notifications/notifications.service';
+import { AuthService } from 'app/auth.service';
+import { FofComponent } from 'app/fof/fof.component';
+import { HeaderControlService } from 'app/header-control.service';
+import { ModelService } from 'app/model.service';
+import { NotificationsService } from 'app/notifications/notifications.service';
 
 class ActivatedRouteStub {
   snapshot = {
@@ -52,7 +53,10 @@ describe('VerifyEmailCodeComponent', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [ VerifyEmailCodeComponent ],
+        declarations: [
+          FofComponent,
+          VerifyEmailCodeComponent
+        ],
         providers: [
           { provide: AuthService, useValue: authStubService },
           { provide: ActivatedRoute, useClass: ActivatedRouteStub },
@@ -92,7 +96,10 @@ describe('VerifyEmailCodeComponent', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [ VerifyEmailCodeComponent ],
+        declarations: [
+          FofComponent,
+          VerifyEmailCodeComponent
+        ],
         providers: [
           { provide: AuthService, useClass: AuthStubService },
           { provide: ActivatedRoute, useClass: ActivatedRouteStub },
@@ -143,7 +150,10 @@ describe('VerifyEmailCodeComponent', () => {
   describe('failed verification', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [ VerifyEmailCodeComponent ],
+        declarations: [
+          FofComponent,
+          VerifyEmailCodeComponent
+        ],
         providers: [
           { provide: AuthService, useClass: AuthStubService },
           { provide: ActivatedRoute, useClass: ActivatedRouteStub },

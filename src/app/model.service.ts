@@ -106,7 +106,12 @@ export class ModelService {
       const { email, token } = response.meta;
       return { email, token };
     } catch (e) {
-      throw { status: e.status, message: 'todo error' };
+      throw { status: e.status, message: getErrorMessage(e) };
+    }
+
+    function getErrorMessage(e): string {
+      const error = e.error.errors[0];
+      return (error.title === 'invalid request') ? error.detail : error.title;
     }
   }
 

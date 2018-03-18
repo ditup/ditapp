@@ -16,6 +16,7 @@ export class VerifyEmailCodeComponent implements OnInit, OnDestroy {
 
   public verifying = true;
   public failed = false;
+  public errorMessage = '';
 
   // this is used to launch the after-success part of the page and hide the form
   public verificationSuccess: boolean;
@@ -68,13 +69,12 @@ export class VerifyEmailCodeComponent implements OnInit, OnDestroy {
       // on success
       // inform
       this.notify.info(`your email ${email} was successfully verified`);
-      // TODO login, when we get jwt token
       this.auth.login(token);
       // redirect to /home
       await this.router.navigate(['/']);
     } catch (e) {
       this.failed = true;
-      // TODO better error reporting
+      this.errorMessage = `verification error: ${e.message}`;
       this.notify.error(`there was an error: ${e.message}`);
     } finally {
       this.verifying = false;
