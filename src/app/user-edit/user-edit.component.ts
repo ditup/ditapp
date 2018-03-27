@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
-import { User } from '../shared/types';
+import { User } from 'app/models/user';
+import * as fromRoot from 'app/reducers';
 
 @Component({
   selector: 'app-user-edit',
@@ -10,14 +12,12 @@ import { User } from '../shared/types';
 })
 export class UserEditComponent implements OnInit {
 
-  public user: User;
+  public user$: Observable<User>;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private store: Store<fromRoot.State>) {
+    this.user$ = this.store.pipe(select('auth', 'user'));
+  }
 
   ngOnInit() {
-    this.route.data
-      .subscribe(({ user }: { user: User }) => {
-        this.user = user;
-      });
   }
 }

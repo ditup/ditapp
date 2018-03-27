@@ -1,2 +1,2 @@
-<app-not-logged *ngIf="auth.logged === false"></app-not-logged>
-<app-logged *ngIf="auth.logged === true"></app-logged>
+<app-not-logged *ngIf="(logged$ | async) === false"></app-not-logged>
+<app-logged *ngIf="(logged$ | async) === true"></app-logged>

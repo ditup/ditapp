@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/take';
 import { LatLng } from 'leaflet';
 import { api } from './config';
 
@@ -12,21 +13,30 @@ import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 
 import { Comment, Idea, Tag, User, UserTag, Message, Contact } from './shared/types';
-import { AuthService } from './auth.service';
+import * as fromRoot from 'app/reducers';
+import { Store, select } from '@ngrx/store';
 
 @Injectable()
 export class ModelService {
 
   private baseUrl = api.baseUrl;
 
+  private auth$: Observable<any>;
+
   private cache: any = {
     avatar: { }
   };
 
+  private get auth() {
+    let value;
+    this.auth$.take(1).subscribe(auth => value = auth)
+    return value;
+  }
+
   // the logged headers as expected by HttpClient
   private get loggedHeaders() {
     return this.notLoggedHeaders
-      .set('Authorization', this.auth.header);
+      .set('Authorization', `Bearer ${this.auth.token}`);
   }
 
   private get notLoggedHeaders() {
@@ -35,7 +45,11 @@ export class ModelService {
       .set('Accept', 'application/vnd.api+json');
   }
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private store: Store<fromRoot.State>) {
+    this.auth$ = this.store.pipe(
+      select('auth')
+    )
+  }
 
   async createUser({ username, email, password }: { username: string, email: string, password: string }): Promise<User> {
     const requestBody = {

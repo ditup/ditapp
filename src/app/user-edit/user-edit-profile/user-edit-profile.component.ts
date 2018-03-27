@@ -1,13 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit/*, HostListener*/ } from '@angular/core';
 
-import { pick, isEqual } from 'lodash';
-
-import { ModelService } from '../../model.service';
-import { DialogService } from '../../dialog.service';
-import { NotificationsService } from '../../notifications/notifications.service';
-import { User } from '../../shared/types';
+// import { DialogService } from '../../dialog.service';
+import { User } from 'app/models/user';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromRoot from 'app/reducers';
 
 @Component({
   selector: 'app-user-edit-profile',
@@ -16,105 +13,33 @@ import { User } from '../../shared/types';
 })
 export class UserEditProfileComponent implements OnInit {
 
-  public profileForm: FormGroup;
+  public pending: boolean;
 
-  public isFormDisabled: boolean;
+  public user$: Observable<User>;
 
-  public user: User;
+  // private profileFields = ['givenName', 'familyName', 'description'];
 
-  public formErrors = {
-    givenName: [],
-    familyName: [],
-    description: []
-  };
-
-  private validationMessages = {
-    givenName: {
-      maxlength: 'the name is too long'
-    },
-    familyName: {
-      maxlength: 'the name is too long'
-    },
-    description: {
-      maxlength: 'the description is too long'
-    }
-  };
-
-  private profileFields = ['givenName', 'familyName', 'description'];
-
-  constructor(private formBuilder: FormBuilder,
-              private model: ModelService,
-              private route: ActivatedRoute,
-              private dialog: DialogService,
-              private notify: NotificationsService) { }
-
-  async ngOnInit(): Promise<void> {
-    this.route.parent.data
-      .subscribe(({ user }: { user: User }) => {
-        this.user = user;
-        this.buildForm();
-      });
+  constructor(private store: Store<fromRoot.State>) {
+    this.user$ = this.store.pipe(select('auth', 'user'));
   }
 
-  private buildForm(): void {
-    this.profileForm = this.formBuilder.group({
-      givenName: [this.user.givenName, [
-        Validators.maxLength(128)
-      ]],
-      familyName: [this.user.familyName, [
-        Validators.maxLength(128)
-      ]],
-      description: [this.user.description, [
-        Validators.maxLength(2048)
-      ]]
-    });
-
-    this.profileForm.valueChanges.subscribe(() => {
-      this.generateErrors();
-    });
+  ngOnInit() {
   }
 
-  async onSubmit() {
-    // disable the form until the submitting is finished
-    this.isFormDisabled = true;
-
+  onSubmit({ givenName, familyName, description }) {
+    console.log('submitting', { givenName, familyName, description })
+    // TODO make it to
+    /*
     const updated = await this.model.updateUser(this.user.username, this.profileForm.value) as User;
 
     // update the user with the new values
     this.profileFields.forEach((field) => { this.user[field] = updated[field]; });
 
-    // update the form with the current values
-    await this.profileForm.setValue(pick(this.user, this.profileFields));
-    // enable the form again
-    this.isFormDisabled = false;
-
     this.notify.info('Your profile was updated.');
+    */
   }
 
-  private generateErrors(): void {
-    for (const field of this.profileFields) {
-      // get a control object for the field
-      const control = this.profileForm.get(field);
-
-      // we'll collect error messages to this variable
-      const errorMessages = [];
-
-      if (control && control.dirty && !control.valid) { // when control is invalid and dirty
-        // get the array of all validation messages belonging to the field
-        const messages = this.validationMessages[field];
-
-        // filter the validation messages for which validation didn't pass
-        for (const key in control.errors) {
-          if (control.errors.hasOwnProperty(key)) {
-            errorMessages.push(messages[key]);
-          }
-        }
-      }
-      // for every field, generate string from array of error messages
-      this.formErrors[field] = errorMessages;
-    }
-  }
-
+  /*
   @HostListener('window:beforeunload')
   canDeactivate(): Promise<boolean> | boolean {
     // Allow synchronous navigation (`true`) if no changes
@@ -130,5 +55,6 @@ export class UserEditProfileComponent implements OnInit {
     // promise which resolves to true or false when the user decides
     return this.dialog.confirm('Discard changes?');
   }
+  */
 
 }

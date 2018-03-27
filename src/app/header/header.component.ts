@@ -7,8 +7,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/timer';
 
 import { HeaderControlService } from '../header-control.service';
-import { AuthService } from '../auth.service';
 import { ModelService } from '../model.service';
+import { Store, select } from '@ngrx/store';
+import * as fromRoot from 'app/reducers';
+import * as authActions from 'app/actions/auth';
+import { State as Auth } from 'app/reducers/auth';
 
 @Component({
   selector: 'app-header',
@@ -31,32 +34,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // how many unread messages do we have?
   public messageCount: number;
 
+  public auth$: Observable<Auth>; // improve value
+
   private modelCountSubscription: Subscription;
 
   // subscriptions to observables. To be able to unsubscribe OnDestroy.
   private subscription: Subscription;
-  private authSubscription: Subscription;
   private messageTimerSubscription: Subscription;
   // subscription for reloading avatar image
   private updateAvatarSubscription: Subscription;
 
   constructor(private headerControl: HeaderControlService,
-              private auth: AuthService,
+              private store: Store<fromRoot.State>,
               private model: ModelService) {
+
+    this.auth$ = this.store.pipe(select('auth'));
 
     // subscribe to observing whether to display the header or not
     this.subscription = this.headerControl.displayChanged$.subscribe(display => {
       this.display = display;
 
-      this.subscribeToMessageCount();
-    });
-
-    // subscribe to observing the login values
-    this.authSubscription = this.auth.loggedStatusChanged$.subscribe(
-      ({logged, username, loggedUnverified }: {logged: boolean, username: string, loggedUnverified: boolean }) => {
-      this.logged = logged;
-      this.username = username;
-      this.loggedUnverified = loggedUnverified;
       this.subscribeToMessageCount();
     });
 
@@ -70,7 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // expose the logout function
   public logout() {
-    this.auth.logout();
+    this.store.dispatch(new authActions.Logout())
   }
 
   /*
@@ -78,7 +75,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * - log in
    * - display the header
    */
-
   private subscribeToMessageCount() {
     if (this.messageTimerSubscription) {
       this.messageTimerSubscription.unsubscribe();
@@ -102,19 +98,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-
-    // initialize the authentication values
-    this.logged = this.auth.logged;
-    this.loggedUnverified = this.auth.loggedUnverified;
-    this.username = this.auth.username;
-
     this.subscribeToMessageCount();
   }
 
   ngOnDestroy() {
     // avoid memory leaks by unsubscribing from observables
     this.subscription.unsubscribe();
-    this.authSubscription.unsubscribe();
     this.updateAvatarSubscription.unsubscribe();
 
     if (this.messageTimerSubscription) {

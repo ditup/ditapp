@@ -4,11 +4,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { DndModule } from 'ng2-dnd';
 import { MomentModule } from 'angular2-moment';
 import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 
 import 'hammerjs';  // for angular material
+
+// imports for store and effects
+import { reducers } from './reducers';
+import { effects } from './effects';
 
 import { GlobalErrorHandler } from './error-handler';
 
@@ -76,7 +83,9 @@ import { TagRelatedPeopleComponent } from './tag/tag-related-people/tag-related-
 import { ChangePasswordComponent } from './account/change-password/change-password.component';
 
 // services
-import { AuthService } from './auth.service';
+import { AuthService as AuthServiceOld } from './auth.service';
+import { AuthService } from './services/auth';
+import { UserService } from './services/user';
 import { DialogService } from './dialog.service';
 import { FooterControlService } from './footer/footer-control.service';
 import { HeaderControlService } from './header-control.service';
@@ -110,6 +119,8 @@ import { CommentsComponent } from './comments/comments.component';
 import { CommentComponent } from './comments/comment/comment.component';
 import { CommentFormComponent } from './comments/comment-form/comment-form.component';
 import { TagRelatedIdeasComponent } from './tag/tag-related-ideas/tag-related-ideas.component';
+import { LoginFormComponent } from './login/login-form/login-form.component';
+import { UserEditProfileFormComponent } from './user-edit/user-edit-profile/user-edit-profile-form/user-edit-profile-form.component';
 
 @NgModule({
   declarations: [
@@ -197,7 +208,9 @@ import { TagRelatedIdeasComponent } from './tag/tag-related-ideas/tag-related-id
     CommentsComponent,
     CommentComponent,
     CommentFormComponent,
-    TagRelatedIdeasComponent
+    TagRelatedIdeasComponent,
+    LoginFormComponent,
+    UserEditProfileFormComponent
   ],
   imports: [
     BrowserModule,
@@ -208,10 +221,17 @@ import { TagRelatedIdeasComponent } from './tag/tag-related-ideas/tag-related-id
     AppRoutingModule,
     DndModule.forRoot(), // drag and drop: ng2-dnd
     MomentModule,
-    FancyImageUploaderModule
+    FancyImageUploaderModule,
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25
+    })
   ],
   providers: [
     AuthService,
+    AuthServiceOld, // TODO to be eventually removed
+    UserService,
     DialogService,
     FooterControlService,
     HeaderControlService,

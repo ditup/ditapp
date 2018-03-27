@@ -1,0 +1,15 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="login-form">
+  <fieldset [disabled]="pending">
+
+    <label for="username">Username</label>
+    <input type="text"
+      formControlName="username" required>
+
+    <label for="password">Password</label>
+    <input type="password"
+      formControlName="password" required>
+
+    <button type="submit"
+      [disabled]="!loginForm.valid">Log in</button>
+  </fieldset>
+</form>

@@ -2,24 +2,24 @@
   <a routerLink="/"><img class="ditup-logo" src="/static/img/logo-white.png" alt="logo of ditup"></a>
 
   <a [matMenuTriggerFor]="newMenu"
-    *ngIf="logged">
+    *ngIf="(auth$ | async).logged">
     <mat-icon alt="create">add</mat-icon>
   </a>
 
   <mat-menu #newMenu [overlapTrigger]="false">
-    <a mat-menu-item *ngIf="logged" disabled>
+    <a mat-menu-item *ngIf="(auth$ | async).logged" disabled>
       <mat-icon alt="challenge">extension</mat-icon>
       Challenge
     </a>
-    <a mat-menu-item *ngIf="logged" routerLink="/ideas/create">
+    <a mat-menu-item *ngIf="(auth$ | async).logged" routerLink="/ideas/create">
       <mat-icon alt="idea">lightbulb_outline</mat-icon>
       Idea
     </a>
-    <a mat-menu-item *ngIf="logged" disabled>
+    <a mat-menu-item *ngIf="(auth$ | async).logged" disabled>
       <mat-icon alt="project">build</mat-icon>
       Project
     </a>
-    <a mat-menu-item *ngIf="logged" disabled>
+    <a mat-menu-item *ngIf="(auth$ | async).logged" disabled>
       <mat-icon alt="discussion">forum</mat-icon>
       Discussion
     </a>
@@ -30,7 +30,7 @@
   </a>
 
   <mat-menu #exploreMenu [overlapTrigger]="false">
-    <a mat-menu-item *ngIf="logged" routerLink="/people">
+    <a mat-menu-item *ngIf="(auth$ | async).logged" routerLink="/people">
       <mat-icon alt="people">person</mat-icon>
       People
     </a>
@@ -57,31 +57,31 @@
   </mat-menu>
 
   <a routerLink="/map"
-    *ngIf="logged">
+    *ngIf="(auth$ | async).logged">
     <mat-icon alt="map">place</mat-icon>
   </a>
 
   <span class="fill-remaining-space"></span>
 
   <a routerLink="/messages"
-    *ngIf="logged">
+    *ngIf="(auth$ | async).logged">
     <mat-icon alt="messages">mail_outline</mat-icon>
     <span *ngIf="messageCount && messageCount > 0">{{messageCount}}</span>
   </a>
 
   <a [matMenuTriggerFor]="userMenu" class="user"
-    *ngIf="logged||loggedUnverified">
-    <app-avatar [username]="username" [size]="32" class="user-avatar" #avatar></app-avatar>
-    <span class="user-name">{{username}}</span>
+    *ngIf="(auth$ | async).logged || (auth$ | async).loggedUnverified">
+    <app-avatar [username]="(auth$ | async).user?.username" [size]="32" class="user-avatar" #avatar></app-avatar>
+    <span class="user-name">{{(auth$ | async).user.username}}</span>
   </a>
 
   <mat-menu #userMenu xPosition="before" [overlapTrigger]="false">
-    <a mat-menu-item *ngIf="logged" routerLink="/user/{{username}}">Profile</a>
-    <a mat-menu-item *ngIf="logged" routerLink="/profile/edit">Edit Profile</a>
-    <a mat-menu-item *ngIf="loggedUnverified" routerLink="/user/{{username}}/verify-email">Verify Email</a>
+    <a mat-menu-item *ngIf="(auth$ | async).logged" routerLink="/user/{{(auth$ | async).user.username}}">Profile</a>
+    <a mat-menu-item *ngIf="(auth$ | async).logged" routerLink="/profile/edit">Edit Profile</a>
+    <a mat-menu-item *ngIf="(auth$ | async).loggedUnverified" routerLink="/user/{{(auth$ | async).user.username}}/verify-email">Verify Email</a>
     <a mat-menu-item routerLink="/account">Account</a>
     <a mat-menu-item routerLink="/" (click)="logout()">Logout</a>
   </mat-menu>
-  <a *ngIf="!(logged||loggedUnverified)" routerLink="/login" class="user">Login</a>
-  <a *ngIf="!(logged||loggedUnverified)" routerLink="/signup" class="user">Signup</a>
+  <a *ngIf="!((auth$ | async).logged||(auth$ | async).loggedUnverified)" routerLink="/login" class="user">Login</a>
+  <a *ngIf="!((auth$ | async).logged||(auth$ | async).loggedUnverified)" routerLink="/signup" class="user">Signup</a>
 </nav>

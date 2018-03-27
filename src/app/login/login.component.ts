@@ -1,11 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+// import { Router, ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 import { AuthService } from '../auth.service';
-import { ModelService } from '../model.service';
+// import { ModelService } from '../model.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { HeaderControlService } from '../header-control.service';
+import { Authenticate } from 'app/models/auth';
+import * as Auth from 'app/actions/auth';
+import * as fromRoot from 'app/reducers/auth';
+
 
 @Component({
   selector: 'app-login',
@@ -14,18 +18,15 @@ import { HeaderControlService } from '../header-control.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  // the form object
-  public loginForm: FormGroup;
-
   public isFormDisabled: boolean;
 
   // inject modules, services
-  constructor(private formBuilder: FormBuilder,
-              private notify: NotificationsService,
+  constructor(private notify: NotificationsService,
               private auth: AuthService,
-              private model: ModelService,
-              private router: Router,
-              private route: ActivatedRoute,
+              // private model: ModelService,
+              // private router: Router,
+              // private route: ActivatedRoute,
+              private store: Store<fromRoot.State>,
               private headerControl: HeaderControlService) { }
 
   // this will execute when the page is loaded
@@ -43,8 +44,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     // don't display the page header
     this.headerControl.display(false);
-    // initialize the reactive form
-    this.buildForm();
   }
 
   ngOnDestroy(): void {
@@ -52,21 +51,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.headerControl.display(true);
   }
 
-  buildForm(): void {
-    this.loginForm = this.formBuilder.group({
-      username: ['', [
-        Validators.required
-      ]],
-      password: ['', [
-        Validators.required
-      ]]
-    });
-  }
+  async onSubmit({ username, password }: Authenticate): Promise<void> {
 
-  async onSubmit(): Promise<void> {
+    this.store.dispatch(new Auth.Login({ username, password }));
+
+    /*
     this.isFormDisabled = true;
     this.auth.logout();
-    const { username, password }: { username: string, password: string } = this.loginForm.value as any;
 
     try {
       const token = await this.model.getJwtToken(username, password);
@@ -79,14 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       const redirectUrl = this.route.snapshot.queryParams['redirect'] || '/';
 
       await this.router.navigate([redirectUrl]);
-      this.loginForm.reset();
-
     } catch (err) {
-
-      this.loginForm.reset({
-        username,
-        password: ''
-      });
 
       this.notify.clear();
 
@@ -107,7 +91,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.isFormDisabled = false;
     }
 
-    // on submit, we want to send http request POST /users to the server
-    // on success (201 response) we want to redirect to a page which is awaiting the email verification code
+    // */
   }
 }

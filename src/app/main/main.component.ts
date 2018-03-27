@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from '../auth.service';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromRoot from 'app/reducers';
 
 @Component({
   selector: 'app-main',
@@ -9,7 +11,11 @@ import { AuthService } from '../auth.service';
 })
 export class MainComponent implements OnInit {
 
-  constructor(public auth: AuthService) { }
+  logged$: Observable<boolean>;
+
+  constructor(private store: Store<fromRoot.State>) {
+    this.logged$ = this.store.pipe(select('auth', 'logged'));
+  }
 
   ngOnInit() {
   }

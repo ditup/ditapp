@@ -5,7 +5,11 @@
 <section class="login-form-container">
 
   <h1>Log in</h1>
-  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="login-form">
+  <app-login-form
+    (submitting)="onSubmit($event)"
+    [pending]="isFormDisabled"
+  ></app-login-form>
+  <!--form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="login-form">
     <fieldset [disabled]="isFormDisabled">
 
       <label for="username">Username</label>
@@ -19,7 +23,7 @@
       <button type="submit"
         [disabled]="!loginForm.valid">Log in</button>
     </fieldset>
-  </form>
+  </form-->
 
   <nav class="related-navigation">
     <a routerLink="/reset-password">forgot password?</a>

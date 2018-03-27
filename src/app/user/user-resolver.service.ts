@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { ModelService } from '../model.service';
-import { AuthService } from '../auth.service';
+// import { AuthService } from '../auth.service';
 import { User } from '../shared/types';
+import { Store, select } from '@ngrx/store';
+import * as fromRoot from 'app/reducers';
 
 @Injectable()
 export class UserResolver implements Resolve<User> {
@@ -23,11 +25,11 @@ export class UserResolver implements Resolve<User> {
 @Injectable()
 export class LoggedUserResolver implements Resolve<User> {
 
-  constructor(private model: ModelService, private auth: AuthService) { }
+  constructor(private model: ModelService,
+              private store: Store<fromRoot.State>) { }
 
   async resolve(): Promise<User> {
-    const username = this.auth.username;
-    const user = await this.model.readUser(username);
-    return user;
+    const user = await this.store.pipe(select('auth', 'user')).take(1).toPromise()
+    return await this.model.readUser(user.username);
   }
 }

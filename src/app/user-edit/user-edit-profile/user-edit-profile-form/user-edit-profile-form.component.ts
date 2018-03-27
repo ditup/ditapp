@@ -1,0 +1,126 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { User } from 'app/models/user';
+
+@Component({
+  selector: 'app-user-edit-profile-form',
+  templateUrl: './user-edit-profile-form.component.html',
+  styleUrls: ['./user-edit-profile-form.component.scss']
+})
+export class UserEditProfileFormComponent implements OnInit {
+  public profileForm: FormGroup;
+
+  @Input() pending = false;
+  @Output() submitting = new EventEmitter<{ givenName: string, familyName: string, description: string }>();
+  @Input() user: User;
+
+  public formErrors = {
+    givenName: [],
+    familyName: [],
+    description: []
+  };
+
+  private validationMessages = {
+    givenName: {
+      maxlength: 'the name is too long'
+    },
+    familyName: {
+      maxlength: 'the name is too long'
+    },
+    description: {
+      maxlength: 'the description is too long'
+    }
+  };
+
+  private profileFields = ['givenName', 'familyName', 'description'];
+
+  constructor(private formBuilder: FormBuilder) { }
+
+  ngOnInit() {
+    this.buildForm();
+  }
+
+  private buildForm(): void {
+    this.profileForm = this.formBuilder.group({
+      givenName: [this.user.givenName, [
+        Validators.maxLength(128)
+      ]],
+      familyName: [this.user.familyName, [
+        Validators.maxLength(128)
+      ]],
+      description: [this.user.description, [
+        Validators.maxLength(2048)
+      ]]
+    });
+
+    this.profileForm.valueChanges.subscribe(() => {
+      this.generateErrors();
+    });
+  }
+
+  async onSubmit() {
+    this.submitting.emit(this.profileForm.value);
+    /*
+    const updated = await this.model.updateUser(this.user.username, this.profileForm.value) as User;
+
+    // update the user with the new values
+    this.profileFields.forEach((field) => { this.user[field] = updated[field]; });
+
+    // update the form with the current values
+    await this.profileForm.setValue(pick(this.user, this.profileFields));
+    // enable the form again
+    this.isFormDisabled = false;
+
+    this.notify.info('Your profile was updated.');
+    */
+  }
+
+  private generateErrors(): void {
+    for (const field of this.profileFields) {
+      // get a control object for the field
+      const control = this.profileForm.get(field);
+
+      // we'll collect error messages to this variable
+      const errorMessages = [];
+
+      if (control && control.dirty && !control.valid) { // when control is invalid and dirty
+        // get the array of all validation messages belonging to the field
+        const messages = this.validationMessages[field];
+
+        // filter the validation messages for which validation didn't pass
+        for (const key in control.errors) {
+          if (control.errors.hasOwnProperty(key)) {
+            errorMessages.push(messages[key]);
+          }
+        }
+      }
+      // for every field, generate string from array of error messages
+      this.formErrors[field] = errorMessages;
+    }
+  }
+
+  /*
+  @HostListener('window:beforeunload')
+  canDeactivate(): Promise<boolean> | boolean {
+    // Allow synchronous navigation (`true`) if no changes
+
+
+    const isUnchanged = isEqual(pick(this.user, this.profileFields), this.profileForm.value);
+
+    if (isUnchanged) {
+      return true;
+    }
+
+    // Otherwise ask the user with the dialog service and return its
+    // promise which resolves to true or false when the user decides
+    return this.dialog.confirm('Discard changes?');
+  }
+
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+  */
+
+}

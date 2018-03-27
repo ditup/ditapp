@@ -2,33 +2,4 @@
 <app-avatar-upload></app-avatar-upload>
 
 <h3>Change personal info</h3>
-<form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
-  <fieldset [disabled]="isFormDisabled">
-
-    <label for="givenName">Given name</label>
-    <input type="text"
-    formControlName="givenName">
-    <ul>
-      <li *ngFor="let error of formErrors.givenName">{{error}}</li>
-    </ul>
-
-    <label for="familyName">Family name</label>
-    <input type="text"
-    formControlName="familyName">
-    <ul>
-      <li *ngFor="let error of formErrors.familyName">{{error}}</li>
-    </ul>
-
-    <label for="description">Description</label>
-    <textarea placeholder="Write about yourself"
-      appEditor [form]="profileForm" [value]="user.description"
-      formControlName="description"></textarea>
-    <ul>
-      <li *ngFor="let error of formErrors.description">{{error}}</li>
-    </ul>
-
-    <button type="submit"
-      [disabled]="!profileForm.valid">Submit</button>
-
-  </fieldset>
-</form>
+<app-user-edit-profile-form [user]="user$ | async" (submitting)="onSubmit($event)" [pending]="pending"></app-user-edit-profile-form>

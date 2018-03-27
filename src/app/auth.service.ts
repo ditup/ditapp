@@ -9,6 +9,7 @@ import * as jwt from 'jsonwebtoken';
 @Injectable()
 export class AuthService {
 
+  /*** this will go to store ***/
   private loggedSource = new Subject<{
     logged: boolean,
     loggedUnverified: boolean,
@@ -16,6 +17,7 @@ export class AuthService {
 
   loggedStatusChanged$ = this.loggedSource.asObservable();
 
+  /** this can stay in auth service and will be used in effects **/
   // a wrapper of localStorage
   storage = {
     set(name: string, value: any) {
@@ -31,9 +33,12 @@ export class AuthService {
 
   constructor(/*private model: ModelService*/) { }
 
+
   logout() {
+    /** This goes to effects **/
     this.storage.clear();
 
+    /** this goes to reducers **/
     this.loggedSource.next({
       logged: this.logged,
       loggedUnverified: this.loggedUnverified,

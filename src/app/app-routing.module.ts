@@ -64,9 +64,9 @@ import { FofComponent } from './fof/fof.component';
 import { ManageContactComponent } from './contact/manage-contact/manage-contact.component';
 
 // importing guards and their dependencies
-import { AuthGuard } from './auth-guard.service';
+import { AuthGuard, AuthExpGuard } from './auth-guard.service';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
-import { AuthExpGuard } from './base/auth-exp-guard.service';
+// import { AuthExpGuard } from './base/auth-exp-guard.service';
 
 // resolvers
 import { UserResolver, LoggedUserResolver } from './user/user-resolver.service';
@@ -77,6 +77,7 @@ import { ThreadsResolver } from './messages/threads-resolver.service';
 import { MessagesResolver } from './messages-with-user/messages-resolver.service';
 import { TagsRelatedToMyTagsResolver, RandomTagsResolver, TagsRelatedToTagResolver } from './tags/tags-resolver.service';
 import { PeopleWithMyTagsResolver, NewPeopleResolver, PeopleWithTagResolver } from './people/people-resolver.service';
+// import { AuthResolver } from './resolvers/auth';
 
 // services
 import { AuthService } from './auth.service';
@@ -127,9 +128,6 @@ const routes: Routes = [
     component: UserEditComponent,
     canActivate: [AuthGuard],
     canDeactivate: [CanDeactivateGuard],
-    resolve: {
-      user: LoggedUserResolver
-    },
     children: [
       {
         path: '',
@@ -332,9 +330,6 @@ const routes: Routes = [
   {
     path: 'map',
     component: MapComponent,
-    resolve: {
-      user: LoggedUserResolver
-    },
     canActivate: [AuthGuard]
   },
   {
@@ -378,6 +373,7 @@ const routeWrapper: Routes = [
   providers: [
     AuthExpGuard,
     AuthGuard,
+    // AuthResolver,
     CanDeactivateGuard,
     UserResolver,
     LoggedUserResolver,
