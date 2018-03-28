@@ -1,2 +1,2 @@
-<app-select-location [location]="user.preciseLocation" (onSubmit)="updateLocation($event)" [disabled]="isSelectLocationDisabled">
+<app-select-location [location]="(user$ | async).preciseLocation" (onSubmit)="updateLocation($event)" [disabled]="isSelectLocationDisabled">
 </app-select-location>

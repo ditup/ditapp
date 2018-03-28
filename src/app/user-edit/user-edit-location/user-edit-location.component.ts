@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ActivatedRoute } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 
-import { User } from '../../shared/types';
-import { ModelService } from '../../model.service';
-import { NotificationsService } from '../../notifications/notifications.service';
+import { User } from 'app/models/user';
+// import { ModelService } from '../../model.service';
+// import { NotificationsService } from '../../notifications/notifications.service';
+import * as fromRoot from 'app/reducers';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-user-edit-location',
@@ -13,21 +15,22 @@ import { NotificationsService } from '../../notifications/notifications.service'
 })
 export class UserEditLocationComponent implements OnInit {
 
-  public user: User;
+  public user$: Observable<User>;
 
   public isSelectLocationDisabled = false;
 
-  constructor(private route: ActivatedRoute, private model: ModelService, private notify: NotificationsService) { }
+  constructor(private store: Store<fromRoot.State>/*, private model: ModelService, private notify: NotificationsService*/) {
+    this.user$ = this.store.pipe(select('auth', 'user'));
+  }
 
   ngOnInit() {
-    this.route.parent.data.subscribe(({ user }: { user: User }) => {
-      this.user = user;
-    });
   }
 
   async updateLocation(location: [number, number]) {
-    this.isSelectLocationDisabled = true;
+    console.log('update location', location);
+    /*this.isSelectLocationDisabled = true;*/
 
+    /*
     const updatedUser = await this.model.updateUser(this.user.username, { location });
     this.user.preciseLocation = updatedUser.preciseLocation;
     this.user.location = updatedUser.location;
@@ -35,6 +38,7 @@ export class UserEditLocationComponent implements OnInit {
     this.isSelectLocationDisabled = false;
 
     this.notify.info('Your location was updated.');
+    */
   }
 
 }

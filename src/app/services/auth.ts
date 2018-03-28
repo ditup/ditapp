@@ -6,7 +6,6 @@ import { Authenticate } from 'app/models/auth';
 import { User } from 'app/models/user';
 
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
 import 'rxjs/add/observable/of';
 import { Observable } from 'rxjs/Observable';
 import * as jwt from 'jsonwebtoken';
@@ -86,11 +85,4 @@ export class AuthService {
   clearPersistentLogin() {
     localStorage.setItem('auth', JSON.stringify(null));
   }
-
-  logout() {
-    console.log('logout service');
-    return of(true);
-  }
-
-
 }

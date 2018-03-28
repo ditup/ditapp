@@ -1,18 +1,27 @@
 import { Action } from '@ngrx/store';
-import { Authenticate } from 'app/models/auth';
 
-export enum AuthActionTypes {
-  INITIAL_LOGIN = '[Auth] Initial Login',
-  INITIAL_LOGIN_SUCCESS = '[Auth] Initial Login Success',
-  LOGIN = '[Auth] Login',
-  LOGIN_SUCCESS = '[Auth] Login Success',
-  LOGIN_FAILURE = '[Auth] Login Failure',
-  GET_SELF_DATA = '[Auth] Get Self Data', // this might not be necessary?
-  GET_SELF_DATA_SUCCESS = '[Auth] Get Self Data Success',
-  GET_SELF_DATA_FAILURE = '[Auth] Get Self Data Failure',
-  LOGOUT = '[Auth] Logout'
+export enum UserEditActionTypes {
+  USER_EDIT_PROFILE = '[User Edit] Profile',
+  USER_EDIT_PROFILE_SUCCESS = '[User Edit] Profile Success',
+  USER_EDIT_PROFILE_FAILURE = '[User Edit] Profile Failure',
+  USER_EDIT_LOCATION = '[User Edit] Location',
+  USER_EDIT_LOCATION_SUCCESS = '[User Edit] Location Success',
+  USER_EDIT_LOCATION_FAILURE = '[User Edit] Location Failure',
 }
 
+export class UserEditProfile implements Action {
+  readonly type = UserEditActionTypes.USER_EDIT_PROFILE
+}
+
+export class UserEditProfileSuccess implements Action {
+  readonly type = UserEditActionTypes.USER_EDIT_PROFILE_SUCCESS
+}
+
+export type userEditActions =
+  | UserEditProfile
+  | UserEditProfileSuccess
+
+/*
 // TODO this is not used
 export class InitialLogin implements Action {
   readonly type = AuthActionTypes.INITIAL_LOGIN
@@ -64,3 +73,4 @@ export type AuthActions =
   | LoginFailure
   | GetSelfDataSuccess
   | Logout
+  */

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { catchError, flatMap, map } from 'rxjs/operators';
 import 'rxjs/add/observable/of';
 import { AuthService } from 'app/services/auth';
+import { ModelService } from 'app/model.service';
 import * as authActions from 'app/actions/auth';
+import { loginBeforeAuthExp } from 'app/config';
 import {
   CanActivate, Router,
   ActivatedRouteSnapshot,
@@ -50,74 +52,72 @@ export class AuthGuard implements CanActivate {
         return false;
       })
     )
-
-    /*
-    if (this.auth.logged) {
-      return true;
-    }
-
-    if (this.auth.loggedUnverified) {
-      // if unverified, go to verify-email page
-      this.router.navigate([`/user/${this.auth.username}/verify-email`], {
-        queryParams: { redirect: url }
-      });
-    } else {
-    }
-
-    return Observable.of(false);
-    */
   }
 }
 
+/**
+ * With this guard we check if user was logged in (local storage).
+ * And see if the token won't expire soon.
+ * And fetch user data and login.
+ * Otherwise log out or do nothing.
+ */
 @Injectable()
 export class AuthExpGuard implements CanActivate {
 
   constructor(private store: Store<fromRoot.State>,
+              private modelService: ModelService,
               private authService: AuthService) {}
 
   canActivate(): Observable<boolean> {
     return this.persistentLogin();
   }
 
+  /**
+   * We login from local storage
+   * and if the login is persisted there, we check that it's not going to expire soon.
+   * This should happen on the application start or reload.
+   */
   private persistentLogin(): Observable<boolean> {
+    // get authentication data from local storage
     const auth = this.authService.loginFromStore()
-    this.store.dispatch(new authActions.InitialLoginSuccess(auth))
-    return Observable.of(true)
-  }
+    // if the token is stored there, let's see when it will expire
+    if (auth.token) {
+      // asking api when the token will expire
+      return this.modelService.authExpiration(auth.token).pipe(
+        // if it's going to expire soon, let's break out of the chain and log out
+        map((validityPeriod) => {
+          if (validityPeriod < loginBeforeAuthExp) {
+            throw(new Error('logout'));
+          }
 
-    /*
-    if (this.auth.logged) {
-      return true;
-    }
+          return true;
+        }),
+        // get the detailed logged user's info
+        flatMap(() => {
+          return Observable.fromPromise(this.modelService.readUser(auth.user.username, { token: auth.token }))
+        }),
+        // log in
+        map(user => {
+          const enrichedAuth = {
+            ...auth,
+            user
+          }
+          this.store.dispatch(new authActions.InitialLoginSuccess(enrichedAuth))
+          return true;
+        }),
+        // log out if logout error was thrown
+        catchError(e => {
+          if (e.message === 'logout') {
+            this.store.dispatch(new authActions.Logout({ redirect: false }))
+            return Observable.of(true);
+          }
 
-    if (this.auth.loggedUnverified) {
-      // if unverified, go to verify-email page
-      this.router.navigate([`/user/${this.auth.username}/verify-email`], {
-        queryParams: { redirect: url }
-      });
+          // throw unexpected error
+          throw e;
+        })
+      )
     } else {
+      return Observable.of(true);
     }
-
-    return Observable.of(false);
-    */
+  }
 }
-/*
-  resolve(): Observable<Auth> {
-    this.initLogin();
-
-    return this.waitForInitLogin();
-  }
-
-  initLogin(): void {
-    const auth = this.authService.loginFromStore()
-    this.store.dispatch(new authActions.InitialLoginSuccess(auth))
-  }
-
-  waitForInitLogin(): Observable<Auth> {
-    return this.store.pipe(
-      select('auth'),
-      filter((auth: Auth) => !auth.pending),
-      take(1)
-    )
-  }
-  */

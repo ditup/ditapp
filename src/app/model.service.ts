@@ -10,6 +10,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 
+import { map, catchError } from 'rxjs/operators';
+
 import * as _ from 'lodash';
 
 import { Comment, Idea, Tag, User, UserTag, Message, Contact } from './shared/types';
@@ -136,13 +138,22 @@ export class ModelService {
     return token;
   }
 
-  async authExpiration(): Promise<number> {
+  authExpiration(token?: string): Observable<number> {
+    const headers = this.notLoggedHeaders
+      .set('Authorization', `Bearer ${token || this.auth.token}`);
 
-    try {
-      const response: any = await this.http
-        .get(`${this.baseUrl}/auth/exp`, { headers: this.loggedHeaders })
-        .toPromise();
+    return this.http
+      .get(`${this.baseUrl}/auth/exp`, { headers })
+      .pipe(
+        map((response: any) => response.meta.exp as number),
+        catchError((e) => {
+          if (e.status === 403) return Observable.of(-1);
+          throw e;
+        })
+      )
 
+
+/*
       return response.meta.exp as number;
     } catch (e) {
       console.error(e);
@@ -152,12 +163,16 @@ export class ModelService {
 
       throw e;
     }
+    */
   }
 
-  async readUser(username: string): Promise<User> { // @TODO better return type
+  async readUser(username: string, options: { token: string } = { token: '' }): Promise<User> { // @TODO better return type
+
+    const headers = this.notLoggedHeaders
+      .set('Authorization', `Bearer ${options.token || this.auth.token}`);
 
     const response: any = await this.http
-      .get(`${this.baseUrl}/users/${username}`, { headers: this.loggedHeaders })
+      .get(`${this.baseUrl}/users/${username}`, { headers })
       .toPromise();
 
     return this.deserializeUser(response.data);
