@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { UserTag } from '../../../shared/types';
+import { UserTag } from 'app/models/user-tag';
 
 @Component({
   selector: 'app-tag-remove-confirm',

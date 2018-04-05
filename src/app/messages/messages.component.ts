@@ -18,7 +18,7 @@ export class MessagesComponent implements OnInit {
   constructor(private auth: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.me = new User({ username: this.auth.username });
+    this.me = { id: this.auth.username } as User;
 
     this.route.data
       .subscribe(({ threads }: { threads: Message[] }) => {

@@ -18,7 +18,7 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }: { user: User }) => {
-      this.username = user.username;
+      this.username = user.id;
       this.email = user.email;
     });
   }

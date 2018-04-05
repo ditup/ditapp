@@ -26,7 +26,7 @@ export class UserComponent implements OnInit {
              ) { }
 
   get username() {
-    return this.user.username;
+    return this.user.id;
   }
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class UserComponent implements OnInit {
 
               this.contactStatus = (isConfirmed)
                 ? 'confirmed'
-                : (me.username === creator.username)
+                : (me.id === creator.id)
                 ? 'sent'
                 : 'received';
 

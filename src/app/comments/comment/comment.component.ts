@@ -37,7 +37,7 @@ export class CommentComponent implements OnInit {
   // is logged user the creator of this comment?
   // (should we display edit, delete buttons?)
   get isCreatorMe() {
-    return this.comment.creator.username === this.auth.username;
+    return this.comment.creator.id === this.auth.username;
   }
 
   ngOnInit() {

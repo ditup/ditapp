@@ -29,6 +29,6 @@ export class PeopleWithTagResolver implements Resolve<User[]> {
 
   async resolve(route: ActivatedRouteSnapshot): Promise<User[]> {
     const tagname: string = route.parent.params['tagname'];
-    return await this.model.findUsersByTags([{ tagname }]);
+    return await this.model.findUsersByTags([{ id: tagname }]);
   }
 }

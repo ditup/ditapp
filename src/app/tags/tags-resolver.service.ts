@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { ModelService } from '../model.service';
-import { Tag } from '../shared/types';
+import { Tag } from 'app/models/tag';
 
 @Injectable()
 export class TagsRelatedToMyTagsResolver implements Resolve<Tag[]> {
@@ -29,6 +29,6 @@ export class TagsRelatedToTagResolver implements Resolve<Tag[]> {
 
   async resolve(route: ActivatedRouteSnapshot): Promise<Tag[]> {
     const tagname: string = route.parent.params['tagname'];
-    return await this.model.findTagsByTags([{ tagname }]);
+    return await this.model.findTagsByTags([{ id: tagname }]);
   }
 }

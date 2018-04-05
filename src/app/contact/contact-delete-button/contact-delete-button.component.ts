@@ -27,9 +27,9 @@ export class ContactDeleteButtonComponent implements OnInit {
   }
 
   public async deleteContact() {
-    await this.model.deleteContactWith(this.otherUser.username);
+    await this.model.deleteContactWith(this.otherUser.id);
 
-    this.notify.info(`Contact with ${this.otherUser.username} was deleted.`);
+    this.notify.info(`Contact with ${this.otherUser.id} was deleted.`);
 
     await this.router.navigate([`/user/${this.auth.username}/contacts`]);
   }

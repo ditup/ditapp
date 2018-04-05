@@ -1,37 +1,11 @@
 import * as _ from 'lodash';
 
-export class User {
+import { User } from 'app/models/user';
+export { User } from 'app/models/user';
+import { Tag } from 'app/models/tag';
+export { Tag } from 'app/models/tag';
+export { UserTag } from 'app/models/user-tag';
 
-  public username: string;
-  public givenName?: string;
-  public familyName?: string;
-  public description?: string;
-  public location?: [number, number];
-  public preciseLocation?: [number, number];
-  public userTags?: UserTag[];
-  public email?: string;
-
-  constructor({ username, givenName, familyName, description, location, preciseLocation, email }: {
-    username: string,
-    givenName?: string,
-    familyName?: string,
-    description?: string,
-    location?: [number, number],
-    preciseLocation?: [number, number],
-    email?: string
-  }) {
-    _.assign(this, { username, givenName, familyName, description, location, preciseLocation, email });
-  }
-}
-
-export class Tag {
-  constructor(public tagname: string,
-              public created?: number) {
-
-    // TODO fix the creator
-
-  }
-}
 
 export class Idea {
   constructor(public id: string,
@@ -92,13 +66,6 @@ export class Contact {
   }
 }
 
-export class UserTag {
-  constructor(public user: User,
-              public tag: Tag,
-              public story: string,
-              public relevance: number) {}
-}
-
 export class TagList {
   public tags: Tag[];
 
@@ -107,17 +74,17 @@ export class TagList {
   }
 
   public get tagnames(): string[] {
-    return _.map(this.tags, tag => tag.tagname);
+    return _.map(this.tags, tag => tag.id);
   }
 
   public find(tagname: string) {
-    return this.tags.find(tag => tag.tagname === tagname);
+    return this.tags.find(tag => tag.id === tagname);
   }
 
   public add(tagname: string) {
     // is the tag already added to the list?
     const tagIndex: number = _.findIndex(this.tags, (_tag) => {
-      return _tag.tagname === tagname;
+      return _tag.id === tagname;
     });
 
     const isAdded: boolean = (tagIndex === -1) ? false : true;
@@ -127,7 +94,7 @@ export class TagList {
     }
 
     // add tag to the list
-    const tag = new Tag(tagname);
+    const tag = { id: tagname };
     this.tags.push(tag);
 
   }
@@ -166,7 +133,7 @@ export class Message {
 
   // who is not me?
   public with(me: User): User {
-    return (me.username === this.from.username) ? this.to : this.from;
+    return (me.id === this.from.id) ? this.to : this.from;
   }
 }
 

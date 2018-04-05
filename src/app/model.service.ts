@@ -14,13 +14,14 @@ import { map, catchError } from 'rxjs/operators';
 
 import * as _ from 'lodash';
 
-import { Comment, UserTag, Contact } from './shared/types';
+import { Comment, Contact } from './shared/types';
 import * as fromRoot from 'app/reducers';
 import { Store, select } from '@ngrx/store';
 import { User } from 'app/models/user';
 import { Idea } from 'app/models/idea';
 import { Message } from 'app/models/message';
 import { Tag } from 'app/models/tag';
+import { UserTag } from 'app/models/user-tag';
 
 @Injectable()
 export class ModelService {
@@ -982,7 +983,7 @@ export class ModelService {
       id: commentData.id,
       content: commentData.attributes.content,
       created: commentData.attributes.created,
-      creator: { username: commentData.relationships.creator.data.id }
+      creator: { id: commentData.relationships.creator.data.id }
     };
   }
 
@@ -1047,14 +1048,14 @@ export class ModelService {
       return user.type === 'users' && user.id === toUsername;
     }) || msgData.relationships.to.data;
 
-    const from = this.deserializeUser(fromData);
-    const to = this.deserializeUser(toData);
+    const from = this.deserializeUser(fromData).id;
+    const to = this.deserializeUser(toData).id;
     const id = msgData.id;
     const body = msgData.attributes.body;
     const created = msgData.attributes.created;
     const read = msgData.attributes.read;
 
-    return new Message({ from, to, id, body, created, read });
+    return { from, to, id, body, created, read } as Message;
   }
 
   private deserializeContact(data: any, included: any): Contact {
@@ -1105,7 +1106,7 @@ export class ModelService {
   }
 
   private deserializeTag(tagData: any): Tag {
-    return { tagname: tagData.id };
+    return { id: tagData.id };
   }
 
   private deserializeUserTag(rawUserTag: any, included: any[]): UserTag {
@@ -1123,6 +1124,6 @@ export class ModelService {
 
     const { story, relevance } = rawUserTag.attributes;
 
-    return { user, tag, story, relevance } as UserTag;
+    return { userId: user.id, tagId: tag.id, story, relevance } as UserTag;
   }
 }

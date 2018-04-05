@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { ModelService } from '../model.service';
 // import { AuthService } from '../auth.service';
-import { User } from '../shared/types';
+import { User } from 'app/models/user';
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from 'app/reducers';
 
@@ -30,6 +30,6 @@ export class LoggedUserResolver implements Resolve<User> {
 
   async resolve(): Promise<User> {
     const user = await this.store.pipe(select(fromRoot.getAuthUser)).take(1).toPromise()
-    return await this.model.readUser(user.username);
+    return await this.model.readUser(user.id);
   }
 }

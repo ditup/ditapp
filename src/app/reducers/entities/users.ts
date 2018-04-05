@@ -12,7 +12,7 @@ export const initialState: State = {
   allIds: []
 }
 
-export function reducers(state=initialState, action): State {
+export function reducer(state=initialState, action: any): State {
   switch (action.type) {
     default:
       return state;

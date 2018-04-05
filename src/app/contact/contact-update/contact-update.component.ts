@@ -41,9 +41,9 @@ export class ContactUpdateComponent implements OnInit {
 
   public async updateContact({ trust, reference }: FormData): Promise<void> {
     this.saving = true;
-    await this.model.updateContactWith(this.to.username, { trust, reference });
-    this.notify.info(`Contact with ${this.to.username} was updated.`);
-    await this.router.navigate([`/user/${this.from.username}/contacts`]);
+    await this.model.updateContactWith(this.to.id, { trust, reference });
+    this.notify.info(`Contact with ${this.to.id} was updated.`);
+    await this.router.navigate([`/user/${this.from.id}/contacts`]);
     this.saving = false;
   }
 }

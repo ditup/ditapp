@@ -30,7 +30,7 @@ export class SelectTagsComponent implements OnInit {
   ngOnInit() {
   }
 
-  public addTagToList({ tagname }: Tag) {
+  public addTagToList({ id: tagname }: Tag) {
     try {
       // add tag to list
       this.tagList.add(tagname);
@@ -43,7 +43,7 @@ export class SelectTagsComponent implements OnInit {
 
   private addTagsToList(tags: Tag[]) {
 
-    const tagnames = tags.map(tag => tag.tagname);
+    const tagnames = tags.map(tag => tag.id);
 
     if (tagnames.length === 0) {
       return;
@@ -67,7 +67,7 @@ export class SelectTagsComponent implements OnInit {
     this.emitSelection();
   }
 
-  public removeTagFromList({ tagname }: Tag) {
+  public removeTagFromList({ id: tagname }: Tag) {
     try {
       this.tagList.remove(tagname);
       // send info to Output
@@ -107,7 +107,7 @@ export class SelectTagsComponent implements OnInit {
     this.onSelected.emit(this.tagList.tags);
   }
 
-  public complainNonexistentTag ({ tagname }: Tag) {
+  public complainNonexistentTag ({ id: tagname }: Tag) {
     this.notify.error(`Tag ${tagname} doesn't exist.`);
   }
 }

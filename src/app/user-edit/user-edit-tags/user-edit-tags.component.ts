@@ -13,7 +13,9 @@ import { TagRemoveConfirmComponent } from './tag-remove-confirm/tag-remove-confi
 import { ModelService } from '../../model.service';
 import { NotificationsService } from '../../notifications/notifications.service';
 
-import { Tag, UserTag, User } from '../../shared/types';
+import { UserTag } from 'app/models/user-tag';
+import { Tag } from 'app/models/tag';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-user-edit-tags',
@@ -80,12 +82,12 @@ export class UserEditTagsComponent implements OnInit {
   // at the end we close the dialog.
   async updateTagStory({ tagname, story }: { tagname: string, story: string }): Promise<void> {
     // update user-tag in database (send XHR to REST API)
-    const { story: updatedStory } = await this.model.updateUserTag(this.user.username, tagname, { story });
+    const { story: updatedStory } = await this.model.updateUserTag(this.user.id, tagname, { story });
     // we succeeded.
 
     // update the story in the tag object of this component
     // find the tag by tagname and update its story
-    const tag = this.tags.find((userTag: UserTag) => userTag.tag.tagname === tagname);
+    const tag = this.tags.find((userTag: UserTag) => userTag.tagId === tagname);
 
     // update with the story returned from server after update
     tag.story = updatedStory;
@@ -98,11 +100,11 @@ export class UserEditTagsComponent implements OnInit {
     this.notify.info('Your tag story was updated.');
   }
 
-  public async addTag({ tagname }: Tag): Promise<void> {
-    const { username } = this.user;
+  public async addTag({ id: tagId }: Tag): Promise<void> {
+    const { id: userId } = this.user;
     try {
-      console.log('adding tag to', username, tagname);
-      const newTag: UserTag = await this.model.addTagToUser({ username, tagname, relevance: 3, story: ''});
+      console.log('adding tag to', userId, tagId);
+      const newTag: UserTag = await this.model.addTagToUser({ username: userId, tagname: tagId, relevance: 3, story: ''});
 
       // add to the tag lists
       this.tagLists[0].push(newTag);
@@ -110,10 +112,10 @@ export class UserEditTagsComponent implements OnInit {
     } catch (e) {
       switch (e.status) {
         case 404:
-          this.notify.error(`The tag ${tagname} doesn't exist.`);
+          this.notify.error(`The tag ${tagId} doesn't exist.`);
           break;
         case 409:
-          this.notify.error(`The tag ${tagname} was already added to you.`);
+          this.notify.error(`The tag ${tagId} was already added to you.`);
           break;
         default:
           this.notify.error(`An unexpected error. ${e.message}`);
@@ -137,7 +139,7 @@ export class UserEditTagsComponent implements OnInit {
     const subscription: any = component.onConfirm.subscribe(async (userTagConfirmed: UserTag) => {
       console.log('confirming tag deletion');
       await dialogRef.close();
-      await this.removeTag(userTagConfirmed.tag.tagname);
+      await this.removeTag(userTagConfirmed.tagId);
       subscription.unsubscribe();
     });
 
@@ -148,7 +150,7 @@ export class UserEditTagsComponent implements OnInit {
     // @TODO make the state of adding and removing a tag visible
     // i.e. change color of the tag which is removed
     // add the tag immediately with different color. when saved, make the color normal
-    const { username } = this.user;
+    const { id: username } = this.user;
 
     await this.model.removeUserTag(username, tagname);
     console.log('tag successfully removed');
@@ -159,8 +161,8 @@ export class UserEditTagsComponent implements OnInit {
 
   // what to do when a tag is dropped to a new relevance
   async dropTagToRelevance({ from, userTag }: { from: number, userTag: UserTag }, to: number) {
-    const { username } = this.user;
-    const { tagname } = userTag.tag;
+    const { id: username } = this.user;
+    const { tagId } = userTag;
 
     // check if the relevance is new
     if (from === to) {
@@ -173,7 +175,7 @@ export class UserEditTagsComponent implements OnInit {
     userTag['disabled'] = true;
 
     try {
-      await this.model.updateUserTag(username, tagname, { relevance: to });
+      await this.model.updateUserTag(username, tagId, { relevance: to });
 
       // change the relevance of the tag object
       userTag.relevance = to;
@@ -185,17 +187,17 @@ export class UserEditTagsComponent implements OnInit {
       _.pull(this.tagLists[to], userTag);
 
       // notify about the error
-      this.notify.error(`Changing relevance of ${tagname} failed.`);
+      this.notify.error(`Changing relevance of ${tagId} failed.`);
     } finally {
       // enable the tag again
       delete userTag['disabled'];
     }
   }
 
-  async createAddTag({ tagname }: Tag): Promise<void> {
+  async createAddTag({ id }: Tag): Promise<void> {
     // create the tag, then add it to the user
-    await this.model.createTag({ tagname });
-    await this.addTag({ tagname });
+    await this.model.createTag({ id });
+    await this.addTag({ id });
   }
 
 }

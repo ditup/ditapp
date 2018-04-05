@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { UserTag } from '../../../shared/types';
+import { UserTag } from 'app/models/user-tag';
 
 @Component({
   selector: 'app-tag-story-form',
@@ -62,7 +62,7 @@ export class TagStoryFormComponent implements OnInit {
     this.isFormDisabled = true;
 
     // collect the data
-    const tagname = this.userTag.tag.tagname;
+    const tagname = this.userTag.tagId;
     const story = this.updateTagStoryForm.value.story;
 
     // process the data

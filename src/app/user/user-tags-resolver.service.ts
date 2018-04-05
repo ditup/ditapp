@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
-import { UserTag } from '../shared/types';
+import { UserTag } from 'app/models/user-tag';
 
 @Injectable()
 export class LoggedUserTagsResolver implements Resolve<UserTag[]> {

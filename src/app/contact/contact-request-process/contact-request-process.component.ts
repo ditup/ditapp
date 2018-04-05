@@ -35,11 +35,11 @@ export class ContactRequestProcessComponent implements OnInit {
   async confirmContact({ trust, reference }: any): Promise<void> {
     this.saving = true;
 
-    await this.model.confirmContactRequestFrom(this.from.username, { trust, reference });
+    await this.model.confirmContactRequestFrom(this.from.id, { trust, reference });
 
-    this.notify.info(`Contact with ${this.from.username} was confirmed.`);
+    this.notify.info(`Contact with ${this.from.id} was confirmed.`);
 
-    await this.router.navigate([`/user/${this.to.username}/contacts`]);
+    await this.router.navigate([`/user/${this.to.id}/contacts`]);
     this.saving = false;
   }
 

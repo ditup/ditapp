@@ -3,7 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ModelService } from '../../model.service';
 
-import { User, Message } from '../../shared/types';
+import { User } from 'app/models/user';
+import { Message } from 'app/models/message';
 
 @Component({
   selector: 'app-message-form',
@@ -94,7 +95,7 @@ export class MessageFormComponent implements OnInit {
 
     const formValue: { body: string } = this.messageForm.value;
 
-    const message: Message = await this.model.sendMessage(this.receiver.username, formValue);
+    const message: Message = await this.model.sendMessage(this.receiver.id, formValue);
 
     this.messageForm.reset();
     // empty the contenteditable (medium-editor) field

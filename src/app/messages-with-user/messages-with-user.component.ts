@@ -4,7 +4,9 @@ import { find } from 'lodash';
 
 import { FooterControlService } from '../footer/footer-control.service';
 import { ModelService } from '../model.service';
-import { Message, User } from '../shared/types';
+
+import { Message } from 'app/models/message';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-messages-with-user',
@@ -42,7 +44,7 @@ export class MessagesWithUserComponent implements OnInit, AfterViewInit, OnDestr
       if (messages.length > 0) {
         // find the last message i received
         const lastUnreadMsg = find(messages, (msg: Message) => {
-          return msg.from.username === this.otherUser.username && !msg.read;
+          return msg.from === this.otherUser.id && !msg.read;
         });
 
         if (lastUnreadMsg) {

@@ -9,7 +9,7 @@ import { Tag } from '../types';
 })
 export class EditTagsComponent implements OnInit {
 
-  @Input() tags: Tag[] = [{ tagname: 'tag1' }];
+  @Input() tags: Tag[] = [{ id: 'tag1' }];
   @Output() addTag = new EventEmitter<Tag>();
   @Output() addNonexistentTag = new EventEmitter<Tag>();
   @Output() removeTag = new EventEmitter<Tag>();

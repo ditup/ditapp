@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { ModelService } from '../model.service';
-import { Comment, Tag } from '../shared/types';
+import { Comment } from '../shared/types';
 import { Idea } from 'app/models/idea';
+import { Tag } from 'app/models/tag';
 
 @Injectable()
 export class IdeaResolver implements Resolve<Idea> {
@@ -64,6 +65,6 @@ export class IdeasWithTagResolver implements Resolve<Idea[]> {
 
   async resolve(route: ActivatedRouteSnapshot): Promise<Idea[]> {
     const tagname: string = route.parent.params['tagname'];
-    return await this.model.findIdeasWithTags([{ tagname }]);
+    return await this.model.findIdeasWithTags([{ id: tagname }]);
   }
 }

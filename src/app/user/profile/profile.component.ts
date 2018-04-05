@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ModelService } from '../../model.service';
 import { AuthService } from '../../auth.service';
-import { UserTag, User } from '../../shared/types';
+import {  User } from 'app/models/user';
+import { UserTag } from 'app/models/user-tag';
 
 @Component({
   selector: 'app-profile',
@@ -26,7 +27,7 @@ export class ProfileComponent implements OnInit {
 
     this.route.data
       .subscribe(async ({ user }: { user: User }) => {
-        this.username = user.username;
+        this.username = user.id;
         this.user = user;
         this.isMe = this.username === this.auth.username;
 

@@ -16,7 +16,7 @@ export interface State {
 
 export const reducers: ActionReducerMap<State> = {
   auth: fromAuth.reducer,
-  entities: fromEntities.reducer,
+  entities: fromEntities.reducers,
   appNotifications: fromAppNotify.reducer
 }
 

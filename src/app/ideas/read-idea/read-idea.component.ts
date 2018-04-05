@@ -27,7 +27,7 @@ export class ReadIdeaComponent implements OnInit {
       this.ideaTags = ideaTags;
       this.comments = comments;
       // check whether user can edit the idea
-      this.canEdit = this.auth.username === this.idea.creator.username;
+      this.canEdit = this.auth.username === this.idea.creator.id;
     });
   }
 

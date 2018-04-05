@@ -61,16 +61,16 @@ export class TagAutocompleteComponent implements OnInit {
     const exists = await this.model.tagExists(tagname);
 
     if (exists) {
-      this.action.emit({ tagname });
+      this.action.emit({ id: tagname });
     } else {
-      this.action404.emit({ tagname });
+      this.action404.emit({ id: tagname });
     }
 
     this.tagForm.reset();
   }
 
   public submitFromAutosuggestion(tagname: string) {
-    this.action.emit({ tagname });
+    this.action.emit({ id: tagname });
     this.tagForm.reset();
   }
 

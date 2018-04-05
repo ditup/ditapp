@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { map, tap, flatMap, switchMap, delay, filter } from 'rxjs/operators';
+import { map, delay, filter } from 'rxjs/operators';
 
 
 import { AppNotifyActionTypes, AddAppNotification, RemoveAppNotification, Notify } from 'app/actions/app-notify';

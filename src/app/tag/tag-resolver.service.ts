@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { ModelService } from '../model.service';
-import { Tag } from '../shared/types';
+import { Tag } from 'app/models/tag';
 
 @Injectable()
 export class TagResolver implements Resolve<Tag> {

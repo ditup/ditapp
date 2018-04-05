@@ -38,13 +38,13 @@ export class SelectFromMyTagsComponent implements OnInit {
     this.myTags = this.userTags.map((userTag: UserTag) => {
 
       const found = this.originalSelection.findIndex((selection) => {
-        return userTag.tag.tagname === selection.tagname;
+        return userTag.tagId === selection.id;
       });
 
       const selectable: boolean = (found === -1) ? true : false;
 
       return {
-        tag: userTag.tag,
+        tag: { id: userTag.tagId },
         selected: false,
         selectable
       };

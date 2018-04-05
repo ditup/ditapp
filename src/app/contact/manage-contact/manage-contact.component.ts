@@ -36,7 +36,7 @@ export class ManageContactComponent implements OnInit {
 
               this.contactStatus = (isConfirmed)
                 ? 'confirmed'
-                : (me.username === creator.username)
+                : (me.id === creator.id)
                 ? 'sent'
                 : 'received';
             }

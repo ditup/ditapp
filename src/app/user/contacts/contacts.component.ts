@@ -25,15 +25,15 @@ export class ContactsComponent implements OnInit {
     this.route.parent.data
       .subscribe(async ({ user }: { user: User }) => {
         this.user = user;
-        this.isMe = this.user.username === this.auth.username;
+        this.isMe = this.user.id === this.auth.username;
 
         // get contacts
-        this.contacts = await this.model.readContactsTo(this.user.username);
+        this.contacts = await this.model.readContactsTo(this.user.id);
       });
   }
 
-  public get me() {
-    return new User({ username: this.auth.username });
+  public get me(): User {
+    return ({ id: this.auth.username });
   }
 
   public get confirmedContacts() {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Tag } from '../../shared/types';
+import { Tag } from 'app/models/tag';
 
 import { ModelService } from '../../model.service';
 
