@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Idea } from '../../shared/types';
+import { Idea } from 'app/models/idea';
 import { ModelService } from '../../model.service';
 import { NotificationsService } from 'app/notifications/notifications.service';
 
@@ -11,7 +11,7 @@ import { NotificationsService } from 'app/notifications/notifications.service';
 })
 export class CreateIdeaComponent implements OnInit {
 
-  public idea: Idea = { id: '', title: '', detail: '' };
+  public idea: Idea = { id: '', title: '', detail: '', creatorId: '', tags: [] };
 
   constructor(private model: ModelService,
               private notify: NotificationsService,

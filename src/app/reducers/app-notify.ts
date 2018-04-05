@@ -1,3 +1,41 @@
+import { AppNotifyActions, AppNotifyActionTypes } from 'app/actions/app-notify';
+import { AppNotification } from 'app/models/app-notification';
+
+export interface State {
+  byId: {
+    [id: string]: AppNotification
+  },
+  allIds: string[]
+}
+
+export const initialState: State = {
+  byId: {},
+  allIds: []
+};
+
+export function reducer(state = initialState, action: AppNotifyActions): State {
+  switch (action.type) {
+    case AppNotifyActionTypes.ADD_APP_NOTIFICATION:
+      return {
+        byId: {
+          ...state.byId,
+          [action.payload.id]: action.payload
+        },
+        allIds: [...state.allIds, action.payload.id]
+      }
+    case AppNotifyActionTypes.REMOVE_APP_NOTIFICATION:
+      const byId = {...state.byId}
+      delete byId[action.payload]
+      return {
+        byId,
+        allIds: state.allIds.filter(notifyId => notifyId !== action.payload)
+      }
+    default:
+      return state;
+  }
+}
+
+/*
 import { AuthActions, AuthActionTypes } from 'app/actions/auth';
 // import { UserEditActions, UserEditActionTypes } from 'app/actions/user-edit';
 
@@ -41,14 +79,12 @@ export function reducer(state = initialPendingState, action: AuthActions): State
         userId: action.payload.userId,
         token: action.payload.token
       };
-      /*
     case AuthActionTypes.GET_SELF_DATA_SUCCESS:
       console.log(action.payload)
       return {
         ...state,
         userId: action.payload.userId,
       }
-      */
     case AuthActionTypes.LOGOUT:
       console.log('logout action reducing')
       return initialState;
@@ -61,8 +97,9 @@ export function reducer(state = initialPendingState, action: AuthActions): State
           ...action.payload
         }
       }
-      */
+      * /
     default:
       return state;
   }
 }
+*/

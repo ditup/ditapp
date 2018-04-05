@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { ModelService } from '../model.service';
-import { Comment, Idea, Tag } from '../shared/types';
+import { Comment, Tag } from '../shared/types';
+import { Idea } from 'app/models/idea';
 
 @Injectable()
 export class IdeaResolver implements Resolve<Idea> {

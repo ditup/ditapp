@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 
-import { map, tap, flatMap } from 'rxjs/operators';
+import { map, tap, flatMap, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import { Authenticate } from 'app/models/auth';
@@ -16,6 +16,10 @@ import {
   GetSelfDataSuccess,
   AuthActionTypes
 } from 'app/actions/auth';
+
+import {
+  Notify
+} from 'app/actions/app-notify';
 
 @Injectable()
 export class AuthEffects {
@@ -33,7 +37,10 @@ export class AuthEffects {
     flatMap((auth: Authenticate) =>
       this.authService.login(auth)
         .pipe(
-          map(({ user, verified, token }) => new LoginSuccess({ user, verified, token }))
+          switchMap(({ userId, verified, token }) => [
+            new LoginSuccess({ userId, verified, token }),
+            new Notify({ type: 'info', message: 'successfully logged in' })
+          ])
         )
     )
   )
@@ -43,8 +50,8 @@ export class AuthEffects {
   loginSuccess$ = this.actions$.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     map((action: LoginSuccess) => action.payload),
-    flatMap(({ user: { username } }) =>
-      Observable.fromPromise(this.model.readUser(username))
+    flatMap(({ userId }) =>
+      Observable.fromPromise(this.model.readUser(userId))
         .pipe(
           map((user) => new GetSelfDataSuccess({ user }))
         )

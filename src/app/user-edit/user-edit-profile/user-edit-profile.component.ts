@@ -5,6 +5,7 @@ import { User } from 'app/models/user';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import * as fromRoot from 'app/reducers';
+import * as userEditActions from 'app/actions/user-edit';
 
 @Component({
   selector: 'app-user-edit-profile',
@@ -20,13 +21,14 @@ export class UserEditProfileComponent implements OnInit {
   // private profileFields = ['givenName', 'familyName', 'description'];
 
   constructor(private store: Store<fromRoot.State>) {
-    this.user$ = this.store.pipe(select('auth', 'user'));
+    this.user$ = this.store.pipe(select(fromRoot.getAuthUser));
   }
 
   ngOnInit() {
   }
 
   onSubmit({ givenName, familyName, description }) {
+    this.store.dispatch(new userEditActions.UserEditProfile({ givenName, familyName, description }))
     console.log('submitting', { givenName, familyName, description })
     // TODO make it to
     /*

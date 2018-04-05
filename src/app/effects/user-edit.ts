@@ -1,5 +1,30 @@
-/*
 import { Injectable } from '@angular/core';
+import { Effect, Actions, ofType } from '@ngrx/effects';
+import { flatMap, map } from 'rxjs/operators';
+
+import { ModelService } from 'app/model.service';
+
+import {
+  UserEditProfile,
+  UserEditProfileSuccess,
+  UserEditActionTypes
+} from 'app/actions/user-edit'
+
+@Injectable()
+export class UserEditEffects {
+  constructor(private actions$: Actions,
+              private modelService: ModelService) {}
+
+  @Effect()
+  userEditProfile$ = this.actions$.pipe(
+    ofType(UserEditActionTypes.USER_EDIT_PROFILE),
+    map((action: UserEditProfile) => action.payload),
+    flatMap(profile => this.modelService.updateUser('', profile)),
+    map(output => new UserEditProfileSuccess(output))
+  )
+}
+
+/*
 import { Router, ActivatedRoute } from '@angular/router';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 

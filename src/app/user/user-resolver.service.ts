@@ -29,7 +29,7 @@ export class LoggedUserResolver implements Resolve<User> {
               private store: Store<fromRoot.State>) { }
 
   async resolve(): Promise<User> {
-    const user = await this.store.pipe(select('auth', 'user')).take(1).toPromise()
+    const user = await this.store.pipe(select(fromRoot.getAuthUser)).take(1).toPromise()
     return await this.model.readUser(user.username);
   }
 }

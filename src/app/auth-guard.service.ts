@@ -94,7 +94,7 @@ export class AuthExpGuard implements CanActivate {
         }),
         // get the detailed logged user's info
         flatMap(() => {
-          return Observable.fromPromise(this.modelService.readUser(auth.user.username, { token: auth.token }))
+          return Observable.fromPromise(this.modelService.readUser(auth.userId, { token: auth.token }))
         }),
         // log in
         map(user => {

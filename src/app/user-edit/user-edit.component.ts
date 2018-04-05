@@ -15,7 +15,7 @@ export class UserEditComponent implements OnInit {
   public user$: Observable<User>;
 
   constructor(private store: Store<fromRoot.State>) {
-    this.user$ = this.store.pipe(select('auth', 'user'));
+    this.user$ = this.store.pipe(select(fromRoot.getAuthUser));
   }
 
   ngOnInit() {

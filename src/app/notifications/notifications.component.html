@@ -1,19 +1,19 @@
 <section class="notifications-placeholder notifications-container">
   <ul class="notifications-list">
-    <li *ngFor="let notification of displayedNotifications"
-      (click)="notifyControl.remove(notification.id)" class="notification"
+    <li *ngFor="let notification of (notifications$ | async)"
+      (click)="removeNotification(notification.id)" class="notification"
       [ngClass]="'notification-' + (notification.type || 'info')">
-      {{notification.msg}}
+      {{notification.message}}
     </li>
   </ul>
 </section>
 
 <section class="notifications-container">
   <ul class="notifications-list">
-    <li *ngFor="let notification of displayedNotifications"
-      (click)="notifyControl.remove(notification.id)" class="notification"
+    <li *ngFor="let notification of (notifications$ | async)"
+      (click)="removeNotification(notification.id)" class="notification"
       [ngClass]="'notification-' + (notification.type || 'info')">
-      {{notification.msg}}
+      {{notification.message}}
     </li>
   </ul>
 </section>

@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 
-import { User, UserTag } from '../types';
+import { UserTag } from '../types';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-user-dialog',

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { api } from 'app/config';
 import { notLoggedHeaders } from 'app/shared/utils';
 import { Authenticate } from 'app/models/auth';
-import { User } from 'app/models/user';
 
 import { map } from 'rxjs/operators';
 import 'rxjs/add/observable/of';
@@ -28,7 +27,7 @@ export class AuthService {
   /**
    * Log in
    */
-  login({ username, password }: Authenticate): Observable<{ verified: boolean, user: User, token: string }> {
+  login({ username, password }: Authenticate): Observable<{ verified: boolean, userId: string, token: string }> {
     return this.getAuthToken({ username, password })
       .pipe(
         map((token: string) => {
@@ -41,10 +40,10 @@ export class AuthService {
       )
   }
 
-  loginFromStore(): { verified: boolean, user: User | null, token: string } {
+  loginFromStore(): { verified: boolean, userId: string, token: string } {
     const data = this.getPersistentLogin();
 
-    if (!data || data.token === '') return { verified: false, user: null, token: '' };
+    if (!data || data.token === '') return { verified: false, userId: '', token: '' };
 
     return {
       ...this.decodeToken(data.token),
@@ -55,13 +54,11 @@ export class AuthService {
   /**
    * Decode jwt token.
    */
-  decodeToken(token: string): { verified: boolean, user: User } {
+  decodeToken(token: string): { verified: boolean, userId: string } {
     const { username, verified } = jwt.decode(token) as any;
     return {
       verified,
-      user: {
-        username
-      } as User
+      userId: username
     };
   }
 

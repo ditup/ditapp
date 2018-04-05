@@ -1,46 +1,33 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { NotificationsService } from './notifications.service';
+import { AppNotification } from 'app/models/app-notification';
+import { RemoveAppNotification } from 'app/actions/app-notify';
 
-import { Notification } from '../shared/types';
+import { Observable } from 'rxjs/Observable';
+import { Store, select } from '@ngrx/store';
 
-import { Subscription } from 'rxjs/Subscription';
+import * as fromRoot from 'app/reducers';
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })
-export class NotificationsComponent implements OnInit, OnDestroy {
+export class NotificationsComponent implements OnInit {
 
-  public notificationHeight: number;
+  // public notificationHeight: number;
 
-  public notifications: Notification[] = [];
+  public notifications$: Observable<AppNotification[]>;
 
-  // get only the existent notifications
-  public get displayedNotifications() {
-    // get only notifications which are not undefined,
-    // and TODO assign id to each notification
-    return this.notifications.filter((note) => {
-      const exists = Boolean(note);
-      return exists;
-    });
-  }
-
-  public notifySubscription: Subscription;
-
-  constructor(public notifyControl: NotificationsService) {
-    // subscribe to observing whether to display the header or not
-    this.notifySubscription = this.notifyControl.notificationsChanged$.subscribe((notifications: Notification[]) => {
-      this.notifications = notifications;
-    });
+  constructor(private store: Store<fromRoot.State>) {
+    this.notifications$ = this.store.pipe(select(fromRoot.getAppNotifications));
   }
 
   ngOnInit() {
   }
 
-  ngOnDestroy() {
-    this.notifySubscription.unsubscribe();
+  removeNotification(id: string) {
+    this.store.dispatch(new RemoveAppNotification(id));
   }
 
 }

@@ -1,23 +1,25 @@
 import { Action } from '@ngrx/store';
+import { User } from 'app/models/user';
 
 export enum UserEditActionTypes {
   USER_EDIT_PROFILE = '[User Edit] Profile',
   USER_EDIT_PROFILE_SUCCESS = '[User Edit] Profile Success',
-  USER_EDIT_PROFILE_FAILURE = '[User Edit] Profile Failure',
-  USER_EDIT_LOCATION = '[User Edit] Location',
-  USER_EDIT_LOCATION_SUCCESS = '[User Edit] Location Success',
-  USER_EDIT_LOCATION_FAILURE = '[User Edit] Location Failure',
+  USER_EDIT_PROFILE_FAILURE = '[User Edit] Profile Failure'
 }
 
 export class UserEditProfile implements Action {
   readonly type = UserEditActionTypes.USER_EDIT_PROFILE
+
+  constructor(public payload: any) {} // TODO better type
 }
 
 export class UserEditProfileSuccess implements Action {
   readonly type = UserEditActionTypes.USER_EDIT_PROFILE_SUCCESS
+
+  constructor(public payload: User) {}
 }
 
-export type userEditActions =
+export type UserEditActions =
   | UserEditProfile
   | UserEditProfileSuccess
 

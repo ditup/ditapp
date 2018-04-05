@@ -14,9 +14,13 @@ import { map, catchError } from 'rxjs/operators';
 
 import * as _ from 'lodash';
 
-import { Comment, Idea, Tag, User, UserTag, Message, Contact } from './shared/types';
+import { Comment, UserTag, Contact } from './shared/types';
 import * as fromRoot from 'app/reducers';
 import { Store, select } from '@ngrx/store';
+import { User } from 'app/models/user';
+import { Idea } from 'app/models/idea';
+import { Message } from 'app/models/message';
+import { Tag } from 'app/models/tag';
 
 @Injectable()
 export class ModelService {
@@ -191,6 +195,8 @@ export class ModelService {
     givenName?: string, familyName?: string, description?: string, location?: [number, number]
   }): Promise<User> {
 
+    username = username || this.auth.user.username;
+
     const requestBody = {
       data: {
         type: 'users',
@@ -222,13 +228,13 @@ export class ModelService {
     });
   }
 
-  async createTag({ tagname }: Tag): Promise<Tag> {
+  async createTag({ id }: Tag): Promise<Tag> {
 
     const requestBody = {
       data: {
         type: 'tags',
         attributes: {
-          tagname
+          tagname: id
         }
       }
     };
@@ -454,7 +460,7 @@ export class ModelService {
 
     const headers = this.loggedHeaders;
 
-    const tagnames: string = tags.map(tag => tag.tagname).join(',');
+    const tagnames: string = tags.map(tag => tag.id).join(',');
 
     const response: any = await this.http
       .get(`${this.baseUrl}/users?filter[tag]=${tagnames}`, { headers })
@@ -523,7 +529,7 @@ export class ModelService {
 
     const headers = this.loggedHeaders;
 
-    const tagQueryString = tagsIn.map((tag: Tag) => tag.tagname).join(',');
+    const tagQueryString = tagsIn.map((tag: Tag) => tag.id).join(',');
 
     const response: any = await this.http
       .get(`${this.baseUrl}/tags?filter[relatedToTags]=${tagQueryString}`, { headers })
@@ -890,7 +896,7 @@ export class ModelService {
    */
   public async findIdeasWithTags(tags: Tag[]): Promise<Idea[]> {
 
-    const tagnames = tags.map(tag => tag.tagname).join(',');
+    const tagnames = tags.map(tag => tag.id).join(',');
 
     const response: any = await this.http
       .get(`${this.baseUrl}/ideas?filter[withTags]=${tagnames}`, { headers: this.loggedHeaders }).toPromise();
@@ -1003,14 +1009,14 @@ export class ModelService {
 
     const { id, attributes: { title, detail }, relationships } = ideaData;
 
-    const idea: Idea = { id, title, detail };
+    const idea: Idea = { id, title, detail, creatorId: '', tags: null };
 
     // add creator
     if (relationships && relationships.creator && included) {
       const creatorUsername = relationships.creator.data.id;
       const rawCreator = included.find(({ type, id: includedId }) => type === 'users' && includedId === creatorUsername);
       const creator: User = this.deserializeUser(rawCreator);
-      idea.creator = creator;
+      idea.creatorId = creator.id;
     }
 
     // add idea's tags
@@ -1079,7 +1085,7 @@ export class ModelService {
 
   private deserializeUser(userData: any): User {
     const attrs = ['givenName', 'familyName', 'description', 'location', 'preciseLocation', 'email'];
-    const user: User = _.extend({ username: userData.id }, _.pick(userData.attributes, attrs));
+    const user: User = _.extend({ id: userData.id }, _.pick(userData.attributes, attrs));
 
     return user;
   }

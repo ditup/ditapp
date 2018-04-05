@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import * as userEditActions from 'app/actions/user-edit';
+
 import { Store, select } from '@ngrx/store';
 
 import { User } from 'app/models/user';
@@ -20,14 +22,14 @@ export class UserEditLocationComponent implements OnInit {
   public isSelectLocationDisabled = false;
 
   constructor(private store: Store<fromRoot.State>/*, private model: ModelService, private notify: NotificationsService*/) {
-    this.user$ = this.store.pipe(select('auth', 'user'));
+    this.user$ = this.store.pipe(select(fromRoot.getAuthUser));
   }
 
   ngOnInit() {
   }
 
   async updateLocation(location: [number, number]) {
-    console.log('update location', location);
+    this.store.dispatch(new userEditActions.UserEditProfile({ location }))
     /*this.isSelectLocationDisabled = true;*/
 
     /*

@@ -13,7 +13,7 @@ import 'leaflet.markercluster';
 import { inRange } from 'lodash';
 
 import { ModelService } from '../model.service';
-import { User } from '../shared/types';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-map',
@@ -178,7 +178,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         users.forEach((user) => {
           const marker = new Marker(new LatLng(user.location[0], user.location[1]), {
-            title: user.username,
+            title: user.id,
             icon: this.userIcon
           });
 
@@ -215,7 +215,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     component.user = user;
     component.ref = dialogRef;
 
-    component.userTags = await this.model.readUserTags(user.username);
+    component.userTags = await this.model.readUserTags(user.id);
   }
 
   @HostListener('window:resize', ['$event'])

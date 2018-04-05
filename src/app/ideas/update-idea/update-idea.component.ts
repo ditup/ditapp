@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth.service';
 import { ModelService } from '../../model.service';
 import { NotificationsService } from '../../notifications/notifications.service';
-import { Idea, Tag } from '../../shared/types';
+import { Tag } from 'app/models/tag';
+import { Idea } from 'app/models/idea';
 
 @Component({
   selector: 'app-update-idea',
@@ -29,7 +30,7 @@ export class UpdateIdeaComponent implements OnInit {
     this.route.data.subscribe(({ idea, ideaTags, editOnlyTags = false }: { idea: Idea, ideaTags: Tag[], editOnlyTags?: boolean }) => {
       this.idea = idea;
       this.ideaTags = ideaTags;
-      this.canEdit = this.auth.username === this.idea.creator.username;
+      this.canEdit = this.auth.username === this.idea.creatorId;
       this.editOnlyTags = editOnlyTags;
     });
   }
