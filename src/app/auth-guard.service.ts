@@ -5,6 +5,7 @@ import 'rxjs/add/observable/of';
 import { AuthService } from 'app/services/auth';
 import { ModelService } from 'app/model.service';
 import * as authActions from 'app/actions/auth';
+import * as userActions from 'app/actions/entities/users';
 import { loginBeforeAuthExp } from 'app/config';
 import {
   CanActivate, Router,
@@ -103,6 +104,7 @@ export class AuthExpGuard implements CanActivate {
             user
           }
           this.store.dispatch(new authActions.InitialLoginSuccess(enrichedAuth))
+          this.store.dispatch(new userActions.User(enrichedAuth.user))
           return true;
         }),
         // log out if logout error was thrown

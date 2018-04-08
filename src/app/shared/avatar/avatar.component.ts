@@ -1,36 +1,25 @@
-import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
-import { ModelService } from '../../model.service';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-avatar',
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss']
 })
-export class AvatarComponent implements OnChanges {
+export class AvatarComponent {
 
-  @Input() username: string;
+  @Input() user: User;
   @Input() size = 128;
 
-  public avatarUrl: string|SafeUrl; // { base64: string, format: string };
+  constructor(private sanitizer: DomSanitizer) { }
 
-  constructor(private model: ModelService, private sanitizer: DomSanitizer) { }
-
-  async ngOnChanges(changes: SimpleChanges) {
-    // (re)load avatar when username changes
-    if (changes.username && changes.username.previousValue !== changes.username.currentValue) {
-      await this.loadAvatar();
+  get avatarUrl(): string | SafeUrl {
+    if (this.user && this.user.avatar) {
+      return this.sanitizer.bypassSecurityTrustUrl(this.user.avatar[this.size]);
     }
-  }
 
-  async reload() {
-    await this.loadAvatar(false);
-  }
-
-  private async loadAvatar(cache = true) {
-    delete this.avatarUrl;
-    const avatarUrl = await this.model.readAvatar(this.username, this.size, cache);
-    this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(avatarUrl);
+    return '';
   }
 }

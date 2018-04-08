@@ -14,7 +14,7 @@ import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 import 'hammerjs';  // for angular material
 
 // imports for store and effects
-import { reducers } from './reducers';
+import { reducerToken, reducerProvider } from './reducers';
 import { effects } from './effects';
 
 import { GlobalErrorHandler } from './error-handler';
@@ -222,13 +222,14 @@ import { UserEditProfileFormComponent } from './user-edit/user-edit-profile/user
     DndModule.forRoot(), // drag and drop: ng2-dnd
     MomentModule,
     FancyImageUploaderModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducerToken),
     EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     })
   ],
   providers: [
+    reducerProvider,
     AuthService,
     AuthServiceOld, // TODO to be eventually removed
     UserService,

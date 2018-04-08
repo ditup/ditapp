@@ -71,7 +71,7 @@
 
   <a [matMenuTriggerFor]="userMenu" class="user"
     *ngIf="(auth$ | async).logged || (auth$ | async).loggedUnverified">
-    <app-avatar [username]="(auth$ | async)?.userId" [size]="32" class="user-avatar" #avatar></app-avatar>
+    <app-avatar [user]="(user$ | async)" [size]="32" class="user-avatar" #avatar></app-avatar>
     <span class="user-name">{{(auth$ | async).userId}}</span>
   </a>
 

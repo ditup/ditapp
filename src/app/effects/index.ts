@@ -1,5 +1,6 @@
-import { AuthEffects } from 'app/effects/auth';
-import { UserEditEffects } from 'app/effects/user-edit';
-import { AppNotifyEffects } from 'app/effects/app-notify';
+import { AuthEffects } from './auth';
+import { UserEditEffects } from './user-edit';
+import { AppNotifyEffects } from './app-notify';
+import { effects as entityEffects } from './entities';
 
-export const effects = [AuthEffects, UserEditEffects, AppNotifyEffects];
+export const effects = [AuthEffects, UserEditEffects, AppNotifyEffects, ...entityEffects];

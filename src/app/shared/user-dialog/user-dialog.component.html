@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <section class="user-info">
-    <app-avatar class="user-avatar" [username]="user.username" [size]="128"></app-avatar>
+    <app-avatar class="user-avatar" [user]="user" [size]="128"></app-avatar>
     <section class="user-profile">
       <section class="user-name">{{user.givenName}} {{user.familyName}}</section>
       <section class="user-username">{{user.username}}</section>

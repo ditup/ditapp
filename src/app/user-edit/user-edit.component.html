@@ -1,7 +1,7 @@
 <div class="container">
 
   <h1>
-    Edit <a routerLink="/user/{{(user$ | async).username}}">my profile</a>
+    Edit <a routerLink="/user/{{(user$ | async)?.id}}">my profile</a>
   </h1>
 
   <app-tab-nav

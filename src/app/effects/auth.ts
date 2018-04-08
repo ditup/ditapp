@@ -17,6 +17,8 @@ import {
   AuthActionTypes
 } from 'app/actions/auth';
 
+import { User } from 'app/actions/entities/users';
+
 import {
   Notify
 } from 'app/actions/app-notify';
@@ -53,7 +55,10 @@ export class AuthEffects {
     flatMap(({ userId }) =>
       Observable.fromPromise(this.model.readUser(userId))
         .pipe(
-          map((user) => new GetSelfDataSuccess({ user }))
+          switchMap((user) => [
+            new GetSelfDataSuccess({ user }),
+            new User(user)
+          ])
         )
     )
   );
@@ -78,5 +83,3 @@ export class AuthEffects {
     })
   )
 }
-/*,
-*/

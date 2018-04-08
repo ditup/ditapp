@@ -1,5 +1,5 @@
 <div [ngClass]="'main-container'" *ngIf="otherUserExists === true">
-  <h1>Conversation with <app-avatar [username]="otherUser.username"></app-avatar> {{otherUser.username}}</h1>
+  <h1>Conversation with <app-avatar [user]="otherUser.username"></app-avatar> {{otherUser.username}}</h1>
 
   <ul #messagesList [ngClass]="'message-list'">
     <li *ngFor="let msg of messages"
@@ -9,7 +9,7 @@
         : (!msg.read)
         ? 'unread'
         : 'read'">
-      <app-avatar [title]="msg.from.username" class="message-from" [username]="msg.from.username"></app-avatar>
+      <app-avatar [title]="msg.from.username" class="message-from" [user]="msg.from.username"></app-avatar>
       <div class="message-sender">{{ msg.from.username }}</div>
       <div class="message-created">{{ msg.created | amTimeAgo }}</div>
       <div class="message-body">

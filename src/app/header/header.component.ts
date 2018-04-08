@@ -12,6 +12,7 @@ import { Store, select } from '@ngrx/store';
 import * as fromRoot from 'app/reducers';
 import * as authActions from 'app/actions/auth';
 import { State as Auth } from 'app/reducers/auth';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-header',
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public messageCount: number;
 
   public auth$: Observable<Auth>; // improve value
+  public user$: Observable<User>
 
   private modelCountSubscription: Subscription;
 
@@ -49,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private model: ModelService) {
 
     this.auth$ = this.store.pipe(select('auth'));
+    this.user$ = this.store.pipe(select(fromRoot.getAuthUser));
 
     // subscribe to observing whether to display the header or not
     this.subscription = this.headerControl.displayChanged$.subscribe(display => {

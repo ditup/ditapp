@@ -4,7 +4,7 @@
     <a routerLink="/messages/{{msg.with(me).username}}" class="thread">
       <div class="thread-with-user">
         <!--a routerLink="/user/{{msg.with(me).username}}"-->
-          <app-avatar [username]="msg.with(me).username"></app-avatar><span class="thread-user-name">{{msg.with(me).username}}</span>
+          <app-avatar [user]="msg.with(me).username"></app-avatar><span class="thread-user-name">{{msg.with(me).username}}</span>
         <!--/a-->
       </div>
       <div class="thread-message">

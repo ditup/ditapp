@@ -1,6 +1,6 @@
 <div class="user-contact-wrapper">
   <a routerLink="/user/{{contact.from.username}}">
-    <app-avatar class="user-contact-avatar" [username]="contact.from.username"></app-avatar>
+    <app-avatar class="user-contact-avatar" [user]="contact.from.username"></app-avatar>
     <div *ngIf="contact.from.givenName + contact.from.familyName" class="contact-name">{{contact.from.givenName}} {{contact.from.familyName}}</div>
     <div class="contact-username-trust">
       <span class="contact-username">{{contact.from.username}}</span>

@@ -1,3 +1,4 @@
+/*
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
@@ -15,7 +16,7 @@ import { loginBeforeAuthExp } from '../config';
  * When logged in but authentication is expired or close to expiration,
  * redirect to login.
  * Otherwise activate.
- */
+ * /
 @Injectable()
 export class AuthExpGuard implements CanActivate {
 
@@ -55,10 +56,11 @@ export class AuthExpGuard implements CanActivate {
    * // helping function for parsing url string
    * @param {string} url - url string i.e. /aa/bb/cc?query=asdf
    * @returns string[] - array of url segments, i.e. ['aa', 'bb', 'cc']
-   */
+   * /
   private getUrlPath(url: string): string[] {
     const tree = this.router.parseUrl(url);
     const segments = _.get(tree, `root.children[${PRIMARY_OUTLET}].segments`, []);
     return segments.map(segment => segment.path);
   }
 }
+*/
