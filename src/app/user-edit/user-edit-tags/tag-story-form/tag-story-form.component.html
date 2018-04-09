@@ -4,17 +4,17 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="updateTagStoryForm">
     <fieldset [disabled]="isFormDisabled">
       <div>
-        Edit story of <mat-icon alt="tag">label</mat-icon> {{userTag.tag.tagname}}
+        Edit story of <mat-icon alt="tag">label</mat-icon> {{userTag.tagId}}
       </div>
 
       <div>
-        <!--<textarea placeholder="Why do you care about {{userTag.tag.tagname}}?"
+        <!--<textarea placeholder="Why do you care about {{userTag.tagId}}?"
           formControlName="story">{{userTag.story}}</textarea>
 
         <div *ngIf="formErrors.story" class="alert alert-danger">
           {{formErrors.story}}
         </div>-->
-        <textarea placeholder="Why do you care about {{userTag.tag.tagname}}?"
+        <textarea placeholder="Why do you care about {{userTag.tagId}}?"
           appEditor [form]="updateTagStoryForm" [value]="userTag.story" [fixed]="true"
           formControlName="story">{{userTag.story}}</textarea>
 

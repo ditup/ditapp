@@ -1,6 +1,8 @@
 import { /*createSelector, */ActionReducerMap } from '@ngrx/store';
 import { InjectionToken } from '@angular/core';
 import { AppNotification } from 'app/models/app-notification';
+import { User } from 'app/models/user';
+import { UserTag } from 'app/models/user-tag';
 
 import * as fromAuth from './auth';
 // import * as fromUsers from './entities/users';
@@ -25,9 +27,16 @@ export const reducers: ActionReducerMap<State> = {
   // ui: fromUi.reducer
 }
 
-export const getAuthUser = (state: State) => {
+export const getAuthUser = (state: State): User => {
   const userId = state.auth.userId;
   return state.entities.users.byId[userId];
+};
+
+export const getAuthUserTags = (state: State): UserTag[]|null => {
+  const userId = state.auth.userId;
+  const user: User = state.entities.users.byId[userId];
+  if (!user.userTags) return null;
+  return user.userTags.map(userTagId => state.entities.userTags.byId[userTagId]);
 };
 
 export function getReducers() {

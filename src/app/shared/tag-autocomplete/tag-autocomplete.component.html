@@ -5,8 +5,8 @@
 
   <!-- autocomplete of tags -->
   <mat-autocomplete #auto (optionSelected)="submitFromAutosuggestion($event.option.value)">
-    <mat-option *ngFor="let tag of suggestedTags | async" [value]="tag.tagname">
-      {{ tag.tagname }}
+    <mat-option *ngFor="let tag of suggestedTags | async" [value]="tag.id">
+      {{ tag.id }}
     </mat-option>
   </mat-autocomplete>
 

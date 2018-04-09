@@ -196,7 +196,7 @@ export class ModelService {
     givenName?: string, familyName?: string, description?: string, location?: [number, number]
   }): Promise<User> {
 
-    username = username || this.auth.user.username;
+    username = username || this.auth.userId;
 
     const requestBody = {
       data: {
@@ -1124,6 +1124,6 @@ export class ModelService {
 
     const { story, relevance } = rawUserTag.attributes;
 
-    return { userId: user.id, tagId: tag.id, story, relevance } as UserTag;
+    return { id: rawUserTag.id, userId: user.id, tagId: tag.id, story, relevance };
   }
 }

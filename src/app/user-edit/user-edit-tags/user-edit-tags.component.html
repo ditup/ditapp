@@ -1,3 +1,7 @@
+<pre *ngFor="let userTag of (userTags$ | async)">
+  {{ userTag?.tagId }}
+</pre>
+
 <section class="cue">
   Tags represent what you care about.<br>
   Add. Drag to change relevance. Click to tell why you care. Remove.</section>
@@ -12,18 +16,18 @@
   <!-- a container for newly added tags -->
   <!-- it is possible to drag them and drop to the relevance containers -->
   <div class="tag-relevance-container tag-relevance-container-initial">
-    <ul>
-      <li *ngFor="let userTag of tagLists[0]"
+    <!--ul *ngIf="tagLists[0] | async">
+      <li *ngFor="let userTag of (tagLists[0] | async)"
         [ngClass]="'user-tag' + ((userTag.disabled) ? ' disabled' : '')"
         (click)="openTagStoryDialog(userTag)"
         dnd-draggable [dragEnabled]="!userTag.disabled" [dragData]="{ from: 0, userTag: userTag }">
-        {{userTag.tag.tagname}}
+        {{userTag.tagId}}
         <span class="story-indicator" *ngIf="userTag.story">&#9679;</span>
         <button (click)="openRemoveTagDialog(userTag); $event.stopPropagation()">
           <mat-icon alt="remove">close</mat-icon>
         </button>
       </li>
-    </ul>
+    </ul-->
   </div>
 
   <!-- containers for userTags by different relevance (1-5) -->
@@ -35,12 +39,15 @@
     (onDragEnter)="preventDefault($event)"
     (onDragOver)="preventDefault($event)"
     (onDragLeave)="preventDefault($event)">
-    <ul>
-      <li *ngFor="let userTag of tagLists[relevance]"
+    <!--pre>
+      {{tagLists[relevance] | async }}
+    </pre-->
+    <ul *ngIf="tagLists[relevance] | async">
+      <li *ngFor="let userTag of (tagLists[relevance] | async)"
         [ngClass]="'user-tag tag-relevance-' + relevance + ((userTag.disabled) ? ' disabled' : '')"
         (click)="openTagStoryDialog(userTag)"
         dnd-draggable [dragEnabled]="!userTag.disabled" [dragData]="{ from: relevance, userTag: userTag }">
-        {{userTag.tag.tagname}}
+        {{userTag.tagId}}
         <span class="story-indicator" *ngIf="userTag.story">&#9679;</span>
         <button (click)="openRemoveTagDialog(userTag); $event.stopPropagation()">
           <mat-icon alt="remove">close</mat-icon>

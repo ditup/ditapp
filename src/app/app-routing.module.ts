@@ -136,9 +136,11 @@ const routes: Routes = [
       {
         path: 'tags',
         component: UserEditTagsComponent,
+        /*
         resolve: {
           userTags: LoggedUserTagsResolver
         }
+        */
       },
       {
         path: 'location',

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { flatMap, map } from 'rxjs/operators';
+import { flatMap, switchMap, map } from 'rxjs/operators';
 
 import { ModelService } from 'app/model.service';
+import { User as UserModel } from 'app/models/user';
+import { User } from 'app/actions/entities/users';
+import { Notify } from 'app/actions/app-notify';
 
 import {
   UserEditProfile,
@@ -20,7 +23,11 @@ export class UserEditEffects {
     ofType(UserEditActionTypes.USER_EDIT_PROFILE),
     map((action: UserEditProfile) => action.payload),
     flatMap(profile => this.modelService.updateUser('', profile)),
-    map(output => new UserEditProfileSuccess(output))
+    switchMap((user: UserModel) => [
+      new UserEditProfileSuccess(user),
+      new User(user),
+      new Notify({ type: 'info', message: 'your profile was updated' })
+    ])
   )
 }
 

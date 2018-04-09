@@ -16,8 +16,8 @@ export const initialState: State = {
 
 export function reducer(state=initialState, action: UserActions): State {
   switch (action.type) {
-    case UserActionTypes.USER:
-    case UserActionTypes.USER_WITH_AVATAR: {
+    case UserActionTypes.USER_ENRICHED:
+    case UserActionTypes.USER: {
       const user = action.payload;
       const exists = !!state.byId[user.id];
       const userFromState = state.byId[user.id] || {};

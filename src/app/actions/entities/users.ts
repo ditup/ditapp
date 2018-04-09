@@ -7,7 +7,7 @@ import { User as UserModel } from 'app/models/user';
 
 export enum UserActionTypes {
   USER = '[User] User',
-  USER_WITH_AVATAR = '[User] User With Avatar'
+  USER_ENRICHED = '[User] User Enriched'
 }
 
 export class User implements Action {
@@ -16,12 +16,12 @@ export class User implements Action {
   constructor(public payload: UserModel) { }
 }
 
-export class UserWithAvatar implements Action {
-  readonly type = UserActionTypes.USER_WITH_AVATAR
+export class UserEnriched implements Action {
+  readonly type = UserActionTypes.USER_ENRICHED
 
   constructor(public payload: UserModel) { }
 }
 
 export type UserActions =
   | User
-  | UserWithAvatar
+  | UserEnriched

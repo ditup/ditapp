@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
 import { MatDialog, MatDialogRef } from '@angular/material';
-
-import * as _ from 'lodash';
-
+// import * as _ from 'lodash';
 import { polyfill } from 'mobile-drag-drop';
 
 import { TagStoryFormComponent } from './tag-story-form/tag-story-form.component';
-import { TagRemoveConfirmComponent } from './tag-remove-confirm/tag-remove-confirm.component';
+// import { TagRemoveConfirmComponent } from './tag-remove-confirm/tag-remove-confirm.component';
 
-import { ModelService } from '../../model.service';
-import { NotificationsService } from '../../notifications/notifications.service';
+// import { ModelService } from '../../model.service';
+// import { NotificationsService } from '../../notifications/notifications.service';
 
 import { UserTag } from 'app/models/user-tag';
-import { Tag } from 'app/models/tag';
+// import { Tag } from 'app/models/tag';
 import { User } from 'app/models/user';
+
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromRoot from 'app/reducers';
+import { filter, map } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
 
 @Component({
   selector: 'app-user-edit-tags',
@@ -24,40 +26,53 @@ import { User } from 'app/models/user';
 })
 export class UserEditTagsComponent implements OnInit {
 
-  public user: User;
+  public user$: Observable<User>;
+  public userTags$: Observable<UserTag[]>;
 
-  public tagStoryDialogRef: MatDialogRef<TagStoryFormComponent>;
-  public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
+public tagStoryDialogRef: MatDialogRef<TagStoryFormComponent>;
+//  public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
 
   // lists of tags, by relevance
   // 1-5 tags by relevance
   // 0 newly added tags (default relevance = 3)
-  tagLists: UserTag[][] = [[], [], [], [], [], []];
+  tagLists: Observable<UserTag[]>[];
 
-  constructor(private model: ModelService,
-              private route: ActivatedRoute,
+  constructor(// private model: ModelService,
               private dialog: MatDialog,
-              private notify: NotificationsService) {
+              // private notify: NotificationsService,
+              private store: Store<fromRoot.State>) {
                 polyfill({});
+                this.user$ = this.store.pipe(select(fromRoot.getAuthUser));
+                this.userTags$ = this.store.pipe(select(fromRoot.getAuthUserTags));
+                this.tagLists = [
+                  of([]),
+                  this.userTags$.pipe(
+                    filter(userTags => !!userTags),
+                    map(userTags => userTags.filter(userTag => userTag.relevance === 1))
+                  ),
+                  this.userTags$.pipe(
+                    filter(userTags => !!userTags),
+                    map(userTags => userTags.filter(userTag => userTag.relevance === 2))
+                  ),
+                  this.userTags$.pipe(
+                    filter(userTags => !!userTags),
+                    map(userTags => userTags.filter(userTag => userTag.relevance === 3))
+                  ),
+                  this.userTags$.pipe(
+                    filter(userTags => !!userTags),
+                    map(userTags => userTags.filter(userTag => userTag.relevance === 4))
+                  ),
+                  this.userTags$.pipe(
+                    filter(userTags => !!userTags),
+                    map(userTags => userTags.filter(userTag => userTag.relevance === 5))
+                  )
+                ]
+                this.userTags$.pipe(map(userTag => {
+                  console.log(userTag);
+                }))
               }
 
-  ngOnInit() {
-    this.route.parent.data.subscribe(({ user }: { user: User }) => {
-      this.user = user;
-    });
-
-    this.route.data.subscribe(({ userTags }: { userTags: UserTag[] }) => {
-      // sort tags into their tagList by relevance
-      for (const tag of userTags) {
-        this.tagLists[tag.relevance].push(tag);
-      }
-    });
-  }
-
-  get tags(): UserTag[] {
-    // join the tagLists to a single list
-    return [].concat(...this.tagLists);
-  }
+  ngOnInit() { }
 
   // prevent default events to make drag & drop work on touch devices with `mobile-drag-drop` library
   public preventDefault(event) {
@@ -81,6 +96,8 @@ export class UserEditTagsComponent implements OnInit {
   // provided the data we update the current user's tag story in database
   // at the end we close the dialog.
   async updateTagStory({ tagname, story }: { tagname: string, story: string }): Promise<void> {
+    console.log(tagname, story);
+    /*
     // update user-tag in database (send XHR to REST API)
     const { story: updatedStory } = await this.model.updateUserTag(this.user.id, tagname, { story });
     // we succeeded.
@@ -98,7 +115,15 @@ export class UserEditTagsComponent implements OnInit {
     }
 
     this.notify.info('Your tag story was updated.');
+    */
   }
+
+  /*
+  get tags(): UserTag[] {
+    // join the tagLists to a single list
+    return [].concat(...this.tagLists);
+  }
+
 
   public async addTag({ id: tagId }: Tag): Promise<void> {
     const { id: userId } = this.user;
@@ -199,5 +224,7 @@ export class UserEditTagsComponent implements OnInit {
     await this.model.createTag({ id });
     await this.addTag({ id });
   }
+
+  */
 
 }
