@@ -249,12 +249,7 @@ export class ModelService {
     return this.deserializeTag(response.data);
   }
 
-  async addTagToUser({ username, tagname, relevance, story }:
-               { username: string, tagname: string, relevance?: number, story?: string }): Promise<UserTag> {
-
-    // defaults
-    relevance = relevance || 3;
-    story = story || '';
+  async addTagToUser({ userId=this.auth.userId, tagId, relevance=3, story='' }: { userId?: string, tagId: string, story?: string, relevance?: number }): Promise<{ user: User, tag: Tag, userTag: UserTag }> {
 
     const requestBody = {
       data: {
@@ -267,7 +262,7 @@ export class ModelService {
           tag: {
             data: {
               type: 'tags',
-              id: tagname
+              id: tagId
             }
           }
         }
@@ -275,10 +270,10 @@ export class ModelService {
     };
 
     const { data, included }: any = await this.http
-      .post(`${this.baseUrl}/users/${username}/tags`, requestBody, { headers: this.loggedHeaders })
+      .post(`${this.baseUrl}/users/${userId}/tags`, requestBody, { headers: this.loggedHeaders })
       .toPromise();
 
-    return this.deserializeUserTag(data, included).userTag;
+    return this.deserializeUserTag(data, included);
 
   }
 

@@ -32,7 +32,7 @@ export class UserEffects {
     flatMap(([user, state]) => {
       const userInState = state.entities.users.byId[user.id]
       if (userInState && userInState.avatar) {
-        return of(new UserEnriched({ ...user, avatar: userInState.avatar }))
+        return of() // keep things as they are
       } else {
         return zip(
           fromPromise(this.modelService.readAvatar(user.id, 16)),
@@ -63,7 +63,7 @@ export class UserEffects {
     flatMap(([user, state]) => {
       const userInState = state.entities.users.byId[user.id]
       if (userInState && userInState.userTags) {
-        return of(new UserEnriched({ ...user, userTags: userInState.userTags }))
+        return of() // keep things as they are
       } else {
         return fromPromise(this.modelService.readUserTags(user.id))
           .pipe(

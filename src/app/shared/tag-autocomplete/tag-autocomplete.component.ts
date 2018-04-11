@@ -2,9 +2,11 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/filter';
 
-import { Tag } from '../types';
+import { Tag } from 'app/models/tag';
 import { ModelService } from '../../model.service';
 
 @Component({
@@ -37,9 +39,10 @@ export class TagAutocompleteComponent implements OnInit {
     // search tags when input value changes
     this.tagForm.controls['tagname'].valueChanges
       .debounceTime(400)
-      .startWith(null)
+      .startWith('')
       .subscribe(val => {
-        this.suggestedTags = this.model.readTagsLike(val);
+        // ask server only if value is truthy
+        this.suggestedTags = (val) ? this.model.readTagsLike(val) : of([]);
       });
   }
 
@@ -73,6 +76,5 @@ export class TagAutocompleteComponent implements OnInit {
     this.action.emit({ id: tagname });
     this.tagForm.reset();
   }
-
 
 }

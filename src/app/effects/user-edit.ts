@@ -11,6 +11,9 @@ import { Notify } from 'app/actions/app-notify';
 import {
   UserEditProfile,
   UserEditProfileSuccess,
+  CreateUserTag,
+  CreateUserTagSuccess,
+  CreateTagAndUserTag,
   UpdateUserTag,
   UpdateUserTagSuccess,
   DeleteUserTag,
@@ -32,6 +35,28 @@ export class UserEditEffects {
       new UserEditProfileSuccess(user),
       new User(user),
       new Notify({ type: 'info', message: 'your profile was updated' })
+    ])
+  )
+
+  @Effect()
+  createUserTag$ = this.actions$.pipe(
+    ofType(UserEditActionTypes.CREATE_USER_TAG),
+    map((action: CreateUserTag) => action.payload),
+    flatMap(({ id }) => this.modelService.addTagToUser({ tagId: id })),
+    switchMap(({ user, tag, userTag }) => [
+      new CreateUserTagSuccess(userTag),
+      new AddUserTag({ user, tag, userTag }),
+      new Notify({ type: 'info', message: `${userTag.id} created`})
+    ])
+  )
+
+  @Effect()
+  createTagAndUserTag$ = this.actions$.pipe(
+    ofType(UserEditActionTypes.CREATE_TAG_AND_USER_TAG),
+    map((action: CreateTagAndUserTag) => action.payload),
+    flatMap(({ id }) => this.modelService.createTag({ id })),
+    switchMap((tag) => [
+      new CreateUserTag(tag)
     ])
   )
 

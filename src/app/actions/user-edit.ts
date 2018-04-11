@@ -1,11 +1,15 @@
 import { Action } from '@ngrx/store';
 import { User } from 'app/models/user';
+import { Tag } from 'app/models/tag';
 import { UserTag } from 'app/models/user-tag';
 
 export enum UserEditActionTypes {
   USER_EDIT_PROFILE = '[User Edit] Profile',
   USER_EDIT_PROFILE_SUCCESS = '[User Edit] Profile Success',
   USER_EDIT_PROFILE_FAILURE = '[User Edit] Profile Failure',
+  CREATE_USER_TAG = '[User Edit] Create UserTag',
+  CREATE_USER_TAG_SUCCESS = '[User Edit] Create UserTag Success',
+  CREATE_TAG_AND_USER_TAG = '[User Edit] Create Tag And UserTag',
   UPDATE_USER_TAG = '[User Edit] Update UserTag',
   UPDATE_USER_TAG_SUCCESS = '[User Edit] Update UserTag Success',
   DELETE_USER_TAG = '[User Edit] Delete UserTag',
@@ -24,15 +28,23 @@ export class UserEditProfileSuccess implements Action {
   constructor(public payload: User) {}
 }
 
-/*
-export class AddUserTag implements Action {
-  readonly type = UserEditActionTypes.ADD_USER_TAG
+export class CreateUserTag implements Action {
+  readonly type = UserEditActionTypes.CREATE_USER_TAG
+
+  constructor(public payload: Tag) { }
 }
 
-export class RemoveUserTag implements Action {
+export class CreateUserTagSuccess implements Action {
+  readonly type = UserEditActionTypes.CREATE_USER_TAG_SUCCESS;
 
+  constructor(public payload: Tag) { }
 }
-*/
+
+export class CreateTagAndUserTag implements Action {
+  readonly type = UserEditActionTypes.CREATE_TAG_AND_USER_TAG
+
+  constructor(public payload: Tag) { }
+}
 
 export class UpdateUserTag implements Action {
   readonly type = UserEditActionTypes.UPDATE_USER_TAG
@@ -49,18 +61,20 @@ export class UpdateUserTagSuccess implements Action {
 export class DeleteUserTag implements Action {
   readonly type = UserEditActionTypes.DELETE_USER_TAG
 
-  constructor(public payload: UserTag) { } // TODO better type
+  constructor(public payload: UserTag) { }
 }
 
 export class DeleteUserTagSuccess implements Action {
   readonly type = UserEditActionTypes.DELETE_USER_TAG_SUCCESS;
 
-  constructor(public payload: UserTag) { } // TODO better type
+  constructor(public payload: UserTag) { }
 }
 
 export type UserEditActions =
   | UserEditProfile
   | UserEditProfileSuccess
+  | CreateUserTag
+  | CreateUserTagSuccess
   | UpdateUserTag
   | UpdateUserTagSuccess
   | DeleteUserTag

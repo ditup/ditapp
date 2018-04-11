@@ -4,15 +4,15 @@
 
 <!-- a form for adding a tag -->
 <app-tag-autocomplete
-  (action)="addTag($event)"
-  (action404)="createAddTag($event)"
+  (action)="createUserTag($event)"
+  (action404)="createTagAndUserTag($event)"
   placeholder="Add Tag"></app-tag-autocomplete>
 
 <section>
   <!-- a container for newly added tags -->
   <!-- it is possible to drag them and drop to the relevance containers -->
   <div class="tag-relevance-container tag-relevance-container-initial">
-    <!--ul *ngIf="tagLists[0] | async">
+    <ul *ngIf="tagLists[0] | async">
       <li *ngFor="let userTag of (tagLists[0] | async)"
         [ngClass]="'user-tag' + ((userTag.disabled) ? ' disabled' : '')"
         (click)="openTagStoryDialog(userTag)"
@@ -23,7 +23,7 @@
           <mat-icon alt="remove">close</mat-icon>
         </button>
       </li>
-    </ul-->
+    </ul>
   </div>
 
   <!-- containers for userTags by different relevance (1-5) -->
@@ -35,9 +35,6 @@
     (onDragEnter)="preventDefault($event)"
     (onDragOver)="preventDefault($event)"
     (onDragLeave)="preventDefault($event)">
-    <!--pre>
-      {{tagLists[relevance] | async }}
-    </pre-->
     <ul *ngIf="tagLists[relevance] | async">
       <li *ngFor="let userTag of (tagLists[relevance] | async)"
         [ngClass]="'user-tag tag-relevance-' + relevance + ((userTag.disabled) ? ' disabled' : '')"

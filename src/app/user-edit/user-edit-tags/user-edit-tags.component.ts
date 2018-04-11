@@ -10,7 +10,7 @@ import { TagRemoveConfirmComponent } from './tag-remove-confirm/tag-remove-confi
 // import { NotificationsService } from '../../notifications/notifications.service';
 
 import { UserTag } from 'app/models/user-tag';
-// import { Tag } from 'app/models/tag';
+import { Tag } from 'app/models/tag';
 import { User } from 'app/models/user';
 
 import { Store, select } from '@ngrx/store';
@@ -18,7 +18,7 @@ import { Observable } from 'rxjs/Observable';
 import * as fromRoot from 'app/reducers';
 import { filter, map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
-import { UpdateUserTag, DeleteUserTag } from 'app/actions/user-edit';
+import { UpdateUserTag, DeleteUserTag, CreateUserTag, CreateTagAndUserTag } from 'app/actions/user-edit';
 
 @Component({
   selector: 'app-user-edit-tags',
@@ -137,7 +137,7 @@ public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
     });
   }
 
-  async removeUserTag(userTag: UserTag) {
+  private removeUserTag(userTag: UserTag) {
 
     // @TODO make the state of adding and removing a tag visible
     // i.e. change color of the tag which is removed
@@ -145,6 +145,16 @@ public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
 
     this.store.dispatch(new DeleteUserTag(userTag));
   }
+
+  createUserTag(tag: Tag) {
+    this.store.dispatch(new CreateUserTag(tag))
+  }
+
+  createTagAndUserTag(tag: Tag) {
+    this.store.dispatch(new CreateTagAndUserTag(tag))
+  }
+
+
 
   /*
   get tags(): UserTag[] {

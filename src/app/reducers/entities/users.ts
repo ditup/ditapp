@@ -21,6 +21,7 @@ export function reducer(state=initialState, action: UserActions): State {
     case UserActionTypes.USER_ENRICHED:
     case UserActionTypes.USER: {
       const user = action.payload;
+      console.log(user.userTags);
       const exists = !!state.byId[user.id];
       const userFromState = state.byId[user.id] || {};
 
