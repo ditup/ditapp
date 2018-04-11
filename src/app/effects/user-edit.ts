@@ -5,11 +5,16 @@ import { flatMap, switchMap, map } from 'rxjs/operators';
 import { ModelService } from 'app/model.service';
 import { User as UserModel } from 'app/models/user';
 import { User } from 'app/actions/entities/users';
+import { AddUserTag, RemoveUserTag } from 'app/actions/entities';
 import { Notify } from 'app/actions/app-notify';
 
 import {
   UserEditProfile,
   UserEditProfileSuccess,
+  UpdateUserTag,
+  UpdateUserTagSuccess,
+  DeleteUserTag,
+  DeleteUserTagSuccess,
   UserEditActionTypes
 } from 'app/actions/user-edit'
 
@@ -28,6 +33,31 @@ export class UserEditEffects {
       new User(user),
       new Notify({ type: 'info', message: 'your profile was updated' })
     ])
+  )
+
+  @Effect()
+  updateUserTag$ = this.actions$.pipe(
+    ofType(UserEditActionTypes.UPDATE_USER_TAG),
+    map((action: UpdateUserTag) => action.payload),
+    flatMap((payload) => Promise.all([this.modelService.updateUserTag(payload), Promise.resolve(payload)])),
+    switchMap(([{ user, tag, userTag }, payload]) => [
+      new UpdateUserTagSuccess(userTag),
+      new AddUserTag({ user, tag, userTag }),
+      ...(payload.story !== undefined) ? [new Notify({ type: 'info', message: 'your story was updated' })] : []
+    ])
+  )
+
+  @Effect()
+  deleteUserTag$ = this.actions$.pipe(
+    ofType(UserEditActionTypes.DELETE_USER_TAG),
+    map((action: DeleteUserTag) => action.payload),
+    flatMap(async (userTag) => { await this.modelService.removeUserTag(userTag); return userTag }),
+    switchMap((userTag) => {
+      return [
+        new DeleteUserTagSuccess(userTag),
+        new RemoveUserTag(userTag)
+      ]
+    })
   )
 }
 

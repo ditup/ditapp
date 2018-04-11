@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { polyfill } from 'mobile-drag-drop';
 
 import { TagStoryFormComponent } from './tag-story-form/tag-story-form.component';
-// import { TagRemoveConfirmComponent } from './tag-remove-confirm/tag-remove-confirm.component';
+import { TagRemoveConfirmComponent } from './tag-remove-confirm/tag-remove-confirm.component';
 
 // import { ModelService } from '../../model.service';
 // import { NotificationsService } from '../../notifications/notifications.service';
@@ -18,6 +18,7 @@ import { Observable } from 'rxjs/Observable';
 import * as fromRoot from 'app/reducers';
 import { filter, map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
+import { UpdateUserTag, DeleteUserTag } from 'app/actions/user-edit';
 
 @Component({
   selector: 'app-user-edit-tags',
@@ -30,7 +31,7 @@ export class UserEditTagsComponent implements OnInit {
   public userTags$: Observable<UserTag[]>;
 
 public tagStoryDialogRef: MatDialogRef<TagStoryFormComponent>;
-//  public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
+public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
 
   // lists of tags, by relevance
   // 1-5 tags by relevance
@@ -95,27 +96,54 @@ public tagStoryDialogRef: MatDialogRef<TagStoryFormComponent>;
 
   // provided the data we update the current user's tag story in database
   // at the end we close the dialog.
-  async updateTagStory({ tagname, story }: { tagname: string, story: string }): Promise<void> {
-    console.log(tagname, story);
-    /*
-    // update user-tag in database (send XHR to REST API)
-    const { story: updatedStory } = await this.model.updateUserTag(this.user.id, tagname, { story });
-    // we succeeded.
-
-    // update the story in the tag object of this component
-    // find the tag by tagname and update its story
-    const tag = this.tags.find((userTag: UserTag) => userTag.tagId === tagname);
-
-    // update with the story returned from server after update
-    tag.story = updatedStory;
-
+  updateTagStory({ tagname: tagId, story }: { tagname: string, story: string }): void {
+    this.store.dispatch(new UpdateUserTag({ tagId, story }));
     // close the dialog
     if (this.tagStoryDialogRef) {
       this.tagStoryDialogRef.close();
     }
+  }
 
-    this.notify.info('Your tag story was updated.');
-    */
+  dropTagToRelevance({ from, to, userTag: { tagId } }: { from: number, to: number, userTag: UserTag }) {
+    if (from === to) return;
+    this.updateTagRelevance({ tagId, relevance: to })
+  }
+
+  private updateTagRelevance({ tagId, relevance }) {
+    this.store.dispatch(new UpdateUserTag({ tagId, relevance }));
+    // close the dialog
+    if (this.tagStoryDialogRef) {
+      this.tagStoryDialogRef.close();
+    }
+  }
+
+  // this function opens a dialog to confirm removing userTag
+  openRemoveTagDialog(userTag: UserTag) {
+    // open the dialog
+    this.removeTagDialogRef = this.dialog.open(TagRemoveConfirmComponent);
+    const dialogRef = this.removeTagDialogRef;
+
+    const component = dialogRef.componentInstance;
+
+    // initialize the dialog with the provided tag
+    component.userTag = userTag;
+
+    // subscribe to dialog confirmation
+    const subscription: any = component.onConfirm.subscribe(async (userTagConfirmed: UserTag) => {
+      console.log('confirming tag deletion');
+      await dialogRef.close();
+      this.removeUserTag(userTagConfirmed);
+      subscription.unsubscribe();
+    });
+  }
+
+  async removeUserTag(userTag: UserTag) {
+
+    // @TODO make the state of adding and removing a tag visible
+    // i.e. change color of the tag which is removed
+    // add the tag immediately with different color. when saved, make the color normal
+
+    this.store.dispatch(new DeleteUserTag(userTag));
   }
 
   /*

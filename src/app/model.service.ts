@@ -225,7 +225,7 @@ export class ModelService {
     const { data, included }: { data: any[], included: any[] } = response;
 
     return data.map((rawUserTag) => {
-      return this.deserializeUserTag(rawUserTag, included);
+      return this.deserializeUserTag(rawUserTag, included).userTag;
     });
   }
 
@@ -278,7 +278,7 @@ export class ModelService {
       .post(`${this.baseUrl}/users/${username}/tags`, requestBody, { headers: this.loggedHeaders })
       .toPromise();
 
-    return this.deserializeUserTag(data, included);
+    return this.deserializeUserTag(data, included).userTag;
 
   }
 
@@ -296,11 +296,16 @@ export class ModelService {
       .map((response: any) => response.data.map((tagDatum: any) => this.deserializeTag(tagDatum)));
   }
 
-  async updateUserTag(username: string, tagname: string, data: { story?: string, relevance?: number}): Promise<UserTag> {
+  async updateUserTag({ tagId, userId=this.auth.userId, story, relevance }: { tagId: string, userId?: string, story?: string, relevance?: number }): Promise<{ user: User, tag: Tag, userTag: UserTag }> {
+    const data: { story?: string, relevance?: number } = {};
+
+    if (story !== undefined) data.story = story;
+    if (relevance !== undefined) data.relevance = relevance;
+
     const requestBody = {
       data: {
         type: 'users',
-        id: `${username}--${tagname}`,
+        id: `${userId}--${tagId}`,
         attributes: data
       }
     };
@@ -308,7 +313,7 @@ export class ModelService {
     const headers = this.loggedHeaders;
 
     const response: any = await this.http
-      .patch(`${this.baseUrl}/users/${username}/tags/${tagname}`, requestBody, { headers })
+      .patch(`${this.baseUrl}/users/${userId}/tags/${tagId}`, requestBody, { headers })
       .toPromise();
 
     const { data: rawTag, included } = response;
@@ -316,12 +321,12 @@ export class ModelService {
 
   }
 
-  async removeUserTag(username: string, tagname: string): Promise<void> {
+  async removeUserTag({ userId=this.auth.userId, tagId }: { userId?: string, tagId: string }): Promise<void> {
 
     const headers = this.loggedHeaders;
 
     await this.http
-      .delete(`${this.baseUrl}/users/${username}/tags/${tagname}`, { headers })
+      .delete(`${this.baseUrl}/users/${userId}/tags/${tagId}`, { headers })
       .toPromise();
   }
 
@@ -1109,7 +1114,7 @@ export class ModelService {
     return { id: tagData.id };
   }
 
-  private deserializeUserTag(rawUserTag: any, included: any[]): UserTag {
+  private deserializeUserTag(rawUserTag: any, included: any[]): { user: User, tag: Tag, userTag: UserTag } {
     const [username, tagname] = rawUserTag.id.split('--');
 
     const rawTag = included.find((inclusion) => {
@@ -1124,6 +1129,8 @@ export class ModelService {
 
     const { story, relevance } = rawUserTag.attributes;
 
-    return { id: rawUserTag.id, userId: user.id, tagId: tag.id, story, relevance };
+    const userTag: UserTag = { id: rawUserTag.id, userId: user.id, tagId: tag.id, story, relevance };
+
+    return { user, tag, userTag };
   }
 }

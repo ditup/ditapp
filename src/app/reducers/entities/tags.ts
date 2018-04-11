@@ -1,5 +1,7 @@
 import { Tag } from 'app/models/tag';
+import { UserTag } from 'app/models/user-tag';
 import { TagActionTypes, TagActions } from 'app/actions/entities/tags';
+import { removeItem } from './utils';
 
 export interface State {
   byId: {
@@ -17,6 +19,8 @@ export function reducer(state=initialState, action: TagActions): State {
   switch (action.type) {
     case TagActionTypes.TAG: {
       const tag = action.payload;
+      if (!tag.userTags) tag.userTags = [];
+
       const exists = !!state.byId[tag.id];
 
       return {
@@ -36,6 +40,28 @@ export function reducer(state=initialState, action: TagActions): State {
         byId: { ...state.byId, ...addedTags },
         allIds: [...state.allIds, ...newTagIds]
       };
+    }
+    case TagActionTypes.ADD_USER_TAG_ID_TO_TAG: {
+      const { tagId, userTagId } = action.payload;
+
+      const tag = state.byId[tagId];
+      const isInUserTags = tag.userTags.includes(userTagId);
+
+      return (isInUserTags) ?
+        state :
+        {
+          ...state,
+          byId: { ...state.byId, [tagId]: { ...tag, userTags: [...tag.userTags, userTagId] } }
+        }
+    }
+    case TagActionTypes.REMOVE_USER_TAG_ID_FROM_TAG: {
+      const userTag: UserTag = action.payload;
+      const tag = state.byId[userTag.tagId];
+
+      return {
+        ...state,
+        byId: { ...state.byId, [userTag.tagId]: { ...tag, userTags: removeItem(tag.userTags, userTag.id) } }
+      }
     }
     default:
       return state;

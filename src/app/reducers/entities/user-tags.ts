@@ -1,5 +1,6 @@
 import { UserTag } from 'app/models/user-tag';
 import { UserTagActionTypes, UserTagActions } from 'app/actions/entities/user-tags';
+import { removeItem, removeProperty } from './utils';
 
 export interface State {
   byId: {
@@ -35,6 +36,14 @@ export function reducer(state=initialState, action: UserTagActions): State {
       return {
         byId: { ...state.byId, ...addedUserTags },
         allIds: [...state.allIds, ...newUserTagIds]
+      };
+    }
+    case UserTagActionTypes.REMOVE_USER_TAG: {
+      const userTag = action.payload;
+
+      return {
+        byId: removeProperty(state.byId, userTag.id),
+        allIds: removeItem(state.allIds, userTag.id)
       };
     }
     default:

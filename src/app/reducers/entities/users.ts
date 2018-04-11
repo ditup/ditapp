@@ -1,6 +1,8 @@
 import { UserActionTypes, UserActions } from 'app/actions/entities/users';
+import { removeItem } from './utils';
 
 import { User } from 'app/models/user';
+import { UserTag } from 'app/models/user-tag';
 
 export interface State {
   byId: {
@@ -29,6 +31,32 @@ export function reducer(state=initialState, action: UserActions): State {
         allIds: exists ? state.allIds : [...state.allIds, user.id]
       };
     }
+    case UserActionTypes.ADD_USER_TAG_ID_TO_USER: {
+      const { userId, userTagId } = action.payload;
+
+      const user = state.byId[userId];
+      const userTags = user.userTags
+      const isTagInUserTags = userTags.includes(userTagId);
+
+
+
+      return (isTagInUserTags) ?
+        state :
+        {
+          ...state,
+          byId: { ...state.byId, [userId]: { ...user, userTags: [...user.userTags, userTagId] } }
+        }
+    }
+    case UserActionTypes.REMOVE_USER_TAG_ID_FROM_USER: {
+      const userTag: UserTag = action.payload;
+      const user = state.byId[userTag.userId];
+
+      return {
+        ...state,
+        byId: { ...state.byId, [userTag.userId]: { ...user, userTags: removeItem(user.userTags, userTag.id) } }
+      }
+    }
+
     default:
       return state;
   }

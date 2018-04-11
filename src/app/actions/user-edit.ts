@@ -1,10 +1,15 @@
 import { Action } from '@ngrx/store';
 import { User } from 'app/models/user';
+import { UserTag } from 'app/models/user-tag';
 
 export enum UserEditActionTypes {
   USER_EDIT_PROFILE = '[User Edit] Profile',
   USER_EDIT_PROFILE_SUCCESS = '[User Edit] Profile Success',
-  USER_EDIT_PROFILE_FAILURE = '[User Edit] Profile Failure'
+  USER_EDIT_PROFILE_FAILURE = '[User Edit] Profile Failure',
+  UPDATE_USER_TAG = '[User Edit] Update UserTag',
+  UPDATE_USER_TAG_SUCCESS = '[User Edit] Update UserTag Success',
+  DELETE_USER_TAG = '[User Edit] Delete UserTag',
+  DELETE_USER_TAG_SUCCESS = '[User Edit] Delete UserTag Success',
 }
 
 export class UserEditProfile implements Action {
@@ -19,9 +24,47 @@ export class UserEditProfileSuccess implements Action {
   constructor(public payload: User) {}
 }
 
+/*
+export class AddUserTag implements Action {
+  readonly type = UserEditActionTypes.ADD_USER_TAG
+}
+
+export class RemoveUserTag implements Action {
+
+}
+*/
+
+export class UpdateUserTag implements Action {
+  readonly type = UserEditActionTypes.UPDATE_USER_TAG
+
+  constructor(public payload: any) { } // TODO better type
+}
+
+export class UpdateUserTagSuccess implements Action {
+  readonly type = UserEditActionTypes.UPDATE_USER_TAG_SUCCESS;
+
+  constructor(public payload: any) { } // TODO better type
+}
+
+export class DeleteUserTag implements Action {
+  readonly type = UserEditActionTypes.DELETE_USER_TAG
+
+  constructor(public payload: UserTag) { } // TODO better type
+}
+
+export class DeleteUserTagSuccess implements Action {
+  readonly type = UserEditActionTypes.DELETE_USER_TAG_SUCCESS;
+
+  constructor(public payload: UserTag) { } // TODO better type
+}
+
 export type UserEditActions =
   | UserEditProfile
   | UserEditProfileSuccess
+  | UpdateUserTag
+  | UpdateUserTagSuccess
+  | DeleteUserTag
+  | DeleteUserTagSuccess
 
 /*
 // TODO this is not used

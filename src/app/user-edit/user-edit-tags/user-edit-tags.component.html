@@ -1,7 +1,3 @@
-<pre *ngFor="let userTag of (userTags$ | async)">
-  {{ userTag?.tagId }}
-</pre>
-
 <section class="cue">
   Tags represent what you care about.<br>
   Add. Drag to change relevance. Click to tell why you care. Remove.</section>
@@ -35,7 +31,7 @@
   <div *ngFor="let relevance of [5,4,3,2,1]"
     class="tag-relevance-container"
     [ngClass]="'tag-relevance-container-' + relevance"
-    dnd-droppable (onDropSuccess)="dropTagToRelevance($event.dragData, relevance)"
+    dnd-droppable (onDropSuccess)="dropTagToRelevance({ from: $event.dragData.from, to: relevance, userTag: $event.dragData.userTag })"
     (onDragEnter)="preventDefault($event)"
     (onDragOver)="preventDefault($event)"
     (onDragLeave)="preventDefault($event)">
