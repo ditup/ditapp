@@ -18,6 +18,7 @@ import {
   UpdateUserTagSuccess,
   DeleteUserTag,
   DeleteUserTagSuccess,
+  UserTagNotAdded,
   UserEditActionTypes
 } from 'app/actions/user-edit'
 
@@ -68,7 +69,8 @@ export class UserEditEffects {
     switchMap(([{ user, tag, userTag }, payload]) => [
       new UpdateUserTagSuccess(userTag),
       new AddUserTag({ user, tag, userTag }),
-      ...(payload.story !== undefined) ? [new Notify({ type: 'info', message: 'your story was updated' })] : []
+      ...(payload.story !== undefined) ? [new Notify({ type: 'info', message: 'your story was updated' })] : [],
+      ...(payload.relevance !== undefined) ? [new UserTagNotAdded(userTag)] : []
     ])
   )
 
@@ -80,7 +82,8 @@ export class UserEditEffects {
     switchMap((userTag) => {
       return [
         new DeleteUserTagSuccess(userTag),
-        new RemoveUserTag(userTag)
+        new RemoveUserTag(userTag),
+        new UserTagNotAdded(userTag)
       ]
     })
   )

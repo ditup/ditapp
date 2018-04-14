@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { UserTag } from 'app/models/user-tag';
@@ -50,26 +50,17 @@ export class TagStoryFormComponent implements OnInit {
 
   // A default method for submitting the form. Does nothing.
   // It is likely to be overwritten.
-  @Output('onSubmit')
-  public processForm(tag: { tagname: string, story: string }): Promise<void> {
-    tag; // tslint:disable-line:no-unused-expression
-    return Promise.resolve();
-  }
+  @Output()
+  submitting = new EventEmitter<{ userId: string, tagId: string, story: string }>();
 
   // A method to be called when submitting the form.
   public async onSubmit() {
-    // disable the form until finished
-    this.isFormDisabled = true;
-
     // collect the data
-    const tagname = this.userTag.tagId;
+    const { userId, tagId } = this.userTag;
     const story = this.updateTagStoryForm.value.story;
 
     // process the data
-    await this.processForm({ tagname, story });
-
-    // finished => enable the form again
-    this.isFormDisabled = false;
+    this.submitting.emit({ userId, tagId, story });
   }
 
 }

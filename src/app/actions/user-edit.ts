@@ -14,6 +14,7 @@ export enum UserEditActionTypes {
   UPDATE_USER_TAG_SUCCESS = '[User Edit] Update UserTag Success',
   DELETE_USER_TAG = '[User Edit] Delete UserTag',
   DELETE_USER_TAG_SUCCESS = '[User Edit] Delete UserTag Success',
+  USER_TAG_NOT_ADDED = '[User Edit] UserTag Not Added', // remove user_tag from freshly added tags
 }
 
 export class UserEditProfile implements Action {
@@ -37,7 +38,7 @@ export class CreateUserTag implements Action {
 export class CreateUserTagSuccess implements Action {
   readonly type = UserEditActionTypes.CREATE_USER_TAG_SUCCESS;
 
-  constructor(public payload: Tag) { }
+  constructor(public payload: UserTag) { }
 }
 
 export class CreateTagAndUserTag implements Action {
@@ -49,13 +50,13 @@ export class CreateTagAndUserTag implements Action {
 export class UpdateUserTag implements Action {
   readonly type = UserEditActionTypes.UPDATE_USER_TAG
 
-  constructor(public payload: any) { } // TODO better type
+  constructor(public payload: { userId: string, tagId: string, story?: string, relevance?: number }) { }
 }
 
 export class UpdateUserTagSuccess implements Action {
   readonly type = UserEditActionTypes.UPDATE_USER_TAG_SUCCESS;
 
-  constructor(public payload: any) { } // TODO better type
+  constructor(public payload: UserTag) { }
 }
 
 export class DeleteUserTag implements Action {
@@ -70,6 +71,13 @@ export class DeleteUserTagSuccess implements Action {
   constructor(public payload: UserTag) { }
 }
 
+// removes userTag id from the added ones
+export class UserTagNotAdded implements Action {
+  readonly type = UserEditActionTypes.USER_TAG_NOT_ADDED;
+
+  constructor(public payload: UserTag) { }
+}
+
 export type UserEditActions =
   | UserEditProfile
   | UserEditProfileSuccess
@@ -79,57 +87,4 @@ export type UserEditActions =
   | UpdateUserTagSuccess
   | DeleteUserTag
   | DeleteUserTagSuccess
-
-/*
-// TODO this is not used
-export class InitialLogin implements Action {
-  readonly type = AuthActionTypes.INITIAL_LOGIN
-}
-
-export class InitialLoginSuccess implements Action {
-  readonly type = AuthActionTypes.INITIAL_LOGIN_SUCCESS
-  constructor(public payload: any) {} // TODO better type
-}
-
-export class Login implements Action {
-  readonly type = AuthActionTypes.LOGIN
-  constructor(public payload: Authenticate) {}
-}
-
-export class LoginSuccess implements Action {
-  readonly type = AuthActionTypes.LOGIN_SUCCESS
-  constructor(public payload: any) {} // TODO better type
-}
-
-export class LoginFailure implements Action {
-  readonly type = AuthActionTypes.LOGIN_FAILURE
-}
-
-// TODO this is not used
-export class GetSelfData implements Action {
-  readonly type = AuthActionTypes.GET_SELF_DATA
-}
-
-export class GetSelfDataSuccess implements Action {
-  readonly type = AuthActionTypes.GET_SELF_DATA_SUCCESS
-  constructor(public payload: any) {} // TODO better type
-}
-
-export class GetSelfDataFailure implements Action {
-  readonly type = AuthActionTypes.GET_SELF_DATA_FAILURE
-}
-
-export class Logout implements Action {
-  readonly type = AuthActionTypes.LOGOUT
-  constructor(public payload: { redirect?: boolean } = { redirect: true }) {}
-}
-
-export type AuthActions =
-  | InitialLogin
-  | InitialLoginSuccess
-  | Login
-  | LoginSuccess
-  | LoginFailure
-  | GetSelfDataSuccess
-  | Logout
-  */
+  | UserTagNotAdded

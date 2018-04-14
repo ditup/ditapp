@@ -12,9 +12,9 @@
   <!-- a container for newly added tags -->
   <!-- it is possible to drag them and drop to the relevance containers -->
   <div class="tag-relevance-container tag-relevance-container-initial">
-    <ul *ngIf="tagLists[0] | async">
-      <li *ngFor="let userTag of (tagLists[0] | async)"
-        [ngClass]="'user-tag' + ((userTag.disabled) ? ' disabled' : '')"
+    <ul *ngIf="(tagLists$ | async)[0]">
+      <li *ngFor="let userTag of (tagLists$ | async)[0]"
+        [ngClass]="'user-tag' + (((pending$ | async)?.includes(userTag.id)) ? ' disabled' : '')"
         (click)="openTagStoryDialog(userTag)"
         dnd-draggable [dragEnabled]="!userTag.disabled" [dragData]="{ from: 0, userTag: userTag }">
         {{userTag.tagId}}
@@ -35,9 +35,9 @@
     (onDragEnter)="preventDefault($event)"
     (onDragOver)="preventDefault($event)"
     (onDragLeave)="preventDefault($event)">
-    <ul *ngIf="tagLists[relevance] | async">
-      <li *ngFor="let userTag of (tagLists[relevance] | async)"
-        [ngClass]="'user-tag tag-relevance-' + relevance + ((userTag.disabled) ? ' disabled' : '')"
+    <ul *ngIf="(tagLists$ | async)[relevance]">
+      <li *ngFor="let userTag of (tagLists$ | async)[relevance]"
+        [ngClass]="'user-tag tag-relevance-' + relevance + (((pending$ | async)?.includes(userTag.id)) ? ' disabled' : '')"
         (click)="openTagStoryDialog(userTag)"
         dnd-draggable [dragEnabled]="!userTag.disabled" [dragData]="{ from: relevance, userTag: userTag }">
         {{userTag.tagId}}

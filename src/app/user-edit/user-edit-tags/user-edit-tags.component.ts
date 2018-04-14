@@ -16,9 +16,9 @@ import { User } from 'app/models/user';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import * as fromRoot from 'app/reducers';
-import { filter, map } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
+import { map } from 'rxjs/operators';
 import { UpdateUserTag, DeleteUserTag, CreateUserTag, CreateTagAndUserTag } from 'app/actions/user-edit';
+import { State } from 'app/reducers/ui/user-edit-page';
 
 @Component({
   selector: 'app-user-edit-tags',
@@ -29,14 +29,16 @@ export class UserEditTagsComponent implements OnInit {
 
   public user$: Observable<User>;
   public userTags$: Observable<UserTag[]>;
+  public ui$: Observable<State>;
+  public pending$: Observable<string[]>;
 
-public tagStoryDialogRef: MatDialogRef<TagStoryFormComponent>;
-public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
+  public tagStoryDialogRef: MatDialogRef<TagStoryFormComponent>;
+  public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
 
   // lists of tags, by relevance
   // 1-5 tags by relevance
   // 0 newly added tags (default relevance = 3)
-  tagLists: Observable<UserTag[]>[];
+  tagLists$: Observable<UserTag[][]>;
 
   constructor(// private model: ModelService,
               private dialog: MatDialog,
@@ -45,32 +47,12 @@ public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
                 polyfill({});
                 this.user$ = this.store.pipe(select(fromRoot.getAuthUser));
                 this.userTags$ = this.store.pipe(select(fromRoot.getAuthUserTags));
-                this.tagLists = [
-                  of([]),
-                  this.userTags$.pipe(
-                    filter(userTags => !!userTags),
-                    map(userTags => userTags.filter(userTag => userTag.relevance === 1))
-                  ),
-                  this.userTags$.pipe(
-                    filter(userTags => !!userTags),
-                    map(userTags => userTags.filter(userTag => userTag.relevance === 2))
-                  ),
-                  this.userTags$.pipe(
-                    filter(userTags => !!userTags),
-                    map(userTags => userTags.filter(userTag => userTag.relevance === 3))
-                  ),
-                  this.userTags$.pipe(
-                    filter(userTags => !!userTags),
-                    map(userTags => userTags.filter(userTag => userTag.relevance === 4))
-                  ),
-                  this.userTags$.pipe(
-                    filter(userTags => !!userTags),
-                    map(userTags => userTags.filter(userTag => userTag.relevance === 5))
-                  )
-                ]
-                this.userTags$.pipe(map(userTag => {
-                  console.log(userTag);
-                }))
+                this.ui$ = this.store.pipe(select(fromRoot.getUserEditPageUI));
+                this.pending$ = this.ui$.pipe(map(ui => {
+                  const { add, remove, update } = ui.tags;
+                  return [...add.allIds, ...update.allIds, ...remove.allIds];
+                }));
+                this.tagLists$ = this.store.pipe(select(fromRoot.getOrganizedUserEditTags));
               }
 
   ngOnInit() { }
@@ -86,31 +68,35 @@ public removeTagDialogRef: MatDialogRef<TagRemoveConfirmComponent>;
     // open the dialog
     this.tagStoryDialogRef = this.dialog.open(TagStoryFormComponent);
     const dialogRef = this.tagStoryDialogRef;
-
-    // a function to call when the dialog form is submitted
-    dialogRef.componentInstance.processForm = this.updateTagStory.bind(this);
+    const component = dialogRef.componentInstance;
 
     // initialize the dialog with the provided tag
-    dialogRef.componentInstance.userTag = tag;
+    component.userTag = tag;
+    // subscribe to dialog confirmation
+    const subscription: any = component.submitting.subscribe(async ({ userId, tagId, story }: { userId: string, tagId: string, story: string }) => {
+      await dialogRef.close();
+      this.updateTagStory({ userId, tagId, story });
+      subscription.unsubscribe();
+    });
   }
 
   // provided the data we update the current user's tag story in database
   // at the end we close the dialog.
-  updateTagStory({ tagname: tagId, story }: { tagname: string, story: string }): void {
-    this.store.dispatch(new UpdateUserTag({ tagId, story }));
+  updateTagStory({ userId, tagId, story }: { userId: string, tagId: string, story: string }): void {
+    this.store.dispatch(new UpdateUserTag({ userId, tagId, story }));
     // close the dialog
     if (this.tagStoryDialogRef) {
       this.tagStoryDialogRef.close();
     }
   }
 
-  dropTagToRelevance({ from, to, userTag: { tagId } }: { from: number, to: number, userTag: UserTag }) {
+  dropTagToRelevance({ from, to, userTag: { userId, tagId } }: { from: number, to: number, userTag: UserTag }) {
     if (from === to) return;
-    this.updateTagRelevance({ tagId, relevance: to })
+    this.updateTagRelevance({ userId, tagId, relevance: to })
   }
 
-  private updateTagRelevance({ tagId, relevance }) {
-    this.store.dispatch(new UpdateUserTag({ tagId, relevance }));
+  private updateTagRelevance({ userId, tagId, relevance }) {
+    this.store.dispatch(new UpdateUserTag({ userId, tagId, relevance }));
     // close the dialog
     if (this.tagStoryDialogRef) {
       this.tagStoryDialogRef.close();

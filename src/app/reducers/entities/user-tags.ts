@@ -1,6 +1,6 @@
 import { UserTag } from 'app/models/user-tag';
 import { UserTagActionTypes, UserTagActions } from 'app/actions/entities/user-tags';
-import { removeItem, removeProperty } from './utils';
+import { removeItem, removeProperty, addToEntityList } from './utils';
 
 export interface State {
   byId: {
@@ -18,12 +18,7 @@ export function reducer(state=initialState, action: UserTagActions): State {
   switch (action.type) {
     case UserTagActionTypes.USER_TAG: {
       const userTag = action.payload;
-      const exists = !!state.byId[userTag.id];
-
-      return {
-        byId: { ...state.byId, [userTag.id]: userTag },
-        allIds: exists ? state.allIds : [...state.allIds, userTag.id]
-      };
+      return addToEntityList(state, userTag)
     }
     case UserTagActionTypes.USER_TAGS: {
       const userTags = action.payload;

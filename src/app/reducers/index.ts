@@ -3,6 +3,7 @@ import { InjectionToken } from '@angular/core';
 import { AppNotification } from 'app/models/app-notification';
 import { User } from 'app/models/user';
 import { UserTag } from 'app/models/user-tag';
+import { getList } from 'app/reducers/entities/utils';
 
 import * as fromAuth from './auth';
 // import * as fromUsers from './entities/users';
@@ -10,22 +11,25 @@ import * as fromEntities from './entities';
 // reducers for user-edit are included in reducers for auth since we are editing the logged user within auth
 //
 import * as fromAppNotify from './app-notify';
-// import * as fromUi from './ui';
+import * as fromUI from './ui';
 
 export interface State {
   auth: fromAuth.State,
   entities: fromEntities.State,
-  appNotifications: fromAppNotify.State
+  appNotifications: fromAppNotify.State,
+  ui: fromUI.State
 }
 
 export const reducerToken = new InjectionToken<ActionReducerMap<State>>('Reducers');
 
+/*
 export const reducers: ActionReducerMap<State> = {
   auth: fromAuth.reducer,
   entities: fromEntities.reducers,
   appNotifications: fromAppNotify.reducer,
-  // ui: fromUi.reducer
+  ui: fromUI.reducers
 }
+*/
 
 export const getAuthUser = (state: State): User => {
   const userId = state.auth.userId;
@@ -39,12 +43,44 @@ export const getAuthUserTags = (state: State): UserTag[]|null => {
   return user.userTags.map(userTagId => state.entities.userTags.byId[userTagId]);
 };
 
+export const getOrganizedUserEditTags = (state: State): UserTag[][] => {
+  const userTags = getAuthUserTags(state) || []
+  const tagsUI = state.ui.userEditPage.tags;
+  const userTagsAdded = userTags.filter(userTag => tagsUI.added.includes(userTag.id))
+  const userTagsWithoutAdded = userTags.filter(userTag => !tagsUI.added.includes(userTag.id))
+
+  // let's see which tags have relevance edited.
+  // We want to have both the old and the new one in the editing list.
+  const userTagsEditingRelevance = getList(tagsUI.update)
+    .filter(userTag => userTag.relevance)
+    // add the story of each user tag to it
+    .map(userTag => {
+      userTag.story = state.entities.userTags.byId[userTag.id].story;
+      return userTag;
+    });
+
+  const userTagsJoined = [...userTagsWithoutAdded, ...userTagsEditingRelevance];
+
+  return [
+    [...userTagsAdded, ...tagsUI.add.allIds.map(id => tagsUI.add.byId[id])],
+    userTagsJoined.filter(userTag => userTag.relevance === 1),
+    userTagsJoined.filter(userTag => userTag.relevance === 2),
+    userTagsJoined.filter(userTag => userTag.relevance === 3),
+    userTagsJoined.filter(userTag => userTag.relevance === 4),
+    userTagsJoined.filter(userTag => userTag.relevance === 5)
+  ]
+}
+
+export const getUserEditPageUI = (state: State) => {
+  return state.ui.userEditPage;
+}
+
 export function getReducers() {
   return {
     appNotifications: fromAppNotify.reducer,
     auth: fromAuth.reducer,
     entities: fromEntities.reducers,
-    // ui: fromUi.reducers
+    ui: fromUI.reducers
   };
 }
 
