@@ -8,7 +8,7 @@ export const initialState: State = {
   notFound: false
 };
 
-export function reducer(state=initialState, action: any): State {
+export function reducer(state=initialState, _action: any): State {
   /*
   switch (action.type) {
     case UserEditActionTypes.CREATE_USER_TAG: {

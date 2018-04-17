@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 
-import { map, tap, flatMap, switchMap } from 'rxjs/operators';
+import { flatMap, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
-import { Authenticate } from 'app/models/auth';
 import { RouterActionTypes } from 'app/actions/router';
 import * as fromUserActions from 'app/actions/entities/users';
 import * as fromRoot from 'app/reducers';

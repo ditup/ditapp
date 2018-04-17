@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { ModelService } from '../model.service';
-import { AuthService } from '../auth.service';
 import { User } from 'app/models/user';
 import { Contact } from 'app/models/contact';
 import * as fromRoot from 'app/reducers';
@@ -24,10 +21,7 @@ export class UserComponent implements OnInit {
 
   public contactStatus: string; // 'confirmed', 'sent', 'received', 'nonexistent'
 
-  constructor(private model: ModelService,
-              private route: ActivatedRoute,
-              private auth: AuthService,
-              private store: Store<fromRoot.State>) {
+  constructor(private store: Store<fromRoot.State>) {
     this.user$ = this.store.pipe(select(fromRoot.getRouteUser));
   }
 
