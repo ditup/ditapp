@@ -1,6 +1,10 @@
-export function addItem(array: string[], item: string) {
-  const clearedArray = removeItem(array, item)
-  return [ ...clearedArray, item]
+export function addItem(array: string[], item: string, append=false) {
+  if (append) {
+    const clearedArray = removeItem(array, item)
+    return [ ...clearedArray, item]
+  }
+
+  return [...array, ...(array.includes(item)) ? [] : [item]];
 }
 
 export function removeItem(array: string[], item: string) {

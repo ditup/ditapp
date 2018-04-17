@@ -58,6 +58,17 @@ export function reducer(state=initialState, action: UserEditActions): State { //
         }
       }
     }
+    case UserEditActionTypes.CREATE_USER_TAG_FAILURE: {
+      const { tagId } = action.payload;
+      const userId = 'pending';
+      return {
+        ...state,
+        tags: {
+          ...state.tags,
+          add: removeFromEntityList(state.tags.add, `${userId}--${tagId}`)
+        }
+      }
+    }
     case UserEditActionTypes.UPDATE_USER_TAG: {
       const { userId, tagId, story, relevance } = action.payload;
       const id = `${userId}--${tagId}`

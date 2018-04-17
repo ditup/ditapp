@@ -33,13 +33,13 @@ export function reducer(state=initialState, action: UserActions): State {
       };
     }
     case UserActionTypes.ADD_USER_TAG_ID_TO_USER: {
-      const { userId, userTagId } = action.payload;
+      const { userId, userTagId, append } = action.payload;
 
       const user = state.byId[userId];
 
       return {
         ...state,
-        byId: { ...state.byId, [userId]: { ...user, userTags: addItem(user.userTags, userTagId) } }
+        byId: { ...state.byId, [userId]: { ...user, userTags: addItem(user.userTags, userTagId, append) } }
       }
     }
     case UserActionTypes.REMOVE_USER_TAG_ID_FROM_USER: {

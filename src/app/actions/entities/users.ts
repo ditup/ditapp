@@ -28,7 +28,7 @@ export class UserEnriched implements Action {
 export class AddUserTagIdToUser implements Action {
   readonly type = UserActionTypes.ADD_USER_TAG_ID_TO_USER
 
-  constructor(public payload: { userId: string, userTagId: string }) { }
+  constructor(public payload: { userId: string, userTagId: string, append?: boolean }) { }
 }
 
 export class RemoveUserTagIdFromUser implements Action {

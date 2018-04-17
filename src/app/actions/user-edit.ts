@@ -9,6 +9,7 @@ export enum UserEditActionTypes {
   USER_EDIT_PROFILE_FAILURE = '[User Edit] Profile Failure',
   CREATE_USER_TAG = '[User Edit] Create UserTag',
   CREATE_USER_TAG_SUCCESS = '[User Edit] Create UserTag Success',
+  CREATE_USER_TAG_FAILURE = '[User Edit] Create UserTag Failure',
   CREATE_TAG_AND_USER_TAG = '[User Edit] Create Tag And UserTag',
   UPDATE_USER_TAG = '[User Edit] Update UserTag',
   UPDATE_USER_TAG_SUCCESS = '[User Edit] Update UserTag Success',
@@ -39,6 +40,12 @@ export class CreateUserTagSuccess implements Action {
   readonly type = UserEditActionTypes.CREATE_USER_TAG_SUCCESS;
 
   constructor(public payload: UserTag) { }
+}
+
+export class CreateUserTagFailure implements Action {
+  readonly type = UserEditActionTypes.CREATE_USER_TAG_FAILURE;
+
+  constructor(public payload: { tagId: string }) { }
 }
 
 export class CreateTagAndUserTag implements Action {
@@ -83,6 +90,7 @@ export type UserEditActions =
   | UserEditProfileSuccess
   | CreateUserTag
   | CreateUserTagSuccess
+  | CreateUserTagFailure
   | UpdateUserTag
   | UpdateUserTagSuccess
   | DeleteUserTag

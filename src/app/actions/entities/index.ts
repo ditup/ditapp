@@ -15,7 +15,7 @@ export enum EntitiesActionTypes {
 export class AddUserTag implements Action {
   readonly type = EntitiesActionTypes.ADD_USER_TAG
 
-  constructor(public payload: { user: User, tag: Tag, userTag: UserTag }) { }
+  constructor(public payload: { user: User, tag: Tag, userTag: UserTag, append?: boolean }) { }
 }
 
 export class RemoveUserTag implements Action {

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { flatMap, switchMap, map } from 'rxjs/operators';
+import { flatMap, switchMap, map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 
 import { ModelService } from 'app/model.service';
 import { User as UserModel } from 'app/models/user';
@@ -13,6 +15,7 @@ import {
   UserEditProfileSuccess,
   CreateUserTag,
   CreateUserTagSuccess,
+  CreateUserTagFailure,
   CreateTagAndUserTag,
   UpdateUserTag,
   UpdateUserTagSuccess,
@@ -43,12 +46,26 @@ export class UserEditEffects {
   createUserTag$ = this.actions$.pipe(
     ofType(UserEditActionTypes.CREATE_USER_TAG),
     map((action: CreateUserTag) => action.payload),
-    flatMap(({ id }) => this.modelService.addTagToUser({ tagId: id })),
-    switchMap(({ user, tag, userTag }) => [
-      new CreateUserTagSuccess(userTag),
-      new AddUserTag({ user, tag, userTag }),
-      new Notify({ type: 'info', message: `${userTag.id} created`})
-    ])
+    switchMap(({ id }) => fromPromise(this.modelService.addTagToUser({ tagId: id }))
+      .pipe(
+        switchMap(({ user, tag, userTag }) => [
+          new CreateUserTagSuccess(userTag),
+          new AddUserTag({ user, tag, userTag }),
+          new Notify({ type: 'info', message: `${userTag.id} created`})
+        ]),
+        catchError(error => {
+          let message = 'Something went wrong.'
+
+          if (error.status === 409) {
+            message = 'The tag is already added.'
+          }
+          return of(null).pipe(switchMap(() => [
+            new Notify({ type: 'error', message }),
+            new CreateUserTagFailure({ tagId: id })
+          ]))
+        })
+      )
+    )
   )
 
   @Effect()
@@ -68,7 +85,7 @@ export class UserEditEffects {
     flatMap((payload) => Promise.all([this.modelService.updateUserTag(payload), Promise.resolve(payload)])),
     switchMap(([{ user, tag, userTag }, payload]) => [
       new UpdateUserTagSuccess(userTag),
-      new AddUserTag({ user, tag, userTag }),
+      new AddUserTag({ user, tag, userTag, append: payload.relevance !== undefined }),
       ...(payload.story !== undefined) ? [new Notify({ type: 'info', message: 'your story was updated' })] : [],
       ...(payload.relevance !== undefined) ? [new UserTagNotAdded(userTag)] : []
     ])
@@ -88,78 +105,3 @@ export class UserEditEffects {
     })
   )
 }
-
-/*
-import { Router, ActivatedRoute } from '@angular/router';
-import { Effect, Actions, ofType } from '@ngrx/effects';
-
-import { map, tap, flatMap } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
-import { Authenticate } from 'app/models/auth';
-import { AuthService } from 'app/services/auth';
-import { ModelService } from 'app/model.service';
-
-import {
-  Login,
-  LoginSuccess,
-  Logout,
-  GetSelfDataSuccess,
-  AuthActionTypes
-} from 'app/actions/auth';
-
-@Injectable()
-export class AuthEffects {
-
-  constructor(private actions$: Actions,
-              private authService: AuthService,
-              private model: ModelService,
-              private route: ActivatedRoute,
-              private router: Router) {}
-
-  @Effect()
-  login$ = this.actions$.pipe(
-    ofType(AuthActionTypes.LOGIN),
-    map((action: Login) => action.payload),
-    flatMap((auth: Authenticate) =>
-      this.authService.login(auth)
-        .pipe(
-          map(({ user, verified, token }) => new LoginSuccess({ user, verified, token }))
-        )
-    )
-  )
-
-  // get user's data after login
-  @Effect()
-  loginSuccess$ = this.actions$.pipe(
-    ofType(AuthActionTypes.LOGIN_SUCCESS),
-    map((action: LoginSuccess) => action.payload),
-    flatMap(({ user: { username } }) =>
-      Observable.fromPromise(this.model.readUser(username))
-        .pipe(
-          map((user) => new GetSelfDataSuccess({ user }))
-        )
-    )
-  );
-
-  // after getting user data, redirect
-  @Effect({ dispatch: false })
-  getSelfDataSuccess$ = this.actions$.pipe(
-    ofType(AuthActionTypes.GET_SELF_DATA_SUCCESS),
-    tap(() => {
-      this.router.navigate([this.route.snapshot.queryParams.redirect || '/'])
-    })
-  )
-
-  @Effect({ dispatch: false})
-  logout$ = this.actions$.pipe(
-    ofType(AuthActionTypes.LOGOUT),
-    map((action: Logout) => action.payload),
-    map((payload) => {
-      this.authService.clearPersistentLogin();
-      if (payload && payload.redirect)
-        this.router.navigate(['/'])
-    })
-  )
-}
-*/

@@ -16,11 +16,11 @@ export class EntitiesEffects {
   addUserTag$ = this.actions$.pipe(
     ofType(EntitiesActionTypes.ADD_USER_TAG),
     map((action: AddUserTag) => action.payload),
-    switchMap(({ user, tag, userTag }) => [
+    switchMap(({ user, tag, userTag, append }) => [
       new UserTag(userTag),
       new User(user),
       new Tag(tag),
-      new AddUserTagIdToUser({ userId: user.id, userTagId: userTag.id }),
+      new AddUserTagIdToUser({ userId: user.id, userTagId: userTag.id, append }),
       new AddUserTagIdToTag({ tagId: tag.id, userTagId: userTag.id })
     ])
   );
