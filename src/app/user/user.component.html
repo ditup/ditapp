@@ -1,55 +1,55 @@
-<app-fof *ngIf="!user" message="user doesn't exist"></app-fof>
+<app-fof *ngIf="!(user$ | async)" message="user doesn't exist"></app-fof>
 
-<section *ngIf="user" class="user-profile">
+<section *ngIf="(user$ | async)" class="user-profile">
 
   <section class="user-info">
 
-    <app-avatar [user]="username" [size]="128" class="user-avatar"></app-avatar>
+    <app-avatar [user]="(user$ | async)" [size]="128" class="user-avatar"></app-avatar>
 
     <section class="user-names-container">
-      <span class="user-name">{{user.givenName}} {{user.familyName}}</span>
-      <span class="user-username">{{username}}</span>
+      <span class="user-name">{{(user$ | async).givenName}} {{(user$ | async).familyName}}</span>
+      <span class="user-username">{{(user$ | async).id}}</span>
     </section>
 
-    <span class="fill-remaining-space"></span>
+    <!--span class="fill-remaining-space"></span>
 
     <nav class="user-links-container">
-      <!-- edit profile -->
+      <!-- edit profile -- >
       <a class="link-button" *ngIf="isMe === true" routerLink="/profile/edit">Edit Profile</a>
-      <!-- messages -->
-      <a class="link-button" *ngIf="isMe === false" routerLink="/messages/{{username}}">Messages</a>
+      <!-- messages -- >
+      <a class="link-button" *ngIf="isMe === false" routerLink="/messages/{{(user$ | async).id}}">Messages</a>
 
 
-      <!-- contact link  -->
+      <!-- contact link  -- >
       <span *ngIf="isMe === false">
 
         <a class="link-button"
           [ngSwitch]="contactStatus"
-          routerLink="/contact-with/{{username}}">
-          <!-- nonexistent -->
+          routerLink="/contact-with/{{(user$ | async).id}}">
+          <!-- nonexistent -- >
           <span *ngSwitchCase="'nonexistent'">Send a contact request</span>
-          <!-- confirmed -->
+          <!-- confirmed -- >
           <span *ngSwitchCase="'confirmed'">Update contact</span>
-          <!-- unconfirmed, sent -->
+          <!-- unconfirmed, sent -- >
           <span *ngSwitchCase="'sent'">Update contact request</span>
-          <!-- unconfirmed, received -->
+          <!-- unconfirmed, received -- >
           <span *ngSwitchCase="'received'">Accept or Decline contact request</span>
-          <!-- loading -->
+          <!-- loading -- >
           <span *ngSwitchDefault>Loading contact...</span>
         </a>
       </span>
-    </nav>
+    </nav-->
   </section>
 
   <section class="user-detail">
 
     <app-tab-nav
       [navRoutes]="[
-        { title: 'Profile', link: '/user/' + user.username },
-        { title: 'Contacts', link: '/user/' + user.username + '/contacts' }
+        { title: 'Profile', link: '/user/username' },
+        { title: 'Contacts', link: '/user/username/contacts' }
       ]"></app-tab-nav>
 
-    <router-outlet></router-outlet>
+    <!--router-outlet></router-outlet-->
 
   </section>
 </section>

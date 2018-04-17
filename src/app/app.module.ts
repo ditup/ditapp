@@ -2,11 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RouterStateSerializer } from '@ngrx/router-store';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 import { DndModule } from 'ng2-dnd';
 import { MomentModule } from 'angular2-moment';
 import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
@@ -14,7 +16,7 @@ import { FancyImageUploaderModule } from 'ng2-fancy-image-uploader';
 import 'hammerjs';  // for angular material
 
 // imports for store and effects
-import { reducerToken, reducerProvider } from './reducers';
+import { reducerToken, reducerProvider, CustomSerializer } from './reducers';
 import { effects } from './effects';
 
 import { GlobalErrorHandler } from './error-handler';
@@ -223,6 +225,7 @@ import { UserEditProfileFormComponent } from './user-edit/user-edit-profile/user
     MomentModule,
     FancyImageUploaderModule,
     StoreModule.forRoot(reducerToken),
+    StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({
       maxAge: 25
@@ -239,6 +242,7 @@ import { UserEditProfileFormComponent } from './user-edit/user-edit-profile/user
     ModelService,
     NotificationsService,
     ProgressService,
+    { provide: RouterStateSerializer, useClass: CustomSerializer },
     { provide: HTTP_INTERCEPTORS, useClass: HttpProgressInterceptor, multi: true },
     { provide: ErrorHandler, useClass: GlobalErrorHandler } // custom global error handler
   ],

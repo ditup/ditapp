@@ -1,5 +1,7 @@
 import { /*createSelector, */ActionReducerMap } from '@ngrx/store';
+import { routerReducer, RouterStateSerializer, RouterReducerState } from '@ngrx/router-store';
 import { InjectionToken } from '@angular/core';
+import { RouterStateSnapshot, Params } from '@angular/router';
 import { AppNotification } from 'app/models/app-notification';
 import { User } from 'app/models/user';
 import { UserTag } from 'app/models/user-tag';
@@ -17,7 +19,8 @@ export interface State {
   auth: fromAuth.State,
   entities: fromEntities.State,
   appNotifications: fromAppNotify.State,
-  ui: fromUI.State
+  ui: fromUI.State,
+  router: RouterReducerState<RouterStateUrl>
 }
 
 export const reducerToken = new InjectionToken<ActionReducerMap<State>>('Reducers');
@@ -35,6 +38,16 @@ export const getAuthUser = (state: State): User => {
   const userId = state.auth.userId;
   return state.entities.users.byId[userId];
 };
+
+export const getRouteUser = (state: State): User => {
+  const userId = state.router.state.params.id;
+
+  return state.entities.users.byId[userId];
+}
+
+export const getRouteId = (state: State): string => {
+  return state.router.state.params.id;
+}
 
 export const getAuthUserTags = (state: State): UserTag[]|null => {
   const userId = state.auth.userId;
@@ -80,7 +93,8 @@ export function getReducers() {
     appNotifications: fromAppNotify.reducer,
     auth: fromAuth.reducer,
     entities: fromEntities.reducers,
-    ui: fromUI.reducers
+    ui: fromUI.reducers,
+    router: routerReducer
   };
 }
 
@@ -122,3 +136,26 @@ export const reducerProvider = [
     { provide: reducerToken, useFactory: getReducers }
 ];
 */
+export interface RouterStateUrl {
+  url: string;
+  params: Params;
+  queryParams: Params;
+}
+
+// copy pasted from @ngrx example (for router-store)
+export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
+  serialize(routerState: RouterStateSnapshot): RouterStateUrl {
+    let route = routerState.root;
+
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+
+    const { url, root: { queryParams } } = routerState;
+    const { params } = route;
+
+    // Only return an object including the URL, params and query params
+    // instead of the entire snapshot
+    return { url, params, queryParams };
+  }
+}

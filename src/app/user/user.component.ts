@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 import { ModelService } from '../model.service';
 import { AuthService } from '../auth.service';
-import { User, Contact } from '../shared/types';
+import { User } from 'app/models/user';
+import { Contact } from 'app/models/contact';
+import * as fromRoot from 'app/reducers';
+import { Store, select } from '@ngrx/store';
 
 @Component({
   selector: 'app-user',
@@ -12,7 +16,7 @@ import { User, Contact } from '../shared/types';
 })
 export class UserComponent implements OnInit {
 
-  public user: User|null;
+  public user$: Observable<User | null>;
   public isMe: boolean;
   public avatar: { base64: string, format: string };
   public contactFromMe?: Contact;
@@ -22,14 +26,19 @@ export class UserComponent implements OnInit {
 
   constructor(private model: ModelService,
               private route: ActivatedRoute,
-              private auth: AuthService
-             ) { }
+              private auth: AuthService,
+              private store: Store<fromRoot.State>) {
+    this.user$ = this.store.pipe(select(fromRoot.getRouteUser));
+  }
 
+  /*
   get username() {
     return this.user.id;
   }
+  */
 
   ngOnInit() {
+    /*
     this.route.data
       .subscribe(async ({ user }: { user: User }) => {
         this.user = user;
@@ -56,5 +65,6 @@ export class UserComponent implements OnInit {
           }
         }
       });
+      */
   }
 }
