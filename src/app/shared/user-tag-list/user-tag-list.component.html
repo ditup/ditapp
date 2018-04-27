@@ -2,7 +2,7 @@
   <li *ngFor="let userTag of userTags"
     [ngClass]="'tag-relevance-' + userTag.relevance"
     (click)="openTagDetail(userTag)">
-    {{userTag.tag.tagname}}
+    {{userTag.tagId}}
     <span class="story-indicator" *ngIf="userTag.story">&#9679;</span>
   </li>
 </ul>

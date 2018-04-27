@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 
-import { UserTag } from '../types';
+import { UserTag } from 'app/models/user-tag';
 
 @Component({
   selector: 'app-user-tag-detail',

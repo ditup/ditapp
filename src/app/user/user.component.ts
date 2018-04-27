@@ -15,7 +15,6 @@ export class UserComponent implements OnInit {
 
   public user$: Observable<User | null>;
   public isMe: boolean;
-  public avatar: { base64: string, format: string };
   public contactFromMe?: Contact;
   public contactToMe?: Contact;
 

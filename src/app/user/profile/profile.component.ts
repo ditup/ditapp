@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-import { ModelService } from '../../model.service';
-import { AuthService } from '../../auth.service';
+import { Observable } from 'rxjs/Observable';
+import { Store, select } from '@ngrx/store';
+import * as fromRoot from 'app/reducers';
 import {  User } from 'app/models/user';
 import { UserTag } from 'app/models/user-tag';
 
@@ -13,27 +12,15 @@ import { UserTag } from 'app/models/user-tag';
 })
 export class ProfileComponent implements OnInit {
 
-  public username: string;
-  public user: User;
-  public isMe: boolean;
-  public userTags: UserTag[];
+  public user$: Observable<User>;
+  public userTags$: Observable<UserTag[]>
+  // public isMe: boolean;
 
-  constructor(private model: ModelService,
-              private route: ActivatedRoute,
-              private auth: AuthService,
-             ) { }
+  constructor(private store: Store<fromRoot.State>) {
+    this.user$ = this.store.pipe(select(fromRoot.getRouteUser));
+    this.userTags$ = this.store.pipe(select(fromRoot.getRouteUserTags));
+  }
 
   ngOnInit() {
-
-    this.route.data
-      .subscribe(async ({ user }: { user: User }) => {
-        this.username = user.id;
-        this.user = user;
-        this.isMe = this.username === this.auth.username;
-
-        // get user-tags and assign them to this.userTags;
-        this.userTags = await this.model.readUserTags(this.username);
-
-      });
   }
 }

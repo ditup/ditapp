@@ -61,7 +61,7 @@
       "spec": true
     },
     "serve": {
-      "host" : "89.221.210.112",
+      "host" : "localhost",
       "port" : "4200"
     }
   }

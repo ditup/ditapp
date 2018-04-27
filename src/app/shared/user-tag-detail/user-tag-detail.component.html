@@ -1,11 +1,11 @@
 <h1 mat-dialog-title>
-  {{userTag.tag.tagname}}
+  {{userTag.tagId}}
 </h1>
 <mat-dialog-content>
   <app-editor-output [value]="userTag.story || '_no user story yet_'"></app-editor-output>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button (click)="close()">Close</button>
-  <a class="link-button" routerLink="/tag/{{userTag.tag.tagname}}"
+  <a class="link-button" routerLink="/tag/{{userTag.tagId}}"
     (click)="close()">Visit Tag Page</a>
 </mat-dialog-actions>

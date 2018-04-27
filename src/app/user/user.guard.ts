@@ -16,7 +16,36 @@ export class LoadUserGuard implements CanActivate {
     return this.store.pipe(
       select(fromRoot.getRouteUser),
       tap((user: User) => {
+        console.log('user found', user);
         if (!user) {
+          console.log('requesting user');
+          this.store.dispatch(new routerActions.GetRouterUser());
+        }
+      }),
+      filter(user => !!user),
+      take(1)
+    );
+  }
+  canActivate(): Observable<boolean> {
+    return this.getFromStoreOrAPI()
+      .pipe(
+        switchMap(() => of(true)),
+        catchError(() => of(false))
+      )
+  }
+}
+
+@Injectable()
+export class LoadContactsGuard implements CanActivate {
+  constructor(private store: Store<fromRoot.State>) {}
+
+  getFromStoreOrAPI(): Observable<any> {
+    return this.store.pipe(
+      select(fromRoot.getRouteUser),
+      tap((user: User) => {
+        console.log('user found', user);
+        if (!user) {
+          console.log('requesting user');
           this.store.dispatch(new routerActions.GetRouterUser());
         }
       }),

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { AuthService } from '../../auth.service';
-import { ModelService } from '../../model.service';
-
-import { User, Contact } from '../../shared/types';
+import { User } from 'app/models/user';
+import { Contact } from 'app/models/contact';
+import { Observable } from 'rxjs/Observable';
+import * as fromRoot from 'app/reducers';
+import { Store, select } from '@ngrx/store';
 
 @Component({
   selector: 'app-contacts',
@@ -13,29 +13,20 @@ import { User, Contact } from '../../shared/types';
 })
 export class ContactsComponent implements OnInit {
 
-  public user: User;
+  public user$: Observable<User>;
+  public me$: Observable<User>;
   public isMe: boolean;
   public contacts: Contact[] = [];
 
-  constructor(private auth: AuthService,
-              private route: ActivatedRoute,
-              private model: ModelService) { }
+  constructor(private store: Store<fromRoot.State>) {
+    this.user$ = this.store.pipe(select(fromRoot.getRouteUser));
+    this.me$ = this.store.pipe(select(fromRoot.getAuthUser));
+  }
 
   ngOnInit() {
-    this.route.parent.data
-      .subscribe(async ({ user }: { user: User }) => {
-        this.user = user;
-        this.isMe = this.user.id === this.auth.username;
-
-        // get contacts
-        this.contacts = await this.model.readContactsTo(this.user.id);
-      });
   }
 
-  public get me(): User {
-    return ({ id: this.auth.username });
-  }
-
+  /*
   public get confirmedContacts() {
     return this.contacts
       .filter((contact: Contact) => contact.isConfirmed)
@@ -48,4 +39,5 @@ export class ContactsComponent implements OnInit {
   public get unconfirmedContacts() {
     return this.contacts.filter((contact: Contact) => !contact.isConfirmed);
   }
+  */
 }

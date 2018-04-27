@@ -101,6 +101,7 @@ import { UserDialogComponent } from './shared/user-dialog/user-dialog.component'
 import { ProgressComponent } from './progress/progress.component';
 
 import { HttpProgressInterceptor } from './progress/progress.interceptor';
+import { RateLimitInterceptor } from './core/rate-limit.interceptor';
 import { EditorComponent } from './shared/editor/editor.component';
 import { EditorOutputComponent } from './shared/editor-output/editor-output.component';
 import { TabNavComponent } from './shared/tab-nav/tab-nav.component';
@@ -243,6 +244,7 @@ import { UserEditProfileFormComponent } from './user-edit/user-edit-profile/user
     NotificationsService,
     ProgressService,
     { provide: RouterStateSerializer, useClass: CustomSerializer },
+    { provide: HTTP_INTERCEPTORS, useClass: RateLimitInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpProgressInterceptor, multi: true },
     { provide: ErrorHandler, useClass: GlobalErrorHandler } // custom global error handler
   ],

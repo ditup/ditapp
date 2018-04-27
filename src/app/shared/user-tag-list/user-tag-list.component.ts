@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
-import { UserTag } from '../types';
+import { UserTag } from 'app/models/user-tag';
 import { UserTagDetailComponent } from '../user-tag-detail/user-tag-detail.component';
 
 @Component({

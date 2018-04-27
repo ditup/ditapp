@@ -1,16 +1,16 @@
 <app-user-tag-list
-  [userTags]="userTags">
+  [userTags]="(userTags$ | async)">
 </app-user-tag-list>
 
 <section class="user-loc-desc-wrapper">
   <section class="user-description">
-    <app-editor-output [value]="user.description"></app-editor-output>
+    <app-editor-output [value]="(user$ | async)?.description"></app-editor-output>
     <!-- no user description -->
-    <div class="no-content-info" *ngIf="user.description === '' ">
-      <span>{{user.username}} hasn't added any description yet.</span>
+    <div class="no-content-info" *ngIf="(user$ | async)?.description === '' ">
+      <span>{{(user$ | async).id}} hasn't added any description yet.</span>
     </div>
     <!-- no user description -->
   </section>
 
-  <app-location class="user-location" *ngIf="user.location" [location]="user.location"></app-location>
+  <app-location class="user-location" *ngIf="(user$ | async)?.location" [location]="(user$ | async)?.location"></app-location>
 </section>

@@ -11,6 +11,9 @@
       <span class="user-username">{{(user$ | async).id}}</span>
     </section>
 
+    <a routerLink="/user/test7">test7</a>
+    <a routerLink="/user/mrkvon">mrkvon</a>
+    <a routerLink="/user/yanka">yanka</a>
     <!--span class="fill-remaining-space"></span>
 
     <nav class="user-links-container">
@@ -45,11 +48,11 @@
 
     <app-tab-nav
       [navRoutes]="[
-        { title: 'Profile', link: '/user/username' },
-        { title: 'Contacts', link: '/user/username/contacts' }
+      { title: 'Profile', link: '/user/' + (user$ | async)?.id },
+        { title: 'Contacts', link: '/user/' + (user$ | async)?.id + '/contacts' }
       ]"></app-tab-nav>
 
-    <!--router-outlet></router-outlet-->
+    <router-outlet></router-outlet>
 
   </section>
 </section>

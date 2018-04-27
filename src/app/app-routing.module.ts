@@ -66,7 +66,7 @@ import { ManageContactComponent } from './contact/manage-contact/manage-contact.
 // importing guards and their dependencies
 import { AuthGuard, AuthExpGuard } from './auth-guard.service';
 import { CanDeactivateGuard } from './can-deactivate-guard.service';
-import { LoadUserGuard } from './user/user.guard';
+import { LoadUserGuard, LoadContactsGuard } from './user/user.guard';
 // import { AuthExpGuard } from './base/auth-exp-guard.service';
 
 // resolvers
@@ -117,7 +117,8 @@ const routes: Routes = [
       },
       {
         path: 'contacts',
-        component: ContactsComponent
+        component: ContactsComponent,
+        canActivate: [LoadContactsGuard]
       }
     ]
   },
@@ -134,11 +135,6 @@ const routes: Routes = [
       {
         path: 'tags',
         component: UserEditTagsComponent,
-        /*
-        resolve: {
-          userTags: LoggedUserTagsResolver
-        }
-        */
       },
       {
         path: 'location',
@@ -376,6 +372,7 @@ const routeWrapper: Routes = [
     // AuthResolver,
     CanDeactivateGuard,
     LoadUserGuard,
+    LoadContactsGuard,
     UserResolver,
     LoggedUserResolver,
     LoggedUserTagsResolver,

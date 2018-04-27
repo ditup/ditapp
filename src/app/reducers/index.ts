@@ -56,6 +56,13 @@ export const getAuthUserTags = (state: State): UserTag[]|null => {
   return user.userTags.map(userTagId => state.entities.userTags.byId[userTagId]);
 };
 
+export const getRouteUserTags = (state: State): UserTag[]|null => {
+  const userId = getRouteId(state);
+  const user: User = state.entities.users.byId[userId];
+  if (!user || !user.userTags) return null;
+  return user.userTags.map(userTagId => state.entities.userTags.byId[userTagId]);
+};
+
 export const getOrganizedUserEditTags = (state: State): UserTag[][] => {
   const userTags = getAuthUserTags(state) || []
   const tagsUI = state.ui.userEditPage.tags;
@@ -147,12 +154,14 @@ export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
   serialize(routerState: RouterStateSnapshot): RouterStateUrl {
     let route = routerState.root;
 
+    const params = {};
+
     while (route.firstChild) {
       route = route.firstChild;
+      Object.assign(params, route.params);
     }
 
     const { url, root: { queryParams } } = routerState;
-    const { params } = route;
 
     // Only return an object including the URL, params and query params
     // instead of the entire snapshot
