@@ -9,7 +9,9 @@
     "test": "ng test",
     "test-once": "ng test --single-run",
     "lint": "ng lint",
-    "e2e": "ng e2e --host=localhost"
+    "e2e": "ng e2e --host=localhost",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "private": true,
   "dependencies": {
@@ -38,7 +40,8 @@
     "ng2-validation": "^3.0.2",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19",
-    "zxcvbn": "^4.4.2"
+    "zxcvbn": "^4.4.2",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@angular/cli": "1.6.5",
@@ -69,5 +72,6 @@
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
     "typescript": "~2.5.3"
-  }
+  },
+  "snyk": true
 }
